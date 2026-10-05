@@ -40,11 +40,6 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
       name = "Blog"
       weight = 10
       identifier = "home"
-      url = "/"
-    [[languages.zh-cn.menu.main]]
-      name = "归档"
-      weight = 20
-      identifier = "archives"
       url = "/post/"
     [[languages.zh-cn.menu.main]]
       name = "分类"
@@ -67,11 +62,6 @@ copyright = ""            # default: author.name ↓        # 默认为下面配
       name = "Blog"
       weight = 10
       identifier = "home"
-      url = "/en/"
-    [[languages.en.menu.main]]
-      name = "Archives"
-      weight = 20
-      identifier = "archives"
       url = "/en/post/"
     [[languages.en.menu.main]]
       name = "Categories"

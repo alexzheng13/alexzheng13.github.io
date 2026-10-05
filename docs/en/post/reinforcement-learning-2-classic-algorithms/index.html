@@ -57,7 +57,7 @@
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 <meta name="site-language-route" data-language="zh-cn" content="/post/reinforcement-learning-2-classic-algorithms/">
 <meta name="site-language-route" data-language="en" content="/en/post/reinforcement-learning-2-classic-algorithms/">
-<meta name="site-current-language" content="en"><script defer src="/js/language-routing.js?v=9f6c124f0bcbcd5458dc672bfafb5fd0"></script>
+<meta name="site-current-language" content="en"><script defer src="/js/language-routing.js?v=4e8327400477593ad412f438fdb86a1f"></script>
 
 <meta property="og:title" content="Reinforcement Learning II: From Q-Learning and DQN to Actor-Critic and PPO" />
 <meta property="og:description" content="A continuous path through dynamic programming, Monte Carlo, temporal difference learning, Q-Learning, DQN, policy gradients, Actor-Critic, and PPO." />
@@ -103,10 +103,8 @@
 </div>
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
-    <a href="/en/">
+    <a href="/en/post/">
         <li class="mobile-menu-item">Blog</li>
-      </a><a href="/en/post/">
-        <li class="mobile-menu-item">Archives</li>
       </a><a href="/en/categories/">
         <li class="mobile-menu-item">Categories</li>
       </a><a href="/en/about/">
@@ -189,9 +187,7 @@
 <nav class="site-navbar">
   <ul id="menu" class="menu">
     <li class="menu-item">
-        <a class="menu-item-link" href="/en/">Blog</a>
-      </li><li class="menu-item">
-        <a class="menu-item-link" href="/en/post/">Archives</a>
+        <a class="menu-item-link" href="/en/post/">Blog</a>
       </li><li class="menu-item">
         <a class="menu-item-link" href="/en/categories/">Categories</a>
       </li><li class="menu-item">
@@ -422,7 +418,7 @@ $$</p>
 <li>The <strong>Critic</strong> $V&#95;{\phi}(s)$ or $Q&#95;{\phi}(s,a)$ evaluates them.</li>
 </ul>
 
-<p><img src="/img/posts/reinforcement-learning-series/actor-critic.png" alt="The Actor selects actions while the Critic supplies learning signals" /></p>
+<p><img src="/img/posts/reinforcement-learning-series/actor-critic.en.jpg" alt="The Actor selects actions while the Critic supplies learning signals" /></p>
 
 <p>The advantage function measures performance relative to the state&rsquo;s baseline:</p>
 
@@ -478,7 +474,7 @@ $$</p>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="p">(</span><span class="n">state</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></code></pre></td></tr></table>
 </div>
 </div>
-<p><img src="/img/posts/reinforcement-learning-series/actor-network.png" alt="A CartPole actor maps four state features to two action logits" /></p>
+<p><img src="/img/posts/reinforcement-learning-series/actor-network.en.jpg" alt="A CartPole actor maps four state features to two action logits" /></p>
 
 <h2 id="7-ppo-constrain-policy-updates">7. PPO: constrain policy updates</h2>
 

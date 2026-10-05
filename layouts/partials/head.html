@@ -96,8 +96,13 @@
 <script defer src="{{ "/js/theme-toggle.js" | relURL }}?v={{ $themeToggleHash }}"></script>
 
 {{- if .Site.IsMultiLingual -}}
-  {{- range .Page.AllTranslations }}
+  {{- if .IsHome }}
+<meta name="site-language-route" data-language="zh-cn" content="/about/">
+<meta name="site-language-route" data-language="en" content="/en/about/">
+  {{- else }}
+    {{- range .Page.AllTranslations }}
 <meta name="site-language-route" data-language="{{ .Language.Lang }}" content="{{ .RelPermalink }}">
+    {{- end }}
   {{- end }}
 <meta name="site-current-language" content="{{ .Site.Language.Lang }}">
   {{- $languageRoutingPath := "static/js/language-routing.js" -}}

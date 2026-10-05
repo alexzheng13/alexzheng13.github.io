@@ -140,7 +140,7 @@ Actor-Critic combines a policy and a value estimator:
 - The **Actor** $\pi&#95;{\theta}(a\mid s)$ chooses actions.
 - The **Critic** $V&#95;{\phi}(s)$ or $Q&#95;{\phi}(s,a)$ evaluates them.
 
-![The Actor selects actions while the Critic supplies learning signals](/img/posts/reinforcement-learning-series/actor-critic.png)
+![The Actor selects actions while the Critic supplies learning signals](/img/posts/reinforcement-learning-series/actor-critic.en.jpg)
 
 The advantage function measures performance relative to the state's baseline:
 
@@ -178,7 +178,7 @@ class ActorCritic(nn.Module):
         return self.actor(state), self.critic(state).squeeze(-1)
 ```
 
-![A CartPole actor maps four state features to two action logits](/img/posts/reinforcement-learning-series/actor-network.png)
+![A CartPole actor maps four state features to two action logits](/img/posts/reinforcement-learning-series/actor-network.en.jpg)
 
 ## 7. PPO: constrain policy updates
 

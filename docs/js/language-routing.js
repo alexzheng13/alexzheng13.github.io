@@ -62,11 +62,6 @@
     return routes;
   }
 
-  function getCurrentLanguage() {
-    var element = document.querySelector('meta[name="site-current-language"]');
-    return normalizeLanguage(element && element.getAttribute("content"));
-  }
-
   function readCachedCountry() {
     var value = readLocalStorage(REGION_KEY);
     if (!value) {
@@ -146,11 +141,17 @@
     return country === "CN" ? "zh-cn" : "en";
   }
 
-  function redirectIfNeeded(language, routes, currentLanguage, respectPreference) {
-    if ((respectPreference && getPreference()) || language === currentLanguage || !routes[language]) {
+  function normalizePath(path) {
+    var value = String(path || "/").replace(/\/index\.html$/, "/");
+    return value.length > 1 ? value.replace(/\/$/, "") : value;
+  }
+
+  function redirectIfNeeded(language, routes, respectPreference) {
+    var target = routes[language];
+    if ((respectPreference && getPreference()) || !target || normalizePath(target) === normalizePath(window.location.pathname)) {
       return;
     }
-    window.location.replace(routes[language]);
+    window.location.replace(target);
   }
 
   function bindLanguageChoices() {
@@ -166,21 +167,20 @@
     bindLanguageChoices();
 
     var routes = getRoutes();
-    var currentLanguage = getCurrentLanguage();
     var preference = getPreference();
     if (preference) {
-      redirectIfNeeded(preference, routes, currentLanguage, false);
+      redirectIfNeeded(preference, routes, false);
       return;
     }
 
     var cachedCountry = readCachedCountry();
     if (cachedCountry !== null) {
-      redirectIfNeeded(desiredLanguage(cachedCountry), routes, currentLanguage, true);
+      redirectIfNeeded(desiredLanguage(cachedCountry), routes, true);
       return;
     }
 
     lookupCountry().then(function (country) {
-      redirectIfNeeded(desiredLanguage(country), routes, currentLanguage, true);
+      redirectIfNeeded(desiredLanguage(country), routes, true);
     });
   }
 

@@ -22,7 +22,7 @@ This series starts with the common language behind those algorithms, then moves 
 
 Reinforcement learning is trial-and-error learning. At each time step, an agent observes a state or observation, chooses an action, and receives a new state and scalar reward from the environment. The goal is not to maximize the score of the current step, but the cumulative return over the interaction.
 
-![An agent acts on an environment and learns from the next state and reward](/img/posts/reinforcement-learning-series/trial-and-error.png)
+![An agent acts on an environment and learns from the next state and reward](/img/posts/reinforcement-learning-series/trial-and-error.en.jpg)
 
 ```text
 State / Observation → Agent → Action
