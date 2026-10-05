@@ -62,6 +62,11 @@
     return routes;
   }
 
+  function getCurrentLanguage() {
+    var element = document.querySelector('meta[name="site-current-language"]');
+    return normalizeLanguage(element && element.getAttribute("content"));
+  }
+
   function readCachedCountry() {
     var value = readLocalStorage(REGION_KEY);
     if (!value) {
@@ -146,9 +151,35 @@
     return value.length > 1 ? value.replace(/\/$/, "") : value;
   }
 
-  function redirectIfNeeded(language, routes, respectPreference) {
+  function preservePagination(target) {
+    var currentPath = normalizePath(window.location.pathname);
+    var pageMatch = currentPath.match(/\/page\/(\d+)$/);
+    var targetPath = normalizePath(target);
+
+    if (!pageMatch || /\/page\/\d+$/.test(targetPath)) {
+      return target;
+    }
+
+    return targetPath + "/page/" + pageMatch[1] + "/";
+  }
+
+  function isLanguageHome(path) {
+    var normalized = normalizePath(path);
+    return normalized === "/" || normalized === "/en";
+  }
+
+  function redirectIfNeeded(language, routes, currentLanguage, respectPreference) {
     var target = routes[language];
-    if ((respectPreference && getPreference()) || !target || normalizePath(target) === normalizePath(window.location.pathname)) {
+    if ((respectPreference && getPreference()) || !target) {
+      return;
+    }
+
+    if (language === currentLanguage && !isLanguageHome(window.location.pathname)) {
+      return;
+    }
+
+    target = preservePagination(target);
+    if (normalizePath(target) === normalizePath(window.location.pathname)) {
       return;
     }
     window.location.replace(target);
@@ -159,6 +190,13 @@
     for (var index = 0; index < choices.length; index += 1) {
       choices[index].addEventListener("click", function (event) {
         savePreference(event.currentTarget.getAttribute("data-language-choice"));
+
+        var target = event.currentTarget.getAttribute("href");
+        var paginatedTarget = preservePagination(target);
+        if (target && normalizePath(paginatedTarget) !== normalizePath(target)) {
+          event.preventDefault();
+          window.location.assign(paginatedTarget);
+        }
       });
     }
   }
@@ -167,20 +205,21 @@
     bindLanguageChoices();
 
     var routes = getRoutes();
+    var currentLanguage = getCurrentLanguage();
     var preference = getPreference();
     if (preference) {
-      redirectIfNeeded(preference, routes, false);
+      redirectIfNeeded(preference, routes, currentLanguage, false);
       return;
     }
 
     var cachedCountry = readCachedCountry();
     if (cachedCountry !== null) {
-      redirectIfNeeded(desiredLanguage(cachedCountry), routes, true);
+      redirectIfNeeded(desiredLanguage(cachedCountry), routes, currentLanguage, true);
       return;
     }
 
     lookupCountry().then(function (country) {
-      redirectIfNeeded(desiredLanguage(country), routes, true);
+      redirectIfNeeded(desiredLanguage(country), routes, currentLanguage, true);
     });
   }
 
