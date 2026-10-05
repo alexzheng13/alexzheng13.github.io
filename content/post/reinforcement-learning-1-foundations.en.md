@@ -43,7 +43,7 @@ The basic objects are:
 Optimizing immediate reward alone often creates shortsighted behavior. RL instead uses the discounted return from time $t$:
 
 $$
-G_t=R_{t+1}+\gamma R_{t+2}+\gamma^2R_{t+3}+\cdots
+G&#95;{t}=R&#95;{t+1}+\gamma R&#95;{t+2}+\gamma^2R&#95;{t+3}+\cdots
 $$
 
 The discount factor $\gamma\in[0,1]$ controls how much future rewards matter. Small values favor immediate outcomes; values near one make long-term consequences important. Discounting also reflects the growing uncertainty of distant outcomes and helps infinite sums converge.
@@ -61,7 +61,7 @@ $$
 A stochastic policy returns a distribution:
 
 $$
-\pi(a\mid s)=\Pr(A_t=a\mid S_t=s)
+\pi(a\mid s)=\Pr(A&#95;{t}=a\mid S&#95;{t}=s)
 $$
 
 Stochastic policies preserve exploration because non-greedy actions can still be sampled.
@@ -90,15 +90,25 @@ $$
 \mathcal{M}=(\mathcal{S},\mathcal{A},P,R,\gamma)
 $$
 
-Here $\mathcal{S}$ is the state space, $\mathcal{A}$ the action space, $P(s'\mid s,a)$ the transition model, $R$ the reward function, and $\gamma$ the discount factor.
+Here $\mathcal{S}$ is the state space, $\mathcal{A}$ the action space, $P(s^{\prime}\mid s,a)$ the transition model, $R$ the reward function, and $\gamma$ the discount factor.
 
-![States, actions, transitions, and rewards in an MDP](/img/posts/reinforcement-learning-series/mdp.png)
+The transition and reward terms can be written explicitly as:
+
+$$
+P(s^{\prime}\mid s,a)=\Pr(S&#95;{t+1}=s^{\prime}\mid S&#95;{t}=s,A&#95;{t}=a)
+$$
+
+$$
+R(s,a,s^{\prime})=\mathbb{E}\left[R&#95;{t+1}\mid S&#95;{t}=s,A&#95;{t}=a,S&#95;{t+1}=s^{\prime}\right]
+$$
+
+They answer two different questions: where does the environment move after an action, and how much reward does that transition produce?
 
 The Markov property says that a complete current state contains everything needed to predict the next state:
 
 $$
-P(S_{t+1}\mid S_t,A_t,S_{t-1},A_{t-1},\ldots)
-=P(S_{t+1}\mid S_t,A_t)
+P(S&#95;{t+1}\mid S&#95;{t},A&#95;{t},S&#95;{t-1},A&#95;{t-1},\ldots)
+=P(S&#95;{t+1}\mid S&#95;{t},A&#95;{t})
 $$
 
 History is not irrelevant; its relevant information must already be summarized by the current state. When an observation is insufficient, the problem is closer to a POMDP and the agent needs memory.
@@ -110,16 +120,22 @@ If $P$ and $R$ are known, dynamic programming can plan directly. In most real ta
 The state-value function measures the expected return from state $s$ under policy $\pi$:
 
 $$
-V^\pi(s)=\mathbb{E}_\pi[G_t\mid S_t=s]
+V^\pi(s)=\mathbb{E}&#95;{\pi}[G&#95;{t}\mid S&#95;{t}=s]
 $$
 
 The action-value function asks the same question after first taking action $a$:
 
 $$
-Q^\pi(s,a)=\mathbb{E}_\pi[G_t\mid S_t=s,A_t=a]
+Q^\pi(s,a)=\mathbb{E}&#95;{\pi}[G&#95;{t}\mid S&#95;{t}=s,A&#95;{t}=a]
 $$
 
-![Q-values compare the long-term return of state-action pairs](/img/posts/reinforcement-learning-series/q-value.png)
+The **Q-function** and **Q-Learning** are not the same thing. $Q^\pi(s,a)$ is an action-value function; Q-Learning is a particular algorithm for estimating the optimal action-value function $Q^{\star}$.
+
+State value is the policy-weighted average of action values:
+
+$$
+V^\pi(s)=\sum&#95;{a}\pi(a\mid s)Q^\pi(s,a)
+$$
 
 Values compress a complex future into comparable scalars. The remaining question is how to estimate a future that has not happened yet.
 
@@ -132,35 +148,42 @@ The Bellman idea is:
 For a fixed policy:
 
 $$
-V^\pi(s)=\sum_a\pi(a\mid s)
-\sum_{s',r}p(s',r\mid s,a)
-\left[r+\gamma V^\pi(s')\right]
+V^\pi(s)=\sum&#95;{a}\pi(a\mid s)
+\sum&#95;{s^{\prime},r}p(s^{\prime},r\mid s,a)
+\left[r+\gamma V^\pi(s^{\prime})\right]
 $$
 
-![The Bellman expectation equation recursively decomposes current value](/img/posts/reinforcement-learning-series/bellman-expectation.png)
+If reward depends only on $(s,a)$, the same equation has a compact form:
+
+$$
+V^\pi(s)=\sum&#95;{a}\pi(a\mid s)
+\left[R(s,a)+\gamma\sum&#95;{s^{\prime}}P(s^{\prime}\mid s,a)V^\pi(s^{\prime})\right]
+$$
+
+The policy weights actions, the transition model weights successor states, and $\gamma$ controls how strongly future value affects the current estimate.
 
 To find the optimal policy, replace averaging over actions with maximization:
 
 $$
-V^*(s)=\max_a\sum_{s',r}p(s',r\mid s,a)
-\left[r+\gamma V^*(s')\right]
+V^{\star}(s)=\max&#95;{a}\sum&#95;{s^{\prime},r}p(s^{\prime},r\mid s,a)
+\left[r+\gamma V^{\star}(s^{\prime})\right]
 $$
 
 The Q-function form is:
 
 $$
-Q^*(s,a)=\mathbb{E}\left[
-R_{t+1}+\gamma\max_{a'}Q^*(S_{t+1},a')
-\mid S_t=s,A_t=a
+Q^{\star}(s,a)=\mathbb{E}\left[
+R&#95;{t+1}+\gamma\max&#95;{a^{\prime}}Q^{\star}(S&#95;{t+1},a^{\prime})
+\mid S&#95;{t}=s,A&#95;{t}=a
 \right]
 $$
 
-![Bellman optimality equation for the Q-function](/img/posts/reinforcement-learning-series/bellman-q-optimality.png)
+The right-hand side combines immediate reward with the best achievable value after reaching the next state. The first action is fixed; optimization begins with the following action.
 
-Once $Q^*$ is known, the optimal policy follows directly:
+Once $Q^{\star}$ is known, the optimal policy follows directly:
 
 $$
-\pi^*(s)=\arg\max_aQ^*(s,a)
+\pi^{\star}(s)=\arg\max&#95;{a}Q^{\star}(s,a)
 $$
 
 ## 8. Two routes forward
@@ -168,6 +191,6 @@ $$
 Bellman equations lead to two major families:
 
 1. **Value-based methods** learn $V$ or $Q$ and derive actions from values. Q-Learning and DQN follow this route.
-2. **Policy-based methods** directly optimize a parameterized policy $\pi_\theta(a\mid s)$. REINFORCE and PPO follow this route.
+2. **Policy-based methods** directly optimize a parameterized policy $\pi&#95;{\theta}(a\mid s)$. REINFORCE and PPO follow this route.
 
 Actor-Critic combines them: the Actor chooses actions and the Critic estimates their value. The next article follows this progression from dynamic programming, Monte Carlo, and temporal difference learning to Q-Learning, DQN, Actor-Critic, and PPO.

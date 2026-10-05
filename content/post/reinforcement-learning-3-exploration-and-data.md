@@ -25,18 +25,22 @@ mathjaxEnableSingleDollar: true
 - **Exploitation（利用）**：选择当前估计最好的动作，使用已有知识获得奖励；
 - **Exploration（探索）**：尝试仍不确定的动作，用短期成本换取新信息。
 
-![探索获取信息，利用把已有信息转化为奖励](/img/posts/reinforcement-learning-series/exploration-exploitation.png)
-
 以选餐厅为例：每天去已经确认好吃的店，收益稳定，却可能永远错过更好的选择；每天都去新店，则会频繁踩雷。困难在于智能体一开始并不知道真实期望，只能一边行动、一边估计。
 
-多臂老虎机中，动作 $a$ 的真实期望奖励为 $\mu_a$。如果每轮都知道最优动作 $a^*$，就能获得 $\mu_{a^*}$。实际选择 $A_t$ 带来的累计遗憾是：
+如果动作 $a$ 的随机奖励为 $R&#95;{a}$，它的真实期望奖励是：
+
+$$
+\mu&#95;{a}=\mathbb{E}[R&#95;{a}]=\sum&#95;{r}r\,P(R&#95;{a}=r)
+$$
+
+智能体无法直接看到 $\mu&#95;{a}$，只能根据已经观察到的样本奖励估计它。
+
+多臂老虎机中，动作 $a$ 的真实期望奖励为 $\mu&#95;{a}$。如果每轮都知道最优动作 $a^{\star}$，就能获得 $\mu&#95;{a^{\star}}$。实际选择 $A&#95;{t}$ 带来的累计遗憾是：
 
 $$
 \operatorname{Regret}(T)=
-T\mu_{a^*}-\sum_{t=1}^{T}\mu_{A_t}
+T\mu&#95;{a^{\star}}-\sum&#95;{t=1}^{T}\mu&#95;{A&#95;{t}}
 $$
-
-![探索策略希望在有限轮数内压低累计遗憾](/img/posts/reinforcement-learning-series/regret.png)
 
 好的探索策略不是让每一步都最高分，而是让长期 Regret 增长得尽可能慢。
 
@@ -45,14 +49,12 @@ $$
 $\epsilon$-greedy 以概率 $1-\epsilon$ 选择当前估计最好的动作，以概率 $\epsilon$ 随机选择：
 
 $$
-A_t=
+A&#95;{t}=
 \begin{cases}
-\arg\max_a \hat\mu_a, & \text{with probability }1-\epsilon\\
+\arg\max&#95;{a} \hat\mu&#95;{a}, & \text{with probability }1-\epsilon\\
 \text{random action}, & \text{with probability }\epsilon
 \end{cases}
 $$
-
-![epsilon-greedy 在随机探索与贪心利用之间切换](/img/posts/reinforcement-learning-series/epsilon-greedy.png)
 
 ```python
 import numpy as np
@@ -78,8 +80,14 @@ class EpsilonGreedy:
 均值采用增量更新：
 
 $$
-\hat\mu_a\leftarrow \hat\mu_a+
-\frac{r-\hat\mu_a}{N_a}
+\hat\mu&#95;{a}=\frac{1}{N&#95;{a}}\sum&#95;{i=1}^{N&#95;{a}}r&#95;{i}
+$$
+
+把同一个样本均值写成无需保存历史数据的增量形式：
+
+$$
+\hat\mu&#95;{a}\leftarrow \hat\mu&#95;{a}+
+\frac{r-\hat\mu&#95;{a}}{N&#95;{a}}
 $$
 
 这样不需要保存所有历史奖励。
@@ -108,13 +116,13 @@ class DecayingEpsilonGreedy(EpsilonGreedy):
 $\epsilon$-greedy 进入探索分支后会在所有动作中随机选择，甚至反复尝试已经明显很差的动作。UCB（Upper Confidence Bound）把平均奖励与不确定性奖金相加：
 
 $$
-A_t=\arg\max_a
+A&#95;{t}=\arg\max&#95;{a}
 \left[
-\hat\mu_a+c\sqrt{\frac{\ln t}{N_a}}
+\hat\mu&#95;{a}+c\sqrt{\frac{\ln t}{N&#95;{a}}}
 \right]
 $$
 
-尝试次数 $N_a$ 越少，探索奖金越大；尝试越多，决策越依赖真实均值。
+尝试次数 $N&#95;{a}$ 越少，探索奖金越大；尝试越多，决策越依赖真实均值。
 
 ```python
 class UCB:

@@ -23,15 +23,19 @@ Always choosing the current best action can preserve an early mistake forever. E
 - **Exploitation** selects the action currently estimated to be best.
 - **Exploration** spends short-term reward to reduce uncertainty.
 
-![Exploration gathers information while exploitation converts knowledge into reward](/img/posts/reinforcement-learning-series/exploration-exploitation.png)
-
-For a multi-armed bandit, let $\mu_a$ be the true mean reward and $a^*$ the optimal arm. Cumulative regret is:
+If action $a$ produces random reward $R&#95;{a}$, its true expected reward is:
 
 $$
-\operatorname{Regret}(T)=T\mu_{a^*}-\sum_{t=1}^{T}\mu_{A_t}
+\mu&#95;{a}=\mathbb{E}[R&#95;{a}]=\sum&#95;{r}r\,P(R&#95;{a}=r)
 $$
 
-![Exploration strategies aim to keep cumulative regret small](/img/posts/reinforcement-learning-series/regret.png)
+The agent cannot observe $\mu&#95;{a}$ directly. It can only estimate it from sampled rewards.
+
+For a multi-armed bandit, let $\mu&#95;{a}$ be the true mean reward and $a^{\star}$ the optimal arm. Cumulative regret is:
+
+$$
+\operatorname{Regret}(T)=T\mu&#95;{a^{\star}}-\sum&#95;{t=1}^{T}\mu&#95;{A&#95;{t}}
+$$
 
 A good strategy does not maximize every individual step; it keeps long-term regret from growing too quickly.
 
@@ -40,13 +44,11 @@ A good strategy does not maximize every individual step; it keeps long-term regr
 With probability $1-\epsilon$, select the estimated best action; with probability $\epsilon$, explore randomly:
 
 $$
-A_t=\begin{cases}
-\arg\max_a\hat\mu_a,&\text{with probability }1-\epsilon\\
+A&#95;{t}=\begin{cases}
+\arg\max&#95;{a}\hat\mu&#95;{a},&\text{with probability }1-\epsilon\\
 \text{random action},&\text{with probability }\epsilon
 \end{cases}
 $$
-
-![Epsilon-greedy alternates random exploration and greedy exploitation](/img/posts/reinforcement-learning-series/epsilon-greedy.png)
 
 ```python
 class EpsilonGreedy:
@@ -65,10 +67,16 @@ class EpsilonGreedy:
         self.q[arm] += (reward - self.q[arm]) / self.n[arm]
 ```
 
-The incremental mean update is:
+The empirical mean is:
 
 $$
-\hat\mu_a\leftarrow\hat\mu_a+\frac{r-\hat\mu_a}{N_a}
+\hat\mu&#95;{a}=\frac{1}{N&#95;{a}}\sum&#95;{i=1}^{N&#95;{a}}r&#95;{i}
+$$
+
+The same mean can be maintained incrementally without storing every past reward:
+
+$$
+\hat\mu&#95;{a}\leftarrow\hat\mu&#95;{a}+\frac{r-\hat\mu&#95;{a}}{N&#95;{a}}
 $$
 
 Exploration is often decayed over time, but a fixed schedule ignores which actions remain uncertain.
@@ -78,8 +86,8 @@ Exploration is often decayed over time, but a fixed schedule ignores which actio
 UCB adds an uncertainty bonus to each empirical mean:
 
 $$
-A_t=\arg\max_a\left[
-\hat\mu_a+c\sqrt{\frac{\ln t}{N_a}}
+A&#95;{t}=\arg\max&#95;{a}\left[
+\hat\mu&#95;{a}+c\sqrt{\frac{\ln t}{N&#95;{a}}}
 \right]
 $$
 

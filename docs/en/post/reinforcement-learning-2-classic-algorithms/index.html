@@ -68,7 +68,7 @@
 
 <meta itemprop="datePublished" content="2026-08-26T09:00:00&#43;02:00" />
 <meta itemprop="dateModified" content="2026-08-26T09:00:00&#43;02:00" />
-<meta itemprop="wordCount" content="793">
+<meta itemprop="wordCount" content="936">
 
 
 
@@ -225,8 +225,8 @@
         <div class="post-category">
             <a href="/en/categories/reinforcement-learning/"> Reinforcement Learning </a>
             </div>
-          <span class="more-meta"> 793 words </span>
-          <span class="more-meta"> 4 mins read </span>
+          <span class="more-meta"> 936 words </span>
+          <span class="more-meta"> 5 mins read </span>
         
       </div>
     </header>
@@ -273,18 +273,59 @@
 
 <h2 id="2-dp-mc-and-td-three-ways-to-estimate-value">2. DP, MC, and TD: three ways to estimate value</h2>
 
-<p><img src="/img/posts/reinforcement-learning-series/dp-mc-td.png" alt="Dynamic programming, Monte Carlo, and temporal difference learning" /></p>
-
 <h3 id="2-1-dynamic-programming">2.1 Dynamic programming</h3>
 
 <p>Dynamic programming requires the complete transition and reward model and computes expectations over all successor states. It is exact in small known MDPs, but rarely available at real-world scale.</p>
 
-<h3 id="2-2-monte-carlo">2.2 Monte Carlo</h3>
-
-<p>Monte Carlo methods wait until an episode finishes, compute the realized return $G_t$, and average across sampled episodes:</p>
+<p>One policy-evaluation update is:</p>
 
 <p>$$
-V(s)\leftarrow V(s)+\alpha(G_t-V(s))
+V&#95;{k+1}(s)\leftarrow\sum&#95;{a}\pi(a\mid s)
+\left[R(s,a)+\gamma\sum&#95;{s^{\prime}}P(s^{\prime}\mid s,a)V&#95;{k}(s^{\prime})\right]
+$$</p>
+
+<p>The three approaches differ in the information used for their targets:</p>
+
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Needs an environment model?</th>
+<th>Update time</th>
+<th>Learning target</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>DP</td>
+<td>Yes</td>
+<td>State-space sweeps</td>
+<td>Expectation over all successors</td>
+</tr>
+
+<tr>
+<td>MC</td>
+<td>No</td>
+<td>End of an episode</td>
+<td>Complete return $G&#95;{t}$</td>
+</tr>
+
+<tr>
+<td>TD</td>
+<td>No</td>
+<td>Every step</td>
+<td>$R&#95;{t+1}+\gamma V(S&#95;{t+1})$</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="2-2-monte-carlo">2.2 Monte Carlo</h3>
+
+<p>Monte Carlo methods wait until an episode finishes, compute the realized return $G&#95;{t}$, and average across sampled episodes:</p>
+
+<p>$$
+V(s)\leftarrow V(s)+\alpha(G&#95;{t}-V(s))
 $$</p>
 
 <p>The target is grounded in an actual return and requires no bootstrapping. The cost is high variance and the need to wait for termination.</p>
@@ -294,14 +335,14 @@ $$</p>
 <p>TD learning updates after one step using the current estimate of the next state:</p>
 
 <p>$$
-V(S_t)\leftarrow V(S<em>t)+\alpha
-\left[R</em>{t+1}+\gamma V(S_{t+1})-V(S_t)\right]
+V(S&#95;{t})\leftarrow V(S&#95;{t})+\alpha
+\left[R&#95;{t+1}+\gamma V(S&#95;{t+1})-V(S&#95;{t})\right]
 $$</p>
 
 <p>The term in brackets is the TD error:</p>
 
 <p>$$
-\delta<em>t=R</em>{t+1}+\gamma V(S_{t+1})-V(S_t)
+\delta&#95;{t}=R&#95;{t+1}+\gamma V(S&#95;{t+1})-V(S&#95;{t})
 $$</p>
 
 <p>Bootstrapping introduces bias, but enables online, lower-variance updates.</p>
@@ -311,17 +352,17 @@ $$</p>
 <p>Q-Learning is a model-free, off-policy TD control algorithm:</p>
 
 <p>$$
-Q(S_t,A_t)\leftarrow Q(S_t,A<em>t)+\alpha
-\left[R</em>{t+1}+\gamma\max<em>aQ(S</em>{t+1},a)-Q(S_t,A_t)\right]
+Q(S&#95;{t},A&#95;{t})\leftarrow Q(S&#95;{t},A&#95;{t})+\alpha
+\left[R&#95;{t+1}+\gamma\max&#95;{a}Q(S&#95;{t+1},a)-Q(S&#95;{t},A&#95;{t})\right]
 $$</p>
 
-<p><img src="/img/posts/reinforcement-learning-series/q-learning-update.png" alt="One-step Q-Learning update" /></p>
+<p>The bracketed quantity is the Q-Learning TD error. It combines immediate reward, the largest next-state Q-value, and the current estimate. Repeated samples move the table toward the fixed point of the Bellman optimality equation.</p>
 
 <p>The behavior policy may explore, while the update target assumes the best next action. Sarsa instead uses the action actually selected by the behavior policy:</p>
 
 <p>$$
-Q(S_t,A_t)\leftarrow Q(S_t,A<em>t)+\alpha
-\left[R</em>{t+1}+\gamma Q(S<em>{t+1},A</em>{t+1})-Q(S_t,A_t)\right]
+Q(S&#95;{t},A&#95;{t})\leftarrow Q(S&#95;{t},A&#95;{t})+\alpha
+\left[R&#95;{t+1}+\gamma Q(S&#95;{t+1},A&#95;{t+1})-Q(S&#95;{t},A&#95;{t})\right]
 $$</p>
 
 <p>This makes Sarsa sensitive to exploration risk, while Q-Learning targets the greedy policy independently of the behavior policy.</p>
@@ -331,15 +372,19 @@ $$</p>
 <p>Large or continuous state spaces cannot be represented by a table. DQN approximates action values with $Q(s,a;\theta)$:</p>
 
 <p>$$
-y=r+\gamma\max_{a&rsquo;}Q(s&rsquo;,a&rsquo;;\theta^-)
+Q(s,a;\theta)\approx Q^{\star}(s,a)
+$$</p>
+
+<p>The 2013 DQN work brought deep function approximation directly into Q-Learning: the network receives a state and predicts a value for every discrete action. “Deep” describes the Q-function approximator, not a different learning target.</p>
+
+<p>$$
+y=r+\gamma\max&#95;{a^{\prime}}Q(s^{\prime},a^{\prime};\theta^-)
 $$</p>
 
 <p>$$
-L(\theta)=\mathbb{E}_{(s,a,r,s&rsquo;)\sim D}
+L(\theta)=\mathbb{E}&#95;{(s,a,r,s^{\prime})\sim D}
 \left[(y-Q(s,a;\theta))^2\right]
 $$</p>
-
-<p><img src="/img/posts/reinforcement-learning-series/dqn.png" alt="DQN predicts action values from high-dimensional state input" /></p>
 
 <p>Two engineering choices stabilize training:</p>
 
@@ -350,17 +395,17 @@ $$</p>
 
 <h2 id="5-policy-gradients">5. Policy gradients</h2>
 
-<p>Policy-based methods directly parameterize $\pi_\theta(a\mid s)$ and maximize expected return:</p>
+<p>Policy-based methods directly parameterize $\pi&#95;{\theta}(a\mid s)$ and maximize expected return:</p>
 
 <p>$$
-J(\theta)=\mathbb{E}<em>{\tau\sim\pi</em>\theta}[G(\tau)]
+J(\theta)=\mathbb{E}&#95;{\tau\sim\pi&#95;{\theta}}[G(\tau)]
 $$</p>
 
 <p>The policy gradient is:</p>
 
 <p>$$
-\nabla<em>\theta J(\theta)=\mathbb{E}
-\left[\nabla</em>\theta\log\pi_\theta(A_t\mid S_t)G_t\right]
+\nabla&#95;{\theta} J(\theta)=\mathbb{E}
+\left[\nabla&#95;{\theta}\log\pi&#95;{\theta}(A&#95;{t}\mid S&#95;{t})G&#95;{t}\right]
 $$</p>
 
 <p>Actions in high-return trajectories become more likely. Direct returns, however, create high-variance estimates, motivating a learned baseline.</p>
@@ -370,8 +415,8 @@ $$</p>
 <p>Actor-Critic combines a policy and a value estimator:</p>
 
 <ul>
-<li>The <strong>Actor</strong> $\pi_\theta(a\mid s)$ chooses actions.</li>
-<li>The <strong>Critic</strong> $V<em>\phi(s)$ or $Q</em>\phi(s,a)$ evaluates them.</li>
+<li>The <strong>Actor</strong> $\pi&#95;{\theta}(a\mid s)$ chooses actions.</li>
+<li>The <strong>Critic</strong> $V&#95;{\phi}(s)$ or $Q&#95;{\phi}(s,a)$ evaluates them.</li>
 </ul>
 
 <p><img src="/img/posts/reinforcement-learning-series/actor-critic.png" alt="The Actor selects actions while the Critic supplies learning signals" /></p>
@@ -385,9 +430,9 @@ $$</p>
 <p>The Actor update becomes:</p>
 
 <p>$$
-\nabla<em>\theta J(\theta)\approx
+\nabla&#95;{\theta} J(\theta)\approx
 \mathbb{E}\left[
-\nabla</em>\theta\log\pi_\theta(a_t\mid s_t)\hat A_t
+\nabla&#95;{\theta}\log\pi&#95;{\theta}(a&#95;{t}\mid s&#95;{t})\hat A&#95;{t}
 \right]
 $$</p>
 
@@ -437,31 +482,29 @@ $$</p>
 <p>PPO asks how far a policy may move while reusing the same rollout. Define the probability ratio:</p>
 
 <p>$$
-r<em>t(\theta)=
-\frac{\pi</em>\theta(a_t\mid s<em>t)}
-{\pi</em>{\theta_{old}}(a_t\mid s_t)}
+r&#95;{t}(\theta)=
+\frac{\pi&#95;{\theta}(a&#95;{t}\mid s&#95;{t})}
+{\pi&#95;{\theta&#95;{old}}(a&#95;{t}\mid s&#95;{t})}
 $$</p>
 
 <p>The clipped objective is:</p>
 
 <p>$$
-L^{CLIP}(\theta)=\mathbb{E}_t\left[
+L^{CLIP}(\theta)=\mathbb{E}&#95;{t}\left[
 \min\left(
-r_t(\theta)\hat A_t,
-\operatorname{clip}(r_t(\theta),1-\epsilon,1+\epsilon)\hat A_t
+r&#95;{t}(\theta)\hat A&#95;{t},
+\operatorname{clip}(r&#95;{t}(\theta),1-\epsilon,1+\epsilon)\hat A&#95;{t}
 \right)
 \right]
 $$</p>
 
-<p><img src="/img/posts/reinforcement-learning-series/ppo-clipping.png" alt="PPO clipping prevents excessively large policy updates" /></p>
-
-<p>Clipping removes the incentive for probability ratios to move too far from one. A typical loop collects rollouts, estimates returns and advantages, updates Actor and Critic for several mini-batch epochs, then refreshes the old-policy snapshot.</p>
+<p>Here $\hat A&#95;{t}$ is the estimated advantage and $\epsilon$ is the clipping width, commonly around $0.1$ to $0.2$. Clipping removes the incentive for probability ratios to move too far from one. A typical loop collects rollouts, estimates returns and advantages, updates Actor and Critic for several mini-batch epochs, then refreshes the old-policy snapshot.</p>
 
 <p>GAE trades bias and variance through $\lambda$:</p>
 
 <p>$$
-\hat A<em>t^{GAE(\gamma,\lambda)}=
-\sum</em>{l=0}^{\infty}(\gamma\lambda)^l\delta_{t+l}
+\hat A&#95;{t}^{GAE(\gamma,\lambda)}=
+\sum&#95;{l=0}^{\infty}(\gamma\lambda)^l\delta&#95;{t+l}
 $$</p>
 
 <p>The full objective usually combines policy loss, value loss, and an entropy bonus.</p>

@@ -25,24 +25,37 @@ mathjaxEnableSingleDollar: true
 - **Model-Based**：拥有或学习转移与奖励模型，可以在内部推演“执行这个动作后会发生什么”；
 - **Model-Free**：不显式建立环境模型，直接从交互经验中学习价值函数或策略。
 
-知道完整 $P(s'\mid s,a)$ 时，动态规划可以遍历状态并反复应用贝尔曼方程。真实世界里模型往往未知，因此 Q-Learning、DQN、PPO 等常用算法大多属于 Model-Free。
+知道完整 $P(s^{\prime}\mid s,a)$ 时，动态规划可以遍历状态并反复应用贝尔曼方程。真实世界里模型往往未知，因此 Q-Learning、DQN、PPO 等常用算法大多属于 Model-Free。
 
 这个维度与 Value-Based / Policy-Based 不冲突：一个算法可以是 Model-Free + Value-Based，也可以是 Model-Free + Policy-Based。
 
 ## 2. DP、MC 与 TD：三种价值估计方式
 
-![动态规划、蒙特卡洛与时序差分在信息需求和更新时机上的差异](/img/posts/reinforcement-learning-series/dp-mc-td.png)
-
 ### 2.1 动态规划：有模型，全期望
 
 动态规划（DP）需要已知转移概率与奖励，通过遍历所有后继状态计算完整期望。它的估计偏差小，但现实中通常拿不到完整环境模型，状态空间也可能太大。
 
-### 2.2 蒙特卡洛：无模型，等结局
-
-蒙特卡洛（MC）不需要环境模型。它从状态 $s$ 出发跑完一个完整 Episode，再计算真实回报 $G_t$，最后用多次采样的平均值估计 $V(s)$：
+固定策略下，一次策略评估更新为：
 
 $$
-V(s) \leftarrow V(s) + \alpha\left(G_t-V(s)\right)
+V&#95;{k+1}(s)\leftarrow\sum&#95;{a}\pi(a\mid s)
+\left[R(s,a)+\gamma\sum&#95;{s^{\prime}}P(s^{\prime}\mid s,a)V&#95;{k}(s^{\prime})\right]
+$$
+
+DP 使用模型给出的完整期望；MC 用回合结束后的完整回报；TD 则只走一步便用当前估计自举。三者的差别可以压缩为：
+
+| 方法 | 是否需要环境模型 | 更新时机 | 学习目标 |
+| --- | --- | --- | --- |
+| DP | 需要 | 扫描状态空间 | 对全部后继状态求期望 |
+| MC | 不需要 | Episode 结束后 | 完整回报 $G&#95;{t}$ |
+| TD | 不需要 | 每个时间步 | $R&#95;{t+1}+\gamma V(S&#95;{t+1})$ |
+
+### 2.2 蒙特卡洛：无模型，等结局
+
+蒙特卡洛（MC）不需要环境模型。它从状态 $s$ 出发跑完一个完整 Episode，再计算真实回报 $G&#95;{t}$，最后用多次采样的平均值估计 $V(s)$：
+
+$$
+V(s) \leftarrow V(s) + \alpha\left(G&#95;{t}-V(s)\right)
 $$
 
 优势是目标来自真实回报，不需要 bootstrap；缺点是必须等回合结束，且方差较大。对于很长或没有自然终点的任务，这种等待代价很高。
@@ -52,14 +65,14 @@ $$
 时序差分（TD）结合了 MC 的采样和 DP 的自举（bootstrapping）。它不等完整回合，而用下一状态的当前估计更新这一状态：
 
 $$
-V(S_t) \leftarrow V(S_t)+\alpha
-\left[R_{t+1}+\gamma V(S_{t+1})-V(S_t)\right]
+V(S&#95;{t}) \leftarrow V(S&#95;{t})+\alpha
+\left[R&#95;{t+1}+\gamma V(S&#95;{t+1})-V(S&#95;{t})\right]
 $$
 
 括号内叫作 **TD error**：
 
 $$
-\delta_t=R_{t+1}+\gamma V(S_{t+1})-V(S_t)
+\delta&#95;{t}=R&#95;{t+1}+\gamma V(S&#95;{t+1})-V(S&#95;{t})
 $$
 
 TD 目标含有另一个估计值，因此可能有偏差，却能在线更新、方差通常更低，也更适合持续交互。
@@ -69,13 +82,13 @@ TD 目标含有另一个估计值，因此可能有偏差，却能在线更新�
 Q-Learning 是无模型、异策略（off-policy）的 TD 控制算法。它用下一状态中价值最高的动作构造目标：
 
 $$
-Q(S_t,A_t) \leftarrow Q(S_t,A_t)+\alpha
+Q(S&#95;{t},A&#95;{t}) \leftarrow Q(S&#95;{t},A&#95;{t})+\alpha
 \left[
-R_{t+1}+\gamma\max_aQ(S_{t+1},a)-Q(S_t,A_t)
+R&#95;{t+1}+\gamma\max&#95;{a}Q(S&#95;{t+1},a)-Q(S&#95;{t},A&#95;{t})
 \right]
 $$
 
-![Q-Learning 的一步更新](/img/posts/reinforcement-learning-series/q-learning-update.png)
+更新式中的括号就是 Q-Learning 的 TD error：新估计由即时奖励、下一状态的最大 Q 值和当前 Q 值三部分决定。反复采样后，Q 表逐渐逼近贝尔曼最优方程的固定点。
 
 “异策略”体现在：产生数据的行为策略可以带有探索，比如 $\epsilon$-greedy；更新目标却假设下一步会选择当前最优动作。也就是说，它可以一边探索，一边学习贪心策略。
 
@@ -84,9 +97,9 @@ $$
 Sarsa 的目标使用行为策略实际选择的下一动作：
 
 $$
-Q(S_t,A_t) \leftarrow Q(S_t,A_t)+\alpha
+Q(S&#95;{t},A&#95;{t}) \leftarrow Q(S&#95;{t},A&#95;{t})+\alpha
 \left[
-R_{t+1}+\gamma Q(S_{t+1},A_{t+1})-Q(S_t,A_t)
+R&#95;{t+1}+\gamma Q(S&#95;{t+1},A&#95;{t+1})-Q(S&#95;{t},A&#95;{t})
 \right]
 $$
 
@@ -100,18 +113,22 @@ $$
 
 表格型 Q-Learning 假设状态—动作组合可以枚举。像素输入、连续状态或巨大状态空间下，表格不再可行。DQN 用参数为 $\theta$ 的神经网络 $Q(s,a;\theta)$ 近似 Q 函数。
 
+$$
+Q(s,a;\theta)\approx Q^{\star}(s,a)
+$$
+
+2013 年的 DQN 工作把深度神经网络的函数逼近能力直接带入 Q-Learning：网络输入状态，输出每个离散动作的价值估计。“Deep”指的是用于表示 Q 函数的深度网络，而不是一种不同的 Q-Learning 目标。
+
 训练目标是：
 
 $$
-y=r+\gamma\max_{a'}Q(s',a';\theta^-)
+y=r+\gamma\max&#95;{a^{\prime}}Q(s^{\prime},a^{\prime};\theta^-)
 $$
 
 $$
-L(\theta)=\mathbb{E}_{(s,a,r,s')\sim D}
+L(\theta)=\mathbb{E}&#95;{(s,a,r,s^{\prime})\sim D}
 \left[(y-Q(s,a;\theta))^2\right]
 $$
-
-![DQN 用神经网络从状态预测每个动作的 Q 值](/img/posts/reinforcement-learning-series/dqn.png)
 
 DQN 能稳定训练，依赖两个关键工程设计：
 
@@ -122,30 +139,30 @@ DQN 能稳定训练，依赖两个关键工程设计：
 
 ## 5. Policy Gradient：直接优化策略
 
-Value-Based 方法先学习动作价值，再从价值中选动作。Policy-Based 方法直接参数化策略 $\pi_\theta(a\mid s)$，最大化期望回报：
+Value-Based 方法先学习动作价值，再从价值中选动作。Policy-Based 方法直接参数化策略 $\pi&#95;{\theta}(a\mid s)$，最大化期望回报：
 
 $$
-J(\theta)=\mathbb{E}_{\tau\sim\pi_\theta}[G(\tau)]
+J(\theta)=\mathbb{E}&#95;{\tau\sim\pi&#95;{\theta}}[G(\tau)]
 $$
 
 策略梯度定理给出：
 
 $$
-\nabla_\theta J(\theta)=
-\mathbb{E}_{\pi_\theta}
-\left[\nabla_\theta\log\pi_\theta(A_t\mid S_t)G_t\right]
+\nabla&#95;{\theta} J(\theta)=
+\mathbb{E}&#95;{\pi&#95;{\theta}}
+\left[\nabla&#95;{\theta}\log\pi&#95;{\theta}(A&#95;{t}\mid S&#95;{t})G&#95;{t}\right]
 $$
 
 直觉是：高回报轨迹中的动作应该更可能被选中，低回报轨迹中的动作应该被压低概率。
 
-但直接使用回报 $G_t$ 方差很高。一次轨迹得分高，未必表示其中每个动作都好；而不同状态本身的难度也不同。于是需要一个评价者提供更稳定的基线。
+但直接使用回报 $G&#95;{t}$ 方差很高。一次轨迹得分高，未必表示其中每个动作都好；而不同状态本身的难度也不同。于是需要一个评价者提供更稳定的基线。
 
 ## 6. Actor-Critic：一个行动，一个评价
 
 Actor-Critic 把策略与价值两条路线放到同一个系统中：
 
-- **Actor**：策略 $\pi_\theta(a\mid s)$，负责选择动作；
-- **Critic**：价值函数 $V_\phi(s)$ 或 $Q_\phi(s,a)$，负责评价行动结果。
+- **Actor**：策略 $\pi&#95;{\theta}(a\mid s)$，负责选择动作；
+- **Critic**：价值函数 $V&#95;{\phi}(s)$ 或 $Q&#95;{\phi}(s,a)$，负责评价行动结果。
 
 ![Actor 根据策略行动，Critic 用价值估计指导 Actor 更新](/img/posts/reinforcement-learning-series/actor-critic.png)
 
@@ -158,9 +175,9 @@ $$
 它回答的不是“这个动作能得多少分”，而是“这个动作比该状态下的平均表现好多少”。Actor 更新可以写成：
 
 $$
-\nabla_\theta J(\theta)\approx
+\nabla&#95;{\theta} J(\theta)\approx
 \mathbb{E}\left[
-\nabla_\theta\log\pi_\theta(a_t\mid s_t)\hat A_t
+\nabla&#95;{\theta}\log\pi&#95;{\theta}(a&#95;{t}\mid s&#95;{t})\hat A&#95;{t}
 \right]
 $$
 
@@ -199,29 +216,27 @@ Actor 与 Critic 相互促进，但也会相互放大误差。Critic 判断不�
 
 PPO（Proximal Policy Optimization）要解决的核心问题是：**同一批采样数据上，策略应该更新多少？**
 
-令旧策略为 $\pi_{\theta_{old}}$，新策略为 $\pi_\theta$，重要性采样比率为：
+令旧策略为 $\pi&#95;{\theta&#95;{old}}$，新策略为 $\pi&#95;{\theta}$，重要性采样比率为：
 
 $$
-r_t(\theta)=
-\frac{\pi_\theta(a_t\mid s_t)}
-{\pi_{\theta_{old}}(a_t\mid s_t)}
+r&#95;{t}(\theta)=
+\frac{\pi&#95;{\theta}(a&#95;{t}\mid s&#95;{t})}
+{\pi&#95;{\theta&#95;{old}}(a&#95;{t}\mid s&#95;{t})}
 $$
 
-如果 $r_t$ 离 1 太远，说明新策略与收集数据时的旧策略差异过大。PPO 的 clipped objective 是：
+如果 $r&#95;{t}$ 离 1 太远，说明新策略与收集数据时的旧策略差异过大。PPO 的 clipped objective 是：
 
 $$
 L^{CLIP}(\theta)=
-\mathbb{E}_t\left[
+\mathbb{E}&#95;{t}\left[
 \min\left(
-r_t(\theta)\hat A_t,
-\operatorname{clip}(r_t(\theta),1-\epsilon,1+\epsilon)\hat A_t
+r&#95;{t}(\theta)\hat A&#95;{t},
+\operatorname{clip}(r&#95;{t}(\theta),1-\epsilon,1+\epsilon)\hat A&#95;{t}
 \right)
 \right]
 $$
 
-![PPO 通过裁剪重要性比率限制单次更新幅度](/img/posts/reinforcement-learning-series/ppo-clipping.png)
-
-裁剪不是阻止学习，而是让过度激进的更新失去额外收益。它以相对简单的实现，近似实现了“新策略不要离旧策略太远”的信赖域思想。
+其中 $\hat A&#95;{t}$ 是优势估计，$\epsilon$ 是裁剪宽度，实践中常取约 $0.1$ 到 $0.2$。裁剪不是阻止学习，而是让过度激进的更新失去额外收益。它以相对简单的实现，近似实现了“新策略不要离旧策略太远”的信赖域思想。
 
 ### 7.1 PPO 的训练循环
 
@@ -235,14 +250,14 @@ $$
 GAE 用参数 $\lambda$ 在偏差与方差之间折中：
 
 $$
-\hat A_t^{GAE(\gamma,\lambda)}=
-\sum_{l=0}^{\infty}(\gamma\lambda)^l\delta_{t+l}
+\hat A&#95;{t}^{GAE(\gamma,\lambda)}=
+\sum&#95;{l=0}^{\infty}(\gamma\lambda)^l\delta&#95;{t+l}
 $$
 
 实际损失通常还包含 value loss 与 entropy bonus：
 
 $$
-L = -L^{CLIP}+c_vL^{value}-c_e\mathcal{H}(\pi)
+L = -L^{CLIP}+c&#95;{v}L^{value}-c&#95;{e}\mathcal{H}(\pi)
 $$
 
 熵奖励鼓励策略保留一定随机性，避免过早坍缩到单一动作。

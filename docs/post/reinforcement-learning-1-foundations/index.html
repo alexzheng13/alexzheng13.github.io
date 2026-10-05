@@ -68,7 +68,7 @@
 
 <meta itemprop="datePublished" content="2026-08-25T09:00:00&#43;02:00" />
 <meta itemprop="dateModified" content="2026-08-25T09:00:00&#43;02:00" />
-<meta itemprop="wordCount" content="2497">
+<meta itemprop="wordCount" content="2890">
 
 
 
@@ -225,8 +225,8 @@
         <div class="post-category">
             <a href="/categories/reinforcement-learning/"> Reinforcement Learning </a>
             </div>
-          <span class="more-meta"> 约 2497 字 </span>
-          <span class="more-meta"> 预计阅读 5 分钟 </span>
+          <span class="more-meta"> 约 2890 字 </span>
+          <span class="more-meta"> 预计阅读 6 分钟 </span>
         
       </div>
     </header>
@@ -302,7 +302,7 @@
 <p>只追逐即时奖励往往会产生短视行为。强化学习真正优化的是从时刻 $t$ 开始的折扣累积回报：</p>
 
 <p>$$
-G<em>t = R</em>{t+1} + \gamma R<em>{t+2} + \gamma^2 R</em>{t+3} + \cdots
+G&#95;t = R&#95;{t+1} + \gamma R&#95;{t+2} + \gamma^2 R&#95;{t+3} + \cdots
 $$</p>
 
 <p>其中折扣因子 $\gamma \in [0,1]$ 决定智能体有多重视未来：</p>
@@ -330,7 +330,7 @@ $$</p>
 <p>随机策略输出动作的概率分布：</p>
 
 <p>$$
-\pi(a\mid s)=\Pr(A_t=a\mid S_t=s)
+\pi(a\mid s)=\Pr(A&#95;{t}=a\mid S&#95;{t}=s)
 $$</p>
 
 <p>随机策略天然保留了探索：即使某个动作当前概率最高，其他动作仍有机会被尝试。这一点会在系列第三篇里继续展开。</p>
@@ -392,18 +392,28 @@ $$</p>
 <ul>
 <li>$\mathcal{S}$：状态空间；</li>
 <li>$\mathcal{A}$：动作空间；</li>
-<li>$P(s&rsquo;\mid s,a)$：状态转移概率；</li>
-<li>$R(s,a,s&rsquo;)$：奖励函数；</li>
+<li>$P(s^{\prime}\mid s,a)$：状态转移概率；</li>
+<li>$R(s,a,s^{\prime})$：奖励函数；</li>
 <li>$\gamma$：折扣因子。</li>
 </ul>
 
-<p><img src="/img/posts/reinforcement-learning-series/mdp.png" alt="MDP 中状态、动作、转移与奖励之间的关系" /></p>
+<p>其中，转移概率和奖励可以展开写为：</p>
+
+<p>$$
+P(s^{\prime}\mid s,a)=\Pr(S&#95;{t+1}=s^{\prime}\mid S&#95;{t}=s,A&#95;{t}=a)
+$$</p>
+
+<p>$$
+R(s,a,s^{\prime})=\mathbb{E}\left[R&#95;{t+1}\mid S&#95;{t}=s,A&#95;{t}=a,S&#95;{t+1}=s^{\prime}\right]
+$$</p>
+
+<p>这两个量分别回答：“执行动作后会到哪里？”以及“这次转移能得到多少奖励？”五元组不是一张术语清单，而是一份完整的序列决策模型。</p>
 
 <p>MDP 的核心假设是<strong>马尔可夫性</strong>：只要当前状态包含了预测未来所需的全部信息，更早的历史就不再提供额外信息。</p>
 
 <p>$$
-P(S_{t+1}\mid S_t,A<em>t,S</em>{t-1},A<em>{t-1},\ldots)
-=P(S</em>{t+1}\mid S_t,A_t)
+P(S&#95;{t+1}\mid S&#95;{t},A&#95;{t},S&#95;{t-1},A&#95;{t-1},\ldots)
+=P(S&#95;{t+1}\mid S&#95;{t},A&#95;{t})
 $$</p>
 
 <p>这不是说历史不重要，而是说历史的重要信息已经被压缩进当前状态。若当前输入不足以做到这一点，问题更接近部分可观测 MDP（POMDP），智能体就需要记忆来补足状态。</p>
@@ -419,16 +429,22 @@ $$</p>
 <p>状态价值函数衡量：从状态 $s$ 出发，之后一直遵循策略 $\pi$，预期能得到多少回报：</p>
 
 <p>$$
-V^{\pi}(s)=\mathbb{E}_{\pi}[G_t\mid S_t=s]
+V^{\pi}(s)=\mathbb{E}&#95;{\pi}[G&#95;{t}\mid S&#95;{t}=s]
 $$</p>
 
 <p>动作价值函数，也就是 Q 函数，进一步问：在状态 $s$ 先执行动作 $a$，之后遵循策略 $\pi$，预期回报是多少：</p>
 
 <p>$$
-Q^{\pi}(s,a)=\mathbb{E}_{\pi}[G_t\mid S_t=s,A_t=a]
+Q^{\pi}(s,a)=\mathbb{E}&#95;{\pi}[G&#95;{t}\mid S&#95;{t}=s,A&#95;{t}=a]
 $$</p>
 
-<p><img src="/img/posts/reinforcement-learning-series/q-value.png" alt="Q 值评价状态—动作组合的长期回报" /></p>
+<p>这里要区分 <strong>Q 函数</strong> 和 <strong>Q-Learning</strong>：$Q^{\pi}(s,a)$ 是动作价值函数，描述“在状态 $s$ 先做动作 $a$，之后遵循策略 $\pi$ 的长期回报”；Q-Learning 则是一种学习最优动作价值 $Q^{\star}$ 的具体算法。</p>
+
+<p>状态价值是动作价值在当前策略下的加权平均：</p>
+
+<p>$$
+V^{\pi}(s)=\sum&#95;{a}\pi(a\mid s)Q^{\pi}(s,a)
+$$</p>
 
 <p>它们把复杂的未来压缩成可比较的标量。只要知道每个动作的 Q 值，智能体就可以选择价值最高的动作。</p>
 
@@ -446,39 +462,46 @@ $$</p>
 
 <p>$$
 V^{\pi}(s)=
-\sum<em>a \pi(a\mid s)
-\sum</em>{s&rsquo;,r}p(s&rsquo;,r\mid s,a)
-\left[r+\gamma V^{\pi}(s&rsquo;)\right]
+\sum&#95;{a} \pi(a\mid s)
+\sum&#95;{s^{\prime},r}p(s^{\prime},r\mid s,a)
+\left[r+\gamma V^{\pi}(s^{\prime})\right]
 $$</p>
 
-<p><img src="/img/posts/reinforcement-learning-series/bellman-expectation.png" alt="贝尔曼期望方程把当前状态价值递归地分解到下一状态" /></p>
-
 <p>外层求和表示按策略选择动作，内层求和表示环境可能转移到不同状态并给出不同奖励。它不是在枚举无限未来，而是把无限序列拆成“当前一步 + 下一状态的价值”。</p>
+
+<p>如果奖励只由 $(s,a)$ 决定，也可以把它写成更紧凑的形式：</p>
+
+<p>$$
+V^{\pi}(s)=\sum&#95;{a}\pi(a\mid s)
+\left[R(s,a)+\gamma\sum&#95;{s^{\prime}}P(s^{\prime}\mid s,a)V^{\pi}(s^{\prime})\right]
+$$</p>
+
+<p>式中 $\pi(a\mid s)$ 决定动作的权重，$P(s^{\prime}\mid s,a)$ 决定后继状态的权重，而 $\gamma$ 控制未来价值对当前判断的影响。</p>
 
 <h3 id="7-1-从评估策略到寻找最优策略">7.1 从评估策略到寻找最优策略</h3>
 
 <p>如果目标不是评价固定策略，而是寻找最优策略，就要在每个状态选择价值最高的动作：</p>
 
 <p>$$
-V^<em>(s)=\max<em>a\sum</em>{s&rsquo;,r}p(s&rsquo;,r\mid s,a)
-\left[r+\gamma V^</em>(s&rsquo;)\right]
+V^{\star}(s)=\max&#95;{a}\sum&#95;{s^{\prime},r}p(s^{\prime},r\mid s,a)
+\left[r+\gamma V^{\star}(s^{\prime})\right]
 $$</p>
 
 <p>对应的 Q 值形式是：</p>
 
 <p>$$
-Q^<em>(s,a)=\mathbb{E}\left[
-R<em>{t+1}+\gamma\max</em>{a&rsquo;}Q^</em>(S_{t+1},a&rsquo;)
-\mid S_t=s,A_t=a
+Q^{\star}(s,a)=\mathbb{E}\left[
+R&#95;{t+1}+\gamma\max&#95;{a^{\prime}}Q^{\star}(S&#95;{t+1},a^{\prime})
+\mid S&#95;{t}=s,A&#95;{t}=a
 \right]
 $$</p>
 
-<p><img src="/img/posts/reinforcement-learning-series/bellman-q-optimality.png" alt="Q 函数的贝尔曼最优方程" /></p>
+<p>等式右侧由两部分组成：当前转移的即时奖励 $R&#95;{t+1}$，以及到达下一状态后能够取得的最优未来价值。由于第一步动作 $a$ 已经给定，真正的最优选择从下一状态才开始。</p>
 
-<p>一旦得到 $Q^*$，最优策略就可以直接读出：</p>
+<p>一旦得到 $Q^{\star}$，最优策略就可以直接读出：</p>
 
 <p>$$
-\pi^<em>(s)=\arg\max_a Q^</em>(s,a)
+\pi^{\star}(s)=\arg\max&#95;{a} Q^{\star}(s,a)
 $$</p>
 
 <p>可以把它想成迷宫路口的分数牌：一开始牌子上的数不准确；每走一步，就用“这一步的奖励 + 下个路口最好的牌子”修正当前牌子。不断试错之后，数值逐渐一致，沿着最大分数走就是最优策略。</p>
@@ -489,7 +512,7 @@ $$</p>
 
 <ol>
 <li><strong>Value-Based</strong>：学习 $V$ 或 $Q$，再从价值中导出动作。Q-Learning 和 DQN 属于这条路线；</li>
-<li><strong>Policy-Based</strong>：不先给动作打分，直接优化参数化策略 $\pi_\theta(a\mid s)$。REINFORCE 和 PPO 属于这条路线。</li>
+<li><strong>Policy-Based</strong>：不先给动作打分，直接优化参数化策略 $\pi&#95;{\theta}(a\mid s)$。REINFORCE 和 PPO 属于这条路线。</li>
 </ol>
 
 <p>Actor-Critic 会把两条路线结合起来：Actor 负责行动，Critic 负责评价。下一篇将从动态规划、蒙特卡洛和时序差分开始，一直走到 Q-Learning、DQN、Actor-Critic 与 PPO。</p>
