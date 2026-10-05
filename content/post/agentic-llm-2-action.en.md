@@ -93,7 +93,7 @@ If the visual encoder produces `z_v`, the projection is `W_p`, and the text embe
 <div class="math-display">
 \[
 z=\left[W_p z_v\,;\,z_x\right],\qquad
-p(y\mid I,x)=\prod_{t=1}^{T}p\!\left(y_t\mid z,y_{<t}\right)
+p(y\mid I,x)=\prod_{t=1}^{T}p\!\left(y_t\mid z,y_{\lt t}\right)
 \]
 </div>
 
@@ -143,7 +143,7 @@ Here, `ℓ` is the language instruction, `o_t` may include camera images and rob
 
 <div class="math-display">
 \[
-\pi_{\theta}(a_t\mid o_{\le t},\ell,a_{<t})
+\pi_{\theta}(a_t\mid o_{\le t},\ell,a_{\lt t})
 \]
 </div>
 
@@ -228,7 +228,7 @@ The most common base objective is behavior cloning: maximize the likelihood of a
 \[
 \mathcal{L}_{\text{BC}}(\theta)
 =-\sum_{t=1}^{T}\log \pi_{\theta}
-\!\left(a_t\mid o_{\le t},\ell,a_{<t}\right)
+\!\left(a_t\mid o_{\le t},\ell,a_{\lt t}\right)
 \]
 </div>
 

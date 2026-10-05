@@ -71,7 +71,7 @@
 
 <meta itemprop="datePublished" content="2026-10-05T19:30:00&#43;02:00" />
 <meta itemprop="dateModified" content="2026-10-05T19:30:00&#43;02:00" />
-<meta itemprop="wordCount" content="2604">
+<meta itemprop="wordCount" content="2613">
 
 
 
@@ -224,7 +224,7 @@
         <div class="post-category">
             <a href="/en/categories/ai-agents/"> AI Agents </a>
             </div>
-          <span class="more-meta"> 2604 words </span>
+          <span class="more-meta"> 2613 words </span>
           <span class="more-meta"> 13 mins read </span>
         
       </div>
@@ -407,7 +407,7 @@ s_{t+1},\,o_{t+1},\,r_t \sim P\!\left(\cdot\mid s_t,a_t\right)
 <div class="math-display">
 \[
 z=\left[W_p z_v\,;\,z_x\right],\qquad
-p(y\mid I,x)=\prod_{t=1}^{T}p\!\left(y_t\mid z,y_{<t}\right)
+p(y\mid I,x)=\prod_{t=1}^{T}p\!\left(y_t\mid z,y_{\lt t}\right)
 \]
 </div>
 
@@ -490,7 +490,7 @@ p(y\mid I,x)=\prod_{t=1}^{T}p\!\left(y_t\mid z,y_{<t}\right)
 
 <div class="math-display">
 \[
-\pi_{\theta}(a_t\mid o_{\le t},\ell,a_{<t})
+\pi_{\theta}(a_t\mid o_{\le t},\ell,a_{\lt t})
 \]
 </div>
 
@@ -629,7 +629,7 @@ Simulation or real-world adaptation, reinforcement learning, safety constraints<
 \[
 \mathcal{L}_{\text{BC}}(\theta)
 =-\sum_{t=1}^{T}\log \pi_{\theta}
-\!\left(a_t\mid o_{\le t},\ell,a_{<t}\right)
+\!\left(a_t\mid o_{\le t},\ell,a_{\lt t}\right)
 \]
 </div>
 

@@ -93,7 +93,7 @@ s_{t+1},\,o_{t+1},\,r_t \sim P\!\left(\cdot\mid s_t,a_t\right)
 <div class="math-display">
 \[
 z=\left[W_p z_v\,;\,z_x\right],\qquad
-p(y\mid I,x)=\prod_{t=1}^{T}p\!\left(y_t\mid z,y_{<t}\right)
+p(y\mid I,x)=\prod_{t=1}^{T}p\!\left(y_t\mid z,y_{\lt t}\right)
 \]
 </div>
 
@@ -143,7 +143,7 @@ VLA 把视觉、语言与动作放进同一个策略中。训练样本不再只�
 
 <div class="math-display">
 \[
-\pi_{\theta}(a_t\mid o_{\le t},\ell,a_{<t})
+\pi_{\theta}(a_t\mid o_{\le t},\ell,a_{\lt t})
 \]
 </div>
 
@@ -228,7 +228,7 @@ Robot Trajectories: (observation, instruction, action)
 \[
 \mathcal{L}_{\text{BC}}(\theta)
 =-\sum_{t=1}^{T}\log \pi_{\theta}
-\!\left(a_t\mid o_{\le t},\ell,a_{<t}\right)
+\!\left(a_t\mid o_{\le t},\ell,a_{\lt t}\right)
 \]
 </div>
 
