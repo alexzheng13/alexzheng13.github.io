@@ -95,6 +95,16 @@
 {{- $themeToggleHash := md5 (readFile $themeTogglePath) -}}
 <script defer src="{{ "/js/theme-toggle.js" | relURL }}?v={{ $themeToggleHash }}"></script>
 
+{{- if .Site.IsMultiLingual -}}
+  {{- range .Page.AllTranslations }}
+<meta name="site-language-route" data-language="{{ .Language.Lang }}" content="{{ .RelPermalink }}">
+  {{- end }}
+<meta name="site-current-language" content="{{ .Site.Language.Lang }}">
+  {{- $languageRoutingPath := "static/js/language-routing.js" -}}
+  {{- $languageRoutingHash := md5 (readFile $languageRoutingPath) -}}
+<script defer src="{{ "/js/language-routing.js" | relURL }}?v={{ $languageRoutingHash }}"></script>
+{{- end }}
+
 {{/* NOTE: These Hugo Internal Templates can be found starting at https://github.com/spf13/hugo/blob/master/tpl/tplimpl/template_embedded.go#L158 */}}
 {{- template "_internal/opengraph.html" . -}}
 {{- template "_internal/google_news.html" . -}}

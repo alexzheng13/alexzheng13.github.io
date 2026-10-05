@@ -7,9 +7,9 @@
         {{ $pageTranslation := (index (where $.Page.AllTranslations "Language.Lang" "eq" $homeTranslation.Language.Lang) 0) }}
         <li class="language-item {{ if $active }}active{{ end }}">
           {{ with $pageTranslation }}
-            <a href="{{ .RelPermalink }}" lang="{{ .Language.Lang }}" hreflang="{{ .Language.Lang }}">{{ .Language.LanguageName }}</a>
+            <a href="{{ .RelPermalink }}" lang="{{ .Language.Lang }}" hreflang="{{ .Language.Lang }}" data-language-choice="{{ .Language.Lang }}">{{ .Language.LanguageName }}</a>
           {{ else }}
-            <a href="{{ $homeTranslation.RelPermalink }}" lang="{{ $homeTranslation.Language.Lang }}" hreflang="{{ $homeTranslation.Language.Lang }}">{{ $homeTranslation.Language.LanguageName }}</a>
+            <a href="{{ $homeTranslation.RelPermalink }}" lang="{{ $homeTranslation.Language.Lang }}" hreflang="{{ $homeTranslation.Language.Lang }}" data-language-choice="{{ $homeTranslation.Language.Lang }}">{{ $homeTranslation.Language.LanguageName }}</a>
           {{ end }}
         </li>
       {{ end }}

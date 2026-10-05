@@ -58,6 +58,9 @@
 <link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/nanochat-gpt-pretraining-from-source/">
+<meta name="site-language-route" data-language="en" content="/en/post/nanochat-gpt-pretraining-from-source/">
+<meta name="site-current-language" content="zh-cn"><script defer src="/js/language-routing.js?v=9f6c124f0bcbcd5458dc672bfafb5fd0"></script>
 
 <meta property="og:title" content="nanochat 源码解读：从参数配置到单步训练" />
 <meta property="og:description" content="本文沿着 scripts/base_train.py 的执行顺序阅读 nanochat：从命令行参数、随机种子和 DDP 环境开始，依次进入模型构建、权重初始化、Scaling Laws、优化器、DataLoader、梯度累积与单步训练。重点不是抽象介绍 GPT，而是理解源码中的每一段配置如何落到真实训练过程里。
@@ -141,7 +144,7 @@
         
         <li class="language-item active">
           
-            <a href="/post/nanochat-gpt-pretraining-from-source/" lang="zh-cn" hreflang="zh-cn">中文</a>
+            <a href="/post/nanochat-gpt-pretraining-from-source/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
           
         </li>
       
@@ -149,7 +152,7 @@
         
         <li class="language-item ">
           
-            <a href="/en/post/nanochat-gpt-pretraining-from-source/" lang="en" hreflang="en">EN</a>
+            <a href="/en/post/nanochat-gpt-pretraining-from-source/" lang="en" hreflang="en" data-language-choice="en">EN</a>
           
         </li>
       
@@ -187,7 +190,7 @@
         
         <li class="language-item active">
           
-            <a href="/post/nanochat-gpt-pretraining-from-source/" lang="zh-cn" hreflang="zh-cn">中文</a>
+            <a href="/post/nanochat-gpt-pretraining-from-source/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
           
         </li>
       
@@ -195,7 +198,7 @@
         
         <li class="language-item ">
           
-            <a href="/en/post/nanochat-gpt-pretraining-from-source/" lang="en" hreflang="en">EN</a>
+            <a href="/en/post/nanochat-gpt-pretraining-from-source/" lang="en" hreflang="en" data-language-choice="en">EN</a>
           
         </li>
       
