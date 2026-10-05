@@ -57,7 +57,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="Understanding I/O: Random and Sequential Access" />
 <meta property="og:description" content="Transfer: https://blog.csdn.net/BaiWfg2/article/details/52885287
 &emsp;&emsp;Storage for DBAs: Ever been to one of those sushi restaurants where the food comes round in dishes on a conveyor belt? As each dish travels around the loop you eye it up and, as long as you can make your mind up in time, grab it. However, if you are as indecisive as me, there’s a chance it will be out of range before you come to your senses – in which case you have to wait for it to complete a further full revolution before getting another chance." />
@@ -116,31 +115,44 @@
       </a>
   </ul>
 
-
+  
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/post/%E7%90%86%E8%A7%A3io-%E9%9A%8F%E6%9C%BA%E5%92%8C%E9%A1%BA%E5%BA%8F/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/en/post/understanding-random-and-sequential-io/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -153,23 +165,23 @@
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/post/%E7%90%86%E8%A7%A3io-%E9%9A%8F%E6%9C%BA%E5%92%8C%E9%A1%BA%E5%BA%8F/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/en/post/understanding-random-and-sequential-io/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
@@ -186,6 +198,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/en/about/">About</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -195,7 +220,7 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-
+    
     <header class="post-header">
       <h1 class="post-title">Understanding I/O: Random and Sequential Access</h1>
 
@@ -206,14 +231,14 @@
             </div>
           <span class="more-meta"> 3120 words </span>
           <span class="more-meta"> 15 mins read </span>
-
+        
       </div>
     </header>
 
     <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">Contents</h2>
   <div class="post-toc-content always-active">
-
+    
   </div>
 </div>
     <div class="post-content">
@@ -313,14 +338,14 @@
     <span class="item-title">LastMod</span>
     <span class="item-content">
         2020-02-06
-
+        
     </span>
   </p>
-
-
+  
+  
 </div>
 <footer class="post-footer">
-
+      
       <nav class="post-nav">
         <a class="prev" href="/en/post/cap-and-service-discovery-systems/">
             <i class="iconfont icon-left"></i>
@@ -336,11 +361,11 @@
     </footer>
   </article>
         </div>
+        
 
+  
 
-
-
-
+  
 
       </div>
     </main>
@@ -356,15 +381,15 @@
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    Theme -
+    Theme - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
-
+  
 
   <span class="copyright-year">
-    &copy;
-    2019 -
+    &copy; 
+    2019 - 
     2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
   </span>
 </div>
@@ -375,7 +400,7 @@
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

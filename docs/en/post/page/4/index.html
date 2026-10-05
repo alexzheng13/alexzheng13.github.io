@@ -58,7 +58,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="Posts" />
 <meta property="og:description" content="Hugo theme even example site." />
 <meta property="og:type" content="website" />
@@ -131,6 +130,19 @@
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -176,6 +188,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/en/about/">About</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -219,7 +244,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 26 posts by year</p>
+      <p>Browse all 29 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -267,6 +292,18 @@
         <a class="blog-archive-index-item" href="/en/post/anthropic-agent-evolution-4-managed-agent-runtime/">
           <time datetime="2026-09-12">09-12</time>
           <span>Anthropic Agent Evolution IV: Managed Agent Runtime—Session, Harness, and Sandbox</span>
+        </a>
+        <a class="blog-archive-index-item" href="/en/post/reinforcement-learning-3-exploration-and-data/">
+          <time datetime="2026-08-27">08-27</time>
+          <span>Reinforcement Learning III: Exploration, Policy Sampling, and Data Sources</span>
+        </a>
+        <a class="blog-archive-index-item" href="/en/post/reinforcement-learning-2-classic-algorithms/">
+          <time datetime="2026-08-26">08-26</time>
+          <span>Reinforcement Learning II: From Q-Learning and DQN to Actor-Critic and PPO</span>
+        </a>
+        <a class="blog-archive-index-item" href="/en/post/reinforcement-learning-1-foundations/">
+          <time datetime="2026-08-25">08-25</time>
+          <span>Reinforcement Learning I: From CartPole to MDPs and Bellman Equations</span>
         </a>
         <a class="blog-archive-index-item" href="/en/post/stanford-cs329a-self-improving-ai-agents/">
           <time datetime="2026-08-11">08-11</time>
@@ -341,6 +378,75 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/linux-io-multiplexing-select-poll-epoll/">Translation: Linux I/O Multiplexing - select vs. poll vs. epoll</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2021-02-11">February 11, 2021</time>
+            <span aria-hidden="true">·</span>
+            <span>9 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">Introduction  Before reading this article, you can first understand the five I/O models of Liunx
+ References: I/O Models &ndash;Section 6.2 of &ldquo;UNIX® Network Programming Volume 1, Third Edition: The Sockets Networking&rdquo; by Richard Stevens
+The following is the text of the article    One of the basic concepts of Linux (actually Unix) is that everything in Unix/Linux is a file. Each process has a file descriptor table that points to files, sockets, devices, and other operating system objects related to the process.</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/en/post/linux-io-multiplexing-select-poll-epoll/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/en/post/domain-driven-design-everything-you-wanted-to-know-1/">Translation: Domain-Driven Design - Everything You Always Wanted to Know (1)</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2021-02-02">February 2, 2021</time>
+            <span aria-hidden="true">·</span>
+            <span>15 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">Domain-Driven Design original address
+ As a personal code base grows, its complexity inevitably increases. As this happens, it becomes very difficult to maintain the organization and structure of the code as originally intended, which is known as &ldquo;software entropy&rdquo;. After a series of iterations, maintaining good focus points and correctly decoupling classes and modules becomes more challenging if strict architectural guidelines are not enforced.
+﻿In a traditional Model-View-Controller (MVC) structure, the “M” layer would retain all business logic but provide no clear guidelines on how to properly delineate responsibilities.</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/en/post/domain-driven-design-everything-you-wanted-to-know-1/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/en/post/introduction-to-go-assembly-2/">A Practical Introduction to Go Assembly (2)</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2021-01-01">January 1, 2021</time>
+            <span aria-hidden="true">·</span>
+            <span>8 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">Function call from assembly perspective ﻿ Let’s start with a simple example:
+1 2 3 4 5 6 7 8 9 10  package main func main() { add(1, 1) } func add(a, b int64) (c int64) { c = a + b return }    After executing the go tool compile -S compliation_add.go command, the assembly code is as follows
+1 2 3 4 5 6 7  .</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/en/post/introduction-to-go-assembly-2/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/introduction-to-go-assembly-1/">A Practical Introduction to Go Assembly (1)</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2020-12-30">December 30, 2020</time>
@@ -381,76 +487,6 @@ Consistency model ﻿ Consistency refers to all nodes see the same data at the s
 
         <footer class="blog-summary-footer">
           <a class="blog-summary-read-more" href="/en/post/cap-and-service-discovery-systems/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/understanding-random-and-sequential-io/">Understanding I/O: Random and Sequential Access</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2020-02-06">February 6, 2020</time>
-            <span aria-hidden="true">·</span>
-            <span>15 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">Transfer: https://blog.csdn.net/BaiWfg2/article/details/52885287
-&emsp;&emsp;Storage for DBAs: Ever been to one of those sushi restaurants where the food comes round in dishes on a conveyor belt? As each dish travels around the loop you eye it up and, as long as you can make your mind up in time, grab it. However, if you are as indecisive as me, there’s a chance it will be out of range before you come to your senses – in which case you have to wait for it to complete a further full revolution before getting another chance.</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/understanding-random-and-sequential-io/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/use-a-mutex-or-a-channel/">Use a Mutex or a Channel?</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2020-01-16">January 16, 2020</time>
-            <span aria-hidden="true">·</span>
-            <span>1 min read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">Use a sync.Mutex or a channel?
- Gives us 3 channel usage scenarios respectively:
- 1. Transfer ownership of data 2. Assign work units 3. Convey asynchronous results  Usage scenarios of 2 mutex:
- 1. Cache 2. Status  Chapter 2 &ldquo;Go&rsquo;s Philosophy on Concurrency&rdquo; in the book &ldquo;Concurrency In Go&rdquo; also has a decision tree and detailed discussion
-Summary
-﻿Go implements the CSP communication model through channels, which are mainly used for message passing and event notification between goroutines.</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/use-a-mutex-or-a-channel/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/http-1-1-vs-http-2/">HTTP/1.1 vs. HTTP/2</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2020-01-16">January 16, 2020</time>
-            <span aria-hidden="true">·</span>
-            <span>6 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">HTTP 1.1 In January 1997, HTTP/1.1 version was released, only half a year later than version 1.0. It further improved the HTTP protocol and has been used to this day 20 years later, and is still the most popular version. Main optimization points:
- Support long connection by default  HTTP/1.1 supports persistent connections and request pipelining. Persistent connections reuse established TCP connections and avoid repeating the RTT cost of the three-way handshake.</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/http-1-1-vs-http-2/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

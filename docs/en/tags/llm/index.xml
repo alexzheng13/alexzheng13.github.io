@@ -7,20 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 26 Sep 2026 23:00:00 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/tags/llm/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/tags/llm/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>A Field Guide to LLM and AI Agent Benchmarks</title>
       <link>https://alexzheng13.github.io/en/post/llm-agent-benchmarks-guide/</link>
       <pubDate>Sat, 26 Sep 2026 23:00:00 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/llm-agent-benchmarks-guide/</guid>
-      <description>&lt;p&gt;Model reports often list ARC-E, ARC-C, MMLU, GPQA, GSM8K, HumanEval, SWE-bench, GAIA, WebArena, and OSWorld side by side. Their scores are not interchangeable: each benchmark uses different tasks, tools, environments, inference budgets, and scoring rules.&lt;/p&gt;
+      <description>&lt;p&gt;Model reports often list the Artificial Analysis Intelligence Index, LMArena, HELM, ARC-E, MMLU, GSM8K, SWE-bench, GAIA, WebArena, and OSWorld side by side. Their scores are not interchangeable: the list mixes composite indices and leaderboards with individual benchmarks, each using different tasks, tools, environments, inference budgets, and scoring rules.&lt;/p&gt;
 
 &lt;p&gt;This guide maps common evaluations from static question answering to agents completing real tasks, and explains what each benchmark can—and cannot—tell us.&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

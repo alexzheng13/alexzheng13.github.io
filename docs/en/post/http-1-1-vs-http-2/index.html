@@ -57,7 +57,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="HTTP/1.1 vs. HTTP/2" />
 <meta property="og:description" content="HTTP 1.1 In January 1997, HTTP/1.1 version was released, only half a year later than version 1.0. It further improved the HTTP protocol and has been used to this day 20 years later, and is still the most popular version. Main optimization points:
  Support long connection by default  HTTP/1.1 supports persistent connections and request pipelining. Persistent connections reuse established TCP connections and avoid repeating the RTT cost of the three-way handshake." />
@@ -116,31 +115,44 @@
       </a>
   </ul>
 
-
+  
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/post/http1.1%E4%B8%8Ehttp2%E7%9A%84%E5%8C%BA%E5%88%AB/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/en/post/http-1-1-vs-http-2/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -153,23 +165,23 @@
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/post/http1.1%E4%B8%8Ehttp2%E7%9A%84%E5%8C%BA%E5%88%AB/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/en/post/http-1-1-vs-http-2/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
@@ -186,6 +198,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/en/about/">About</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -195,7 +220,7 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-
+    
     <header class="post-header">
       <h1 class="post-title">HTTP/1.1 vs. HTTP/2</h1>
 
@@ -206,7 +231,7 @@
             </div>
           <span class="more-meta"> 1165 words </span>
           <span class="more-meta"> 6 mins read </span>
-
+        
       </div>
     </header>
 
@@ -234,7 +259,7 @@
   </div>
 </div>
     <div class="post-content">
-
+      
 
 <h1 id="http-1-1">HTTP 1.1</h1>
 
@@ -345,14 +370,14 @@ The server can send multiple responses to a client request. The server pushes re
     <span class="item-title">LastMod</span>
     <span class="item-content">
         2020-01-16
-
+        
     </span>
   </p>
-
-
+  
+  
 </div>
 <footer class="post-footer">
-
+      
       <nav class="post-nav">
         <a class="prev" href="/en/post/use-a-mutex-or-a-channel/">
             <i class="iconfont icon-left"></i>
@@ -368,11 +393,11 @@ The server can send multiple responses to a client request. The server pushes re
     </footer>
   </article>
         </div>
+        
 
+  
 
-
-
-
+  
 
       </div>
     </main>
@@ -388,15 +413,15 @@ The server can send multiple responses to a client request. The server pushes re
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    Theme -
+    Theme - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
-
+  
 
   <span class="copyright-year">
-    &copy;
-    2019 -
+    &copy; 
+    2019 - 
     2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
   </span>
 </div>
@@ -407,7 +432,7 @@ The server can send multiple responses to a client request. The server pushes re
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

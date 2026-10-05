@@ -58,7 +58,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="Blowing in the wind" />
 <meta property="og:description" content="Hugo theme even example site." />
 <meta property="og:type" content="website" />
@@ -131,6 +130,19 @@
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -176,6 +188,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/en/about/">About</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -184,9 +209,7 @@
     <main id="main" class="main">
       <div class="content-wrapper">
         <div id="content" class="content">
-          <link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
-
-  <section id="posts" class="posts">
+          <section id="posts" class="posts">
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/en/post/anthropic-agent-evolution-3-planner-generator-evaluator/">Anthropic Agent Evolution III: The Planner–Generator–Evaluator Quality Loop</a></h1>
@@ -233,6 +256,81 @@
     </div>
     <div class="read-more">
       <a href="/en/post/anthropic-agent-evolution-4-managed-agent-runtime/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/reinforcement-learning-3-exploration-and-data/">Reinforcement Learning III: Exploration, Policy Sampling, and Data Sources</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-08-27 </span>
+      <div class="post-category">
+          <a href="/en/categories/reinforcement-learning/"> Reinforcement Learning </a>
+          </div>
+        <span class="more-meta"> 935 words </span>
+        <span class="more-meta"> 5 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>Reinforcement learning must decide more than how to update parameters. It must also decide <strong>where the next training example should come from</strong>.</p>
+
+<p>Always choosing the current best action can preserve an early mistake forever. Exploring at random forever wastes opportunities. Training data may also come from the current policy, old policies, humans, experts, or a fixed dataset. Whether an algorithm can use that data safely depends on distribution mismatch.</p>
+    </div>
+    <div class="read-more">
+      <a href="/en/post/reinforcement-learning-3-exploration-and-data/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/reinforcement-learning-2-classic-algorithms/">Reinforcement Learning II: From Q-Learning and DQN to Actor-Critic and PPO</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-08-26 </span>
+      <div class="post-category">
+          <a href="/en/categories/reinforcement-learning/"> Reinforcement Learning </a>
+          </div>
+        <span class="more-meta"> 793 words </span>
+        <span class="more-meta"> 4 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p><a href="/en/post/reinforcement-learning-1-foundations/">Part I</a> established MDPs, value functions, and Bellman equations. Now the practical question is: <strong>when the environment is unknown, states cannot be enumerated, and policies are neural networks, how do we actually learn values or policies?</strong></p>
+
+<p>The progression is continuous. Dynamic programming assumes a model. Monte Carlo uses complete trajectories. Temporal difference learning updates before an episode ends. Q-Learning targets optimal action values. DQN scales Q-functions to high-dimensional inputs. Actor-Critic and PPO optimize policies while controlling unstable updates.</p>
+    </div>
+    <div class="read-more">
+      <a href="/en/post/reinforcement-learning-2-classic-algorithms/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/reinforcement-learning-1-foundations/">Reinforcement Learning I: From CartPole to MDPs and Bellman Equations</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-08-25 </span>
+      <div class="post-category">
+          <a href="/en/categories/reinforcement-learning/"> Reinforcement Learning </a>
+          </div>
+        <span class="more-meta"> 767 words </span>
+        <span class="more-meta"> 4 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>Reinforcement learning has many algorithms, but they all address the same question: <strong>how can an agent learn decisions that produce high long-term reward through interaction with an environment?</strong></p>
+
+<p>This series starts with the common language behind those algorithms, then moves toward Q-Learning, DQN, Actor-Critic, PPO, exploration, data collection, and eventually LLM post-training. This first article establishes the foundation: states, actions, policies, returns, MDPs, value functions, and Bellman equations.</p>
+    </div>
+    <div class="read-more">
+      <a href="/en/post/reinforcement-learning-1-foundations/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
@@ -307,80 +405,6 @@ The following is the text of the article    One of the basic concepts of Linux
     </div>
     <div class="read-more">
       <a href="/en/post/linux-io-multiplexing-select-poll-epoll/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/en/post/domain-driven-design-everything-you-wanted-to-know-1/">Translation: Domain-Driven Design - Everything You Always Wanted to Know (1)</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-02-02 </span>
-      <div class="post-category">
-          <a href="/en/categories/architecture/"> Architecture </a>
-          </div>
-        <span class="more-meta"> 2984 words </span>
-        <span class="more-meta"> 15 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      Domain-Driven Design original address
- As a personal code base grows, its complexity inevitably increases. As this happens, it becomes very difficult to maintain the organization and structure of the code as originally intended, which is known as &ldquo;software entropy&rdquo;. After a series of iterations, maintaining good focus points and correctly decoupling classes and modules becomes more challenging if strict architectural guidelines are not enforced.
-﻿In a traditional Model-View-Controller (MVC) structure, the “M” layer would retain all business logic but provide no clear guidelines on how to properly delineate responsibilities.
-    </div>
-    <div class="read-more">
-      <a href="/en/post/domain-driven-design-everything-you-wanted-to-know-1/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/en/post/introduction-to-go-assembly-2/">A Practical Introduction to Go Assembly (2)</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-01-01 </span>
-      <div class="post-category">
-          <a href="/en/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 1664 words </span>
-        <span class="more-meta"> 8 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      Function call from assembly perspective ﻿ Let’s start with a simple example:
-1 2 3 4 5 6 7 8 9 10  package main func main() { add(1, 1) } func add(a, b int64) (c int64) { c = a + b return }    After executing the go tool compile -S compliation_add.go command, the assembly code is as follows
-1 2 3 4 5 6 7  .
-    </div>
-    <div class="read-more">
-      <a href="/en/post/introduction-to-go-assembly-2/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/en/post/introduction-to-go-assembly-1/">A Practical Introduction to Go Assembly (1)</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2020-12-30 </span>
-      <div class="post-category">
-          <a href="/en/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 1939 words </span>
-        <span class="more-meta"> 10 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      Program storage space layout  A process is an executing program instance. Each instance has its own address space and execution state. A program becomes a process when the operating system adds the appropriate information to the kernel data structures and allocates the necessary resources to run the program code.
- A thread is an abstract data type that represents a thread of execution within a process. A thread has its own execution stack, program counter value, register set and state.
-    </div>
-    <div class="read-more">
-      <a href="/en/post/introduction-to-go-assembly-1/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>

@@ -56,7 +56,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="Inside Go&#39;s Main Goroutine Scheduler (1)" />
 <meta property="og:description" content="Under the compilation, all traces are revealed.   1.go program entry_rt0_amd64_linux: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  // The TEXT instruction defines the symbol _rt0_amd64_linux, the global data symbol is declared with DATA, and GLOBL defines the data as global. // SB SB virtual register: saves the starting address of the program address space; the value saved by this SB register is the starting address of the TEXT segment, which is mainly used to locate global symbols." />
 <meta property="og:type" content="article" />
@@ -112,31 +111,44 @@
       </a>
   </ul>
 
-
+  
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/post/runtime-main-1/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/en/post/go-main-goroutine-scheduler-1/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -149,23 +161,23 @@
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/post/runtime-main-1/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/en/post/go-main-goroutine-scheduler-1/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
@@ -182,6 +194,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/en/about/">About</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -191,7 +216,7 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-
+    
     <header class="post-header">
       <h1 class="post-title">Inside Go&#39;s Main Goroutine Scheduler (1)</h1>
 
@@ -202,7 +227,7 @@
             </div>
           <span class="more-meta"> 2232 words </span>
           <span class="more-meta"> 11 mins read </span>
-
+        
       </div>
     </header>
 
@@ -236,7 +261,7 @@
   </div>
 </div>
     <div class="post-content">
-
+      
 
 <!-- HTML method: Write HTML directly in the Markdown file to call -->
 
@@ -811,30 +836,30 @@ g0.m = &amp;m0</pre></td></tr></table>
     <span class="item-title">LastMod</span>
     <span class="item-content">
         2019-11-10
-
+        
     </span>
   </p>
-
-
+  
+  
 </div>
 <footer class="post-footer">
-
+      
       <nav class="post-nav">
         <a class="prev" href="/en/post/why-quicksort-is-used-more-than-merge-sort/">
             <i class="iconfont icon-left"></i>
             <span class="prev-text nav-default">Why Is Quicksort Used More Often Than Merge Sort?</span>
             <span class="prev-text nav-mobile">Prev</span>
           </a>
-
+        
       </nav>
     </footer>
   </article>
         </div>
+        
 
+  
 
-
-
-
+  
 
       </div>
     </main>
@@ -850,15 +875,15 @@ g0.m = &amp;m0</pre></td></tr></table>
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    Theme -
+    Theme - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
-
+  
 
   <span class="copyright-year">
-    &copy;
-    2019 -
+    &copy; 
+    2019 - 
     2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
   </span>
 </div>
@@ -869,7 +894,7 @@ g0.m = &amp;m0</pre></td></tr></table>
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

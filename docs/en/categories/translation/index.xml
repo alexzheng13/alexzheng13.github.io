@@ -7,31 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 11 Feb 2021 09:45:47 +0800</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/categories/translation/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/categories/translation/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Translation: Linux I/O Multiplexing - select vs. poll vs. epoll</title>
       <link>https://alexzheng13.github.io/en/post/linux-io-multiplexing-select-poll-epoll/</link>
       <pubDate>Thu, 11 Feb 2021 09:45:47 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/linux-io-multiplexing-select-poll-epoll/</guid>
       <description>Introduction  Before reading this article, you can first understand the five I/O models of Liunx
  References: I/O Models &amp;ndash;Section 6.2 of &amp;ldquo;UNIX® Network Programming Volume 1, Third Edition: The Sockets Networking&amp;rdquo; by Richard Stevens
 The following is the text of the article    One of the basic concepts of Linux (actually Unix) is that everything in Unix/Linux is a file. Each process has a file descriptor table that points to files, sockets, devices, and other operating system objects related to the process.</description>
     </item>
-
+    
     <item>
       <title>Translation: Contiguous Stacks</title>
       <link>https://alexzheng13.github.io/en/post/contiguous-stacks/</link>
       <pubDate>Sat, 30 Nov 2019 13:14:00 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/contiguous-stacks/</guid>
       <description>Contiguous stacks original address
  Allocate a continuous stack memory space for each go coroutine. When the memory is used up, it will be reallocated/copied and grown.
 Why?  The current stack splitting mechanism has a &amp;ldquo;hot split&amp;rdquo; problem - if the stack space is almost full, calling the function will trigger the forced allocation of a new stack block. When the calling function returns, the new stack block will be released.</description>
     </item>
-
+    
   </channel>
 </rss>

@@ -6,15 +6,15 @@
     <description>Recent content in Notes on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-
-  <atom:link href="https://alexzheng13.github.io/en/note/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/note/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Notes on Critical Thinking</title>
       <link>https://alexzheng13.github.io/en/note/critical-thinking-notes/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/note/critical-thinking-notes/</guid>
       <description>Introduction The author&amp;rsquo;s own definition of critical thinking: thinking about ways of thinking
 The benefits of being a good thinker
@@ -23,6 +23,6 @@ Detailed explanation of the concept of critical thinking&amp;ndash;&amp;gt;Analy
 Re-emphasized the importance of critical thinking and briefly introduced the measurement criteria of critical thinking
 1 2 3 4  The essence of learning is improving and controlling how you think.</description>
     </item>
-
+    
   </channel>
 </rss>

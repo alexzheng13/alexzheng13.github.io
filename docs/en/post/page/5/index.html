@@ -58,7 +58,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="Posts" />
 <meta property="og:description" content="Hugo theme even example site." />
 <meta property="og:type" content="website" />
@@ -131,6 +130,19 @@
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -176,6 +188,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/en/about/">About</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -219,7 +244,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 26 posts by year</p>
+      <p>Browse all 29 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -267,6 +292,18 @@
         <a class="blog-archive-index-item" href="/en/post/anthropic-agent-evolution-4-managed-agent-runtime/">
           <time datetime="2026-09-12">09-12</time>
           <span>Anthropic Agent Evolution IV: Managed Agent Runtime—Session, Harness, and Sandbox</span>
+        </a>
+        <a class="blog-archive-index-item" href="/en/post/reinforcement-learning-3-exploration-and-data/">
+          <time datetime="2026-08-27">08-27</time>
+          <span>Reinforcement Learning III: Exploration, Policy Sampling, and Data Sources</span>
+        </a>
+        <a class="blog-archive-index-item" href="/en/post/reinforcement-learning-2-classic-algorithms/">
+          <time datetime="2026-08-26">08-26</time>
+          <span>Reinforcement Learning II: From Q-Learning and DQN to Actor-Critic and PPO</span>
+        </a>
+        <a class="blog-archive-index-item" href="/en/post/reinforcement-learning-1-foundations/">
+          <time datetime="2026-08-25">08-25</time>
+          <span>Reinforcement Learning I: From CartPole to MDPs and Bellman Equations</span>
         </a>
         <a class="blog-archive-index-item" href="/en/post/stanford-cs329a-self-improving-ai-agents/">
           <time datetime="2026-08-11">08-11</time>
@@ -341,6 +378,76 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/understanding-random-and-sequential-io/">Understanding I/O: Random and Sequential Access</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2020-02-06">February 6, 2020</time>
+            <span aria-hidden="true">·</span>
+            <span>15 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">Transfer: https://blog.csdn.net/BaiWfg2/article/details/52885287
+&emsp;&emsp;Storage for DBAs: Ever been to one of those sushi restaurants where the food comes round in dishes on a conveyor belt? As each dish travels around the loop you eye it up and, as long as you can make your mind up in time, grab it. However, if you are as indecisive as me, there’s a chance it will be out of range before you come to your senses – in which case you have to wait for it to complete a further full revolution before getting another chance.</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/en/post/understanding-random-and-sequential-io/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/en/post/use-a-mutex-or-a-channel/">Use a Mutex or a Channel?</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2020-01-16">January 16, 2020</time>
+            <span aria-hidden="true">·</span>
+            <span>1 min read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">Use a sync.Mutex or a channel?
+ Gives us 3 channel usage scenarios respectively:
+ 1. Transfer ownership of data 2. Assign work units 3. Convey asynchronous results  Usage scenarios of 2 mutex:
+ 1. Cache 2. Status  Chapter 2 &ldquo;Go&rsquo;s Philosophy on Concurrency&rdquo; in the book &ldquo;Concurrency In Go&rdquo; also has a decision tree and detailed discussion
+Summary
+﻿Go implements the CSP communication model through channels, which are mainly used for message passing and event notification between goroutines.</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/en/post/use-a-mutex-or-a-channel/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/en/post/http-1-1-vs-http-2/">HTTP/1.1 vs. HTTP/2</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2020-01-16">January 16, 2020</time>
+            <span aria-hidden="true">·</span>
+            <span>6 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">HTTP 1.1 In January 1997, HTTP/1.1 version was released, only half a year later than version 1.0. It further improved the HTTP protocol and has been used to this day 20 years later, and is still the most popular version. Main optimization points:
+ Support long connection by default  HTTP/1.1 supports persistent connections and request pipelining. Persistent connections reuse established TCP connections and avoid repeating the RTT cost of the three-way handshake.</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/en/post/http-1-1-vs-http-2/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/inside-go-channel-runtime/">Inside Go&#39;s Channel Runtime</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2020-01-05">January 5, 2020</time>
@@ -382,71 +489,6 @@ lab content  In this lab, you will implement most of the Raft design described
 
         <footer class="blog-summary-footer">
           <a class="blog-summary-read-more" href="/en/post/implementing-raft-in-go-1/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/contiguous-stacks/">Translation: Contiguous Stacks</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2019-11-30">November 30, 2019</time>
-            <span aria-hidden="true">·</span>
-            <span>8 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">Contiguous stacks original address
- Allocate a continuous stack memory space for each go coroutine. When the memory is used up, it will be reallocated/copied and grown.
-Why?  The current stack splitting mechanism has a &ldquo;hot split&rdquo; problem - if the stack space is almost full, calling the function will trigger the forced allocation of a new stack block. When the calling function returns, the new stack block will be released.</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/contiguous-stacks/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/go-main-goroutine-scheduler-2/">Inside Go&#39;s Main Goroutine Scheduler (2)</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2019-11-13">November 13, 2019</time>
-            <span aria-hidden="true">·</span>
-            <span>27 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">9. Enter runtime/proc.go and scheduler initialization 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65  func schedinit() { // raceinit must be the first call to race detector.</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/go-main-goroutine-scheduler-2/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/why-quicksort-is-used-more-than-merge-sort/">Why Is Quicksort Used More Often Than Merge Sort?</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2019-11-13">November 13, 2019</time>
-            <span aria-hidden="true">·</span>
-            <span>3 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">What is honey to you is arsenic to another.   Quick sort: 1 2 3  * Worst-case time complexity: O(n^2) * Best-case time complexity: O(n log n) * Average time complexity: O(n log n)   Merge sort: 1  * Worst-, best-, and average-case time complexity: O(n log n)   Since the time complexity of merge sort is &gt;= the time complexity of quick sort in different situations, why are the sorting algorithms we use in actual programming quick sort instead of merge sort?</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/why-quicksort-is-used-more-than-merge-sort/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

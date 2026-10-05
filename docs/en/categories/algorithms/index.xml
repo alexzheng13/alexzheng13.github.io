@@ -7,18 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Wed, 13 Nov 2019 20:32:10 +0800</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/categories/algorithms/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/categories/algorithms/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Why Is Quicksort Used More Often Than Merge Sort?</title>
       <link>https://alexzheng13.github.io/en/post/why-quicksort-is-used-more-than-merge-sort/</link>
       <pubDate>Wed, 13 Nov 2019 20:32:10 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/why-quicksort-is-used-more-than-merge-sort/</guid>
       <description>What is honey to you is arsenic to another.   Quick sort: 1 2 3  * Worst-case time complexity: O(n^2) * Best-case time complexity: O(n log n) * Average time complexity: O(n log n)   Merge sort: 1  * Worst-, best-, and average-case time complexity: O(n log n)   Since the time complexity of merge sort is &amp;gt;= the time complexity of quick sort in different situations, why are the sorting algorithms we use in actual programming quick sort instead of merge sort?</description>
     </item>
-
+    
   </channel>
 </rss>

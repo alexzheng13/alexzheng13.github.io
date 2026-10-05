@@ -7,20 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 12 Sep 2026 21:06:45 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/tags/playwright/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/tags/playwright/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Anthropic Agent 演进（三）：Planner–Generator–Evaluator 质量闭环</title>
       <link>https://alexzheng13.github.io/post/anthropic-agent-evolution-3-planner-generator-evaluator/</link>
       <pubDate>Sat, 12 Sep 2026 21:06:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/anthropic-agent-evolution-3-planner-generator-evaluator/</guid>
       <description>&lt;p&gt;第一代 Harness 让 Agent 能跨 Context 持续工作，但“持续”不等于“高质量”。生成者评价自己的作品时，往往会把“基本能运行”误判成“已经足够好”，主观设计任务尤其明显。&lt;/p&gt;
 
 &lt;p&gt;Anthropic 的下一步是把计划、生成和评价拆成三个职责，让外部 Evaluator 成为 Generator 必须面对的反馈来源。&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

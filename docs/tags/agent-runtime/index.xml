@@ -7,20 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 12 Sep 2026 21:05:45 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/tags/agent-runtime/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/tags/agent-runtime/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Anthropic Agent 演进（四）：Managed Agent Runtime——Session、Harness 与 Sandbox</title>
       <link>https://alexzheng13.github.io/post/anthropic-agent-evolution-4-managed-agent-runtime/</link>
       <pubDate>Sat, 12 Sep 2026 21:05:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/anthropic-agent-evolution-4-managed-agent-runtime/</guid>
       <description>&lt;p&gt;前几代 Harness 关注的是模型怎样持续工作、怎样提高质量。走向托管服务后，问题变成了系统工程：Session 如何持久化？Harness 崩溃后怎样恢复？Sandbox 如何替换？怎样连接客户自己的 VPC？凭据如何不暴露给模型生成的代码？&lt;/p&gt;
 
 &lt;p&gt;Anthropic Managed Agents 的核心答案是：&lt;strong&gt;把 Brain、Hands 和 Session 解耦为稳定接口。&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

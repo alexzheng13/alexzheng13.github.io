@@ -7,31 +7,31 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Tue, 02 Feb 2021 12:06:47 +0800</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/categories/architecture/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/categories/architecture/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Translation: Domain-Driven Design - Everything You Always Wanted to Know (1)</title>
       <link>https://alexzheng13.github.io/en/post/domain-driven-design-everything-you-wanted-to-know-1/</link>
       <pubDate>Tue, 02 Feb 2021 12:06:47 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/domain-driven-design-everything-you-wanted-to-know-1/</guid>
       <description>Domain-Driven Design original address
  As a personal code base grows, its complexity inevitably increases. As this happens, it becomes very difficult to maintain the organization and structure of the code as originally intended, which is known as &amp;ldquo;software entropy&amp;rdquo;. After a series of iterations, maintaining good focus points and correctly decoupling classes and modules becomes more challenging if strict architectural guidelines are not enforced.
 ﻿In a traditional Model-View-Controller (MVC) structure, the “M” layer would retain all business logic but provide no clear guidelines on how to properly delineate responsibilities.</description>
     </item>
-
+    
     <item>
       <title>CAP and a Comparison of Service Discovery Systems</title>
       <link>https://alexzheng13.github.io/en/post/cap-and-service-discovery-systems/</link>
       <pubDate>Sat, 29 Feb 2020 09:41:00 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/cap-and-service-discovery-systems/</guid>
       <description>Overview of CAP theory **A distributed system can only satisfy at most two of the three requirements of consistency (consistency), availability (Availability) and partition tolerance (Partition tolerance) at the same time. **
 Introduction Overview of CAP theory: CAP theory of distributed systems
 Consistency model ﻿ Consistency refers to all nodes see the same data at the same time, that is, after the update operation is successful and returned to the client, the data of all nodes at the same time is completely consistent.</description>
     </item>
-
+    
   </channel>
 </rss>

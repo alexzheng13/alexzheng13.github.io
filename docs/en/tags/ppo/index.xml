@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>PPO on Blowing in the wind</title>
+    <link>https://alexzheng13.github.io/en/tags/ppo/</link>
+    <description>Recent content in PPO on Blowing in the wind</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 26 Aug 2026 09:00:00 +0200</lastBuildDate>
+    
+	<atom:link href="https://alexzheng13.github.io/en/tags/ppo/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Reinforcement Learning II: From Q-Learning and DQN to Actor-Critic and PPO</title>
+      <link>https://alexzheng13.github.io/en/post/reinforcement-learning-2-classic-algorithms/</link>
+      <pubDate>Wed, 26 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/post/reinforcement-learning-2-classic-algorithms/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://alexzheng13.github.io/en/post/reinforcement-learning-1-foundations/&#34;&gt;Part I&lt;/a&gt; established MDPs, value functions, and Bellman equations. Now the practical question is: &lt;strong&gt;when the environment is unknown, states cannot be enumerated, and policies are neural networks, how do we actually learn values or policies?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The progression is continuous. Dynamic programming assumes a model. Monte Carlo uses complete trajectories. Temporal difference learning updates before an episode ends. Q-Learning targets optimal action values. DQN scales Q-functions to high-dimensional inputs. Actor-Critic and PPO optimize policies while controlling unstable updates.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

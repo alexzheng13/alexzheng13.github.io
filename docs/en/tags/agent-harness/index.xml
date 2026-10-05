@@ -7,42 +7,42 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 12 Sep 2026 21:08:45 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/tags/agent-harness/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/tags/agent-harness/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Anthropic Agent Evolution I: From Workflows to Agents—and Why Harnesses Matter</title>
       <link>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-1-from-workflows-to-agents/</link>
       <pubDate>Sat, 12 Sep 2026 21:08:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-1-from-workflows-to-agents/</guid>
       <description>&lt;p&gt;“Agent” is often used as a broad label for any system that calls tools or takes multiple steps. Anthropic&amp;rsquo;s engineering work offers a more useful distinction: &lt;strong&gt;a workflow follows code paths defined in advance; an agent lets the model dynamically choose its process from environmental feedback.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;This first article in the “Anthropic Agent Evolution” series establishes the vocabulary: augmented LLMs, fixed workflows, autonomous agents, and the harness that surrounds the model.&lt;/p&gt;</description>
     </item>
-
+    
     <item>
       <title>Anthropic Agent Evolution II: Context Reset and Structured Handoff</title>
       <link>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-2-context-reset-and-handoff/</link>
       <pubDate>Sat, 12 Sep 2026 21:07:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-2-context-reset-and-handoff/</guid>
       <description>&lt;p&gt;The central tension in long-running work is not whether a model can write code. It is that a task may last hours or days while every context window is finite. Replaying the entire history eventually creates both capacity and noise problems.&lt;/p&gt;
 
 &lt;p&gt;Anthropic&amp;rsquo;s first long-running agent harness answered with a simple principle: &lt;strong&gt;reset conversational context, but externalize project state into structured artifacts that the next agent can recover.&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
-
+    
     <item>
       <title>Anthropic Agent Evolution III: The Planner–Generator–Evaluator Quality Loop</title>
       <link>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-3-planner-generator-evaluator/</link>
       <pubDate>Sat, 12 Sep 2026 21:06:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-3-planner-generator-evaluator/</guid>
       <description>&lt;p&gt;The first harness let an agent continue across context windows, but continuity is not quality. Generators routinely mistake “mostly runs” for “good enough,” especially in subjective product and design work.&lt;/p&gt;
 
 &lt;p&gt;Anthropic&amp;rsquo;s next step separated planning, generation, and evaluation so that an external evaluator became a source of evidence the generator had to respond to.&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

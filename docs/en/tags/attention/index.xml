@@ -7,15 +7,15 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Mon, 14 Sep 2026 10:25:02 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/tags/attention/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/tags/attention/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Transformer Architecture: From Token Embeddings to the Training Loop</title>
       <link>https://alexzheng13.github.io/en/post/transformer-architecture/</link>
       <pubDate>Mon, 14 Sep 2026 10:25:02 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/transformer-architecture/</guid>
       <description>&lt;p&gt;Transformer appears to be made up of many components, but a GPT-style forward path can be summarized as:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -52,6 +52,6 @@ Next-token logits → Cross-Entropy Loss&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;
 &lt;/div&gt;
 &lt;p&gt;This article starts from a simple GPT implementation and explains the role and tensor shape of each step along the data flow. The complete source code is placed at the end of the article. After reading the previous principles, you can compare and understand it with the code.&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

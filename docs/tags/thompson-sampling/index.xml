@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Thompson Sampling on Blowing in the wind</title>
+    <link>https://alexzheng13.github.io/tags/thompson-sampling/</link>
+    <description>Recent content in Thompson Sampling on Blowing in the wind</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 27 Aug 2026 09:00:00 +0200</lastBuildDate>
+    
+	<atom:link href="https://alexzheng13.github.io/tags/thompson-sampling/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>强化学习（三）：探索与利用、策略采样和数据来源</title>
+      <link>https://alexzheng13.github.io/post/reinforcement-learning-3-exploration-and-data/</link>
+      <pubDate>Thu, 27 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/reinforcement-learning-3-exploration-and-data/</guid>
+      <description>&lt;p&gt;强化学习不只是“拿到数据以后怎样更新参数”，它还必须决定：&lt;strong&gt;下一条训练数据应该从哪里来？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;如果一直选择当前最好的动作，早期误判可能永远无法纠正；如果不断随机探索，又会浪费大量行动机会。进一步地，训练数据可能来自当前策略、历史策略、人类、专家或一个固定数据集。算法能否安全使用这些数据，取决于策略分布是否匹配。&lt;/p&gt;
+
+&lt;p&gt;本文把这两组问题放在一起：先讨论探索与利用，再区分 on-policy、off-policy、online、offline，最后说明奖励设计为什么会把我们带到 RLHF、DPO、GRPO 与 Agentic RL。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

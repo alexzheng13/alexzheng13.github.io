@@ -58,7 +58,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="Blowing in the wind" />
 <meta property="og:description" content="Hugo theme even example site." />
 <meta property="og:type" content="website" />
@@ -131,6 +130,19 @@
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -176,6 +188,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/about/">关于我</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -184,9 +209,7 @@
     <main id="main" class="main">
       <div class="content-wrapper">
         <div id="content" class="content">
-          <link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
-
-  <section id="posts" class="posts">
+          <section id="posts" class="posts">
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/anthropic-agent-evolution-3-planner-generator-evaluator/">Anthropic Agent 演进（三）：Planner–Generator–Evaluator 质量闭环</a></h1>
@@ -233,6 +256,83 @@
     </div>
     <div class="read-more">
       <a href="/post/anthropic-agent-evolution-4-managed-agent-runtime/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/reinforcement-learning-3-exploration-and-data/">强化学习（三）：探索与利用、策略采样和数据来源</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-08-27 </span>
+      <div class="post-category">
+          <a href="/categories/reinforcement-learning/"> Reinforcement Learning </a>
+          </div>
+        <span class="more-meta"> 约 2943 字 </span>
+        <span class="more-meta"> 预计阅读 6 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>强化学习不只是“拿到数据以后怎样更新参数”，它还必须决定：<strong>下一条训练数据应该从哪里来？</strong></p>
+
+<p>如果一直选择当前最好的动作，早期误判可能永远无法纠正；如果不断随机探索，又会浪费大量行动机会。进一步地，训练数据可能来自当前策略、历史策略、人类、专家或一个固定数据集。算法能否安全使用这些数据，取决于策略分布是否匹配。</p>
+
+<p>本文把这两组问题放在一起：先讨论探索与利用，再区分 on-policy、off-policy、online、offline，最后说明奖励设计为什么会把我们带到 RLHF、DPO、GRPO 与 Agentic RL。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/reinforcement-learning-3-exploration-and-data/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/reinforcement-learning-2-classic-algorithms/">强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-08-26 </span>
+      <div class="post-category">
+          <a href="/categories/reinforcement-learning/"> Reinforcement Learning </a>
+          </div>
+        <span class="more-meta"> 约 2749 字 </span>
+        <span class="more-meta"> 预计阅读 6 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p><a href="/post/reinforcement-learning-1-foundations/">上一篇</a>建立了 MDP、价值函数与贝尔曼方程。接下来要回答的是：<strong>当环境模型未知、状态无法枚举、策略又由神经网络表示时，怎样真的把价值或策略学出来？</strong></p>
+
+<p>本文沿着一条连续的演进路径展开：动态规划需要完整模型；蒙特卡洛只依赖完整轨迹；时序差分可以边走边学；Q-Learning 学最优动作价值；DQN 用神经网络处理高维状态；Actor-Critic 与 PPO 则直接优化策略，并控制每次更新不要走得太远。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/reinforcement-learning-2-classic-algorithms/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/reinforcement-learning-1-foundations/">强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-08-25 </span>
+      <div class="post-category">
+          <a href="/categories/reinforcement-learning/"> Reinforcement Learning </a>
+          </div>
+        <span class="more-meta"> 约 2497 字 </span>
+        <span class="more-meta"> 预计阅读 5 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>强化学习最容易让人困惑的地方，是算法名字很多，但它们真正回答的始终是同一个问题：<strong>一个智能体怎样通过与环境交互，学会做出能带来长期收益的决策？</strong></p>
+
+<p>这组文章从最基本的问题定义开始，再逐步走向 Q-Learning、DQN、Actor-Critic、PPO、探索策略以及大模型后训练。本文是系列第一篇，先建立后续所有算法共用的语言：状态、动作、策略、回报、MDP、价值函数和贝尔曼方程。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/reinforcement-learning-1-foundations/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>
@@ -305,75 +405,6 @@
     </div>
     <div class="read-more">
       <a href="/post/%E8%AF%91liunx-io-multiplexing-select-vs-poll-vs-epoll/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/domain-driven-design/">（译）Domain-Driven Design:Everything You Always Wanted to Know About it, But Were Afraid to Ask(1)</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-02-02 </span>
-      <div class="post-category">
-          <a href="/categories/architecture/"> architecture </a>
-          </div>
-        <span class="more-meta"> 约 5455 字 </span>
-        <span class="more-meta"> 预计阅读 11 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      Domain-Driven Design原文地址 &emsp;&emsp;随着个人代码库的扩展,其复杂性也不可避免地会随之增加。随着这种情况发生,按原本的意图去保持代码
-    </div>
-    <div class="read-more">
-      <a href="/post/domain-driven-design/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/go%E6%B1%87%E7%BC%96%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A82/">go汇编简易入门(Ⅱ)</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2021-01-01 </span>
-      <div class="post-category">
-          <a href="/categories/go/"> go </a>
-          </div>
-        <span class="more-meta"> 约 2958 字 </span>
-        <span class="more-meta"> 预计阅读 6 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      汇编角度看函数调用 &emsp;&emsp;我们以一个简单的例子来作为开始: 1 2 3 4 5 6 7 8 9 10 package main func main() { add(1, 1) } func add(a, b int64) (c int64) { c = a + b return } &
-    </div>
-    <div class="read-more">
-      <a href="/post/go%E6%B1%87%E7%BC%96%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A82/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/go%E6%B1%87%E7%BC%96%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A81/">go汇编简易入门(1)</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2020-12-30 </span>
-      <div class="post-category">
-          <a href="/categories/go/"> go </a>
-          </div>
-        <span class="more-meta"> 约 3688 字 </span>
-        <span class="more-meta"> 预计阅读 8 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      程序的存储空间布局 &emsp;&emsp;进程(Process)是一个正在执行的程序实例(instance)。每个实例有自己的地址空间和执行
-    </div>
-    <div class="read-more">
-      <a href="/post/go%E6%B1%87%E7%BC%96%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A81/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>

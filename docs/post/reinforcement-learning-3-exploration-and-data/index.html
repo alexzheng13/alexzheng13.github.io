@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>强化学习（三）：探索与利用、策略采样和数据来源 - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="从 epsilon-greedy、UCB、Thompson Sampling 到 on-policy、off-policy、online 与 offline，理解强化学习如何获得真正有用的数据。" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/post/reinforcement-learning-3-exploration-and-data/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+
+<meta property="og:title" content="强化学习（三）：探索与利用、策略采样和数据来源" />
+<meta property="og:description" content="从 epsilon-greedy、UCB、Thompson Sampling 到 on-policy、off-policy、online 与 offline，理解强化学习如何获得真正有用的数据。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/post/reinforcement-learning-3-exploration-and-data/" />
+<meta property="article:published_time" content="2026-08-27T09:00:00+02:00" />
+<meta property="article:modified_time" content="2026-08-27T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="强化学习（三）：探索与利用、策略采样和数据来源">
+<meta itemprop="description" content="从 epsilon-greedy、UCB、Thompson Sampling 到 on-policy、off-policy、online 与 offline，理解强化学习如何获得真正有用的数据。">
+
+
+<meta itemprop="datePublished" content="2026-08-27T09:00:00&#43;02:00" />
+<meta itemprop="dateModified" content="2026-08-27T09:00:00&#43;02:00" />
+<meta itemprop="wordCount" content="2943">
+
+
+
+<meta itemprop="keywords" content="Reinforcement Learning,Exploration,Exploitation,UCB,Thompson Sampling,Offline RL," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="强化学习（三）：探索与利用、策略采样和数据来源"/>
+<meta name="twitter:description" content="从 epsilon-greedy、UCB、Thompson Sampling 到 on-policy、off-policy、online 与 offline，理解强化学习如何获得真正有用的数据。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/reinforcement-learning-3-exploration-and-data/" lang="zh-cn" hreflang="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/reinforcement-learning-3-exploration-and-data/" lang="en" hreflang="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/reinforcement-learning-3-exploration-and-data/" lang="zh-cn" hreflang="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/reinforcement-learning-3-exploration-and-data/" lang="en" hreflang="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">强化学习（三）：探索与利用、策略采样和数据来源</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-08-27 </span>
+        <div class="post-category">
+            <a href="/categories/reinforcement-learning/"> Reinforcement Learning </a>
+            </div>
+          <span class="more-meta"> 约 2943 字 </span>
+          <span class="more-meta"> 预计阅读 6 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-探索与利用为什么不可避免">1. 探索与利用为什么不可避免？</a></li>
+<li><a href="#2-epsilon-greedy-简单-稳定-但很粗糙">2. $\epsilon$-greedy：简单、稳定、但很粗糙</a>
+<ul>
+<li><a href="#2-1-让探索随时间衰减">2.1 让探索随时间衰减</a></li>
+</ul></li>
+<li><a href="#3-ucb-优先尝试-不确定但可能很好-的动作">3. UCB：优先尝试“不确定但可能很好”的动作</a></li>
+<li><a href="#4-thompson-sampling-对可能的世界进行采样">4. Thompson Sampling：对可能的世界进行采样</a></li>
+<li><a href="#5-on-policy-与-off-policy-数据是谁产生的">5. On-policy 与 Off-policy：数据是谁产生的？</a></li>
+<li><a href="#6-online-与-offline-训练时还能否继续交互">6. Online 与 Offline：训练时还能否继续交互？</a></li>
+<li><a href="#7-数据来源决定算法的能力边界">7. 数据来源决定算法的能力边界</a></li>
+<li><a href="#8-奖励设计-当指标成为目标">8. 奖励设计：当指标成为目标</a></li>
+<li><a href="#9-从环境奖励走向大模型后训练">9. 从环境奖励走向大模型后训练</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>强化学习不只是“拿到数据以后怎样更新参数”，它还必须决定：<strong>下一条训练数据应该从哪里来？</strong></p>
+
+<p>如果一直选择当前最好的动作，早期误判可能永远无法纠正；如果不断随机探索，又会浪费大量行动机会。进一步地，训练数据可能来自当前策略、历史策略、人类、专家或一个固定数据集。算法能否安全使用这些数据，取决于策略分布是否匹配。</p>
+
+<p>本文把这两组问题放在一起：先讨论探索与利用，再区分 on-policy、off-policy、online、offline，最后说明奖励设计为什么会把我们带到 RLHF、DPO、GRPO 与 Agentic RL。</p>
+
+<blockquote>
+<p><strong>系列导航</strong>：<a href="/post/reinforcement-learning-1-foundations/">（一）基础、MDP 与贝尔曼方程</a> · <a href="/post/reinforcement-learning-2-classic-algorithms/">（二）从 Q-Learning 到 PPO</a> · <strong>（三）探索、采样与数据</strong> · （四）RLHF（待续） · （五）DPO 与 GRPO（待续） · （六）Agentic RL（待续）</p>
+</blockquote>
+
+<h2 id="1-探索与利用为什么不可避免">1. 探索与利用为什么不可避免？</h2>
+
+<ul>
+<li><strong>Exploitation（利用）</strong>：选择当前估计最好的动作，使用已有知识获得奖励；</li>
+<li><strong>Exploration（探索）</strong>：尝试仍不确定的动作，用短期成本换取新信息。</li>
+</ul>
+
+<p><img src="/img/posts/reinforcement-learning-series/exploration-exploitation.png" alt="探索获取信息，利用把已有信息转化为奖励" /></p>
+
+<p>以选餐厅为例：每天去已经确认好吃的店，收益稳定，却可能永远错过更好的选择；每天都去新店，则会频繁踩雷。困难在于智能体一开始并不知道真实期望，只能一边行动、一边估计。</p>
+
+<p>多臂老虎机中，动作 $a$ 的真实期望奖励为 $\mu<em>a$。如果每轮都知道最优动作 $a^*$，就能获得 $\mu</em>{a^*}$。实际选择 $A_t$ 带来的累计遗憾是：</p>
+
+<p>$$
+\operatorname{Regret}(T)=
+T\mu<em>{a^*}-\sum</em>{t=1}^{T}\mu_{A_t}
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/regret.png" alt="探索策略希望在有限轮数内压低累计遗憾" /></p>
+
+<p>好的探索策略不是让每一步都最高分，而是让长期 Regret 增长得尽可能慢。</p>
+
+<h2 id="2-epsilon-greedy-简单-稳定-但很粗糙">2. $\epsilon$-greedy：简单、稳定、但很粗糙</h2>
+
+<p>$\epsilon$-greedy 以概率 $1-\epsilon$ 选择当前估计最好的动作，以概率 $\epsilon$ 随机选择：</p>
+
+<p>$$
+A_t=
+\begin{cases}
+\arg\max_a \hat\mu_a, &amp; \text{with probability }1-\epsilon<br />
+\text{random action}, &amp; \text{with probability }\epsilon
+\end{cases}
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/epsilon-greedy.png" alt="epsilon-greedy 在随机探索与贪心利用之间切换" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+
+<span class="k">class</span> <span class="nc">EpsilonGreedy</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_arms</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_arms</span> <span class="o">=</span> <span class="n">n_arms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_arms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_arms</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_arms</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>均值采用增量更新：</p>
+
+<p>$$
+\hat\mu_a\leftarrow \hat\mu_a+
+\frac{r-\hat\mu_a}{N_a}
+$$</p>
+
+<p>这样不需要保存所有历史奖励。</p>
+
+<h3 id="2-1-让探索随时间衰减">2.1 让探索随时间衰减</h3>
+
+<p>训练早期经验少，应该多探索；后期估计稳定后，持续大量随机动作只会降低收益。因此常让 $\epsilon$ 随时间衰减：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">DecayingEpsilonGreedy</span><span class="p">(</span><span class="n">EpsilonGreedy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_arms</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">decay</span><span class="o">=</span><span class="mf">0.995</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">n_arms</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="n">start</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">end</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decay</span> <span class="o">=</span> <span class="n">decay</span>
+
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">arm</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">select</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">arm</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>固定衰减日程的问题是：它只根据时间减少探索，不关心智能体究竟还不确定什么。</p>
+
+<h2 id="3-ucb-优先尝试-不确定但可能很好-的动作">3. UCB：优先尝试“不确定但可能很好”的动作</h2>
+
+<p>$\epsilon$-greedy 进入探索分支后会在所有动作中随机选择，甚至反复尝试已经明显很差的动作。UCB（Upper Confidence Bound）把平均奖励与不确定性奖金相加：</p>
+
+<p>$$
+A_t=\arg\max_a
+\left[
+\hat\mu_a+c\sqrt{\frac{\ln t}{N_a}}
+\right]
+$$</p>
+
+<p>尝试次数 $N_a$ 越少，探索奖金越大；尝试越多，决策越依赖真实均值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">UCB</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_arms</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_arms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_arms</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">untried</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">counts</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">untried</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">untried</span><span class="p">))</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">counts</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">bonus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">counts</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="n">bonus</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counts</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">counts</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span> <span class="o">/</span> <span class="n">n</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>UCB 体现了“面对不确定性保持乐观”：如果一个动作数据太少，就暂时按它可能达到置信区间上界来考虑。</p>
+
+<h2 id="4-thompson-sampling-对可能的世界进行采样">4. Thompson Sampling：对可能的世界进行采样</h2>
+
+<p>Thompson Sampling 为每个动作维护参数的后验分布。每一轮从各动作的后验中采样一次，再选择采样值最大的动作。</p>
+
+<p>对 Bernoulli 奖励，可以用 Beta 分布作为共轭先验：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">ThompsonSampling</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_arms</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_arms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_arms</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">beta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">reward</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>数据少的动作分布更宽，仍有机会抽到高值；数据多的动作分布更窄，选择逐渐稳定。与 UCB 的确定性上界相比，Thompson Sampling 是一种概率匹配：一个动作成为最优动作的概率越高，它被选择的概率也越高。</p>
+
+<h2 id="5-on-policy-与-off-policy-数据是谁产生的">5. On-policy 与 Off-policy：数据是谁产生的？</h2>
+
+<p>探索策略回答“下一步做什么”，而策略采样还要回答“产生训练数据的策略，是否就是正在优化的策略”。</p>
+
+<ul>
+<li><strong>On-policy（同策略）</strong>：训练数据来自当前正在优化的策略；</li>
+<li><strong>Off-policy（异策略）</strong>：训练数据可以来自旧策略、其他策略、人类或专家。</li>
+</ul>
+
+<p>PPO 和 Sarsa 是典型 on-policy 方法；Q-Learning、DQN、SAC 属于 off-policy。DPO 使用固定偏好数据，也可以从数据关系上理解为离线、异策略学习，但它的目标并不是传统环境交互式 RL。</p>
+
+<p>为什么这一区分重要？因为一个策略生成的数据不一定能无偏估计另一个策略的目标。分布差异越大，重要性采样的方差越高，模型也越容易在没见过的动作上产生错误高估。</p>
+
+<h2 id="6-online-与-offline-训练时还能否继续交互">6. Online 与 Offline：训练时还能否继续交互？</h2>
+
+<ul>
+<li><strong>Online（在线）</strong>：训练过程中智能体继续与环境交互，数据集不断增长；</li>
+<li><strong>Offline（离线）</strong>：训练前数据已经固定，过程中不能向环境索取新样本。</li>
+</ul>
+
+<p>两组概念可以组合成四种数据形态：</p>
+
+<table>
+<thead>
+<tr>
+<th>数据形态</th>
+<th>含义</th>
+<th>典型算法或场景</th>
+<th>主要风险</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Online + On-policy</td>
+<td>用当前策略的新数据更新当前策略</td>
+<td>REINFORCE、Sarsa、PPO、GRPO</td>
+<td>采样昂贵、数据复用率低</td>
+</tr>
+
+<tr>
+<td>Online + Off-policy</td>
+<td>继续交互，并反复使用历史数据</td>
+<td>Q-Learning、DQN、SAC、TD3</td>
+<td>新旧策略的分布差异</td>
+</tr>
+
+<tr>
+<td>Offline + Off-policy</td>
+<td>只从固定历史数据学习</td>
+<td>CQL、IQL、固定数据上的偏好优化</td>
+<td>对数据外动作盲目高估</td>
+</tr>
+
+<tr>
+<td>Offline + On-policy</td>
+<td>固定数据仍代表当前策略</td>
+<td>固定策略评估等边界情况</td>
+<td>策略一更新，数据就过时</td>
+</tr>
+</tbody>
+</table>
+
+<p>Online 不等于 on-policy，offline 也不等于 off-policy。前者描述是否继续收集数据，后者描述行为策略和目标策略是否相同。</p>
+
+<h2 id="7-数据来源决定算法的能力边界">7. 数据来源决定算法的能力边界</h2>
+
+<p>数据不只是输入，它规定了模型能学到什么：</p>
+
+<ul>
+<li>当前策略的 rollout 最贴近优化目标，但昂贵且相关性强；</li>
+<li>Replay Buffer 提高样本复用率，但需要控制分布偏移；</li>
+<li>专家演示能快速建立可用行为，却覆盖不了模型自己犯错后进入的状态；</li>
+<li>固定离线数据安全、便宜、可复现，但无法主动补足盲区；</li>
+<li>人类偏好可以表达难以写成规则的目标，却昂贵、主观且可能不一致；</li>
+<li>可验证奖励适合数学和代码，却只覆盖能够自动判断对错的任务。</li>
+</ul>
+
+<p>这也是为什么“换一个 loss”通常不足以解决强化学习问题。采样分布、奖励质量、环境接口与评估协议共同决定训练结果。</p>
+
+<h2 id="8-奖励设计-当指标成为目标">8. 奖励设计：当指标成为目标</h2>
+
+<p>Goodhart 定律提醒我们：</p>
+
+<blockquote>
+<p>当一个指标成为优化目标，它就不再是一个好指标。</p>
+</blockquote>
+
+<p>RL 会极其认真地优化我们给出的数字，却不会自动理解这个数字背后的意图。一个不完整的奖励函数可能让机器人用奇怪姿势完成动作，也可能让语言模型通过更长、更迎合、更模板化的回答骗取高分。</p>
+
+<p>因此奖励至少要接受三种检查：</p>
+
+<ol>
+<li><strong>Coverage</strong>：它是否覆盖了真正关心的行为，而不只是容易测量的部分？</li>
+<li><strong>Robustness</strong>：模型是否可以找到规则漏洞获得高分？</li>
+<li><strong>Generalization</strong>：奖励在训练分布外是否仍代表真实目标？</li>
+</ol>
+
+<h2 id="9-从环境奖励走向大模型后训练">9. 从环境奖励走向大模型后训练</h2>
+
+<p>传统控制任务的奖励往往能由环境直接计算；语言模型的“回答是否有帮助、诚实、安全”却很难写成程序。人类通常更容易比较两个回答，而不是给出完整评分规则，于是出现了从偏好中学习奖励的 RLHF。</p>
+
+<p>当任务转向数学、代码等可自动验证领域，又可以直接使用规则或测试结果作为奖励，形成 RLVR 与 GRPO 等路线。Agentic RL 则进一步把动作从“生成下一个 token”扩展为调用工具、操作环境并完成长程任务。</p>
+
+<p>后续文章会分别展开：</p>
+
+<ul>
+<li><strong>RLHF</strong>：SFT、Reward Model、PPO 与评估闭环；</li>
+<li><strong>DPO 与 GRPO</strong>：偏好优化与可验证推理训练的不同假设；</li>
+<li><strong>Agentic RL</strong>：如何定义状态、动作、轨迹、信用分配和长程奖励。</li>
+</ul>
+
+<p>这几章仍在继续整理。与其把未完成的段落混入本文，不如先保留清晰边界：前三篇解决“经典 RL 怎样定义问题、学习价值或策略、获得数据”；后续再专门回答“这些思想怎样进入大模型和 Agent”。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2026-08-27
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/reinforcement-learning/">Reinforcement Learning</a>
+          <a href="/tags/exploration/">Exploration</a>
+          <a href="/tags/exploitation/">Exploitation</a>
+          <a href="/tags/ucb/">UCB</a>
+          <a href="/tags/thompson-sampling/">Thompson Sampling</a>
+          <a href="/tags/offline-rl/">Offline RL</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/anthropic-agent-evolution-4-managed-agent-runtime/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Anthropic Agent 演进（四）：Managed Agent Runtime——Session、Harness 与 Sandbox</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/reinforcement-learning-2-classic-algorithms/">
+            <span class="next-text nav-default">强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

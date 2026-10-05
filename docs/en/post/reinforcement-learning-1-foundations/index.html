@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Reinforcement Learning I: From CartPole to MDPs and Bellman Equations - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="A grounded introduction to trial-and-error learning, policies, returns, Markov decision processes, value functions, Q-functions, and Bellman equations." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/en/post/reinforcement-learning-1-foundations/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+
+<meta property="og:title" content="Reinforcement Learning I: From CartPole to MDPs and Bellman Equations" />
+<meta property="og:description" content="A grounded introduction to trial-and-error learning, policies, returns, Markov decision processes, value functions, Q-functions, and Bellman equations." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/en/post/reinforcement-learning-1-foundations/" />
+<meta property="article:published_time" content="2026-08-25T09:00:00+02:00" />
+<meta property="article:modified_time" content="2026-08-25T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="Reinforcement Learning I: From CartPole to MDPs and Bellman Equations">
+<meta itemprop="description" content="A grounded introduction to trial-and-error learning, policies, returns, Markov decision processes, value functions, Q-functions, and Bellman equations.">
+
+
+<meta itemprop="datePublished" content="2026-08-25T09:00:00&#43;02:00" />
+<meta itemprop="dateModified" content="2026-08-25T09:00:00&#43;02:00" />
+<meta itemprop="wordCount" content="767">
+
+
+
+<meta itemprop="keywords" content="Reinforcement Learning,MDP,Bellman Equation,CartPole,Value Function," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Reinforcement Learning I: From CartPole to MDPs and Bellman Equations"/>
+<meta name="twitter:description" content="A grounded introduction to trial-and-error learning, policies, returns, Markov decision processes, value functions, Q-functions, and Bellman equations."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/en/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/en/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/en/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/en/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/en/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/reinforcement-learning-1-foundations/" lang="zh-cn" hreflang="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/reinforcement-learning-1-foundations/" lang="en" hreflang="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/en/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/reinforcement-learning-1-foundations/" lang="zh-cn" hreflang="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/reinforcement-learning-1-foundations/" lang="en" hreflang="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/en/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/about/">About</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Reinforcement Learning I: From CartPole to MDPs and Bellman Equations</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-08-25 </span>
+        <div class="post-category">
+            <a href="/en/categories/reinforcement-learning/"> Reinforcement Learning </a>
+            </div>
+          <span class="more-meta"> 767 words </span>
+          <span class="more-meta"> 4 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-what-does-reinforcement-learning-learn">1. What does reinforcement learning learn?</a></li>
+<li><a href="#2-return-and-discounting">2. Return and discounting</a></li>
+<li><a href="#3-an-action-is-not-a-policy">3. An action is not a policy</a></li>
+<li><a href="#4-cartpole-as-a-minimal-rl-problem">4. CartPole as a minimal RL problem</a></li>
+<li><a href="#5-markov-decision-processes">5. Markov decision processes</a></li>
+<li><a href="#6-value-functions-compress-the-future">6. Value functions compress the future</a></li>
+<li><a href="#7-bellman-equations-estimate-now-from-the-next-step">7. Bellman equations: estimate now from the next step</a></li>
+<li><a href="#8-two-routes-forward">8. Two routes forward</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>Reinforcement learning has many algorithms, but they all address the same question: <strong>how can an agent learn decisions that produce high long-term reward through interaction with an environment?</strong></p>
+
+<p>This series starts with the common language behind those algorithms, then moves toward Q-Learning, DQN, Actor-Critic, PPO, exploration, data collection, and eventually LLM post-training. This first article establishes the foundation: states, actions, policies, returns, MDPs, value functions, and Bellman equations.</p>
+
+<blockquote>
+<p><strong>Series</strong>: <strong>I. Foundations, MDPs, and Bellman equations</strong> · <a href="/en/post/reinforcement-learning-2-classic-algorithms/">II. From Q-Learning to PPO</a> · <a href="/en/post/reinforcement-learning-3-exploration-and-data/">III. Exploration, sampling, and data</a> · IV. RLHF (planned) · V. DPO and GRPO (planned) · VI. Agentic RL (planned)</p>
+</blockquote>
+
+<h2 id="1-what-does-reinforcement-learning-learn">1. What does reinforcement learning learn?</h2>
+
+<p>Reinforcement learning is trial-and-error learning. At each time step, an agent observes a state or observation, chooses an action, and receives a new state and scalar reward from the environment. The goal is not to maximize the score of the current step, but the cumulative return over the interaction.</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/trial-and-error.png" alt="An agent acts on an environment and learns from the next state and reward" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">State / Observation → Agent → Action
+          ↑                    ↓
+          └──── Reward + Environment</code></pre></td></tr></table>
+</div>
+</div>
+<p>The basic objects are:</p>
+
+<ul>
+<li><strong>State</strong>: a complete description of the environment;</li>
+<li><strong>Observation</strong>: the part of the environment visible to the agent;</li>
+<li><strong>Action space</strong>: the set of available discrete or continuous actions;</li>
+<li><strong>Reward</strong>: immediate scalar feedback;</li>
+<li><strong>Episode</strong>: a complete trajectory from an initial to a terminal state.</li>
+</ul>
+
+<h2 id="2-return-and-discounting">2. Return and discounting</h2>
+
+<p>Optimizing immediate reward alone often creates shortsighted behavior. RL instead uses the discounted return from time $t$:</p>
+
+<p>$$
+G<em>t=R</em>{t+1}+\gamma R<em>{t+2}+\gamma^2R</em>{t+3}+\cdots
+$$</p>
+
+<p>The discount factor $\gamma\in[0,1]$ controls how much future rewards matter. Small values favor immediate outcomes; values near one make long-term consequences important. Discounting also reflects the growing uncertainty of distant outcomes and helps infinite sums converge.</p>
+
+<h2 id="3-an-action-is-not-a-policy">3. An action is not a policy</h2>
+
+<p>An action is a local instruction. A policy is a rule that covers every state the agent may encounter.</p>
+
+<p>A deterministic policy returns one action:</p>
+
+<p>$$
+a=\pi(s)
+$$</p>
+
+<p>A stochastic policy returns a distribution:</p>
+
+<p>$$
+\pi(a\mid s)=\Pr(A_t=a\mid S_t=s)
+$$</p>
+
+<p>Stochastic policies preserve exploration because non-greedy actions can still be sampled.</p>
+
+<h2 id="4-cartpole-as-a-minimal-rl-problem">4. CartPole as a minimal RL problem</h2>
+
+<p>In CartPole, a pole is attached to a cart. The agent can push the cart left or right and must keep the pole upright.</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/cartpole.webp" alt="CartPole-v1: moving the cart left and right to balance the pole" /></p>
+
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>CartPole meaning</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>State</td>
+<td>Cart position and velocity, pole angle and angular velocity</td>
+</tr>
+
+<tr>
+<td>Action</td>
+<td>Push left or right</td>
+</tr>
+
+<tr>
+<td>Reward</td>
+<td>Positive reward for every surviving step</td>
+</tr>
+
+<tr>
+<td>Termination</td>
+<td>Excessive tilt, leaving bounds, or reaching the time limit</td>
+</tr>
+
+<tr>
+<td>Policy</td>
+<td>A mapping from the four-dimensional state to an action</td>
+</tr>
+</tbody>
+</table>
+
+<p>The task already exposes the core difficulty: an action that looks bad immediately may create room for a better recovery on the next step.</p>
+
+<h2 id="5-markov-decision-processes">5. Markov decision processes</h2>
+
+<p>An MDP formalizes sequential decisions as:</p>
+
+<p>$$
+\mathcal{M}=(\mathcal{S},\mathcal{A},P,R,\gamma)
+$$</p>
+
+<p>Here $\mathcal{S}$ is the state space, $\mathcal{A}$ the action space, $P(s&rsquo;\mid s,a)$ the transition model, $R$ the reward function, and $\gamma$ the discount factor.</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/mdp.png" alt="States, actions, transitions, and rewards in an MDP" /></p>
+
+<p>The Markov property says that a complete current state contains everything needed to predict the next state:</p>
+
+<p>$$
+P(S_{t+1}\mid S_t,A<em>t,S</em>{t-1},A<em>{t-1},\ldots)
+=P(S</em>{t+1}\mid S_t,A_t)
+$$</p>
+
+<p>History is not irrelevant; its relevant information must already be summarized by the current state. When an observation is insufficient, the problem is closer to a POMDP and the agent needs memory.</p>
+
+<p>If $P$ and $R$ are known, dynamic programming can plan directly. In most real tasks they are unknown, so the agent must estimate values from interaction.</p>
+
+<h2 id="6-value-functions-compress-the-future">6. Value functions compress the future</h2>
+
+<p>The state-value function measures the expected return from state $s$ under policy $\pi$:</p>
+
+<p>$$
+V^\pi(s)=\mathbb{E}_\pi[G_t\mid S_t=s]
+$$</p>
+
+<p>The action-value function asks the same question after first taking action $a$:</p>
+
+<p>$$
+Q^\pi(s,a)=\mathbb{E}_\pi[G_t\mid S_t=s,A_t=a]
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/q-value.png" alt="Q-values compare the long-term return of state-action pairs" /></p>
+
+<p>Values compress a complex future into comparable scalars. The remaining question is how to estimate a future that has not happened yet.</p>
+
+<h2 id="7-bellman-equations-estimate-now-from-the-next-step">7. Bellman equations: estimate now from the next step</h2>
+
+<p>The Bellman idea is:</p>
+
+<blockquote>
+<p>Current value = immediate reward + discounted future value.</p>
+</blockquote>
+
+<p>For a fixed policy:</p>
+
+<p>$$
+V^\pi(s)=\sum<em>a\pi(a\mid s)
+\sum</em>{s&rsquo;,r}p(s&rsquo;,r\mid s,a)
+\left[r+\gamma V^\pi(s&rsquo;)\right]
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/bellman-expectation.png" alt="The Bellman expectation equation recursively decomposes current value" /></p>
+
+<p>To find the optimal policy, replace averaging over actions with maximization:</p>
+
+<p>$$
+V^<em>(s)=\max<em>a\sum</em>{s&rsquo;,r}p(s&rsquo;,r\mid s,a)
+\left[r+\gamma V^</em>(s&rsquo;)\right]
+$$</p>
+
+<p>The Q-function form is:</p>
+
+<p>$$
+Q^<em>(s,a)=\mathbb{E}\left[
+R<em>{t+1}+\gamma\max</em>{a&rsquo;}Q^</em>(S_{t+1},a&rsquo;)
+\mid S_t=s,A_t=a
+\right]
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/bellman-q-optimality.png" alt="Bellman optimality equation for the Q-function" /></p>
+
+<p>Once $Q^*$ is known, the optimal policy follows directly:</p>
+
+<p>$$
+\pi^<em>(s)=\arg\max_aQ^</em>(s,a)
+$$</p>
+
+<h2 id="8-two-routes-forward">8. Two routes forward</h2>
+
+<p>Bellman equations lead to two major families:</p>
+
+<ol>
+<li><strong>Value-based methods</strong> learn $V$ or $Q$ and derive actions from values. Q-Learning and DQN follow this route.</li>
+<li><strong>Policy-based methods</strong> directly optimize a parameterized policy $\pi_\theta(a\mid s)$. REINFORCE and PPO follow this route.</li>
+</ol>
+
+<p>Actor-Critic combines them: the Actor chooses actions and the Critic estimates their value. The next article follows this progression from dynamic programming, Monte Carlo, and temporal difference learning to Q-Learning, DQN, Actor-Critic, and PPO.</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-08-25
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/en/tags/reinforcement-learning/">Reinforcement Learning</a>
+          <a href="/en/tags/mdp/">MDP</a>
+          <a href="/en/tags/bellman-equation/">Bellman Equation</a>
+          <a href="/en/tags/cartpole/">CartPole</a>
+          <a href="/en/tags/value-function/">Value Function</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/en/post/reinforcement-learning-2-classic-algorithms/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Reinforcement Learning II: From Q-Learning and DQN to Actor-Critic and PPO</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/en/post/stanford-cs329a-self-improving-ai-agents/">
+            <span class="next-text nav-default">Stanford CS329A: A Complete Framework for Self-Improving AI Agents</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

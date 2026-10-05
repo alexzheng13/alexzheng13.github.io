@@ -7,27 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Tue, 02 Feb 2021 12:06:47 +0800</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/categories/architecture/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/categories/architecture/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>（译）Domain-Driven Design:Everything You Always Wanted to Know About it, But Were Afraid to Ask(1)</title>
       <link>https://alexzheng13.github.io/post/domain-driven-design/</link>
       <pubDate>Tue, 02 Feb 2021 12:06:47 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/domain-driven-design/</guid>
       <description>Domain-Driven Design原文地址 &amp;emsp;&amp;emsp;随着个人代码库的扩展,其复杂性也不可避免地会随之增加。随着这种情况发生,按原本的意图去保持代码</description>
     </item>
-
+    
     <item>
       <title>CAP与服务发现组件比较</title>
       <link>https://alexzheng13.github.io/post/cap%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E7%BB%84%E4%BB%B6%E6%AF%94%E8%BE%83/</link>
       <pubDate>Sat, 29 Feb 2020 09:41:00 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/cap%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E7%BB%84%E4%BB%B6%E6%AF%94%E8%BE%83/</guid>
       <description>CAP理论概述 一个分布式系统最多只能同时满足一致性（consistency）、可用性（Availability）和分区容错性（Partiti</description>
     </item>
-
+    
   </channel>
 </rss>

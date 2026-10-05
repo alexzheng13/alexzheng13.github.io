@@ -58,7 +58,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="未来 5—10 年的 AI 架构推演：Base Model、个人智能与企业私有能力层" />
 <meta property="og:description" content="我对未来 5—10 年 AI 的一个核心判断是：人们不会为每个人、每家公司重新训练一套完整模型，而会在共享的 Base Model 之上，挂载属于个人和组织的私有认知层。
 
@@ -145,6 +144,19 @@
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -190,6 +202,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/about/">关于我</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -686,7 +711,11 @@ AI 产品的竞争中心从“模型”迁移到“持续性认知系统”</cod
           <a href="/tags/ai-agent/">AI Agent</a>
           </div>
       <nav class="post-nav">
-        
+        <a class="prev" href="/post/anthropic-recursive-self-improvement/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">当 AI 开始构建自己：Anthropic 内部实践与递归自我改进的未来</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
         <a class="next" href="/post/llm-agent-benchmarks-guide/">
             <span class="next-text nav-default">大模型与 AI Agent Benchmark 全景指南：它们究竟在评估什么</span>
             <span class="next-text nav-mobile">下一篇</span>

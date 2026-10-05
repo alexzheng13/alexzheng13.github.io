@@ -1,0 +1,181 @@
+---
+title: "Reinforcement Learning III: Exploration, Policy Sampling, and Data Sources"
+date: 2026-08-27 09:00:00 +0200
+slug: "reinforcement-learning-3-exploration-and-data"
+description: "From epsilon-greedy, UCB, and Thompson sampling to on-policy, off-policy, online, and offline learning: where useful RL data comes from."
+categories: [Reinforcement Learning]
+tags: [Reinforcement Learning, Exploration, Exploitation, UCB, Thompson Sampling, Offline RL]
+toc: true
+mathjax: true
+mathjaxEnableSingleDollar: true
+---
+
+Reinforcement learning must decide more than how to update parameters. It must also decide **where the next training example should come from**.
+
+Always choosing the current best action can preserve an early mistake forever. Exploring at random forever wastes opportunities. Training data may also come from the current policy, old policies, humans, experts, or a fixed dataset. Whether an algorithm can use that data safely depends on distribution mismatch.
+
+<!--more-->
+
+> **Series**: [I. Foundations](/en/post/reinforcement-learning-1-foundations/) · [II. From Q-Learning to PPO](/en/post/reinforcement-learning-2-classic-algorithms/) · **III. Exploration, sampling, and data** · IV. RLHF (planned) · V. DPO and GRPO (planned) · VI. Agentic RL (planned)
+
+## 1. Exploration versus exploitation
+
+- **Exploitation** selects the action currently estimated to be best.
+- **Exploration** spends short-term reward to reduce uncertainty.
+
+![Exploration gathers information while exploitation converts knowledge into reward](/img/posts/reinforcement-learning-series/exploration-exploitation.png)
+
+For a multi-armed bandit, let $\mu_a$ be the true mean reward and $a^*$ the optimal arm. Cumulative regret is:
+
+$$
+\operatorname{Regret}(T)=T\mu_{a^*}-\sum_{t=1}^{T}\mu_{A_t}
+$$
+
+![Exploration strategies aim to keep cumulative regret small](/img/posts/reinforcement-learning-series/regret.png)
+
+A good strategy does not maximize every individual step; it keeps long-term regret from growing too quickly.
+
+## 2. $\epsilon$-greedy
+
+With probability $1-\epsilon$, select the estimated best action; with probability $\epsilon$, explore randomly:
+
+$$
+A_t=\begin{cases}
+\arg\max_a\hat\mu_a,&\text{with probability }1-\epsilon\\
+\text{random action},&\text{with probability }\epsilon
+\end{cases}
+$$
+
+![Epsilon-greedy alternates random exploration and greedy exploitation](/img/posts/reinforcement-learning-series/epsilon-greedy.png)
+
+```python
+class EpsilonGreedy:
+    def __init__(self, n_arms, epsilon=0.1):
+        self.epsilon = epsilon
+        self.q = np.zeros(n_arms)
+        self.n = np.zeros(n_arms)
+
+    def select(self):
+        if np.random.random() < self.epsilon:
+            return np.random.randint(len(self.q))
+        return int(np.argmax(self.q))
+
+    def update(self, arm, reward):
+        self.n[arm] += 1
+        self.q[arm] += (reward - self.q[arm]) / self.n[arm]
+```
+
+The incremental mean update is:
+
+$$
+\hat\mu_a\leftarrow\hat\mu_a+\frac{r-\hat\mu_a}{N_a}
+$$
+
+Exploration is often decayed over time, but a fixed schedule ignores which actions remain uncertain.
+
+## 3. UCB: explore uncertain actions selectively
+
+UCB adds an uncertainty bonus to each empirical mean:
+
+$$
+A_t=\arg\max_a\left[
+\hat\mu_a+c\sqrt{\frac{\ln t}{N_a}}
+\right]
+$$
+
+Rarely tried actions receive larger bonuses. As evidence accumulates, decisions rely increasingly on the empirical mean.
+
+```python
+class UCB:
+    def __init__(self, n_arms, c=2.0):
+        self.c = c
+        self.counts = np.zeros(n_arms)
+        self.values = np.zeros(n_arms)
+
+    def select(self):
+        untried = np.flatnonzero(self.counts == 0)
+        if len(untried):
+            return int(np.random.choice(untried))
+        t = self.counts.sum()
+        bonus = self.c * np.sqrt(np.log(t) / self.counts)
+        return int(np.argmax(self.values + bonus))
+
+    def update(self, arm, reward):
+        self.counts[arm] += 1
+        self.values[arm] += (
+            reward - self.values[arm]
+        ) / self.counts[arm]
+```
+
+## 4. Thompson sampling
+
+Thompson sampling maintains a posterior distribution for each action, samples one plausible value from every posterior, and selects the largest sample. For Bernoulli rewards, Beta distributions provide a convenient conjugate model:
+
+```python
+class ThompsonSampling:
+    def __init__(self, n_arms):
+        self.alpha = np.ones(n_arms)
+        self.beta = np.ones(n_arms)
+
+    def select(self):
+        samples = np.random.beta(self.alpha, self.beta)
+        return int(np.argmax(samples))
+
+    def update(self, arm, reward):
+        if reward == 1:
+            self.alpha[arm] += 1
+        else:
+            self.beta[arm] += 1
+```
+
+Uncertain actions have wider posteriors and remain capable of producing a large sample. Well-tested actions become more predictable.
+
+## 5. On-policy versus off-policy
+
+- **On-policy** methods train on data generated by the policy currently being optimized.
+- **Off-policy** methods may train on data from older policies, different agents, humans, or experts.
+
+PPO and Sarsa are on-policy. Q-Learning, DQN, and SAC are off-policy. Distribution mismatch matters because samples from one policy may not provide a low-variance estimate of another policy's objective.
+
+## 6. Online versus offline
+
+- **Online** learning keeps interacting with the environment while training.
+- **Offline** learning receives a fixed dataset and cannot request new samples.
+
+The two distinctions form four data regimes:
+
+| Regime | Meaning | Typical examples | Main risk |
+| --- | --- | --- | --- |
+| Online + on-policy | Fresh data from the current policy | REINFORCE, Sarsa, PPO, GRPO | Expensive interaction; low reuse |
+| Online + off-policy | New interaction plus reusable history | Q-Learning, DQN, SAC, TD3 | Distribution mismatch |
+| Offline + off-policy | Learning only from fixed historical data | CQL, IQL, preference optimization on fixed data | Overestimating unseen actions |
+| Offline + on-policy | Fixed data still represents the current policy | Fixed-policy evaluation and boundary cases | Data expires after policy updates |
+
+Online is not synonymous with on-policy, and offline is not synonymous with off-policy.
+
+## 7. Data sources define the capability boundary
+
+- Current-policy rollouts match the objective but are expensive and correlated.
+- Replay buffers improve reuse but introduce stale distributions.
+- Expert demonstrations quickly establish useful behavior but do not cover states created by the learner's mistakes.
+- Fixed datasets are safe and reproducible but cannot actively fill gaps.
+- Human preferences express objectives that are hard to code, but are expensive and inconsistent.
+- Verifiable rewards work well for math and code, but only where correctness can be checked automatically.
+
+Changing the loss alone rarely solves an RL problem. Sampling distribution, reward quality, environment access, and evaluation protocol jointly determine the outcome.
+
+## 8. Reward design and Goodhart's law
+
+> When a measure becomes a target, it ceases to be a good measure.
+
+RL aggressively optimizes the supplied number, not the intent behind it. An incomplete reward can produce strange robotic behavior or language models that gain score through verbosity, flattery, or templates.
+
+A reward should therefore be checked for coverage, robustness to gaming, and generalization outside the training distribution.
+
+## 9. The bridge to LLM post-training
+
+Traditional control tasks often have programmatic rewards. The helpfulness, honesty, or safety of an answer is harder to encode. Humans find it easier to compare two answers than to write a complete scoring rule, which motivates RLHF.
+
+For mathematics and code, correctness may be verified automatically, enabling RLVR and GRPO-style training. Agentic RL extends the action space beyond the next token to tool calls, environment operations, and long-horizon tasks.
+
+The remaining articles will treat these as separate topics: RLHF; DPO and GRPO; and Agentic RL. Those notes are still being developed, so the first three articles keep a clean boundary around classical RL foundations, algorithms, exploration, and data.

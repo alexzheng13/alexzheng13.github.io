@@ -7,20 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 12 Sep 2026 21:08:45 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/tags/workflow/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/tags/workflow/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Anthropic Agent Evolution I: From Workflows to Agents—and Why Harnesses Matter</title>
       <link>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-1-from-workflows-to-agents/</link>
       <pubDate>Sat, 12 Sep 2026 21:08:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-1-from-workflows-to-agents/</guid>
       <description>&lt;p&gt;“Agent” is often used as a broad label for any system that calls tools or takes multiple steps. Anthropic&amp;rsquo;s engineering work offers a more useful distinction: &lt;strong&gt;a workflow follows code paths defined in advance; an agent lets the model dynamically choose its process from environmental feedback.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;This first article in the “Anthropic Agent Evolution” series establishes the vocabulary: augmented LLMs, fixed workflows, autonomous agents, and the harness that surrounds the model.&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

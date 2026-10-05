@@ -58,7 +58,6 @@ Anthropic Managed Agents 的核心答案是：把 Brain、Hands 和 Session 解�
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="Anthropic Agent 演进（四）：Managed Agent Runtime——Session、Harness 与 Sandbox" />
 <meta property="og:description" content="前几代 Harness 关注的是模型怎样持续工作、怎样提高质量。走向托管服务后，问题变成了系统工程：Session 如何持久化？Harness 崩溃后怎样恢复？Sandbox 如何替换？怎样连接客户自己的 VPC？凭据如何不暴露给模型生成的代码？
 
@@ -120,31 +119,44 @@ Anthropic Managed Agents 的核心答案是：把 Brain、Hands 和 Session 解�
       </a>
   </ul>
 
-
+  
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/post/anthropic-agent-evolution-4-managed-agent-runtime/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/en/post/anthropic-agent-evolution-4-managed-agent-runtime/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -157,23 +169,23 @@ Anthropic Managed Agents 的核心答案是：把 Brain、Hands 和 Session 解�
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/post/anthropic-agent-evolution-4-managed-agent-runtime/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/en/post/anthropic-agent-evolution-4-managed-agent-runtime/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
@@ -190,6 +202,19 @@ Anthropic Managed Agents 的核心答案是：把 Brain、Hands 和 Session 解�
       </li><li class="menu-item">
         <a class="menu-item-link" href="/about/">关于我</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -199,7 +224,7 @@ Anthropic Managed Agents 的核心答案是：把 Brain、Hands 和 Session 解�
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-
+    
     <header class="post-header">
       <h1 class="post-title">Anthropic Agent 演进（四）：Managed Agent Runtime——Session、Harness 与 Sandbox</h1>
 
@@ -210,7 +235,7 @@ Anthropic Managed Agents 的核心答案是：把 Brain、Hands 和 Session 解�
             </div>
           <span class="more-meta"> 约 2060 字 </span>
           <span class="more-meta"> 预计阅读 5 分钟 </span>
-
+        
       </div>
     </header>
 
@@ -431,11 +456,11 @@ Anthropic Managed Agents 的核心答案是：把 Brain、Hands 和 Session 解�
     <span class="item-title">上次更新</span>
     <span class="item-content">
         2026-09-12
-
+        
     </span>
   </p>
-
-
+  
+  
 </div>
 <footer class="post-footer">
       <div class="post-tags">
@@ -452,8 +477,8 @@ Anthropic Managed Agents 的核心答案是：把 Brain、Hands 和 Session 解�
             <span class="prev-text nav-default">Anthropic Agent 演进（三）：Planner–Generator–Evaluator 质量闭环</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
-        <a class="next" href="/post/stanford-cs329a-self-improving-ai-agents/">
-            <span class="next-text nav-default">Stanford CS329A：Self-Improving AI Agents 的完整技术框架</span>
+        <a class="next" href="/post/reinforcement-learning-3-exploration-and-data/">
+            <span class="next-text nav-default">强化学习（三）：探索与利用、策略采样和数据来源</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
@@ -461,11 +486,11 @@ Anthropic Managed Agents 的核心答案是：把 Brain、Hands 和 Session 解�
     </footer>
   </article>
         </div>
+        
 
+  
 
-
-
-
+  
 
       </div>
     </main>
@@ -481,15 +506,15 @@ Anthropic Managed Agents 的核心答案是：把 Brain、Hands 和 Session 解�
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 -
+    主题 - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
-
+  
 
   <span class="copyright-year">
-    &copy;
-    2019 -
+    &copy; 
+    2019 - 
     2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
   </span>
 </div>
@@ -500,7 +525,7 @@ Anthropic Managed Agents 的核心答案是：把 Brain、Hands 和 Session 解�
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

@@ -7,20 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 12 Sep 2026 21:08:45 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/tags/workflow/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/tags/workflow/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness</title>
       <link>https://alexzheng13.github.io/post/anthropic-agent-evolution-1-from-workflows-to-agents/</link>
       <pubDate>Sat, 12 Sep 2026 21:08:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/anthropic-agent-evolution-1-from-workflows-to-agents/</guid>
       <description>&lt;p&gt;“Agent” 经常被当作一个宽泛标签：只要模型调用了工具、执行了多步任务，就被称为 Agent。Anthropic 的工程实践给出了一个更有用的区分：&lt;strong&gt;Workflow 的路径由代码预先定义；Agent 则由模型根据环境反馈动态决定下一步。&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;这是“Anthropic Agent 演进”系列的第一篇。我们先建立共同语言：从增强型 LLM、固定 Workflow，一直到真正的自主 Agent，并解释为什么模型外部还需要一层 Harness。&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

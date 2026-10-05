@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="沿着 DP、MC、TD 三种估计方法，理解 Q-Learning、DQN、策略梯度、Actor-Critic 与 PPO 如何逐步解决真实训练问题。" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/post/reinforcement-learning-2-classic-algorithms/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+
+<meta property="og:title" content="强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO" />
+<meta property="og:description" content="沿着 DP、MC、TD 三种估计方法，理解 Q-Learning、DQN、策略梯度、Actor-Critic 与 PPO 如何逐步解决真实训练问题。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/post/reinforcement-learning-2-classic-algorithms/" />
+<meta property="article:published_time" content="2026-08-26T09:00:00+02:00" />
+<meta property="article:modified_time" content="2026-08-26T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO">
+<meta itemprop="description" content="沿着 DP、MC、TD 三种估计方法，理解 Q-Learning、DQN、策略梯度、Actor-Critic 与 PPO 如何逐步解决真实训练问题。">
+
+
+<meta itemprop="datePublished" content="2026-08-26T09:00:00&#43;02:00" />
+<meta itemprop="dateModified" content="2026-08-26T09:00:00&#43;02:00" />
+<meta itemprop="wordCount" content="2749">
+
+
+
+<meta itemprop="keywords" content="Reinforcement Learning,Q-Learning,DQN,Actor-Critic,PPO,Temporal Difference," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO"/>
+<meta name="twitter:description" content="沿着 DP、MC、TD 三种估计方法，理解 Q-Learning、DQN、策略梯度、Actor-Critic 与 PPO 如何逐步解决真实训练问题。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/reinforcement-learning-2-classic-algorithms/" lang="zh-cn" hreflang="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/reinforcement-learning-2-classic-algorithms/" lang="en" hreflang="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/reinforcement-learning-2-classic-algorithms/" lang="zh-cn" hreflang="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/reinforcement-learning-2-classic-algorithms/" lang="en" hreflang="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-08-26 </span>
+        <div class="post-category">
+            <a href="/categories/reinforcement-learning/"> Reinforcement Learning </a>
+            </div>
+          <span class="more-meta"> 约 2749 字 </span>
+          <span class="more-meta"> 预计阅读 6 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-model-based-与-model-free">1. Model-Based 与 Model-Free</a></li>
+<li><a href="#2-dp-mc-与-td-三种价值估计方式">2. DP、MC 与 TD：三种价值估计方式</a>
+<ul>
+<li><a href="#2-1-动态规划-有模型-全期望">2.1 动态规划：有模型，全期望</a></li>
+<li><a href="#2-2-蒙特卡洛-无模型-等结局">2.2 蒙特卡洛：无模型，等结局</a></li>
+<li><a href="#2-3-时序差分-边走边学">2.3 时序差分：边走边学</a></li>
+</ul></li>
+<li><a href="#3-q-learning-直接逼近最优动作价值">3. Q-Learning：直接逼近最优动作价值</a>
+<ul>
+<li><a href="#3-1-q-learning-与-sarsa">3.1 Q-Learning 与 Sarsa</a></li>
+</ul></li>
+<li><a href="#4-dqn-q-表装不下时-用神经网络逼近">4. DQN：Q 表装不下时，用神经网络逼近</a></li>
+<li><a href="#5-policy-gradient-直接优化策略">5. Policy Gradient：直接优化策略</a></li>
+<li><a href="#6-actor-critic-一个行动-一个评价">6. Actor-Critic：一个行动，一个评价</a></li>
+<li><a href="#7-ppo-限制策略更新的步幅">7. PPO：限制策略更新的步幅</a>
+<ul>
+<li><a href="#7-1-ppo-的训练循环">7.1 PPO 的训练循环</a></li>
+</ul></li>
+<li><a href="#8-这些方法解决了不同层次的问题">8. 这些方法解决了不同层次的问题</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p><a href="/post/reinforcement-learning-1-foundations/">上一篇</a>建立了 MDP、价值函数与贝尔曼方程。接下来要回答的是：<strong>当环境模型未知、状态无法枚举、策略又由神经网络表示时，怎样真的把价值或策略学出来？</strong></p>
+
+<p>本文沿着一条连续的演进路径展开：动态规划需要完整模型；蒙特卡洛只依赖完整轨迹；时序差分可以边走边学；Q-Learning 学最优动作价值；DQN 用神经网络处理高维状态；Actor-Critic 与 PPO 则直接优化策略，并控制每次更新不要走得太远。</p>
+
+<blockquote>
+<p><strong>系列导航</strong>：<a href="/post/reinforcement-learning-1-foundations/">（一）基础、MDP 与贝尔曼方程</a> · <strong>（二）从 Q-Learning 到 PPO</strong> · <a href="/post/reinforcement-learning-3-exploration-and-data/">（三）探索、采样与数据</a> · （四）RLHF（待续） · （五）DPO 与 GRPO（待续） · （六）Agentic RL（待续）</p>
+</blockquote>
+
+<h2 id="1-model-based-与-model-free">1. Model-Based 与 Model-Free</h2>
+
+<p>先区分算法是否学习或使用环境模型。</p>
+
+<ul>
+<li><strong>Model-Based</strong>：拥有或学习转移与奖励模型，可以在内部推演“执行这个动作后会发生什么”；</li>
+<li><strong>Model-Free</strong>：不显式建立环境模型，直接从交互经验中学习价值函数或策略。</li>
+</ul>
+
+<p>知道完整 $P(s&rsquo;\mid s,a)$ 时，动态规划可以遍历状态并反复应用贝尔曼方程。真实世界里模型往往未知，因此 Q-Learning、DQN、PPO 等常用算法大多属于 Model-Free。</p>
+
+<p>这个维度与 Value-Based / Policy-Based 不冲突：一个算法可以是 Model-Free + Value-Based，也可以是 Model-Free + Policy-Based。</p>
+
+<h2 id="2-dp-mc-与-td-三种价值估计方式">2. DP、MC 与 TD：三种价值估计方式</h2>
+
+<p><img src="/img/posts/reinforcement-learning-series/dp-mc-td.png" alt="动态规划、蒙特卡洛与时序差分在信息需求和更新时机上的差异" /></p>
+
+<h3 id="2-1-动态规划-有模型-全期望">2.1 动态规划：有模型，全期望</h3>
+
+<p>动态规划（DP）需要已知转移概率与奖励，通过遍历所有后继状态计算完整期望。它的估计偏差小，但现实中通常拿不到完整环境模型，状态空间也可能太大。</p>
+
+<h3 id="2-2-蒙特卡洛-无模型-等结局">2.2 蒙特卡洛：无模型，等结局</h3>
+
+<p>蒙特卡洛（MC）不需要环境模型。它从状态 $s$ 出发跑完一个完整 Episode，再计算真实回报 $G_t$，最后用多次采样的平均值估计 $V(s)$：</p>
+
+<p>$$
+V(s) \leftarrow V(s) + \alpha\left(G_t-V(s)\right)
+$$</p>
+
+<p>优势是目标来自真实回报，不需要 bootstrap；缺点是必须等回合结束，且方差较大。对于很长或没有自然终点的任务，这种等待代价很高。</p>
+
+<h3 id="2-3-时序差分-边走边学">2.3 时序差分：边走边学</h3>
+
+<p>时序差分（TD）结合了 MC 的采样和 DP 的自举（bootstrapping）。它不等完整回合，而用下一状态的当前估计更新这一状态：</p>
+
+<p>$$
+V(S_t) \leftarrow V(S<em>t)+\alpha
+\left[R</em>{t+1}+\gamma V(S_{t+1})-V(S_t)\right]
+$$</p>
+
+<p>括号内叫作 <strong>TD error</strong>：</p>
+
+<p>$$
+\delta<em>t=R</em>{t+1}+\gamma V(S_{t+1})-V(S_t)
+$$</p>
+
+<p>TD 目标含有另一个估计值，因此可能有偏差，却能在线更新、方差通常更低，也更适合持续交互。</p>
+
+<h2 id="3-q-learning-直接逼近最优动作价值">3. Q-Learning：直接逼近最优动作价值</h2>
+
+<p>Q-Learning 是无模型、异策略（off-policy）的 TD 控制算法。它用下一状态中价值最高的动作构造目标：</p>
+
+<p>$$
+Q(S_t,A_t) \leftarrow Q(S_t,A<em>t)+\alpha
+\left[
+R</em>{t+1}+\gamma\max<em>aQ(S</em>{t+1},a)-Q(S_t,A_t)
+\right]
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/q-learning-update.png" alt="Q-Learning 的一步更新" /></p>
+
+<p>“异策略”体现在：产生数据的行为策略可以带有探索，比如 $\epsilon$-greedy；更新目标却假设下一步会选择当前最优动作。也就是说，它可以一边探索，一边学习贪心策略。</p>
+
+<h3 id="3-1-q-learning-与-sarsa">3.1 Q-Learning 与 Sarsa</h3>
+
+<p>Sarsa 的目标使用行为策略实际选择的下一动作：</p>
+
+<p>$$
+Q(S_t,A_t) \leftarrow Q(S_t,A<em>t)+\alpha
+\left[
+R</em>{t+1}+\gamma Q(S<em>{t+1},A</em>{t+1})-Q(S_t,A_t)
+\right]
+$$</p>
+
+<p>两者的差别不是公式中少了一个 $\max$ 那么简单：</p>
+
+<ul>
+<li>Q-Learning 学的是“假设以后总选最优动作”的目标策略；</li>
+<li>Sarsa 学的是“包含当前探索行为”的策略本身；</li>
+<li>在有风险的环境中，Sarsa 往往更保守，因为它会把探索可能造成的损失计算进去。</li>
+</ul>
+
+<h2 id="4-dqn-q-表装不下时-用神经网络逼近">4. DQN：Q 表装不下时，用神经网络逼近</h2>
+
+<p>表格型 Q-Learning 假设状态—动作组合可以枚举。像素输入、连续状态或巨大状态空间下，表格不再可行。DQN 用参数为 $\theta$ 的神经网络 $Q(s,a;\theta)$ 近似 Q 函数。</p>
+
+<p>训练目标是：</p>
+
+<p>$$
+y=r+\gamma\max_{a&rsquo;}Q(s&rsquo;,a&rsquo;;\theta^-)
+$$</p>
+
+<p>$$
+L(\theta)=\mathbb{E}_{(s,a,r,s&rsquo;)\sim D}
+\left[(y-Q(s,a;\theta))^2\right]
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/dqn.png" alt="DQN 用神经网络从状态预测每个动作的 Q 值" /></p>
+
+<p>DQN 能稳定训练，依赖两个关键工程设计：</p>
+
+<ol>
+<li><strong>Experience Replay</strong>：把交互样本存入回放缓冲区 $D$，随机采样 mini-batch，打破相邻样本的强相关性并重复利用数据；</li>
+<li><strong>Target Network</strong>：用较慢更新的参数 $\theta^-$ 生成目标，避免预测值和目标值同时剧烈变化。</li>
+</ol>
+
+<p>这揭示了深度 RL 的一个基本困难：模型既在改变策略、改变采样到的数据分布，又在用自己的预测构造监督目标。缺少稳定机制时，这个反馈环很容易发散。</p>
+
+<h2 id="5-policy-gradient-直接优化策略">5. Policy Gradient：直接优化策略</h2>
+
+<p>Value-Based 方法先学习动作价值，再从价值中选动作。Policy-Based 方法直接参数化策略 $\pi_\theta(a\mid s)$，最大化期望回报：</p>
+
+<p>$$
+J(\theta)=\mathbb{E}<em>{\tau\sim\pi</em>\theta}[G(\tau)]
+$$</p>
+
+<p>策略梯度定理给出：</p>
+
+<p>$$
+\nabla<em>\theta J(\theta)=
+\mathbb{E}</em>{\pi<em>\theta}
+\left[\nabla</em>\theta\log\pi_\theta(A_t\mid S_t)G_t\right]
+$$</p>
+
+<p>直觉是：高回报轨迹中的动作应该更可能被选中，低回报轨迹中的动作应该被压低概率。</p>
+
+<p>但直接使用回报 $G_t$ 方差很高。一次轨迹得分高，未必表示其中每个动作都好；而不同状态本身的难度也不同。于是需要一个评价者提供更稳定的基线。</p>
+
+<h2 id="6-actor-critic-一个行动-一个评价">6. Actor-Critic：一个行动，一个评价</h2>
+
+<p>Actor-Critic 把策略与价值两条路线放到同一个系统中：</p>
+
+<ul>
+<li><strong>Actor</strong>：策略 $\pi_\theta(a\mid s)$，负责选择动作；</li>
+<li><strong>Critic</strong>：价值函数 $V<em>\phi(s)$ 或 $Q</em>\phi(s,a)$，负责评价行动结果。</li>
+</ul>
+
+<p><img src="/img/posts/reinforcement-learning-series/actor-critic.png" alt="Actor 根据策略行动，Critic 用价值估计指导 Actor 更新" /></p>
+
+<p>最常见的优势函数是：</p>
+
+<p>$$
+A(s,a)=Q(s,a)-V(s)
+$$</p>
+
+<p>它回答的不是“这个动作能得多少分”，而是“这个动作比该状态下的平均表现好多少”。Actor 更新可以写成：</p>
+
+<p>$$
+\nabla<em>\theta J(\theta)\approx
+\mathbb{E}\left[
+\nabla</em>\theta\log\pi_\theta(a_t\mid s_t)\hat A_t
+\right]
+$$</p>
+
+<p>在 CartPole 上，一个最小的共享接口可以写成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">ActorCritic</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obs_dim</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">act_dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">hidden</span><span class="o">=</span><span class="mi">64</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actor</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">obs_dim</span><span class="p">,</span> <span class="n">hidden</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden</span><span class="p">,</span> <span class="n">hidden</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden</span><span class="p">,</span> <span class="n">act_dim</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">obs_dim</span><span class="p">,</span> <span class="n">hidden</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden</span><span class="p">,</span> <span class="n">hidden</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logits</span><span class="p">,</span> <span class="n">value</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><img src="/img/posts/reinforcement-learning-series/actor-network.png" alt="CartPole Actor 网络：四维状态输入，两个动作分数输出" /></p>
+
+<p>Actor 与 Critic 相互促进，但也会相互放大误差。Critic 判断不准，Actor 就会沿错误方向更新；Actor 变化太快，Critic 面对的数据分布又会迅速过时。</p>
+
+<h2 id="7-ppo-限制策略更新的步幅">7. PPO：限制策略更新的步幅</h2>
+
+<p>PPO（Proximal Policy Optimization）要解决的核心问题是：<strong>同一批采样数据上，策略应该更新多少？</strong></p>
+
+<p>令旧策略为 $\pi<em>{\theta</em>{old}}$，新策略为 $\pi_\theta$，重要性采样比率为：</p>
+
+<p>$$
+r<em>t(\theta)=
+\frac{\pi</em>\theta(a_t\mid s<em>t)}
+{\pi</em>{\theta_{old}}(a_t\mid s_t)}
+$$</p>
+
+<p>如果 $r_t$ 离 1 太远，说明新策略与收集数据时的旧策略差异过大。PPO 的 clipped objective 是：</p>
+
+<p>$$
+L^{CLIP}(\theta)=
+\mathbb{E}_t\left[
+\min\left(
+r_t(\theta)\hat A_t,
+\operatorname{clip}(r_t(\theta),1-\epsilon,1+\epsilon)\hat A_t
+\right)
+\right]
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/ppo-clipping.png" alt="PPO 通过裁剪重要性比率限制单次更新幅度" /></p>
+
+<p>裁剪不是阻止学习，而是让过度激进的更新失去额外收益。它以相对简单的实现，近似实现了“新策略不要离旧策略太远”的信赖域思想。</p>
+
+<h3 id="7-1-ppo-的训练循环">7.1 PPO 的训练循环</h3>
+
+<p>一个典型循环包括：</p>
+
+<ol>
+<li>用当前策略与环境交互，保存状态、动作、奖励、log probability 和价值估计；</li>
+<li>计算回报与优势，通常使用 GAE；</li>
+<li>固定这批 rollout，多轮 mini-batch 更新 Actor 与 Critic；</li>
+<li>更新旧策略快照，再采集下一批数据。</li>
+</ol>
+
+<p>GAE 用参数 $\lambda$ 在偏差与方差之间折中：</p>
+
+<p>$$
+\hat A<em>t^{GAE(\gamma,\lambda)}=
+\sum</em>{l=0}^{\infty}(\gamma\lambda)^l\delta_{t+l}
+$$</p>
+
+<p>实际损失通常还包含 value loss 与 entropy bonus：</p>
+
+<p>$$
+L = -L^{CLIP}+c_vL^{value}-c_e\mathcal{H}(\pi)
+$$</p>
+
+<p>熵奖励鼓励策略保留一定随机性，避免过早坍缩到单一动作。</p>
+
+<h2 id="8-这些方法解决了不同层次的问题">8. 这些方法解决了不同层次的问题</h2>
+
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>学什么</th>
+<th>关键目标</th>
+<th>核心限制</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>MC</td>
+<td>状态或动作价值</td>
+<td>完整回报</td>
+<td>必须等 Episode 结束、方差高</td>
+</tr>
+
+<tr>
+<td>TD</td>
+<td>状态价值</td>
+<td>一步 bootstrap</td>
+<td>目标有偏，但可在线学习</td>
+</tr>
+
+<tr>
+<td>Q-Learning</td>
+<td>最优 Q 值</td>
+<td>下一状态最大 Q</td>
+<td>状态难以枚举</td>
+</tr>
+
+<tr>
+<td>DQN</td>
+<td>神经网络 Q 值</td>
+<td>Replay + Target Network</td>
+<td>训练分布与目标同时变化</td>
+</tr>
+
+<tr>
+<td>Policy Gradient</td>
+<td>参数化策略</td>
+<td>最大化期望回报</td>
+<td>方差高、更新易失控</td>
+</tr>
+
+<tr>
+<td>Actor-Critic</td>
+<td>策略 + 价值</td>
+<td>Advantage</td>
+<td>两个网络会相互影响</td>
+</tr>
+
+<tr>
+<td>PPO</td>
+<td>受约束的策略</td>
+<td>Clipped objective</td>
+<td>On-policy，采样成本高</td>
+</tr>
+</tbody>
+</table>
+
+<p>算法并不是简单的新旧替代关系。Q-Learning 适合离散动作和可重复采样，DQN 适合高维观测下的离散动作，PPO 则能自然处理随机策略与连续控制。下一篇会补上训练时经常被忽略的另一半：数据从哪里来、探索该怎么做，以及 on-policy、off-policy、online、offline 到底有什么区别。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2026-08-26
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/reinforcement-learning/">Reinforcement Learning</a>
+          <a href="/tags/q-learning/">Q-Learning</a>
+          <a href="/tags/dqn/">DQN</a>
+          <a href="/tags/actor-critic/">Actor-Critic</a>
+          <a href="/tags/ppo/">PPO</a>
+          <a href="/tags/temporal-difference/">Temporal Difference</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/reinforcement-learning-3-exploration-and-data/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">强化学习（三）：探索与利用、策略采样和数据来源</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/reinforcement-learning-1-foundations/">
+            <span class="next-text nav-default">强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

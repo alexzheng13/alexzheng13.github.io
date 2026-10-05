@@ -7,29 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 12 Sep 2026 21:06:45 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/tags/software-engineering/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/tags/software-engineering/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Anthropic Agent Evolution III: The Planner–Generator–Evaluator Quality Loop</title>
       <link>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-3-planner-generator-evaluator/</link>
       <pubDate>Sat, 12 Sep 2026 21:06:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-3-planner-generator-evaluator/</guid>
       <description>&lt;p&gt;The first harness let an agent continue across context windows, but continuity is not quality. Generators routinely mistake “mostly runs” for “good enough,” especially in subjective product and design work.&lt;/p&gt;
 
 &lt;p&gt;Anthropic&amp;rsquo;s next step separated planning, generation, and evaluation so that an external evaluator became a source of evidence the generator had to respond to.&lt;/p&gt;</description>
     </item>
-
+    
     <item>
       <title>Stanford CS230: Career Advice for the AI Era</title>
       <link>https://alexzheng13.github.io/en/post/stanford-cs230-career-advice-in-ai/</link>
       <pubDate>Mon, 23 Mar 2026 12:22:13 +0100</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/stanford-cs230-career-advice-in-ai/</guid>
       <description>&lt;p&gt;AI is rapidly changing software engineering: the cost of writing code continues to fall, the tasks engineers can complete are becoming more and more complex, and the bottleneck of product development is also shifting. This article summarizes five suggestions on AI career development shared in CS230 - understand changes, choose peers, measure efforts with output, lay a solid technical foundation, and pay attention to Small AI.&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

@@ -2,14 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://alexzheng13.github.io/en/post/agentic-llm-1-reasoning/</loc>
+    <loc>https://alexzheng13.github.io/en/tags/agentic-llm/</loc>
     <lastmod>2026-09-29T09:00:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/tags/agentic-llm/</loc>
+    <loc>https://alexzheng13.github.io/en/post/agentic-llm-1-reasoning/</loc>
     <lastmod>2026-09-29T09:00:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -450,6 +450,139 @@
   </url>
   
   <url>
+    <loc>https://alexzheng13.github.io/en/tags/exploitation/</loc>
+    <lastmod>2026-08-27T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/exploration/</loc>
+    <lastmod>2026-08-27T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/offline-rl/</loc>
+    <lastmod>2026-08-27T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/categories/reinforcement-learning/</loc>
+    <lastmod>2026-08-27T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/reinforcement-learning/</loc>
+    <lastmod>2026-08-27T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/post/reinforcement-learning-3-exploration-and-data/</loc>
+    <lastmod>2026-08-27T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/thompson-sampling/</loc>
+    <lastmod>2026-08-27T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/ucb/</loc>
+    <lastmod>2026-08-27T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/actor-critic/</loc>
+    <lastmod>2026-08-26T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/dqn/</loc>
+    <lastmod>2026-08-26T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/ppo/</loc>
+    <lastmod>2026-08-26T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/q-learning/</loc>
+    <lastmod>2026-08-26T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/post/reinforcement-learning-2-classic-algorithms/</loc>
+    <lastmod>2026-08-26T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/temporal-difference/</loc>
+    <lastmod>2026-08-26T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/bellman-equation/</loc>
+    <lastmod>2026-08-25T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/cartpole/</loc>
+    <lastmod>2026-08-25T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/mdp/</loc>
+    <lastmod>2026-08-25T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/post/reinforcement-learning-1-foundations/</loc>
+    <lastmod>2026-08-25T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/value-function/</loc>
+    <lastmod>2026-08-25T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://alexzheng13.github.io/en/tags/lats/</loc>
     <lastmod>2026-08-11T06:27:01+02:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -458,13 +591,6 @@
   
   <url>
     <loc>https://alexzheng13.github.io/en/tags/react/</loc>
-    <lastmod>2026-08-11T06:27:01+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/tags/reinforcement-learning/</loc>
     <lastmod>2026-08-11T06:27:01+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -499,14 +625,14 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/categories/career-development/</loc>
+    <loc>https://alexzheng13.github.io/en/tags/career-development/</loc>
     <lastmod>2026-03-23T12:22:13+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/tags/career-development/</loc>
+    <loc>https://alexzheng13.github.io/en/categories/career-development/</loc>
     <lastmod>2026-03-23T12:22:13+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

@@ -56,7 +56,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="channel runtime源码分析" />
 <meta property="og:description" content="&emsp;&emsp;Channel 是 Go 语言中一个非常重要的类型，是 Go 里的第一对象。通过 channel，Go 实现了通过通信来实现内存共享。Channel 是在多个 goroutine 之间传递数据" />
 <meta property="og:type" content="article" />
@@ -112,31 +111,44 @@
       </a>
   </ul>
 
-
+  
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/post/runtime-channel/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/en/post/inside-go-channel-runtime/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -149,23 +161,23 @@
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/post/runtime-channel/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/en/post/inside-go-channel-runtime/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
@@ -182,6 +194,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/about/">关于我</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -191,7 +216,7 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-
+    
     <header class="post-header">
       <h1 class="post-title">channel runtime源码分析</h1>
 
@@ -202,7 +227,7 @@
             </div>
           <span class="more-meta"> 约 8651 字 </span>
           <span class="more-meta"> 预计阅读 18 分钟 </span>
-
+        
       </div>
     </header>
 
@@ -228,7 +253,7 @@
   </div>
 </div>
     <div class="post-content">
-
+      
 
 <p>&emsp;&emsp;Channel 是 Go 语言中一个非常重要的类型，是 Go 里的第一对象。通过 channel，Go 实现了通过通信来实现内存共享。Channel 是在多个 goroutine 之间传递数据和同步的重要手段。</p>
 
@@ -399,46 +424,46 @@ ch2 := make(chan int, 10)</pre></td></tr></table>
 <pre class="chroma">func makechan(t *chantype, size int) *hchan {
 
         // 初始化，做一些基本校验,检查 channel size，align 的代码
-  elem := t.elem
+	elem := t.elem
 
-  // 元素类型大小限制
-  if elem.size &gt;= 1&lt;&lt;16 {
-    throw(&#34;makechan: invalid channel element type&#34;)
-  }
+	// 元素类型大小限制
+	if elem.size &gt;= 1&lt;&lt;16 {
+		throw(&#34;makechan: invalid channel element type&#34;)
+	}
         // 对齐限制
-  if hchanSize%maxAlign != 0 || elem.align &gt; maxAlign {
-    throw(&#34;makechan: bad alignment&#34;)
-  }
+	if hchanSize%maxAlign != 0 || elem.align &gt; maxAlign {
+		throw(&#34;makechan: bad alignment&#34;)
+	}
        // 获取要分配的内存
-  mem, overflow := math.MulUintptr(elem.size, uintptr(size))
-  if overflow || mem &gt; maxAlloc-hchanSize || size &lt; 0 {
-    panic(plainError(&#34;makechan: size out of range&#34;))
-  }
-  var c *hchan
-  switch {
-  case mem == 0:
-    // size 为 0 的情况(无缓存channel)，分配 hchan 结构体大小的内存，64位系统为 96 Byte.
-    c = (*hchan)(mallocgc(hchanSize, nil, true))
-    // Race detector uses this location for synchronization.
-    c.buf = c.raceaddr()
-  case elem.ptrdata == 0:
-    // 数据项不为指针类型，调用 mallocgc 一次性分配内存大小，hchan 结构体大小 + 数据总量大小
-    c = (*hchan)(mallocgc(hchanSize+mem, nil, true))
-    c.buf = add(unsafe.Pointer(c), hchanSize)
-  default:
-          // 数据项为指针类型，hchan 和 buf 分开分配内存，GC 中指针类型判断 reachable and unreadchable.
-    c = new(hchan)
-    c.buf = mallocgc(mem, elem, true)
-  }
+	mem, overflow := math.MulUintptr(elem.size, uintptr(size))
+	if overflow || mem &gt; maxAlloc-hchanSize || size &lt; 0 {
+		panic(plainError(&#34;makechan: size out of range&#34;))
+	}
+	var c *hchan
+	switch {
+	case mem == 0:
+		// size 为 0 的情况(无缓存channel)，分配 hchan 结构体大小的内存，64位系统为 96 Byte.
+		c = (*hchan)(mallocgc(hchanSize, nil, true))
+		// Race detector uses this location for synchronization.
+		c.buf = c.raceaddr()
+	case elem.ptrdata == 0:
+		// 数据项不为指针类型，调用 mallocgc 一次性分配内存大小，hchan 结构体大小 + 数据总量大小
+		c = (*hchan)(mallocgc(hchanSize+mem, nil, true))
+		c.buf = add(unsafe.Pointer(c), hchanSize)
+	default:
+	        // 数据项为指针类型，hchan 和 buf 分开分配内存，GC 中指针类型判断 reachable and unreadchable.
+		c = new(hchan)
+		c.buf = mallocgc(mem, elem, true)
+	}
         // chan 赋值属性, 数据项大小、数据项类型、缓存数据的容量
-  c.elemsize = uint16(elem.size)
-  c.elemtype = elem
-  c.dataqsiz = uint(size)
+	c.elemsize = uint16(elem.size)
+	c.elemtype = elem
+	c.dataqsiz = uint(size)
 
-  if debugChan {
-    print(&#34;makechan: chan=&#34;, c, &#34;; elemsize=&#34;, elem.size, &#34;; elemalg=&#34;, elem.alg, &#34;; dataqsiz=&#34;, size, &#34;\n&#34;)
-  }
-  return c
+	if debugChan {
+		print(&#34;makechan: chan=&#34;, c, &#34;; elemsize=&#34;, elem.size, &#34;; elemalg=&#34;, elem.alg, &#34;; dataqsiz=&#34;, size, &#34;\n&#34;)
+	}
+	return c
 }</pre></td></tr></table>
 </div>
 </div>
@@ -466,18 +491,18 @@ ch2 := make(chan int, 10)</pre></td></tr></table>
 </span></pre></td>
 <td class="lntd">
 <pre class="chroma">type hchan struct {
-  qcount   uint           // buffer中数据总数
-  dataqsiz uint           // buffer的容量
-  buf      unsafe.Pointer // buffer的开始指针
-  elemsize uint16         // channel中数据的大小
-  closed   uint32         // channel是否关闭，0 =&gt; false，其他都是true
-  elemtype *_type       // channel数据类型
-  sendx    uint              // buffer中正在send的element的index
-  recvx    uint              // buffer中正在recieve的element的index
-  recvq    waitq           // 由 recv 行为（也就是 &lt;-ch）阻塞在 channel 上的 goroutine 队列
-  sendq    waitq          // 由 send 行为 (也就是 ch&lt;-) 阻塞在 channel 上的 goroutine 队列
+	qcount   uint           // buffer中数据总数
+	dataqsiz uint           // buffer的容量
+	buf      unsafe.Pointer // buffer的开始指针
+	elemsize uint16         // channel中数据的大小
+	closed   uint32         // channel是否关闭，0 =&gt; false，其他都是true
+	elemtype *_type       // channel数据类型
+	sendx    uint              // buffer中正在send的element的index
+	recvx    uint              // buffer中正在recieve的element的index
+	recvq    waitq           // 由 recv 行为（也就是 &lt;-ch）阻塞在 channel 上的 goroutine 队列
+	sendq    waitq          // 由 send 行为 (也就是 ch&lt;-) 阻塞在 channel 上的 goroutine 队列
 
-  lock     mutex          // 互斥锁
+	lock     mutex          // 互斥锁
 }</pre></td></tr></table>
 </div>
 </div>
@@ -740,142 +765,142 @@ ch是指向hchan结构体的指针,所以我们能在函数之间直接传递cha
 <td class="lntd">
 <pre class="chroma">// src/runtime/chan.go
 func chanrecv1(c *hchan, elem unsafe.Pointer) {
-  chanrecv(c, elem, true)
+	chanrecv(c, elem, true)
 }
 
 func chanrecv2(c *hchan, elem unsafe.Pointer) (received bool) {
-  _, received = chanrecv(c, elem, true)
-  return
+	_, received = chanrecv(c, elem, true)
+	return
 }
 
 func chanrecv(c *hchan, ep unsafe.Pointer, block bool) (selected, received bool) {
-  // 省略 debug 内容 …………
-
+	// 省略 debug 内容 …………
+    
         // 如果是一个 nil 的 channel
-  if c == nil {
-    if !block {
+	if c == nil {
+		if !block {
                          // 如果不阻塞，直接返回 (false, false)
-      return
-    }
+			return
+		}
                // 否则，接收一个 nil 的 channel，goroutine 挂起
-    gopark(nil, nil, waitReasonChanReceiveNilChan, traceEvGoStop, 2)
+		gopark(nil, nil, waitReasonChanReceiveNilChan, traceEvGoStop, 2)
                // 不会执行到这里
-    throw(&#34;unreachable&#34;)
-  }
+		throw(&#34;unreachable&#34;)
+	}
 
-  // 在非阻塞模式下，快速检测到失败，不用获取锁，快速返回
+	// 在非阻塞模式下，快速检测到失败，不用获取锁，快速返回
     // 当我们观察到 channel 没准备好接收：
     // 1. 非缓冲型，等待发送列队 sendq 里没有 goroutine 在等待
     // 2. 缓冲型，但 buf 里没有元素
     // 之后，又观察到 closed == 0，即 channel 未关闭。
     // 因为 channel 不可能被重复打开，所以前一个观测的时候 channel 也是未关闭的，
     // 因此在这种情况下可以直接宣布接收失败，返回 (false, false)
-  if !block &amp;&amp; (c.dataqsiz == 0 &amp;&amp; c.sendq.first == nil ||
-    c.dataqsiz &gt; 0 &amp;&amp; atomic.Loaduint(&amp;c.qcount) == 0) &amp;&amp;
-    atomic.Load(&amp;c.closed) == 0 {
-    return
-  }
+	if !block &amp;&amp; (c.dataqsiz == 0 &amp;&amp; c.sendq.first == nil ||
+		c.dataqsiz &gt; 0 &amp;&amp; atomic.Loaduint(&amp;c.qcount) == 0) &amp;&amp;
+		atomic.Load(&amp;c.closed) == 0 {
+		return
+	}
 
-  var t0 int64
-  if blockprofilerate &gt; 0 {
-    t0 = cputicks()
-  }
+	var t0 int64
+	if blockprofilerate &gt; 0 {
+		t0 = cputicks()
+	}
        // 加锁
-  lock(&amp;c.lock)
+	lock(&amp;c.lock)
          // channel 已关闭，并且循环数组 buf 里没有元素
     // 这里可以处理非缓冲型关闭 和 缓冲型关闭但 buf 无元素的情况
     // 也就是说即使是关闭状态，但在缓冲型的 channel，
     // buf 里有元素的情况下还能接收到元素
-  if c.closed != 0 &amp;&amp; c.qcount == 0 {
-    if raceenabled {
-      raceacquire(c.raceaddr())
-    }
+	if c.closed != 0 &amp;&amp; c.qcount == 0 {
+		if raceenabled {
+			raceacquire(c.raceaddr())
+		}
                // 解锁
-    unlock(&amp;c.lock)
-    if ep != nil {
+		unlock(&amp;c.lock)
+		if ep != nil {
                          // 从一个已关闭的 channel 执行接收操作，且未忽略返回值
             // 那么接收的值将是一个该类型的零值
             // typedmemclr 根据类型清理相应地址的内存
-      typedmemclr(c.elemtype, ep)
-    }
+			typedmemclr(c.elemtype, ep)
+		}
                 // 从一个已关闭的 channel 接收，selected 会返回true
-    return true, false
-  }
+		return true, false
+	}
          // 等待发送队列里有 goroutine 存在，说明 buf 是满的
     // 这有可能是：
     // 1. 非缓冲型的 channel
     // 2. 缓冲型的 channel，但 buf 满了
     // 针对 1，直接进行内存拷贝（从 sender goroutine -&gt; receiver goroutine）
     // 针对 2，接收到循环数组头部的元素，并将发送者的元素放到循环数组尾部
-  if sg := c.sendq.dequeue(); sg != nil {
-    recv(c, sg, ep, func() { unlock(&amp;c.lock) }, 3)
-    return true, true
-  }
+	if sg := c.sendq.dequeue(); sg != nil {
+		recv(c, sg, ep, func() { unlock(&amp;c.lock) }, 3)
+		return true, true
+	}
   // 缓冲型，buf 里有元素，可以正常接收
-  if c.qcount &gt; 0 {
-     // 直接从循环数组里找到要接收的元素
-    qp := chanbuf(c, c.recvx)
-      // …………
+	if c.qcount &gt; 0 {
+		 // 直接从循环数组里找到要接收的元素
+		qp := chanbuf(c, c.recvx)
+		  // …………
 
               // 代码里，没有忽略要接收的值，不是 &#34;&lt;- ch&#34;，而是 &#34;val &lt;- ch&#34;，ep 指向 val
-    if ep != nil {
-      typedmemmove(c.elemtype, ep, qp)
-    }
+		if ep != nil {
+			typedmemmove(c.elemtype, ep, qp)
+		}
                 // 清理掉循环数组里相应位置的值
-    typedmemclr(c.elemtype, qp)
+		typedmemclr(c.elemtype, qp)
                 // 接收游标向前移动
-    c.recvx++
+		c.recvx++
                  // 接收游标归零
-    if c.recvx == c.dataqsiz {
-      c.recvx = 0
-    }
+		if c.recvx == c.dataqsiz {
+			c.recvx = 0
+		}
                  // buf 数组里的元素个数减 1
-    c.qcount--
+		c.qcount--
                  // 解锁
-    unlock(&amp;c.lock)
-    return true, true
-  }
+		unlock(&amp;c.lock)
+		return true, true
+	}
 
-  if !block {
+	if !block {
                 // 非阻塞接收，解锁。selected 返回 false，因为没有接收到值
-    unlock(&amp;c.lock)
-    return false, false
-  }
+		unlock(&amp;c.lock)
+		return false, false
+	}
 
-   // 接下来就是要被阻塞的情况了
+	 // 接下来就是要被阻塞的情况了
         // 构造一个 sudog
-  gp := getg()
-  mysg := acquireSudog()
-  mysg.releasetime = 0
-  if t0 != 0 {
-    mysg.releasetime = -1
-  }
-   // 待接收数据的地址保存下来
-  mysg.elem = ep
-  mysg.waitlink = nil
-  gp.waiting = mysg
-  mysg.g = gp
-  mysg.isSelect = false
-  mysg.c = c
-  gp.param = nil
+	gp := getg()
+	mysg := acquireSudog()
+	mysg.releasetime = 0
+	if t0 != 0 {
+		mysg.releasetime = -1
+	}
+	 // 待接收数据的地址保存下来
+	mysg.elem = ep
+	mysg.waitlink = nil
+	gp.waiting = mysg
+	mysg.g = gp
+	mysg.isSelect = false
+	mysg.c = c
+	gp.param = nil
          // 进入channel 的等待接收队列
-  c.recvq.enqueue(mysg)
+	c.recvq.enqueue(mysg)
         // 将当前 goroutine 挂起
-  goparkunlock(&amp;c.lock, waitReasonChanReceive, traceEvGoBlockRecv, 3)
+	goparkunlock(&amp;c.lock, waitReasonChanReceive, traceEvGoBlockRecv, 3)
 
-   // 被唤醒了，接着从这里继续执行一些扫尾工作
-  if mysg != gp.waiting {
-    throw(&#34;G waiting list is corrupted&#34;)
-  }
-  gp.waiting = nil
-  if mysg.releasetime &gt; 0 {
-    blockevent(mysg.releasetime-t0, 2)
-  }
-  closed := gp.param == nil
-  gp.param = nil
-  mysg.c = nil
-  releaseSudog(mysg)
-  return true, !closed
+	 // 被唤醒了，接着从这里继续执行一些扫尾工作
+	if mysg != gp.waiting {
+		throw(&#34;G waiting list is corrupted&#34;)
+	}
+	gp.waiting = nil
+	if mysg.releasetime &gt; 0 {
+		blockevent(mysg.releasetime-t0, 2)
+	}
+	closed := gp.param == nil
+	gp.param = nil
+	mysg.c = nil
+	releaseSudog(mysg)
+	return true, !closed
 }</pre></td></tr></table>
 </div>
 </div>
@@ -1041,7 +1066,7 @@ func recv(c *hchan, sg *sudog, ep unsafe.Pointer, unlockf func(), skip int) {
         if c.recvx == c.dataqsiz {
             c.recvx = 0
         }
-        c.sendx = c.recvx
+        c.sendx = c.recvx 
     }
     sg.elem = nil
     gp := sg.g
@@ -1196,7 +1221,7 @@ func park_m(gp *g) {
     dropg()  //解除g和m之间的关系
 
     ......
-
+   
     schedule()
 }</pre></td></tr></table>
 </div>
@@ -1335,7 +1360,7 @@ func park_m(gp *g) {
 </span></pre></td>
 <td class="lntd">
 <pre class="chroma">func chansend1(c *hchan, elem unsafe.Pointer) {
-  chansend(c, elem, true, getcallerpc())
+	chansend(c, elem, true, getcallerpc())
 }
 
 func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
@@ -1522,7 +1547,7 @@ func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
 </span></pre></td>
 <td class="lntd">
 <pre class="chroma">// 第 3 步，加锁
-lock(&amp;c.lock)
+lock(&amp;c.lock)  
 
 // 第 4 步，如果通道已经被关闭了，那么 panic
 if c.closed != 0 {
@@ -1945,14 +1970,14 @@ goparkunlock(&amp;c.lock, waitReasonChanSend, traceEvGoBlockSend, 3)</pre></td><
     <span class="item-title">上次更新</span>
     <span class="item-content">
         2020-01-05
-
+        
     </span>
   </p>
-
-
+  
+  
 </div>
 <footer class="post-footer">
-
+      
       <nav class="post-nav">
         <a class="prev" href="/post/http1.1%E4%B8%8Ehttp2%E7%9A%84%E5%8C%BA%E5%88%AB/">
             <i class="iconfont icon-left"></i>
@@ -1968,11 +1993,11 @@ goparkunlock(&amp;c.lock, waitReasonChanSend, traceEvGoBlockSend, 3)</pre></td><
     </footer>
   </article>
         </div>
+        
 
+  
 
-
-
-
+  
 
       </div>
     </main>
@@ -1988,15 +2013,15 @@ goparkunlock(&amp;c.lock, waitReasonChanSend, traceEvGoBlockSend, 3)</pre></td><
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 -
+    主题 - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
-
+  
 
   <span class="copyright-year">
-    &copy;
-    2019 -
+    &copy; 
+    2019 - 
     2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
   </span>
 </div>
@@ -2007,7 +2032,7 @@ goparkunlock(&amp;c.lock, waitReasonChanSend, traceEvGoBlockSend, 3)</pre></td><
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

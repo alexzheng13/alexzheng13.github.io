@@ -7,18 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Mon, 23 Mar 2026 12:22:13 +0100</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/tags/small-ai/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/tags/small-ai/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Stanford CS230：AI 时代的职业建议</title>
       <link>https://alexzheng13.github.io/post/cs230-career-advice-in-ai/</link>
       <pubDate>Mon, 23 Mar 2026 12:22:13 +0100</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/cs230-career-advice-in-ai/</guid>
       <description>&lt;p&gt;AI 正在快速改变软件工程：写代码的成本持续下降，工程师能够完成的任务越来越复杂，产品研发的瓶颈也随之转移。这篇文章整理了 CS230 分享中关于 AI 职业发展的五点建议——理解变化、选择同行者、用产出衡量努力、打牢技术基础，以及关注 Small AI。&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

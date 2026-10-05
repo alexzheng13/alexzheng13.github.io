@@ -192,6 +192,39 @@ Next-token logits → Cross-Entropy Loss&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;
     </item>
     
     <item>
+      <title>Reinforcement Learning III: Exploration, Policy Sampling, and Data Sources</title>
+      <link>https://alexzheng13.github.io/en/post/reinforcement-learning-3-exploration-and-data/</link>
+      <pubDate>Thu, 27 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/post/reinforcement-learning-3-exploration-and-data/</guid>
+      <description>&lt;p&gt;Reinforcement learning must decide more than how to update parameters. It must also decide &lt;strong&gt;where the next training example should come from&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Always choosing the current best action can preserve an early mistake forever. Exploring at random forever wastes opportunities. Training data may also come from the current policy, old policies, humans, experts, or a fixed dataset. Whether an algorithm can use that data safely depends on distribution mismatch.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Reinforcement Learning II: From Q-Learning and DQN to Actor-Critic and PPO</title>
+      <link>https://alexzheng13.github.io/en/post/reinforcement-learning-2-classic-algorithms/</link>
+      <pubDate>Wed, 26 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/post/reinforcement-learning-2-classic-algorithms/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://alexzheng13.github.io/en/post/reinforcement-learning-1-foundations/&#34;&gt;Part I&lt;/a&gt; established MDPs, value functions, and Bellman equations. Now the practical question is: &lt;strong&gt;when the environment is unknown, states cannot be enumerated, and policies are neural networks, how do we actually learn values or policies?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The progression is continuous. Dynamic programming assumes a model. Monte Carlo uses complete trajectories. Temporal difference learning updates before an episode ends. Q-Learning targets optimal action values. DQN scales Q-functions to high-dimensional inputs. Actor-Critic and PPO optimize policies while controlling unstable updates.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Reinforcement Learning I: From CartPole to MDPs and Bellman Equations</title>
+      <link>https://alexzheng13.github.io/en/post/reinforcement-learning-1-foundations/</link>
+      <pubDate>Tue, 25 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/post/reinforcement-learning-1-foundations/</guid>
+      <description>&lt;p&gt;Reinforcement learning has many algorithms, but they all address the same question: &lt;strong&gt;how can an agent learn decisions that produce high long-term reward through interaction with an environment?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This series starts with the common language behind those algorithms, then moves toward Q-Learning, DQN, Actor-Critic, PPO, exploration, data collection, and eventually LLM post-training. This first article establishes the foundation: states, actions, policies, returns, MDPs, value functions, and Bellman equations.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Stanford CS329A: A Complete Framework for Self-Improving AI Agents</title>
       <link>https://alexzheng13.github.io/en/post/stanford-cs329a-self-improving-ai-agents/</link>
       <pubDate>Tue, 11 Aug 2026 06:27:01 +0200</pubDate>

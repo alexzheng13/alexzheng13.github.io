@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Reinforcement Learning III: Exploration, Policy Sampling, and Data Sources - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="From epsilon-greedy, UCB, and Thompson sampling to on-policy, off-policy, online, and offline learning: where useful RL data comes from." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/en/post/reinforcement-learning-3-exploration-and-data/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+
+<meta property="og:title" content="Reinforcement Learning III: Exploration, Policy Sampling, and Data Sources" />
+<meta property="og:description" content="From epsilon-greedy, UCB, and Thompson sampling to on-policy, off-policy, online, and offline learning: where useful RL data comes from." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/en/post/reinforcement-learning-3-exploration-and-data/" />
+<meta property="article:published_time" content="2026-08-27T09:00:00+02:00" />
+<meta property="article:modified_time" content="2026-08-27T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="Reinforcement Learning III: Exploration, Policy Sampling, and Data Sources">
+<meta itemprop="description" content="From epsilon-greedy, UCB, and Thompson sampling to on-policy, off-policy, online, and offline learning: where useful RL data comes from.">
+
+
+<meta itemprop="datePublished" content="2026-08-27T09:00:00&#43;02:00" />
+<meta itemprop="dateModified" content="2026-08-27T09:00:00&#43;02:00" />
+<meta itemprop="wordCount" content="935">
+
+
+
+<meta itemprop="keywords" content="Reinforcement Learning,Exploration,Exploitation,UCB,Thompson Sampling,Offline RL," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Reinforcement Learning III: Exploration, Policy Sampling, and Data Sources"/>
+<meta name="twitter:description" content="From epsilon-greedy, UCB, and Thompson sampling to on-policy, off-policy, online, and offline learning: where useful RL data comes from."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/en/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/en/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/en/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/en/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/en/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/reinforcement-learning-3-exploration-and-data/" lang="zh-cn" hreflang="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/reinforcement-learning-3-exploration-and-data/" lang="en" hreflang="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/en/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/reinforcement-learning-3-exploration-and-data/" lang="zh-cn" hreflang="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/reinforcement-learning-3-exploration-and-data/" lang="en" hreflang="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/en/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/about/">About</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Reinforcement Learning III: Exploration, Policy Sampling, and Data Sources</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-08-27 </span>
+        <div class="post-category">
+            <a href="/en/categories/reinforcement-learning/"> Reinforcement Learning </a>
+            </div>
+          <span class="more-meta"> 935 words </span>
+          <span class="more-meta"> 5 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-exploration-versus-exploitation">1. Exploration versus exploitation</a></li>
+<li><a href="#2-epsilon-greedy">2. $\epsilon$-greedy</a></li>
+<li><a href="#3-ucb-explore-uncertain-actions-selectively">3. UCB: explore uncertain actions selectively</a></li>
+<li><a href="#4-thompson-sampling">4. Thompson sampling</a></li>
+<li><a href="#5-on-policy-versus-off-policy">5. On-policy versus off-policy</a></li>
+<li><a href="#6-online-versus-offline">6. Online versus offline</a></li>
+<li><a href="#7-data-sources-define-the-capability-boundary">7. Data sources define the capability boundary</a></li>
+<li><a href="#8-reward-design-and-goodhart-s-law">8. Reward design and Goodhart&rsquo;s law</a></li>
+<li><a href="#9-the-bridge-to-llm-post-training">9. The bridge to LLM post-training</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>Reinforcement learning must decide more than how to update parameters. It must also decide <strong>where the next training example should come from</strong>.</p>
+
+<p>Always choosing the current best action can preserve an early mistake forever. Exploring at random forever wastes opportunities. Training data may also come from the current policy, old policies, humans, experts, or a fixed dataset. Whether an algorithm can use that data safely depends on distribution mismatch.</p>
+
+<blockquote>
+<p><strong>Series</strong>: <a href="/en/post/reinforcement-learning-1-foundations/">I. Foundations</a> · <a href="/en/post/reinforcement-learning-2-classic-algorithms/">II. From Q-Learning to PPO</a> · <strong>III. Exploration, sampling, and data</strong> · IV. RLHF (planned) · V. DPO and GRPO (planned) · VI. Agentic RL (planned)</p>
+</blockquote>
+
+<h2 id="1-exploration-versus-exploitation">1. Exploration versus exploitation</h2>
+
+<ul>
+<li><strong>Exploitation</strong> selects the action currently estimated to be best.</li>
+<li><strong>Exploration</strong> spends short-term reward to reduce uncertainty.</li>
+</ul>
+
+<p><img src="/img/posts/reinforcement-learning-series/exploration-exploitation.png" alt="Exploration gathers information while exploitation converts knowledge into reward" /></p>
+
+<p>For a multi-armed bandit, let $\mu_a$ be the true mean reward and $a^*$ the optimal arm. Cumulative regret is:</p>
+
+<p>$$
+\operatorname{Regret}(T)=T\mu<em>{a^*}-\sum</em>{t=1}^{T}\mu_{A_t}
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/regret.png" alt="Exploration strategies aim to keep cumulative regret small" /></p>
+
+<p>A good strategy does not maximize every individual step; it keeps long-term regret from growing too quickly.</p>
+
+<h2 id="2-epsilon-greedy">2. $\epsilon$-greedy</h2>
+
+<p>With probability $1-\epsilon$, select the estimated best action; with probability $\epsilon$, explore randomly:</p>
+
+<p>$$
+A_t=\begin{cases}
+\arg\max_a\hat\mu_a,&amp;\text{with probability }1-\epsilon<br />
+\text{random action},&amp;\text{with probability }\epsilon
+\end{cases}
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/epsilon-greedy.png" alt="Epsilon-greedy alternates random exploration and greedy exploitation" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">EpsilonGreedy</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_arms</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">epsilon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_arms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_arms</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">[</span><span class="n">arm</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>The incremental mean update is:</p>
+
+<p>$$
+\hat\mu_a\leftarrow\hat\mu_a+\frac{r-\hat\mu_a}{N_a}
+$$</p>
+
+<p>Exploration is often decayed over time, but a fixed schedule ignores which actions remain uncertain.</p>
+
+<h2 id="3-ucb-explore-uncertain-actions-selectively">3. UCB: explore uncertain actions selectively</h2>
+
+<p>UCB adds an uncertainty bonus to each empirical mean:</p>
+
+<p>$$
+A_t=\arg\max_a\left[
+\hat\mu_a+c\sqrt{\frac{\ln t}{N_a}}
+\right]
+$$</p>
+
+<p>Rarely tried actions receive larger bonuses. As evidence accumulates, decisions rely increasingly on the empirical mean.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">UCB</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_arms</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_arms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_arms</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">untried</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flatnonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">counts</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">untried</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">untried</span><span class="p">))</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">counts</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">bonus</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">counts</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">+</span> <span class="n">bonus</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">counts</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">counts</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="4-thompson-sampling">4. Thompson sampling</h2>
+
+<p>Thompson sampling maintains a posterior distribution for each action, samples one plausible value from every posterior, and selects the largest sample. For Bernoulli rewards, Beta distributions provide a convenient conjugate model:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">ThompsonSampling</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_arms</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_arms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_arms</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">beta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">samples</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arm</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">reward</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">[</span><span class="n">arm</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Uncertain actions have wider posteriors and remain capable of producing a large sample. Well-tested actions become more predictable.</p>
+
+<h2 id="5-on-policy-versus-off-policy">5. On-policy versus off-policy</h2>
+
+<ul>
+<li><strong>On-policy</strong> methods train on data generated by the policy currently being optimized.</li>
+<li><strong>Off-policy</strong> methods may train on data from older policies, different agents, humans, or experts.</li>
+</ul>
+
+<p>PPO and Sarsa are on-policy. Q-Learning, DQN, and SAC are off-policy. Distribution mismatch matters because samples from one policy may not provide a low-variance estimate of another policy&rsquo;s objective.</p>
+
+<h2 id="6-online-versus-offline">6. Online versus offline</h2>
+
+<ul>
+<li><strong>Online</strong> learning keeps interacting with the environment while training.</li>
+<li><strong>Offline</strong> learning receives a fixed dataset and cannot request new samples.</li>
+</ul>
+
+<p>The two distinctions form four data regimes:</p>
+
+<table>
+<thead>
+<tr>
+<th>Regime</th>
+<th>Meaning</th>
+<th>Typical examples</th>
+<th>Main risk</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Online + on-policy</td>
+<td>Fresh data from the current policy</td>
+<td>REINFORCE, Sarsa, PPO, GRPO</td>
+<td>Expensive interaction; low reuse</td>
+</tr>
+
+<tr>
+<td>Online + off-policy</td>
+<td>New interaction plus reusable history</td>
+<td>Q-Learning, DQN, SAC, TD3</td>
+<td>Distribution mismatch</td>
+</tr>
+
+<tr>
+<td>Offline + off-policy</td>
+<td>Learning only from fixed historical data</td>
+<td>CQL, IQL, preference optimization on fixed data</td>
+<td>Overestimating unseen actions</td>
+</tr>
+
+<tr>
+<td>Offline + on-policy</td>
+<td>Fixed data still represents the current policy</td>
+<td>Fixed-policy evaluation and boundary cases</td>
+<td>Data expires after policy updates</td>
+</tr>
+</tbody>
+</table>
+
+<p>Online is not synonymous with on-policy, and offline is not synonymous with off-policy.</p>
+
+<h2 id="7-data-sources-define-the-capability-boundary">7. Data sources define the capability boundary</h2>
+
+<ul>
+<li>Current-policy rollouts match the objective but are expensive and correlated.</li>
+<li>Replay buffers improve reuse but introduce stale distributions.</li>
+<li>Expert demonstrations quickly establish useful behavior but do not cover states created by the learner&rsquo;s mistakes.</li>
+<li>Fixed datasets are safe and reproducible but cannot actively fill gaps.</li>
+<li>Human preferences express objectives that are hard to code, but are expensive and inconsistent.</li>
+<li>Verifiable rewards work well for math and code, but only where correctness can be checked automatically.</li>
+</ul>
+
+<p>Changing the loss alone rarely solves an RL problem. Sampling distribution, reward quality, environment access, and evaluation protocol jointly determine the outcome.</p>
+
+<h2 id="8-reward-design-and-goodhart-s-law">8. Reward design and Goodhart&rsquo;s law</h2>
+
+<blockquote>
+<p>When a measure becomes a target, it ceases to be a good measure.</p>
+</blockquote>
+
+<p>RL aggressively optimizes the supplied number, not the intent behind it. An incomplete reward can produce strange robotic behavior or language models that gain score through verbosity, flattery, or templates.</p>
+
+<p>A reward should therefore be checked for coverage, robustness to gaming, and generalization outside the training distribution.</p>
+
+<h2 id="9-the-bridge-to-llm-post-training">9. The bridge to LLM post-training</h2>
+
+<p>Traditional control tasks often have programmatic rewards. The helpfulness, honesty, or safety of an answer is harder to encode. Humans find it easier to compare two answers than to write a complete scoring rule, which motivates RLHF.</p>
+
+<p>For mathematics and code, correctness may be verified automatically, enabling RLVR and GRPO-style training. Agentic RL extends the action space beyond the next token to tool calls, environment operations, and long-horizon tasks.</p>
+
+<p>The remaining articles will treat these as separate topics: RLHF; DPO and GRPO; and Agentic RL. Those notes are still being developed, so the first three articles keep a clean boundary around classical RL foundations, algorithms, exploration, and data.</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-08-27
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/en/tags/reinforcement-learning/">Reinforcement Learning</a>
+          <a href="/en/tags/exploration/">Exploration</a>
+          <a href="/en/tags/exploitation/">Exploitation</a>
+          <a href="/en/tags/ucb/">UCB</a>
+          <a href="/en/tags/thompson-sampling/">Thompson Sampling</a>
+          <a href="/en/tags/offline-rl/">Offline RL</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/en/post/anthropic-agent-evolution-4-managed-agent-runtime/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Anthropic Agent Evolution IV: Managed Agent Runtime—Session, Harness, and Sandbox</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/en/post/reinforcement-learning-2-classic-algorithms/">
+            <span class="next-text nav-default">Reinforcement Learning II: From Q-Learning and DQN to Actor-Critic and PPO</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

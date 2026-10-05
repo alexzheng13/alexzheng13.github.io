@@ -7,19 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 06 Feb 2020 21:06:10 +0800</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/categories/operating-systems/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/categories/operating-systems/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Understanding I/O: Random and Sequential Access</title>
       <link>https://alexzheng13.github.io/en/post/understanding-random-and-sequential-io/</link>
       <pubDate>Thu, 06 Feb 2020 21:06:10 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/understanding-random-and-sequential-io/</guid>
       <description>Transfer: https://blog.csdn.net/BaiWfg2/article/details/52885287
 &amp;emsp;&amp;emsp;Storage for DBAs: Ever been to one of those sushi restaurants where the food comes round in dishes on a conveyor belt? As each dish travels around the loop you eye it up and, as long as you can make your mind up in time, grab it. However, if you are as indecisive as me, there’s a chance it will be out of range before you come to your senses – in which case you have to wait for it to complete a further full revolution before getting another chance.</description>
     </item>
-
+    
   </channel>
 </rss>

@@ -7,18 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Thu, 06 Feb 2020 21:06:10 +0800</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/categories/operating-system/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/categories/operating-system/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>理解I/O：随机和顺序</title>
       <link>https://alexzheng13.github.io/post/%E7%90%86%E8%A7%A3io-%E9%9A%8F%E6%9C%BA%E5%92%8C%E9%A1%BA%E5%BA%8F/</link>
       <pubDate>Thu, 06 Feb 2020 21:06:10 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/%E7%90%86%E8%A7%A3io-%E9%9A%8F%E6%9C%BA%E5%92%8C%E9%A1%BA%E5%BA%8F/</guid>
       <description>转：https://blog.csdn.net/BaiWfg2/article/details/52885287 &amp;emsp;&amp;emsp;Storage for DBAs: Ever been to one of those sushi restaurants where the food</description>
     </item>
-
+    
   </channel>
 </rss>

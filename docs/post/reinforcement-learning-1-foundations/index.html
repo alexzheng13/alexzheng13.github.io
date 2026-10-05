@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程 - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="从试错学习与 CartPole 出发，系统理解状态、动作、策略、回报、MDP、价值函数、Q 函数与贝尔曼方程。" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/post/reinforcement-learning-1-foundations/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+
+<meta property="og:title" content="强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程" />
+<meta property="og:description" content="从试错学习与 CartPole 出发，系统理解状态、动作、策略、回报、MDP、价值函数、Q 函数与贝尔曼方程。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/post/reinforcement-learning-1-foundations/" />
+<meta property="article:published_time" content="2026-08-25T09:00:00+02:00" />
+<meta property="article:modified_time" content="2026-08-25T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程">
+<meta itemprop="description" content="从试错学习与 CartPole 出发，系统理解状态、动作、策略、回报、MDP、价值函数、Q 函数与贝尔曼方程。">
+
+
+<meta itemprop="datePublished" content="2026-08-25T09:00:00&#43;02:00" />
+<meta itemprop="dateModified" content="2026-08-25T09:00:00&#43;02:00" />
+<meta itemprop="wordCount" content="2497">
+
+
+
+<meta itemprop="keywords" content="Reinforcement Learning,MDP,Bellman Equation,CartPole,Value Function," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程"/>
+<meta name="twitter:description" content="从试错学习与 CartPole 出发，系统理解状态、动作、策略、回报、MDP、价值函数、Q 函数与贝尔曼方程。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/reinforcement-learning-1-foundations/" lang="zh-cn" hreflang="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/reinforcement-learning-1-foundations/" lang="en" hreflang="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/reinforcement-learning-1-foundations/" lang="zh-cn" hreflang="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/reinforcement-learning-1-foundations/" lang="en" hreflang="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-08-25 </span>
+        <div class="post-category">
+            <a href="/categories/reinforcement-learning/"> Reinforcement Learning </a>
+            </div>
+          <span class="more-meta"> 约 2497 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-强化学习到底在学什么">1. 强化学习到底在学什么？</a></li>
+<li><a href="#2-从即时奖励到累积回报">2. 从即时奖励到累积回报</a></li>
+<li><a href="#3-动作不是策略">3. 动作不是策略</a></li>
+<li><a href="#4-cartpole-最小但完整的-rl-问题">4. CartPole：最小但完整的 RL 问题</a></li>
+<li><a href="#5-用-mdp-描述序列决策">5. 用 MDP 描述序列决策</a>
+<ul>
+<li><a href="#5-1-已知模型与未知模型">5.1 已知模型与未知模型</a></li>
+</ul></li>
+<li><a href="#6-价值函数-把未来压缩成一个数">6. 价值函数：把未来压缩成一个数</a></li>
+<li><a href="#7-贝尔曼方程-用下一步估计这一刻">7. 贝尔曼方程：用下一步估计这一刻</a>
+<ul>
+<li><a href="#7-1-从评估策略到寻找最优策略">7.1 从评估策略到寻找最优策略</a></li>
+</ul></li>
+<li><a href="#8-到这里-我们有了两条路线">8. 到这里，我们有了两条路线</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>强化学习最容易让人困惑的地方，是算法名字很多，但它们真正回答的始终是同一个问题：<strong>一个智能体怎样通过与环境交互，学会做出能带来长期收益的决策？</strong></p>
+
+<p>这组文章从最基本的问题定义开始，再逐步走向 Q-Learning、DQN、Actor-Critic、PPO、探索策略以及大模型后训练。本文是系列第一篇，先建立后续所有算法共用的语言：状态、动作、策略、回报、MDP、价值函数和贝尔曼方程。</p>
+
+<blockquote>
+<p><strong>系列导航</strong>：<strong>（一）基础、MDP 与贝尔曼方程</strong> · <a href="/post/reinforcement-learning-2-classic-algorithms/">（二）从 Q-Learning 到 PPO</a> · <a href="/post/reinforcement-learning-3-exploration-and-data/">（三）探索、采样与数据</a> · （四）RLHF（待续） · （五）DPO 与 GRPO（待续） · （六）Agentic RL（待续）</p>
+</blockquote>
+
+<h2 id="1-强化学习到底在学什么">1. 强化学习到底在学什么？</h2>
+
+<p>强化学习是一种 <strong>Trial-and-Error（试错学习）</strong>。一个智能体（Agent）处在环境（Environment）中，在每个时刻观察状态或观测，据此选择动作；环境接收动作后转移到新状态，并返回一个标量奖励。智能体的目标不是让眼前这一步得分最高，而是让整个交互过程中的<strong>累积回报最大</strong>。</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/trial-and-error.png" alt="智能体通过动作影响环境，并从新状态与奖励中继续学习" /></p>
+
+<p>一次交互可以写成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">State / Observation → Agent → Action
+          ↑                    ↓
+          └──── Reward + Environment</code></pre></td></tr></table>
+</div>
+</div>
+<p>先区分几个基础概念：</p>
+
+<ul>
+<li><strong>State（状态）</strong>：对环境的完整描述，例如国际象棋的完整棋盘；</li>
+<li><strong>Observation（观测）</strong>：智能体能够看到的部分信息，例如游戏角色附近的画面；</li>
+<li><strong>Action Space（动作空间）</strong>：可执行动作的集合，可以是离散的，也可以是连续的；</li>
+<li><strong>Reward（奖励）</strong>：环境对当前结果的即时反馈；</li>
+<li><strong>Episode（回合）</strong>：从初始状态到终止状态的一段完整轨迹。</li>
+</ul>
+
+<p>动作空间的类型会直接影响算法。CartPole 只有向左和向右两个离散动作；机械臂的关节角度却可能是任意实数，需要处理连续动作的算法。</p>
+
+<h2 id="2-从即时奖励到累积回报">2. 从即时奖励到累积回报</h2>
+
+<p>只追逐即时奖励往往会产生短视行为。强化学习真正优化的是从时刻 $t$ 开始的折扣累积回报：</p>
+
+<p>$$
+G<em>t = R</em>{t+1} + \gamma R<em>{t+2} + \gamma^2 R</em>{t+3} + \cdots
+$$</p>
+
+<p>其中折扣因子 $\gamma \in [0,1]$ 决定智能体有多重视未来：</p>
+
+<ul>
+<li>$\gamma$ 越小，越关注眼前奖励；</li>
+<li>$\gamma$ 越接近 1，越愿意为长期收益延迟满足；</li>
+<li>在有终止状态的任务里，$\gamma$ 还帮助保证无限和收敛。</li>
+</ul>
+
+<p>折扣并不只是数学技巧。现实任务中，越远的结果通常越不确定，也越难归因给当前动作。</p>
+
+<h2 id="3-动作不是策略">3. 动作不是策略</h2>
+
+<p>动作是一个局部决定。比如在迷宫的某个格子选择“向右走”，它只解决眼前一步。</p>
+
+<p>策略（Policy）则是一本覆盖所有可能状态的行动手册。强化学习最终想得到的不是某一步动作，而是一个从状态到动作的规则。</p>
+
+<p>确定性策略直接输出动作：</p>
+
+<p>$$
+a = \pi(s)
+$$</p>
+
+<p>随机策略输出动作的概率分布：</p>
+
+<p>$$
+\pi(a\mid s)=\Pr(A_t=a\mid S_t=s)
+$$</p>
+
+<p>随机策略天然保留了探索：即使某个动作当前概率最高，其他动作仍有机会被尝试。这一点会在系列第三篇里继续展开。</p>
+
+<h2 id="4-cartpole-最小但完整的-rl-问题">4. CartPole：最小但完整的 RL 问题</h2>
+
+<p>CartPole 是强化学习最常见的入门环境。一根杆通过关节连接在小车上，智能体每步只能选择向左或向右推车，目标是尽可能长时间保持杆子竖直。</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/cartpole.webp" alt="CartPole-v1：通过控制小车左右移动使杆保持竖直" /></p>
+
+<p>它看起来简单，却包含完整的强化学习结构：</p>
+
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>CartPole 中的含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>状态</td>
+<td>小车位置、速度，杆的角度、角速度</td>
+</tr>
+
+<tr>
+<td>动作</td>
+<td>向左推或向右推</td>
+</tr>
+
+<tr>
+<td>奖励</td>
+<td>杆仍保持竖直时每步获得正奖励</td>
+</tr>
+
+<tr>
+<td>终止</td>
+<td>杆倾斜过大、小车越界或达到步数上限</td>
+</tr>
+
+<tr>
+<td>策略</td>
+<td>根据四维状态选择左右动作</td>
+</tr>
+</tbody>
+</table>
+
+<p>它还揭示了 RL 的关键难点：一次动作的好坏不能只看当下。向左推可能暂时让杆更斜，却是在为下一步恢复平衡创造空间。</p>
+
+<h2 id="5-用-mdp-描述序列决策">5. 用 MDP 描述序列决策</h2>
+
+<p>马尔可夫决策过程（Markov Decision Process, MDP）把序列决策形式化为五元组：</p>
+
+<p>$$
+\mathcal{M}=(\mathcal{S},\mathcal{A},P,R,\gamma)
+$$</p>
+
+<ul>
+<li>$\mathcal{S}$：状态空间；</li>
+<li>$\mathcal{A}$：动作空间；</li>
+<li>$P(s&rsquo;\mid s,a)$：状态转移概率；</li>
+<li>$R(s,a,s&rsquo;)$：奖励函数；</li>
+<li>$\gamma$：折扣因子。</li>
+</ul>
+
+<p><img src="/img/posts/reinforcement-learning-series/mdp.png" alt="MDP 中状态、动作、转移与奖励之间的关系" /></p>
+
+<p>MDP 的核心假设是<strong>马尔可夫性</strong>：只要当前状态包含了预测未来所需的全部信息，更早的历史就不再提供额外信息。</p>
+
+<p>$$
+P(S_{t+1}\mid S_t,A<em>t,S</em>{t-1},A<em>{t-1},\ldots)
+=P(S</em>{t+1}\mid S_t,A_t)
+$$</p>
+
+<p>这不是说历史不重要，而是说历史的重要信息已经被压缩进当前状态。若当前输入不足以做到这一点，问题更接近部分可观测 MDP（POMDP），智能体就需要记忆来补足状态。</p>
+
+<h3 id="5-1-已知模型与未知模型">5.1 已知模型与未知模型</h3>
+
+<p>如果转移概率 $P$ 和奖励函数已知，可以利用动态规划直接计算价值；如果不知道环境规律，就只能通过交互样本估计。</p>
+
+<p>多数真实问题属于后者。智能体并不知道机器人下一步是否会失衡，也不知道一段 token 序列最终会得到怎样的偏好评价。<strong>不知道 $P$，正是强化学习与传统确定性最优化之间的重要区别。</strong></p>
+
+<h2 id="6-价值函数-把未来压缩成一个数">6. 价值函数：把未来压缩成一个数</h2>
+
+<p>状态价值函数衡量：从状态 $s$ 出发，之后一直遵循策略 $\pi$，预期能得到多少回报：</p>
+
+<p>$$
+V^{\pi}(s)=\mathbb{E}_{\pi}[G_t\mid S_t=s]
+$$</p>
+
+<p>动作价值函数，也就是 Q 函数，进一步问：在状态 $s$ 先执行动作 $a$，之后遵循策略 $\pi$，预期回报是多少：</p>
+
+<p>$$
+Q^{\pi}(s,a)=\mathbb{E}_{\pi}[G_t\mid S_t=s,A_t=a]
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/q-value.png" alt="Q 值评价状态—动作组合的长期回报" /></p>
+
+<p>它们把复杂的未来压缩成可比较的标量。只要知道每个动作的 Q 值，智能体就可以选择价值最高的动作。</p>
+
+<p>但问题随之而来：回合还没结束，未来回报尚未发生，Q 值从哪里来？答案是贝尔曼方程。</p>
+
+<h2 id="7-贝尔曼方程-用下一步估计这一刻">7. 贝尔曼方程：用下一步估计这一刻</h2>
+
+<p>贝尔曼方程的核心思想很直观：</p>
+
+<blockquote>
+<p>当前价值 = 即时奖励 + 折扣后的未来价值。</p>
+</blockquote>
+
+<p>对固定策略 $\pi$，状态价值的贝尔曼期望方程是：</p>
+
+<p>$$
+V^{\pi}(s)=
+\sum<em>a \pi(a\mid s)
+\sum</em>{s&rsquo;,r}p(s&rsquo;,r\mid s,a)
+\left[r+\gamma V^{\pi}(s&rsquo;)\right]
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/bellman-expectation.png" alt="贝尔曼期望方程把当前状态价值递归地分解到下一状态" /></p>
+
+<p>外层求和表示按策略选择动作，内层求和表示环境可能转移到不同状态并给出不同奖励。它不是在枚举无限未来，而是把无限序列拆成“当前一步 + 下一状态的价值”。</p>
+
+<h3 id="7-1-从评估策略到寻找最优策略">7.1 从评估策略到寻找最优策略</h3>
+
+<p>如果目标不是评价固定策略，而是寻找最优策略，就要在每个状态选择价值最高的动作：</p>
+
+<p>$$
+V^<em>(s)=\max<em>a\sum</em>{s&rsquo;,r}p(s&rsquo;,r\mid s,a)
+\left[r+\gamma V^</em>(s&rsquo;)\right]
+$$</p>
+
+<p>对应的 Q 值形式是：</p>
+
+<p>$$
+Q^<em>(s,a)=\mathbb{E}\left[
+R<em>{t+1}+\gamma\max</em>{a&rsquo;}Q^</em>(S_{t+1},a&rsquo;)
+\mid S_t=s,A_t=a
+\right]
+$$</p>
+
+<p><img src="/img/posts/reinforcement-learning-series/bellman-q-optimality.png" alt="Q 函数的贝尔曼最优方程" /></p>
+
+<p>一旦得到 $Q^*$，最优策略就可以直接读出：</p>
+
+<p>$$
+\pi^<em>(s)=\arg\max_a Q^</em>(s,a)
+$$</p>
+
+<p>可以把它想成迷宫路口的分数牌：一开始牌子上的数不准确；每走一步，就用“这一步的奖励 + 下个路口最好的牌子”修正当前牌子。不断试错之后，数值逐渐一致，沿着最大分数走就是最优策略。</p>
+
+<h2 id="8-到这里-我们有了两条路线">8. 到这里，我们有了两条路线</h2>
+
+<p>贝尔曼方程引出了强化学习的两条主要路线：</p>
+
+<ol>
+<li><strong>Value-Based</strong>：学习 $V$ 或 $Q$，再从价值中导出动作。Q-Learning 和 DQN 属于这条路线；</li>
+<li><strong>Policy-Based</strong>：不先给动作打分，直接优化参数化策略 $\pi_\theta(a\mid s)$。REINFORCE 和 PPO 属于这条路线。</li>
+</ol>
+
+<p>Actor-Critic 会把两条路线结合起来：Actor 负责行动，Critic 负责评价。下一篇将从动态规划、蒙特卡洛和时序差分开始，一直走到 Q-Learning、DQN、Actor-Critic 与 PPO。</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2026-08-25
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/reinforcement-learning/">Reinforcement Learning</a>
+          <a href="/tags/mdp/">MDP</a>
+          <a href="/tags/bellman-equation/">Bellman Equation</a>
+          <a href="/tags/cartpole/">CartPole</a>
+          <a href="/tags/value-function/">Value Function</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/reinforcement-learning-2-classic-algorithms/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/stanford-cs329a-self-improving-ai-agents/">
+            <span class="next-text nav-default">Stanford CS329A：Self-Improving AI Agents 的完整技术框架</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

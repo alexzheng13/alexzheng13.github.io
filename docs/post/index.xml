@@ -169,6 +169,41 @@ Next-token logits → Cross-Entropy Loss&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;
     </item>
     
     <item>
+      <title>强化学习（三）：探索与利用、策略采样和数据来源</title>
+      <link>https://alexzheng13.github.io/post/reinforcement-learning-3-exploration-and-data/</link>
+      <pubDate>Thu, 27 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/reinforcement-learning-3-exploration-and-data/</guid>
+      <description>&lt;p&gt;强化学习不只是“拿到数据以后怎样更新参数”，它还必须决定：&lt;strong&gt;下一条训练数据应该从哪里来？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;如果一直选择当前最好的动作，早期误判可能永远无法纠正；如果不断随机探索，又会浪费大量行动机会。进一步地，训练数据可能来自当前策略、历史策略、人类、专家或一个固定数据集。算法能否安全使用这些数据，取决于策略分布是否匹配。&lt;/p&gt;
+
+&lt;p&gt;本文把这两组问题放在一起：先讨论探索与利用，再区分 on-policy、off-policy、online、offline，最后说明奖励设计为什么会把我们带到 RLHF、DPO、GRPO 与 Agentic RL。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO</title>
+      <link>https://alexzheng13.github.io/post/reinforcement-learning-2-classic-algorithms/</link>
+      <pubDate>Wed, 26 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/reinforcement-learning-2-classic-algorithms/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://alexzheng13.github.io/post/reinforcement-learning-1-foundations/&#34;&gt;上一篇&lt;/a&gt;建立了 MDP、价值函数与贝尔曼方程。接下来要回答的是：&lt;strong&gt;当环境模型未知、状态无法枚举、策略又由神经网络表示时，怎样真的把价值或策略学出来？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;本文沿着一条连续的演进路径展开：动态规划需要完整模型；蒙特卡洛只依赖完整轨迹；时序差分可以边走边学；Q-Learning 学最优动作价值；DQN 用神经网络处理高维状态；Actor-Critic 与 PPO 则直接优化策略，并控制每次更新不要走得太远。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程</title>
+      <link>https://alexzheng13.github.io/post/reinforcement-learning-1-foundations/</link>
+      <pubDate>Tue, 25 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/reinforcement-learning-1-foundations/</guid>
+      <description>&lt;p&gt;强化学习最容易让人困惑的地方，是算法名字很多，但它们真正回答的始终是同一个问题：&lt;strong&gt;一个智能体怎样通过与环境交互，学会做出能带来长期收益的决策？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这组文章从最基本的问题定义开始，再逐步走向 Q-Learning、DQN、Actor-Critic、PPO、探索策略以及大模型后训练。本文是系列第一篇，先建立后续所有算法共用的语言：状态、动作、策略、回报、MDP、价值函数和贝尔曼方程。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Stanford CS329A：Self-Improving AI Agents 的完整技术框架</title>
       <link>https://alexzheng13.github.io/post/stanford-cs329a-self-improving-ai-agents/</link>
       <pubDate>Tue, 11 Aug 2026 06:27:01 +0200</pubDate>

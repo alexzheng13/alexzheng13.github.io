@@ -7,20 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Tue, 11 Aug 2026 06:27:01 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/tags/test-time-compute/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/tags/test-time-compute/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Stanford CS329A: A Complete Framework for Self-Improving AI Agents</title>
       <link>https://alexzheng13.github.io/en/post/stanford-cs329a-self-improving-ai-agents/</link>
       <pubDate>Tue, 11 Aug 2026 06:27:01 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/stanford-cs329a-self-improving-ai-agents/</guid>
       <description>&lt;p&gt;Self-Improving AI Agent is not a mysterious system that recursively modifies itself indefinitely. A more practical understanding is: Agent forms a closed loop between generation, action, observation and verification, and uses the feedback obtained during reasoning to improve current answers, subsequent decisions, and even the next round of training.&lt;/p&gt;
 
 &lt;p&gt;This article follows the main line of the Stanford CS329A course and strings together test-time calculations, verifiers, tool feedback, planning search, reinforcement learning, in-depth research and long-term evaluation into a complete framework.&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

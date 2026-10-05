@@ -435,6 +435,141 @@
     </item>
     
     <item>
+      <title>Exploitation</title>
+      <link>https://alexzheng13.github.io/en/tags/exploitation/</link>
+      <pubDate>Thu, 27 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/exploitation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Exploration</title>
+      <link>https://alexzheng13.github.io/en/tags/exploration/</link>
+      <pubDate>Thu, 27 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/exploration/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Offline RL</title>
+      <link>https://alexzheng13.github.io/en/tags/offline-rl/</link>
+      <pubDate>Thu, 27 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/offline-rl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reinforcement Learning</title>
+      <link>https://alexzheng13.github.io/en/tags/reinforcement-learning/</link>
+      <pubDate>Thu, 27 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/reinforcement-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Thompson Sampling</title>
+      <link>https://alexzheng13.github.io/en/tags/thompson-sampling/</link>
+      <pubDate>Thu, 27 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/thompson-sampling/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>UCB</title>
+      <link>https://alexzheng13.github.io/en/tags/ucb/</link>
+      <pubDate>Thu, 27 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/ucb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Actor-Critic</title>
+      <link>https://alexzheng13.github.io/en/tags/actor-critic/</link>
+      <pubDate>Wed, 26 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/actor-critic/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>DQN</title>
+      <link>https://alexzheng13.github.io/en/tags/dqn/</link>
+      <pubDate>Wed, 26 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/dqn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PPO</title>
+      <link>https://alexzheng13.github.io/en/tags/ppo/</link>
+      <pubDate>Wed, 26 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/ppo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Q-Learning</title>
+      <link>https://alexzheng13.github.io/en/tags/q-learning/</link>
+      <pubDate>Wed, 26 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/q-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Temporal Difference</title>
+      <link>https://alexzheng13.github.io/en/tags/temporal-difference/</link>
+      <pubDate>Wed, 26 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/temporal-difference/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bellman Equation</title>
+      <link>https://alexzheng13.github.io/en/tags/bellman-equation/</link>
+      <pubDate>Tue, 25 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/bellman-equation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>CartPole</title>
+      <link>https://alexzheng13.github.io/en/tags/cartpole/</link>
+      <pubDate>Tue, 25 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/cartpole/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MDP</title>
+      <link>https://alexzheng13.github.io/en/tags/mdp/</link>
+      <pubDate>Tue, 25 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/mdp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Value Function</title>
+      <link>https://alexzheng13.github.io/en/tags/value-function/</link>
+      <pubDate>Tue, 25 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/value-function/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>LATS</title>
       <link>https://alexzheng13.github.io/en/tags/lats/</link>
       <pubDate>Tue, 11 Aug 2026 06:27:01 +0200</pubDate>
@@ -449,15 +584,6 @@
       <pubDate>Tue, 11 Aug 2026 06:27:01 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/en/tags/react/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Reinforcement Learning</title>
-      <link>https://alexzheng13.github.io/en/tags/reinforcement-learning/</link>
-      <pubDate>Tue, 11 Aug 2026 06:27:01 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/en/tags/reinforcement-learning/</guid>
       <description></description>
     </item>
     

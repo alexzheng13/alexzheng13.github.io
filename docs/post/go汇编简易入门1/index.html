@@ -56,7 +56,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="go汇编简易入门(1)" />
 <meta property="og:description" content="程序的存储空间布局 &emsp;&emsp;进程(Process)是一个正在执行的程序实例(instance)。每个实例有自己的地址空间和执行" />
 <meta property="og:type" content="article" />
@@ -112,31 +111,44 @@
       </a>
   </ul>
 
-
+  
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/post/go%E6%B1%87%E7%BC%96%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A81/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/en/post/introduction-to-go-assembly-1/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -149,23 +161,23 @@
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/post/go%E6%B1%87%E7%BC%96%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A81/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/en/post/introduction-to-go-assembly-1/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
@@ -182,6 +194,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/about/">关于我</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -191,7 +216,7 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-
+    
     <header class="post-header">
       <h1 class="post-title">go汇编简易入门(1)</h1>
 
@@ -202,7 +227,7 @@
             </div>
           <span class="more-meta"> 约 3688 字 </span>
           <span class="more-meta"> 预计阅读 8 分钟 </span>
-
+        
       </div>
     </header>
 
@@ -226,7 +251,7 @@
   </div>
 </div>
     <div class="post-content">
-
+      
 
 <h1 id="程序的存储空间布局">程序的存储空间布局</h1>
 
@@ -295,9 +320,9 @@
 </span></pre></td>
 <td class="lntd">
 <pre class="chroma">func main() {
-  var a, b, c = 0, 0, 0
-  c = a + b
-  print(c)
+	var a, b, c = 0, 0, 0
+	c = a + b
+	print(c)
 }
 
 zhengxuzhangde-MacBook-Pro:compilation zhengxuzhang$ size compliation_add
@@ -520,13 +545,13 @@ MOVQ 0(SP), DI // argc 把0(SP)内容放入 DI 寄存器中</pre></td></tr></tab
 <pre class="chroma"><span class="kn">package</span> <span class="nx">main</span>
 
 <span class="kd">type</span> <span class="nx">unused</span> <span class="kd">struct</span> <span class="p">{</span>
-  <span class="nx">parameter1</span> <span class="kt">int</span>
+	<span class="nx">parameter1</span> <span class="kt">int</span>
 <span class="p">}</span>
 
 <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span> <span class="p">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
-  <span class="nx">c</span> <span class="p">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span>
-  <span class="nb">print</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+	<span class="kd">var</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span> <span class="p">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+	<span class="nx">c</span> <span class="p">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span>
+	<span class="nb">print</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
 <span class="p">}</span></pre></td></tr></table>
 </div>
 </div>
@@ -616,20 +641,20 @@ MOVQ 0(SP), DI // argc 把0(SP)内容放入 DI 寄存器中</pre></td></tr></tab
 </span></pre></td>
 <td class="lntd">
 <pre class="chroma">TEXT main.main(SB) /Users/zhengxuzhang/Project/go/src/runtimeMainProject/compilation/compliation_add.go
-  compliation_add.go:7  0x1051560               65488b0c2530000000      MOVQ GS:0x30, CX
-  compliation_add.go:7  0x1051569               483b6110                CMPQ 0x10(CX), SP
-  compliation_add.go:7  0x105156d               762f                    JBE 0x105159e
-  compliation_add.go:7  0x105156f               4883ec10                SUBQ $0x10, SP
-  compliation_add.go:7  0x1051573               48896c2408              MOVQ BP, 0x8(SP)
-  compliation_add.go:7  0x1051578               488d6c2408              LEAQ 0x8(SP), BP
-  compliation_add.go:10 0x105157d               e82e3afdff              CALL runtime.printlock(SB)
-  compliation_add.go:10 0x1051582               48c7042400000000        MOVQ $0x0, 0(SP)
-  compliation_add.go:10 0x105158a               e8a141fdff              CALL runtime.printint(SB)
-  compliation_add.go:10 0x105158f               e89c3afdff              CALL runtime.printunlock(SB)
-  compliation_add.go:11 0x1051594               488b6c2408              MOVQ 0x8(SP), BP
-  compliation_add.go:11 0x1051599               4883c410                ADDQ $0x10, SP
-  compliation_add.go:11 0x105159d               c3                      RET
-  compliation_add.go:7  0x105159e               e84d81ffff              CALL runtime.morestack_noctxt(SB)
+  compliation_add.go:7  0x1051560               65488b0c2530000000      MOVQ GS:0x30, CX                     
+  compliation_add.go:7  0x1051569               483b6110                CMPQ 0x10(CX), SP                    
+  compliation_add.go:7  0x105156d               762f                    JBE 0x105159e                        
+  compliation_add.go:7  0x105156f               4883ec10                SUBQ $0x10, SP                       
+  compliation_add.go:7  0x1051573               48896c2408              MOVQ BP, 0x8(SP)                     
+  compliation_add.go:7  0x1051578               488d6c2408              LEAQ 0x8(SP), BP                     
+  compliation_add.go:10 0x105157d               e82e3afdff              CALL runtime.printlock(SB)           
+  compliation_add.go:10 0x1051582               48c7042400000000        MOVQ $0x0, 0(SP)                     
+  compliation_add.go:10 0x105158a               e8a141fdff              CALL runtime.printint(SB)            
+  compliation_add.go:10 0x105158f               e89c3afdff              CALL runtime.printunlock(SB)         
+  compliation_add.go:11 0x1051594               488b6c2408              MOVQ 0x8(SP), BP                     
+  compliation_add.go:11 0x1051599               4883c410                ADDQ $0x10, SP                       
+  compliation_add.go:11 0x105159d               c3                      RET                                  
+  compliation_add.go:7  0x105159e               e84d81ffff              CALL runtime.morestack_noctxt(SB)    
   compliation_add.go:7  0x10515a3               ebbb                    JMP main.main(SB)     </pre></td></tr></table>
 </div>
 </div>
@@ -674,14 +699,14 @@ MOVQ 0(SP), DI // argc 把0(SP)内容放入 DI 寄存器中</pre></td></tr></tab
     <span class="item-title">上次更新</span>
     <span class="item-content">
         2020-12-30
-
+        
     </span>
   </p>
-
-
+  
+  
 </div>
 <footer class="post-footer">
-
+      
       <nav class="post-nav">
         <a class="prev" href="/post/go%E6%B1%87%E7%BC%96%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A82/">
             <i class="iconfont icon-left"></i>
@@ -697,11 +722,11 @@ MOVQ 0(SP), DI // argc 把0(SP)内容放入 DI 寄存器中</pre></td></tr></tab
     </footer>
   </article>
         </div>
+        
 
+  
 
-
-
-
+  
 
       </div>
     </main>
@@ -717,15 +742,15 @@ MOVQ 0(SP), DI // argc 把0(SP)内容放入 DI 寄存器中</pre></td></tr></tab
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 -
+    主题 - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
-
+  
 
   <span class="copyright-year">
-    &copy;
-    2019 -
+    &copy; 
+    2019 - 
     2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
   </span>
 </div>
@@ -736,7 +761,7 @@ MOVQ 0(SP), DI // argc 把0(SP)内容放入 DI 寄存器中</pre></td></tr></tab
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

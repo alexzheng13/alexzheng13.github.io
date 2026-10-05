@@ -7,20 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 04 Feb 2021 17:32:47 +0800</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/todo/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/todo/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Introduction to CSRF and CORS</title>
       <link>https://alexzheng13.github.io/en/todo/csrf-and-cors-introduction/</link>
       <pubDate>Thu, 04 Feb 2021 17:32:47 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/todo/csrf-and-cors-introduction/</guid>
       <description>Introduction  Before introducing CRSF(Cross-site request forgery)&amp;amp;CORS(Cross-origin resource sharing), we first introduce HTTP. If readers are familiar with HTTP, they can skip this content directly.
 HTTP request ﻿An HTTP request consists of four parts: request line, request header, blank line and request body.
 1 2 3 4 5 6 7  GET /mix/76.html?name=kelvin&amp;amp;password=123456 HTTP/1.1 Host: www.fishbay.cn Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.</description>
     </item>
-
+    
   </channel>
 </rss>

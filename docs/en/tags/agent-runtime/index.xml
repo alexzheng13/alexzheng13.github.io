@@ -7,20 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 12 Sep 2026 21:05:45 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/tags/agent-runtime/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/tags/agent-runtime/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Anthropic Agent Evolution IV: Managed Agent Runtime—Session, Harness, and Sandbox</title>
       <link>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-4-managed-agent-runtime/</link>
       <pubDate>Sat, 12 Sep 2026 21:05:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-4-managed-agent-runtime/</guid>
       <description>&lt;p&gt;Earlier harnesses focused on how a model could continue work and improve quality. A managed service introduces system questions: how is a session persisted, how does work recover after a harness crash, how can sandboxes be replaced, how do customer VPCs connect, and how are credentials kept away from model-generated code?&lt;/p&gt;
 
 &lt;p&gt;Anthropic Managed Agents answers by &lt;strong&gt;decoupling the brain, hands, and session behind stable interfaces.&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

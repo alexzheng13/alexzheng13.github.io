@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Actor-Critic on Blowing in the wind</title>
+    <link>https://alexzheng13.github.io/tags/actor-critic/</link>
+    <description>Recent content in Actor-Critic on Blowing in the wind</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 26 Aug 2026 09:00:00 +0200</lastBuildDate>
+    
+	<atom:link href="https://alexzheng13.github.io/tags/actor-critic/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO</title>
+      <link>https://alexzheng13.github.io/post/reinforcement-learning-2-classic-algorithms/</link>
+      <pubDate>Wed, 26 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/reinforcement-learning-2-classic-algorithms/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://alexzheng13.github.io/post/reinforcement-learning-1-foundations/&#34;&gt;上一篇&lt;/a&gt;建立了 MDP、价值函数与贝尔曼方程。接下来要回答的是：&lt;strong&gt;当环境模型未知、状态无法枚举、策略又由神经网络表示时，怎样真的把价值或策略学出来？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;本文沿着一条连续的演进路径展开：动态规划需要完整模型；蒙特卡洛只依赖完整轨迹；时序差分可以边走边学；Q-Learning 学最优动作价值；DQN 用神经网络处理高维状态；Actor-Critic 与 PPO 则直接优化策略，并控制每次更新不要走得太远。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

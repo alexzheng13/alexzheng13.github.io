@@ -7,53 +7,53 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 12 Sep 2026 21:08:45 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/tags/anthropic-agent-%E6%BC%94%E8%BF%9B/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/tags/anthropic-agent-%E6%BC%94%E8%BF%9B/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness</title>
       <link>https://alexzheng13.github.io/post/anthropic-agent-evolution-1-from-workflows-to-agents/</link>
       <pubDate>Sat, 12 Sep 2026 21:08:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/anthropic-agent-evolution-1-from-workflows-to-agents/</guid>
       <description>&lt;p&gt;“Agent” 经常被当作一个宽泛标签：只要模型调用了工具、执行了多步任务，就被称为 Agent。Anthropic 的工程实践给出了一个更有用的区分：&lt;strong&gt;Workflow 的路径由代码预先定义；Agent 则由模型根据环境反馈动态决定下一步。&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;这是“Anthropic Agent 演进”系列的第一篇。我们先建立共同语言：从增强型 LLM、固定 Workflow，一直到真正的自主 Agent，并解释为什么模型外部还需要一层 Harness。&lt;/p&gt;</description>
     </item>
-
+    
     <item>
       <title>Anthropic Agent 演进（二）：Context Reset 与 Structured Handoff</title>
       <link>https://alexzheng13.github.io/post/anthropic-agent-evolution-2-context-reset-and-handoff/</link>
       <pubDate>Sat, 12 Sep 2026 21:07:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/anthropic-agent-evolution-2-context-reset-and-handoff/</guid>
       <description>&lt;p&gt;长任务的核心矛盾不是“模型能不能写代码”，而是：任务可能持续数小时或数天，但一次 Context Window 终究有限。把整个历史无限重放，会同时遇到容量和噪声问题。&lt;/p&gt;
 
 &lt;p&gt;Anthropic 第一代 Long-Running Agent Harness 的答案是：&lt;strong&gt;重置对话上下文，但把项目状态写进结构化工件，让下一轮 Agent 可以恢复工作。&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
-
+    
     <item>
       <title>Anthropic Agent 演进（三）：Planner–Generator–Evaluator 质量闭环</title>
       <link>https://alexzheng13.github.io/post/anthropic-agent-evolution-3-planner-generator-evaluator/</link>
       <pubDate>Sat, 12 Sep 2026 21:06:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/anthropic-agent-evolution-3-planner-generator-evaluator/</guid>
       <description>&lt;p&gt;第一代 Harness 让 Agent 能跨 Context 持续工作，但“持续”不等于“高质量”。生成者评价自己的作品时，往往会把“基本能运行”误判成“已经足够好”，主观设计任务尤其明显。&lt;/p&gt;
 
 &lt;p&gt;Anthropic 的下一步是把计划、生成和评价拆成三个职责，让外部 Evaluator 成为 Generator 必须面对的反馈来源。&lt;/p&gt;</description>
     </item>
-
+    
     <item>
       <title>Anthropic Agent 演进（四）：Managed Agent Runtime——Session、Harness 与 Sandbox</title>
       <link>https://alexzheng13.github.io/post/anthropic-agent-evolution-4-managed-agent-runtime/</link>
       <pubDate>Sat, 12 Sep 2026 21:05:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/anthropic-agent-evolution-4-managed-agent-runtime/</guid>
       <description>&lt;p&gt;前几代 Harness 关注的是模型怎样持续工作、怎样提高质量。走向托管服务后，问题变成了系统工程：Session 如何持久化？Harness 崩溃后怎样恢复？Sandbox 如何替换？怎样连接客户自己的 VPC？凭据如何不暴露给模型生成的代码？&lt;/p&gt;
 
 &lt;p&gt;Anthropic Managed Agents 的核心答案是：&lt;strong&gt;把 Brain、Hands 和 Session 解耦为稳定接口。&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

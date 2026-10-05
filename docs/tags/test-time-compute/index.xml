@@ -7,20 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Tue, 11 Aug 2026 06:27:01 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/tags/test-time-compute/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/tags/test-time-compute/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Stanford CS329A：Self-Improving AI Agents 的完整技术框架</title>
       <link>https://alexzheng13.github.io/post/stanford-cs329a-self-improving-ai-agents/</link>
       <pubDate>Tue, 11 Aug 2026 06:27:01 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/stanford-cs329a-self-improving-ai-agents/</guid>
       <description>&lt;p&gt;Self-Improving AI Agent 并不是一个会无限递归修改自己的神秘系统。更实际的理解是：Agent 在生成、行动、观察和验证之间形成闭环，把推理时获得的反馈用于改进当前答案、后续决策，甚至下一轮训练。&lt;/p&gt;
 
 &lt;p&gt;这篇文章沿着 Stanford CS329A 的课程主线，把测试时计算、验证器、工具反馈、规划搜索、强化学习、深度研究与长程评测串成一个完整框架。&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

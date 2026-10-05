@@ -56,7 +56,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="main goroutine调度源码分析(2)" />
 <meta property="og:description" content="9.进入到runtime/proc.go,调度器初始化 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43" />
 <meta property="og:type" content="article" />
@@ -112,31 +111,44 @@
       </a>
   </ul>
 
-
+  
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/post/runtime-main-2/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/en/post/go-main-goroutine-scheduler-2/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -149,23 +161,23 @@
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/post/runtime-main-2/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/en/post/go-main-goroutine-scheduler-2/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
@@ -182,6 +194,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/about/">关于我</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -191,7 +216,7 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-
+    
     <header class="post-header">
       <h1 class="post-title">main goroutine调度源码分析(2)</h1>
 
@@ -202,7 +227,7 @@
             </div>
           <span class="more-meta"> 约 8724 字 </span>
           <span class="more-meta"> 预计阅读 18 分钟 </span>
-
+        
       </div>
     </header>
 
@@ -224,7 +249,7 @@
   </div>
 </div>
     <div class="post-content">
-
+      
 
 <h3 id="9-进入到runtime-proc-go-调度器初始化">9.进入到runtime/proc.go,调度器初始化</h3>
 <div class="highlight"><div class="chroma">
@@ -297,69 +322,69 @@
 </span></pre></td>
 <td class="lntd">
 <pre class="chroma">func schedinit() {
-  // raceinit must be the first call to race detector.
-  // In particular, it must be done before mallocinit below calls racemapshadow.
+	// raceinit must be the first call to race detector.
+	// In particular, it must be done before mallocinit below calls racemapshadow.
     // getg函数由编译器实现，类似执行下面两行代码
     // get_tls(CX)
     // MOVQ g(cx), BX; BX寄存器 = tls[0] = 当前g结构体对象的地址
 
-  _g_ := getg()           // 调度器初始化过程中, _g_ = &amp;g0
-  if raceenabled {
-    _g_.racectx, raceprocctx0 = raceinit()
-  }
+	_g_ := getg()           // 调度器初始化过程中, _g_ = &amp;g0
+	if raceenabled {
+		_g_.racectx, raceprocctx0 = raceinit()
+	}
 
-  sched.maxmcount = 10000 // 最多启动10000个操作系统线程，也是最多10000个M
+	sched.maxmcount = 10000 // 最多启动10000个操作系统线程，也是最多10000个M
 
-  tracebackinit()
-  moduledataverify()
+	tracebackinit()
+	moduledataverify()
 
-  // 内存相关初始化
-  stackinit()
-  mallocinit()
-  // M相关初始化
-  mcommoninit(_g_.m)
-  cpuinit()       // must run before alginit
-  alginit()       // maps must not be used before this call
-  modulesinit()   // provides activeModules
-  typelinksinit() // uses maps, activeModules
-  itabsinit()     // uses activeModules
+	// 内存相关初始化
+	stackinit()
+	mallocinit()
+	// M相关初始化
+	mcommoninit(_g_.m)
+	cpuinit()       // must run before alginit
+	alginit()       // maps must not be used before this call
+	modulesinit()   // provides activeModules
+	typelinksinit() // uses maps, activeModules
+	itabsinit()     // uses activeModules
 
-  msigsave(_g_.m)
-  initSigmask = _g_.m.sigmask
-  // 存储命令行参数和环境变量
-  goargs()
-  goenvs()
-  // 解析GODEBUG的调试参数
-  parsedebugvars()
-  // 初始化垃圾回收器
-  gcinit()
-  // 初始化 poll时间
-  sched.lastpoll = uint64(nanotime())
-  // 设置 GOMAXPROCS
-  procs := ncpu
-  if n, ok := atoi32(gogetenv(&#34;GOMAXPROCS&#34;)); ok &amp;&amp; n &gt; 0 {
-    procs = n
-  }
-  if procresize(procs) != nil {
-    throw(&#34;unknown runnable goroutine during bootstrap&#34;)
-  }
+	msigsave(_g_.m)
+	initSigmask = _g_.m.sigmask
+	// 存储命令行参数和环境变量
+	goargs()
+	goenvs()
+	// 解析GODEBUG的调试参数
+	parsedebugvars()
+	// 初始化垃圾回收器
+	gcinit()
+	// 初始化 poll时间
+	sched.lastpoll = uint64(nanotime())
+	// 设置 GOMAXPROCS
+	procs := ncpu
+	if n, ok := atoi32(gogetenv(&#34;GOMAXPROCS&#34;)); ok &amp;&amp; n &gt; 0 {
+		procs = n
+	}
+	if procresize(procs) != nil {
+		throw(&#34;unknown runnable goroutine during bootstrap&#34;)
+	}
 
-  // For cgocheck &gt; 1, we turn on the write barrier at all times
-  // and check all pointer writes. We can&#39;t do this until after
-  // procresize because the write barrier needs a P.
-  if debug.cgocheck &gt; 1 {
-    writeBarrier.cgo = true
-    writeBarrier.enabled = true
-    for _, p := range allp {
-      p.wbBuf.reset()
-    }
-  }
+	// For cgocheck &gt; 1, we turn on the write barrier at all times
+	// and check all pointer writes. We can&#39;t do this until after
+	// procresize because the write barrier needs a P.
+	if debug.cgocheck &gt; 1 {
+		writeBarrier.cgo = true
+		writeBarrier.enabled = true
+		for _, p := range allp {
+			p.wbBuf.reset()
+		}
+	}
 
-  if buildVersion == &#34;&#34; {
-    // Condition should never trigger. This code just serves
-    // to ensure runtime·buildVersion is kept in the resulting binary.
-    buildVersion = &#34;unknown&#34;
-  }
+	if buildVersion == &#34;&#34; {
+		// Condition should never trigger. This code just serves
+		// to ensure runtime·buildVersion is kept in the resulting binary.
+		buildVersion = &#34;unknown&#34;
+	}
 }</pre></td></tr></table>
 </div>
 </div>
@@ -391,15 +416,15 @@
 </span></pre></td>
 <td class="lntd">
 <pre class="chroma">func stackinit() {
-  if _StackCacheSize&amp;_PageMask != 0 {
-    throw(&#34;cache size must be a multiple of page size&#34;)
-  }
-  for i := range stackpool {
-    stackpool[i].init()
-  }
-  for i := range stackLarge.free {
-    stackLarge.free[i].init()
-  }
+	if _StackCacheSize&amp;_PageMask != 0 {
+		throw(&#34;cache size must be a multiple of page size&#34;)
+	}
+	for i := range stackpool {
+		stackpool[i].init()
+	}
+	for i := range stackLarge.free {
+		stackLarge.free[i].init()
+	}
 }</pre></td></tr></table>
 </div>
 </div>
@@ -468,9 +493,9 @@
     ...
       // 1.初始化堆内容空间mheap，mcentral，及mcache
       // Initialize the heap.
-  mheap_.init()  、
-  _g_ := getg()
-  _g_.m.mcache = allocmcache()
+	mheap_.init()  、
+	_g_ := getg()
+	_g_.m.mcache = allocmcache()
 }</pre></td></tr></table>
 </div>
 </div>
@@ -558,45 +583,45 @@
 </span></pre></td>
 <td class="lntd">
 <pre class="chroma">func mcommoninit(mp *m) {
-  _g_ := getg() // 调度器初始化过程中_g_ = g0
+	_g_ := getg() // 调度器初始化过程中_g_ = g0
 
-  // g0 stack won&#39;t make sense for user (and is not necessary unwindable).
-  if _g_ != _g_.m.g0 {    //函数调用栈traceback，不需要关心
-    callers(1, mp.createstack[:])
-  }
+	// g0 stack won&#39;t make sense for user (and is not necessary unwindable).
+	if _g_ != _g_.m.g0 {    //函数调用栈traceback，不需要关心
+		callers(1, mp.createstack[:])
+	}
 
-  lock(&amp;sched.lock)
-  if sched.mnext+1 &lt; sched.mnext {
-    throw(&#34;runtime: thread ID overflow&#34;)
-  }
-  mp.id = sched.mnext
-  sched.mnext++
-  checkmcount() //检查已创建系统线程是否超过了数量限制（10000）
+	lock(&amp;sched.lock)
+	if sched.mnext+1 &lt; sched.mnext {
+		throw(&#34;runtime: thread ID overflow&#34;)
+	}
+	mp.id = sched.mnext
+	sched.mnext++
+	checkmcount() //检查已创建系统线程是否超过了数量限制（10000）
 
-  mp.fastrand[0] = 1597334677 * uint32(mp.id)
-  mp.fastrand[1] = uint32(cputicks())
-  if mp.fastrand[0]|mp.fastrand[1] == 0 {
-    mp.fastrand[1] = 1
-  }
+	mp.fastrand[0] = 1597334677 * uint32(mp.id)
+	mp.fastrand[1] = uint32(cputicks())
+	if mp.fastrand[0]|mp.fastrand[1] == 0 {
+		mp.fastrand[1] = 1
+	}
    //创建用于信号处理的gsignal，只是简单的从堆上分配一个g结构体对象,然后把栈设置好就返回了
 
-  mpreinit(mp)
-  if mp.gsignal != nil {
-    mp.gsignal.stackguard1 = mp.gsignal.stack.lo + _StackGuard
-  }
+	mpreinit(mp)
+	if mp.gsignal != nil {
+		mp.gsignal.stackguard1 = mp.gsignal.stack.lo + _StackGuard
+	}
 
-  //把m挂入全局链表allm之中
-  mp.alllink = allm
+	//把m挂入全局链表allm之中
+	mp.alllink = allm
 
-  // NumCgoCall() iterates over allm w/o schedlock,
-  // so we need to publish it safely.
-  atomicstorep(unsafe.Pointer(&amp;allm), unsafe.Pointer(mp))
-  unlock(&amp;sched.lock)
+	// NumCgoCall() iterates over allm w/o schedlock,
+	// so we need to publish it safely.
+	atomicstorep(unsafe.Pointer(&amp;allm), unsafe.Pointer(mp))
+	unlock(&amp;sched.lock)
 
-  // Allocate memory to hold a cgo traceback if the cgo call crashes.
-  if iscgo || GOOS == &#34;solaris&#34; || GOOS == &#34;illumos&#34; || GOOS == &#34;windows&#34; {
-    mp.cgoCallers = new(cgoCallers)
-  }
+	// Allocate memory to hold a cgo traceback if the cgo call crashes.
+	if iscgo || GOOS == &#34;solaris&#34; || GOOS == &#34;illumos&#34; || GOOS == &#34;windows&#34; {
+		mp.cgoCallers = new(cgoCallers)
+	}
 }</pre></td></tr></table>
 </div>
 </div>
@@ -691,9 +716,9 @@
 <td class="lntd">
 <pre class="chroma">func procresize(nprocsint32) *p {
     old := gomaxprocs//系统初始化时 gomaxprocs = 0
-
+ 
     ......
-
+ 
     // Grow allp if necessary.
    if nprocs &gt; int32(len(allp)) { //初始化时 len(allp) == 0
         // Synchronize with retake, which could be running
@@ -710,7 +735,7 @@
         }
         unlock(&amp;allpLock)
     }
-
+ 
     // initialize new P&#39;s
    //循环创建nprocs个p并完成基本初始化
     for i := int32(0); i&lt;nprocs; i++{
@@ -722,12 +747,12 @@
             ......
             atomicstorep(unsafe.Pointer(&amp;allp[i]), unsafe.Pointer(pp))
         }
-
+ 
        ......
     }
-
+ 
     ......
-
+ 
     _g_:=getg()  // _g_ = g0
     if _g_.m.p != 0 &amp;&amp; _g_.m.p.ptr().id &lt; nprocs {//初始化时m0-&gt;p还未初始化，所以不会执行这个分支
         // continue to use the current P
@@ -748,7 +773,7 @@
             traceGoStart()
         }
     }
-
+    
    //下面这个for 循环把所有空闲的p放入空闲链表
     var runnablePs *p
     for i := nprocs-1; i &gt;= 0; i-- {
@@ -763,9 +788,9 @@
             ......
         }
     }
-
+ 
     ......
-
+    
     return runnablePs
 }</pre></td></tr></table>
 </div>
@@ -800,27 +825,27 @@
 </span><span class="lnt">21
 </span></pre></td>
 <td class="lntd">
-<pre class="chroma">  // create a new goroutine to start program
-  MOVQ  $runtime·mainPC(SB), AX    // entry runtime.main 函数地址
-  // newproc的第二个参数入栈，也就是新的goroutine需要执行的函数
-  PUSHQ  AX              // AX = &amp;funcval{runtime·main}
-  // newproc的第一个参数入栈，该参数表示runtime.main函数需要的参数大小，因为runtime.main没有参数，所以这里是0
-  PUSHQ  $0      // arg size
-  CALL  runtime·newproc(SB)         // proc.go 创建main goroutine
-  POPQ  AX
-  POPQ  AX
+<pre class="chroma">	// create a new goroutine to start program
+	MOVQ	$runtime·mainPC(SB), AX		// entry runtime.main 函数地址
+	// newproc的第二个参数入栈，也就是新的goroutine需要执行的函数
+	PUSHQ	AX							// AX = &amp;funcval{runtime·main}
+	// newproc的第一个参数入栈，该参数表示runtime.main函数需要的参数大小，因为runtime.main没有参数，所以这里是0
+	PUSHQ	$0			// arg size
+	CALL	runtime·newproc(SB)         // proc.go 创建main goroutine
+	POPQ	AX 
+	POPQ	AX
 
-  // start this M
-  CALL  runtime·mstart(SB)   // 主线程进入调度循环，运行刚刚创建的goroutine
+	// start this M
+	CALL	runtime·mstart(SB)   // 主线程进入调度循环，运行刚刚创建的goroutine
 
       // 上面的mstart永远不应该返回的，如果返回了，一定是代码逻辑有问题，直接abort
-  CALL  runtime·abort(SB)  // mstart should never return
-  RET
+	CALL	runtime·abort(SB)	// mstart should never return
+	RET
 
-  // Prevent dead-code elimination of debugCallV1, which is
-  // intended to be called by debuggers.
-  MOVQ  $runtime·debugCallV1(SB), AX
-  RET</pre></td></tr></table>
+	// Prevent dead-code elimination of debugCallV1, which is
+	// intended to be called by debuggers.
+	MOVQ	$runtime·debugCallV1(SB), AX
+	RET</pre></td></tr></table>
 </div>
 </div>
 <p><strong>runtime.newproc</strong></p>
@@ -965,140 +990,140 @@
 </span></pre></td>
 <td class="lntd">
 <pre class="chroma">func newproc(siz int32, fn *funcval) {
-  // 函数调用参数入栈顺序是从右向左，而且栈是从高地址向低地址增长的，支持可变参数的编译器是从右向左入栈的
-  // 注意:argp指向fn函数的第一个参数，而不是newproc函数的参数
-  // 函数fn在栈上地址+8位置存放的是fn函数的第一个参数，因为被调用函数的参数是放在调用函数的栈上的
-  argp := add(unsafe.Pointer(&amp;fn), sys.PtrSize)
-  gp := getg() // 获取正在运行的g，初始化时是m0.g0
-  // pc寄存器存的是下一条执行指令的地址
-  // getcallerpc()返回一个地址，也就是调用newproc时由call指令压栈的函数返回地址，
-  // 对于asm_amd64.s runtime·rt0_go函数这个场景来说，pc就是CALLruntime·newproc(SB)指令后面的POPQ AX这条指令的地址
-  pc := getcallerpc()
-  // systemstack asm_amd64.s runtime·systemstack(SB) 切回到g0栈执行作为参数的函数，然后再切换到curg
-  systemstack(func() {
-    newproc1(fn, (*uint8)(argp), siz, gp, pc)
-  })
+	// 函数调用参数入栈顺序是从右向左，而且栈是从高地址向低地址增长的，支持可变参数的编译器是从右向左入栈的
+	// 注意:argp指向fn函数的第一个参数，而不是newproc函数的参数
+	// 函数fn在栈上地址+8位置存放的是fn函数的第一个参数，因为被调用函数的参数是放在调用函数的栈上的
+	argp := add(unsafe.Pointer(&amp;fn), sys.PtrSize)
+	gp := getg() // 获取正在运行的g，初始化时是m0.g0
+	// pc寄存器存的是下一条执行指令的地址
+	// getcallerpc()返回一个地址，也就是调用newproc时由call指令压栈的函数返回地址，
+	// 对于asm_amd64.s runtime·rt0_go函数这个场景来说，pc就是CALLruntime·newproc(SB)指令后面的POPQ AX这条指令的地址
+	pc := getcallerpc()
+	// systemstack asm_amd64.s runtime·systemstack(SB) 切回到g0栈执行作为参数的函数，然后再切换到curg
+	systemstack(func() {
+		newproc1(fn, (*uint8)(argp), siz, gp, pc)
+	})
 }
 
 func newproc1(fn *funcval, argp *uint8, narg int32, callergp *g, callerpc uintptr) {
-  // 因为已经切换到g0栈，所以无论什么场景都有 _g_ = g0，当然这个g0是指当前工作线程的g0
-  _g_ := getg()
+	// 因为已经切换到g0栈，所以无论什么场景都有 _g_ = g0，当然这个g0是指当前工作线程的g0
+	_g_ := getg()
 
-  if fn == nil {
-    _g_.m.throwing = -1 // do not dump full stacks
-    throw(&#34;go of nil func value&#34;)
-  }
-  acquirem() // disable preemption because it can be holding p in a local var
-  siz := narg
-  siz = (siz + 7) &amp;^ 7
+	if fn == nil {
+		_g_.m.throwing = -1 // do not dump full stacks
+		throw(&#34;go of nil func value&#34;)
+	}
+	acquirem() // disable preemption because it can be holding p in a local var
+	siz := narg
+	siz = (siz + 7) &amp;^ 7
 
-  // We could allocate a larger initial stack if necessary.
-  // Not worth it: this is almost always an error.
-  // 4*sizeof(uintreg): extra space added below
-  // sizeof(uintreg): caller&#39;s LR (arm) or return address (x86, in gostartcall).
-  if siz &gt;= _StackMin-4*sys.RegSize-sys.RegSize {
-    throw(&#34;newproc: function arguments too large for new goroutine&#34;)
-  }
-  // 初始化时_p_ = g0.m.p，从前面的分析可以知道其实就是allp[0]
-  _p_ := _g_.m.p.ptr()
-  // 从p的本地缓存里获取一个没有使用的g,初始化时没有，返回nil
-  newg := gfget(_p_)
-  if newg == nil {
-    // new一个g结构体对象，然后从堆上为其分配栈，并设置g的stack成员和两个stackgard成员
-    newg = malg(_StackMin)
-    // 初始化g的状态为_Gdead
-    casgstatus(newg, _Gidle, _Gdead)
-    // 放入全局变量allgs，并更新allglen
-    allgadd(newg) // publishes with a g-&gt;status of Gdead so GC scanner doesn&#39;t look at uninitialized stack.
-  }
-  if newg.stack.hi == 0 {
-    throw(&#34;newproc1: newg missing stack&#34;)
-  }
+	// We could allocate a larger initial stack if necessary.
+	// Not worth it: this is almost always an error.
+	// 4*sizeof(uintreg): extra space added below
+	// sizeof(uintreg): caller&#39;s LR (arm) or return address (x86, in gostartcall).
+	if siz &gt;= _StackMin-4*sys.RegSize-sys.RegSize {
+		throw(&#34;newproc: function arguments too large for new goroutine&#34;)
+	}
+	// 初始化时_p_ = g0.m.p，从前面的分析可以知道其实就是allp[0]
+	_p_ := _g_.m.p.ptr()
+	// 从p的本地缓存里获取一个没有使用的g,初始化时没有，返回nil
+	newg := gfget(_p_)
+	if newg == nil {
+		// new一个g结构体对象，然后从堆上为其分配栈，并设置g的stack成员和两个stackgard成员
+		newg = malg(_StackMin)
+		// 初始化g的状态为_Gdead
+		casgstatus(newg, _Gidle, _Gdead)
+		// 放入全局变量allgs，并更新allglen
+		allgadd(newg) // publishes with a g-&gt;status of Gdead so GC scanner doesn&#39;t look at uninitialized stack.
+	}
+	if newg.stack.hi == 0 {
+		throw(&#34;newproc1: newg missing stack&#34;)
+	}
 
-  if readgstatus(newg) != _Gdead {
-    throw(&#34;newproc1: new g is not Gdead&#34;)
-  }
-  // 调整g的栈顶置针，无需关注
-  totalSize := 4*sys.RegSize + uintptr(siz) + sys.MinFrameSize // extra space in case of reads slightly beyond frame
-  totalSize += -totalSize &amp; (sys.SpAlign - 1)                  // align to spAlign
-  sp := newg.stack.hi - totalSize
-  spArg := sp
-  if usesLR {
-    // caller&#39;s LR
-    *(*uintptr)(unsafe.Pointer(sp)) = 0
-    prepGoExitFrame(sp)
-    spArg += sys.MinFrameSize
-  }
-  if narg &gt; 0 {
-    // 把参数从执行newproc函数的栈（初始化时是g0栈）拷贝到新g的栈
-    // 从argp地址开始，拷贝nrag个字节到spArg
-    memmove(unsafe.Pointer(spArg), unsafe.Pointer(argp), uintptr(narg))
-    // This is a stack-to-stack copy. If write barriers
-    // are enabled and the source stack is grey (the
-    // destination is always black), then perform a
-    // barrier copy. We do this *after* the memmove
-    // because the destination stack may have garbage on
-    // it.
-    if writeBarrier.needed &amp;&amp; !_g_.m.curg.gcscandone {
-      f := findfunc(fn.fn)
-      stkmap := (*stackmap)(funcdata(f, _FUNCDATA_ArgsPointerMaps))
-      if stkmap.nbit &gt; 0 {
-        // We&#39;re in the prologue, so it&#39;s always stack map index 0.
-        bv := stackmapdata(stkmap, 0)
-        bulkBarrierBitmap(spArg, spArg, uintptr(bv.n)*sys.PtrSize, 0, bv.bytedata)
-      }
-    }
-  }
-  // 把newg.sched结构体成员的所有成员设置为0
-  memclrNoHeapPointers(unsafe.Pointer(&amp;newg.sched), unsafe.Sizeof(newg.sched))
-  // 设置newg的sched成员，调度器需要依靠这些字段才能把goroutine调度到CPU上运行。
-  newg.sched.sp = sp // 栈顶
-  newg.stktopsp = sp
-  // newg.sched.pc表示当newg被调度起来运行时从这个地址开始执行指令
-  // 把pc设置成了goexit这个函数偏移1（sys.PCQuantum等于1）的位置，
-  // 至于为什么要这么做需要等到分析完gostartcallfn函数才知道
-  // 正常该gorutine下一步指令应该是fn函数
-  newg.sched.pc = funcPC(goexit) + sys.PCQuantum // +PCQuantum so that previous instruction is in same function
-  newg.sched.g = guintptr(unsafe.Pointer(newg))
-  gostartcallfn(&amp;newg.sched, fn)
-  newg.gopc = callerpc
-  newg.ancestors = saveAncestors(callergp)
-  // 设置newg的startpc为fn.fn，该成员主要用于函数调用栈的traceback和栈收缩
-  // newg真正从哪里开始执行并不依赖于这个成员，而是sched.pc
-  newg.startpc = fn.fn
-  if _g_.m.curg != nil {
-    newg.labels = _g_.m.curg.labels
-  }
-  if isSystemGoroutine(newg, false) {
-    atomic.Xadd(&amp;sched.ngsys, +1)
-  }
-  newg.gcscanvalid = false
-  // 设置g的状态为_Grunnable，表示这个g代表的goroutine可以运行了
-  casgstatus(newg, _Gdead, _Grunnable)
+	if readgstatus(newg) != _Gdead {
+		throw(&#34;newproc1: new g is not Gdead&#34;)
+	}
+	// 调整g的栈顶置针，无需关注
+	totalSize := 4*sys.RegSize + uintptr(siz) + sys.MinFrameSize // extra space in case of reads slightly beyond frame
+	totalSize += -totalSize &amp; (sys.SpAlign - 1)                  // align to spAlign
+	sp := newg.stack.hi - totalSize
+	spArg := sp
+	if usesLR {
+		// caller&#39;s LR
+		*(*uintptr)(unsafe.Pointer(sp)) = 0
+		prepGoExitFrame(sp)
+		spArg += sys.MinFrameSize
+	}
+	if narg &gt; 0 {
+		// 把参数从执行newproc函数的栈（初始化时是g0栈）拷贝到新g的栈
+		// 从argp地址开始，拷贝nrag个字节到spArg
+		memmove(unsafe.Pointer(spArg), unsafe.Pointer(argp), uintptr(narg))
+		// This is a stack-to-stack copy. If write barriers
+		// are enabled and the source stack is grey (the
+		// destination is always black), then perform a
+		// barrier copy. We do this *after* the memmove
+		// because the destination stack may have garbage on
+		// it.
+		if writeBarrier.needed &amp;&amp; !_g_.m.curg.gcscandone {
+			f := findfunc(fn.fn)
+			stkmap := (*stackmap)(funcdata(f, _FUNCDATA_ArgsPointerMaps))
+			if stkmap.nbit &gt; 0 {
+				// We&#39;re in the prologue, so it&#39;s always stack map index 0.
+				bv := stackmapdata(stkmap, 0)
+				bulkBarrierBitmap(spArg, spArg, uintptr(bv.n)*sys.PtrSize, 0, bv.bytedata)
+			}
+		}
+	}
+	// 把newg.sched结构体成员的所有成员设置为0
+	memclrNoHeapPointers(unsafe.Pointer(&amp;newg.sched), unsafe.Sizeof(newg.sched))
+	// 设置newg的sched成员，调度器需要依靠这些字段才能把goroutine调度到CPU上运行。
+	newg.sched.sp = sp // 栈顶
+	newg.stktopsp = sp
+	// newg.sched.pc表示当newg被调度起来运行时从这个地址开始执行指令
+	// 把pc设置成了goexit这个函数偏移1（sys.PCQuantum等于1）的位置，
+	// 至于为什么要这么做需要等到分析完gostartcallfn函数才知道
+	// 正常该gorutine下一步指令应该是fn函数
+	newg.sched.pc = funcPC(goexit) + sys.PCQuantum // +PCQuantum so that previous instruction is in same function
+	newg.sched.g = guintptr(unsafe.Pointer(newg))
+	gostartcallfn(&amp;newg.sched, fn)
+	newg.gopc = callerpc
+	newg.ancestors = saveAncestors(callergp)
+	// 设置newg的startpc为fn.fn，该成员主要用于函数调用栈的traceback和栈收缩
+	// newg真正从哪里开始执行并不依赖于这个成员，而是sched.pc
+	newg.startpc = fn.fn
+	if _g_.m.curg != nil {
+		newg.labels = _g_.m.curg.labels
+	}
+	if isSystemGoroutine(newg, false) {
+		atomic.Xadd(&amp;sched.ngsys, +1)
+	}
+	newg.gcscanvalid = false
+	// 设置g的状态为_Grunnable，表示这个g代表的goroutine可以运行了
+	casgstatus(newg, _Gdead, _Grunnable)
 
-  if _p_.goidcache == _p_.goidcacheend {
-    // Sched.goidgen is the last allocated id,
-    // this batch must be [sched.goidgen+1, sched.goidgen+GoidCacheBatch].
-    // At startup sched.goidgen=0, so main goroutine receives goid=1.
-    _p_.goidcache = atomic.Xadd64(&amp;sched.goidgen, _GoidCacheBatch)
-    _p_.goidcache -= _GoidCacheBatch - 1
-    _p_.goidcacheend = _p_.goidcache + _GoidCacheBatch
-  }
-  newg.goid = int64(_p_.goidcache)
-  _p_.goidcache++
-  if raceenabled {
-    newg.racectx = racegostart(callerpc)
-  }
-  if trace.enabled {
-    traceGoCreate(newg, newg.startpc)
-  }
-  // 把newg放入_p_的运行队列，初始化的时候一定是p的本地运行队列，其它时候可能因为本地队列满了而放入全局队列
-  runqput(_p_, newg, true)
+	if _p_.goidcache == _p_.goidcacheend {
+		// Sched.goidgen is the last allocated id,
+		// this batch must be [sched.goidgen+1, sched.goidgen+GoidCacheBatch].
+		// At startup sched.goidgen=0, so main goroutine receives goid=1.
+		_p_.goidcache = atomic.Xadd64(&amp;sched.goidgen, _GoidCacheBatch)
+		_p_.goidcache -= _GoidCacheBatch - 1
+		_p_.goidcacheend = _p_.goidcache + _GoidCacheBatch
+	}
+	newg.goid = int64(_p_.goidcache)
+	_p_.goidcache++
+	if raceenabled {
+		newg.racectx = racegostart(callerpc)
+	}
+	if trace.enabled {
+		traceGoCreate(newg, newg.startpc)
+	}
+	// 把newg放入_p_的运行队列，初始化的时候一定是p的本地运行队列，其它时候可能因为本地队列满了而放入全局队列
+	runqput(_p_, newg, true)
 
-  if atomic.Load(&amp;sched.npidle) != 0 &amp;&amp; atomic.Load(&amp;sched.nmspinning) == 0 &amp;&amp; mainStarted {
-    wakep()
-  }
-  releasem(_g_.m)
+	if atomic.Load(&amp;sched.npidle) != 0 &amp;&amp; atomic.Load(&amp;sched.nmspinning) == 0 &amp;&amp; mainStarted {
+		wakep()
+	}
+	releasem(_g_.m)
 }</pre></td></tr></table>
 </div>
 </div>
@@ -1143,7 +1168,7 @@ func newproc1(fn *funcval, argp *uint8, narg int32, callergp *g, callerpc uintpt
 <td class="lntd">
 <pre class="chroma">func mstart() {
     _g_ := getg() //_g_ = g0
-
+ 
         //对于启动过程来说，g0的stack.lo早已完成初始化，所以onStack = false
     osStack := _g_.stack.lo == 0
     if osStack {
@@ -1161,9 +1186,9 @@ func newproc1(fn *funcval, argp *uint8, narg int32, callergp *g, callerpc uintpt
     // both Go and C functions with stack growth prologues.
     _g_.stackguard0 = _g_.stack.lo + _StackGuard
     _g_.stackguard1 = _g_.stackguard0
-
+     
     mstart1()
-
+ 
     // Exit this thread.
     if GOOS == &#34;windows&#34; || GOOS == &#34;solaris&#34; || GOOS == &#34;plan9&#34; || GOOS == &#34;darwin&#34; || GOOS == &#34;aix&#34; {
         // Window, Solaris, Darwin, AIX and Plan 9 always system-allocate
@@ -1217,11 +1242,11 @@ func newproc1(fn *funcval, argp *uint8, narg int32, callergp *g, callerpc uintpt
 <td class="lntd">
 <pre class="chroma">func mstart1() {
     _g_ := getg()  //启动过程时 _g_ = m0的g0
-
+ 
     if _g_ != _g_.m.g0 {
         throw(&#34;bad runtime·mstart&#34;)
     }
-
+ 
     // Record the caller for use as the top of stack in mcall and
     // for terminating the thread.
     // We&#39;re never coming back to mstart1 after we call schedule,
@@ -1231,22 +1256,22 @@ func newproc1(fn *funcval, argp *uint8, narg int32, callergp *g, callerpc uintpt
     save(getcallerpc(), getcallersp())
     asminit()  //在AMD64 Linux平台中，这个函数什么也没做，是个空函数
     minit()    //与信号相关的初始化，目前不需要关心
-
+ 
     // Install signal handlers; after minit so that minit can
     // prepare the thread to be able to handle the signals.
     if _g_.m == &amp;m0 { //启动时_g_.m是m0，所以会执行下面的mstartm0函数
         mstartm0() //也是信号相关的初始化，现在我们不关注
     }
-
+ 
     if fn := _g_.m.mstartfn; fn != nil { //初始化过程中fn == nil
         fn()
     }
-
+ 
     if _g_.m != &amp;m0 {// m0已经绑定了allp[0]，不是m0的话还没有p，所以需要获取一个p
         acquirep(_g_.m.nextp.ptr())
         _g_.m.nextp = 0
     }
-
+     
         //schedule函数永远不会返回
     schedule()
 }</pre></td></tr></table>
@@ -1290,7 +1315,7 @@ func newproc1(fn *funcval, argp *uint8, narg int32, callergp *g, callerpc uintpt
 //go:nowritebarrierrec
 func save(pc, sp uintptr) {
     _g_ := getg()
-
+ 
     _g_.sched.pc = pc //再次运行时的指令地址
     _g_.sched.sp = sp //再次运行时到栈顶
     _g_.sched.lr = 0
@@ -1455,117 +1480,117 @@ func save(pc, sp uintptr) {
 <pre class="chroma">// One round of scheduler: find a runnable goroutine and execute it.
 // Never returns.
 func schedule() {
-  _g_ := getg() //_g_ = m.g0
+	_g_ := getg() //_g_ = m.g0
 
-  if _g_.m.locks != 0 {
-    throw(&#34;schedule: holding locks&#34;)
-  }
+	if _g_.m.locks != 0 {
+		throw(&#34;schedule: holding locks&#34;)
+	}
 
-  if _g_.m.lockedg != 0 {
-    stoplockedm()
-    execute(_g_.m.lockedg.ptr(), false) // Never returns.
-  }
+	if _g_.m.lockedg != 0 {
+		stoplockedm()
+		execute(_g_.m.lockedg.ptr(), false) // Never returns.
+	}
 
-  // We should not schedule away from a g that is executing a cgo call,
-  // since the cgo call is using the m&#39;s g0 stack.
-  if _g_.m.incgo {
-    throw(&#34;schedule: in cgo&#34;)
-  }
+	// We should not schedule away from a g that is executing a cgo call,
+	// since the cgo call is using the m&#39;s g0 stack.
+	if _g_.m.incgo {
+		throw(&#34;schedule: in cgo&#34;)
+	}
 
 top:
-  if sched.gcwaiting != 0 {
-    gcstopm()
-    goto top
-  }
-  if _g_.m.p.ptr().runSafePointFn != 0 {
-    runSafePointFn()
-  }
+	if sched.gcwaiting != 0 {
+		gcstopm()
+		goto top
+	}
+	if _g_.m.p.ptr().runSafePointFn != 0 {
+		runSafePointFn()
+	}
 
-  var gp *g
-  var inheritTime bool
+	var gp *g
+	var inheritTime bool
 
-  // Normal goroutines will check for need to wakeP in ready,
-  // but GCworkers and tracereaders will not, so the check must
-  // be done here instead.
-  tryWakeP := false
-  if trace.enabled || trace.shutdown {
-    gp = traceReader()
-    if gp != nil {
-      casgstatus(gp, _Gwaiting, _Grunnable)
-      traceGoUnpark(gp, 0)
-      tryWakeP = true
-    }
-  }
-  if gp == nil &amp;&amp; gcBlackenEnabled != 0 {
-    gp = gcController.findRunnableGCWorker(_g_.m.p.ptr())
-    tryWakeP = tryWakeP || gp != nil
-  }
-  if gp == nil {
-    // Check the global runnable queue once in a while to ensure fairness.
-    // Otherwise two goroutines can completely occupy the local runqueue
-    // by constantly respawning each other.
-    // 为了保证调度的公平性，每个工作线程每进行61次调度就需要优先从全局运行队列中获取goroutine出来运行，
-    // 因为如果只调度本地运行队列中的goroutine，则全局运行队列中的goroutine有可能得不到运行
-    if _g_.m.p.ptr().schedtick%61 == 0 &amp;&amp; sched.runqsize &gt; 0 {
-      lock(&amp;sched.lock)                  // 所有工作线程都能访问全局运行队列，所以需要加锁
-      gp = globrunqget(_g_.m.p.ptr(), 1) // 从全局运行队列中获取1个goroutine
-      unlock(&amp;sched.lock)
-    }
-  }
-  if gp == nil {
-    // 从与m关联的p的本地运行队列中获取goroutine
-    gp, inheritTime = runqget(_g_.m.p.ptr())
-    if gp != nil &amp;&amp; _g_.m.spinning {
-      throw(&#34;schedule: spinning with local work&#34;)
-    }
-  }
-  if gp == nil {
-    // 如果从本地运行队列和全局运行队列都没有找到需要运行的goroutine，
-    // 则调用findrunnable函数从其它工作线程的运行队列中偷取，如果偷取不到，则当前工作线程进入睡眠，
-    // 直到获取到需要运行的goroutine之后findrunnable函数才会返回。
-    gp, inheritTime = findrunnable() // blocks until work is available
-  }
+	// Normal goroutines will check for need to wakeP in ready,
+	// but GCworkers and tracereaders will not, so the check must
+	// be done here instead.
+	tryWakeP := false
+	if trace.enabled || trace.shutdown {
+		gp = traceReader()
+		if gp != nil {
+			casgstatus(gp, _Gwaiting, _Grunnable)
+			traceGoUnpark(gp, 0)
+			tryWakeP = true
+		}
+	}
+	if gp == nil &amp;&amp; gcBlackenEnabled != 0 {
+		gp = gcController.findRunnableGCWorker(_g_.m.p.ptr())
+		tryWakeP = tryWakeP || gp != nil
+	}
+	if gp == nil {
+		// Check the global runnable queue once in a while to ensure fairness.
+		// Otherwise two goroutines can completely occupy the local runqueue
+		// by constantly respawning each other.
+		// 为了保证调度的公平性，每个工作线程每进行61次调度就需要优先从全局运行队列中获取goroutine出来运行，
+		// 因为如果只调度本地运行队列中的goroutine，则全局运行队列中的goroutine有可能得不到运行
+		if _g_.m.p.ptr().schedtick%61 == 0 &amp;&amp; sched.runqsize &gt; 0 {
+			lock(&amp;sched.lock)                  // 所有工作线程都能访问全局运行队列，所以需要加锁
+			gp = globrunqget(_g_.m.p.ptr(), 1) // 从全局运行队列中获取1个goroutine
+			unlock(&amp;sched.lock)
+		}
+	}
+	if gp == nil {
+		// 从与m关联的p的本地运行队列中获取goroutine
+		gp, inheritTime = runqget(_g_.m.p.ptr())
+		if gp != nil &amp;&amp; _g_.m.spinning {
+			throw(&#34;schedule: spinning with local work&#34;)
+		}
+	}
+	if gp == nil {
+		// 如果从本地运行队列和全局运行队列都没有找到需要运行的goroutine，
+		// 则调用findrunnable函数从其它工作线程的运行队列中偷取，如果偷取不到，则当前工作线程进入睡眠，
+		// 直到获取到需要运行的goroutine之后findrunnable函数才会返回。
+		gp, inheritTime = findrunnable() // blocks until work is available
+	}
 
-  // This thread is going to run a goroutine and is not spinning anymore,
-  // so if it was marked as spinning we need to reset it now and potentially
-  // start a new spinning M.
-  if _g_.m.spinning {
-    resetspinning()
-  }
+	// This thread is going to run a goroutine and is not spinning anymore,
+	// so if it was marked as spinning we need to reset it now and potentially
+	// start a new spinning M.
+	if _g_.m.spinning {
+		resetspinning()
+	}
 
-  if sched.disable.user &amp;&amp; !schedEnabled(gp) {
-    // Scheduling of this goroutine is disabled. Put it on
-    // the list of pending runnable goroutines for when we
-    // re-enable user scheduling and look again.
-    lock(&amp;sched.lock)
-    if schedEnabled(gp) {
-      // Something re-enabled scheduling while we
-      // were acquiring the lock.
-      unlock(&amp;sched.lock)
-    } else {
-      sched.disable.runnable.pushBack(gp)
-      sched.disable.n++
-      unlock(&amp;sched.lock)
-      goto top
-    }
-  }
+	if sched.disable.user &amp;&amp; !schedEnabled(gp) {
+		// Scheduling of this goroutine is disabled. Put it on
+		// the list of pending runnable goroutines for when we
+		// re-enable user scheduling and look again.
+		lock(&amp;sched.lock)
+		if schedEnabled(gp) {
+			// Something re-enabled scheduling while we
+			// were acquiring the lock.
+			unlock(&amp;sched.lock)
+		} else {
+			sched.disable.runnable.pushBack(gp)
+			sched.disable.n++
+			unlock(&amp;sched.lock)
+			goto top
+		}
+	}
 
-  // If about to schedule a not-normal goroutine (a GCworker or tracereader),
-  // wake a P if there is one.
-  if tryWakeP {
-    if atomic.Load(&amp;sched.npidle) != 0 &amp;&amp; atomic.Load(&amp;sched.nmspinning) == 0 {
-      wakep()
-    }
-  }
-  if gp.lockedm != 0 {
-    // Hands off own p to the locked m,
-    // then blocks waiting for a new p.
-    startlockedm(gp)
-    goto top
-  }
-  // 当前运行的是runtime的代码，函数调用栈使用的是g0的栈空间
-  // 调用execte切换到gp的代码和栈空间去运行
-  execute(gp, inheritTime)
+	// If about to schedule a not-normal goroutine (a GCworker or tracereader),
+	// wake a P if there is one.
+	if tryWakeP {
+		if atomic.Load(&amp;sched.npidle) != 0 &amp;&amp; atomic.Load(&amp;sched.nmspinning) == 0 {
+			wakep()
+		}
+	}
+	if gp.lockedm != 0 {
+		// Hands off own p to the locked m,
+		// then blocks waiting for a new p.
+		startlockedm(gp)
+		goto top
+	}
+	// 当前运行的是runtime的代码，函数调用栈使用的是g0的栈空间
+	// 调用execte切换到gp的代码和栈空间去运行
+	execute(gp, inheritTime)
 }
 
 // Schedules gp to run on the current M.
@@ -1579,18 +1604,18 @@ top:
 //go:yeswritebarrierrec
 func execute(gp *g, inheritTime bool) {
     _g_ := getg() //g0
-
+ 
         //设置待运行g的状态为_Grunning
     casgstatus(gp, _Grunnable, _Grunning)
-
+     
         //......
-
+     
         //把g和m关联起来
     _g_.m.curg = gp
     gp.m = _g_.m
-
+ 
     //......
-
+ 
         //gogo完成从g0到gp真正的切换
     gogo(&amp;gp.sched)
 }</pre></td></tr></table>
@@ -1647,36 +1672,36 @@ func execute(gp *g, inheritTime bool) {
 TEXT runtime·gogo(SB), NOSPLIT, $16-8
     #buf = &amp;gp.sched
     MOVQ    buf+0(FP), BX        # BX = buf
-
+    
     #gobuf-&gt;g --&gt; dx register
     MOVQ    gobuf_g(BX), DX  # DX = gp.sched.g
-
+    
     #下面这行代码没有实质作用，检查gp.sched.g是否是nil，如果是nil进程会crash死掉
     MOVQ    0(DX), CX        # make sure g != nil
-
-    get_tls(CX)
-
+    
+    get_tls(CX) 
+    
     #把要运行的g的指针放入线程本地存储，这样后面的代码就可以通过线程本地存储
     #获取到当前正在执行的goroutine的g结构体对象，从而找到与之关联的m和p
     MOVQ    DX, g(CX)
-
+    
     #把CPU的SP寄存器设置为sched.sp，完成了栈的切换
     MOVQ    gobuf_sp(BX), SP    # restore SP
-
+    
     #下面三条同样是恢复调度上下文到CPU相关寄存器
     MOVQ    gobuf_ret(BX), AX
     MOVQ    gobuf_ctxt(BX), DX
     MOVQ    gobuf_bp(BX), BP
-
+    
     #清空sched的值，因为我们已把相关值放入CPU对应的寄存器了，不再需要，这样做可以少gc的工作量
     MOVQ    $0, gobuf_sp(BX)    # clear to help garbage collector
     MOVQ    $0, gobuf_ret(BX)
     MOVQ    $0, gobuf_ctxt(BX)
     MOVQ    $0, gobuf_bp(BX)
-
+    
     #把sched.pc值放入BX寄存器
     MOVQ    gobuf_pc(BX), BX
-
+    
     #JMP把BX寄存器的包含的地址值放入CPU的IP寄存器，于是，CPU跳转到该地址继续执行指令，
     JMP    BX</pre></td></tr></table>
 </div>
@@ -1748,9 +1773,9 @@ TEXT runtime·gogo(SB), NOSPLIT, $16-8
 <pre class="chroma"><span class="c1">// The main goroutine.
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">g</span> <span class="o">:=</span> <span class="nf">getg</span><span class="p">()</span>  <span class="c1">// g = main goroutine，不再是g0了
-</span><span class="c1"></span>
+</span><span class="c1"></span> 
     <span class="c1">// ......
-</span><span class="c1"></span>
+</span><span class="c1"></span> 
     <span class="c1">// Max stack size is 1 GB on 64-bit, 250 MB on 32-bit.
 </span><span class="c1"></span>    <span class="c1">// Using decimal instead of binary GB and MB because
 </span><span class="c1"></span>    <span class="c1">// they look nicer in the stack overflow failure message.
@@ -1759,10 +1784,10 @@ TEXT runtime·gogo(SB), NOSPLIT, $16-8
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
         <span class="nx">maxstacksize</span> <span class="p">=</span> <span class="mi">250000000</span>
     <span class="p">}</span>
-
+ 
     <span class="c1">// Allow newproc to start new Ms.
 </span><span class="c1"></span>    <span class="nx">mainStarted</span> <span class="p">=</span> <span class="kc">true</span>
-
+ 
     <span class="k">if</span> <span class="nx">GOARCH</span> <span class="o">!=</span> <span class="s">&#34;wasm&#34;</span> <span class="p">{</span> <span class="c1">// no threads on wasm yet, so no sysmon
 </span><span class="c1"></span>        <span class="c1">//现在执行的是main goroutine，所以使用的是main goroutine的栈，需要切换到g0栈去执行newm()
 </span><span class="c1"></span>        <span class="nf">systemstack</span><span class="p">(</span><span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
@@ -1770,34 +1795,34 @@ TEXT runtime·gogo(SB), NOSPLIT, $16-8
 </span><span class="c1"></span>            <span class="nf">newm</span><span class="p">(</span><span class="nx">sysmon</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
         <span class="p">})</span>
     <span class="p">}</span>
-
+     
     <span class="c1">//......
-</span><span class="c1"></span>
+</span><span class="c1"></span> 
     <span class="c1">//调用runtime包的初始化函数，由编译器实现
 </span><span class="c1"></span>    <span class="nf">runtime_init</span><span class="p">()</span> <span class="c1">// must be before defer
-</span><span class="c1"></span>
+</span><span class="c1"></span> 
     <span class="c1">// Record when the world started.
 </span><span class="c1"></span>    <span class="nx">runtimeInitTime</span> <span class="p">=</span> <span class="nf">nanotime</span><span class="p">()</span>
-
+ 
     <span class="nf">gcenable</span><span class="p">()</span>  <span class="c1">//开启垃圾回收器
-</span><span class="c1"></span>
+</span><span class="c1"></span> 
     <span class="c1">//......
-</span><span class="c1"></span>
+</span><span class="c1"></span> 
         <span class="c1">//main 包的初始化函数，也是由编译器实现，会递归的调用我们import进来的包的初始化函数
 </span><span class="c1"></span>    <span class="nx">fn</span> <span class="o">:=</span> <span class="nx">main_init</span> <span class="c1">// make an indirect call, as the linker doesn&#39;t know the address of the main package when laying down the runtime
 </span><span class="c1"></span>    <span class="nf">fn</span><span class="p">()</span>
-
+ 
     <span class="c1">//......
-</span><span class="c1"></span>
+</span><span class="c1"></span>     
         <span class="c1">//调用main.main函数
 </span><span class="c1"></span>    <span class="nx">fn</span> <span class="p">=</span> <span class="nx">main_main</span> <span class="c1">// make an indirect call, as the linker doesn&#39;t know the address of the main package when laying down the runtime
 </span><span class="c1"></span>    <span class="nf">fn</span><span class="p">()</span>
-
+     
     <span class="c1">//......
-</span><span class="c1"></span>
+</span><span class="c1"></span> 
         <span class="c1">//进入系统调用，退出进程，可以看出main goroutine并未返回，而是直接进入系统调用退出进程了
 </span><span class="c1"></span>    <span class="nf">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
+     
         <span class="c1">//保护性代码，如果exit意外返回，下面的代码也会让该进程crash死掉
 </span><span class="c1"></span>    <span class="k">for</span> <span class="p">{</span>
         <span class="kd">var</span> <span class="nx">x</span> <span class="o">*</span><span class="kt">int32</span>
@@ -1831,14 +1856,14 @@ TEXT runtime·gogo(SB), NOSPLIT, $16-8
     <span class="item-title">上次更新</span>
     <span class="item-content">
         2019-11-13
-
+        
     </span>
   </p>
-
-
+  
+  
 </div>
 <footer class="post-footer">
-
+      
       <nav class="post-nav">
         <a class="prev" href="/post/%E8%AF%91contiguous-stacks/">
             <i class="iconfont icon-left"></i>
@@ -1854,11 +1879,11 @@ TEXT runtime·gogo(SB), NOSPLIT, $16-8
     </footer>
   </article>
         </div>
+        
 
+  
 
-
-
-
+  
 
       </div>
     </main>
@@ -1874,15 +1899,15 @@ TEXT runtime·gogo(SB), NOSPLIT, $16-8
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 -
+    主题 - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
-
+  
 
   <span class="copyright-year">
-    &copy;
-    2019 -
+    &copy; 
+    2019 - 
     2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
   </span>
 </div>
@@ -1893,7 +1918,7 @@ TEXT runtime·gogo(SB), NOSPLIT, $16-8
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

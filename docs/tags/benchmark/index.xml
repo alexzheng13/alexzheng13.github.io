@@ -7,20 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 26 Sep 2026 23:00:00 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/tags/benchmark/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/tags/benchmark/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>大模型与 AI Agent Benchmark 全景指南：它们究竟在评估什么</title>
       <link>https://alexzheng13.github.io/post/llm-agent-benchmarks-guide/</link>
       <pubDate>Sat, 26 Sep 2026 23:00:00 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/llm-agent-benchmarks-guide/</guid>
-      <description>&lt;p&gt;看模型发布报告时，我们经常会遇到一长串名字：ARC-E、ARC-C、MMLU、GPQA、GSM8K、HumanEval、SWE-bench、GAIA、WebArena、OSWorld……它们的分数不能直接横向比较，因为每个 benchmark 测量的能力、输入形式、可用工具和评分方式都不同。&lt;/p&gt;
+      <description>&lt;p&gt;看模型发布报告时，我们经常会遇到一长串名字：Artificial Analysis Intelligence Index、LMArena、HELM、ARC-E、MMLU、GSM8K、SWE-bench、GAIA、WebArena、OSWorld……它们的分数不能直接横向比较，因为这里既有综合指数和排行榜，也有单项 benchmark；各自测量的能力、输入形式、可用工具和评分方式都不同。&lt;/p&gt;
 
 &lt;p&gt;本文整理一张从“大模型答题”到“Agent 完成真实任务”的评测地图，并解释每个常见 benchmark 究竟是什么、适合测什么，以及不能从分数中推出什么结论。&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

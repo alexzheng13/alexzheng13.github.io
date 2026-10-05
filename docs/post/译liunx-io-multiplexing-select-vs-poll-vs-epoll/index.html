@@ -56,7 +56,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="（译）Liunx – IO Multiplexing – Select VS Poll VS Epoll" />
 <meta property="og:description" content="导读 &emsp;&emsp;读这篇文章前可以先了解下Liunx5种I/O模型 &emsp;&emsp;参考文献: I/O Models &ndash;Richard Stevens的《UNI" />
 <meta property="og:type" content="article" />
@@ -112,31 +111,44 @@
       </a>
   </ul>
 
-
+  
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/post/%E8%AF%91liunx-io-multiplexing-select-vs-poll-vs-epoll/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/en/post/linux-io-multiplexing-select-poll-epoll/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -149,23 +161,23 @@
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/post/%E8%AF%91liunx-io-multiplexing-select-vs-poll-vs-epoll/" lang="zh-cn" hreflang="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/en/post/linux-io-multiplexing-select-poll-epoll/" lang="en" hreflang="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
@@ -182,6 +194,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/about/">关于我</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -191,7 +216,7 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <article class="post">
-
+    
     <header class="post-header">
       <h1 class="post-title">（译）Liunx – IO Multiplexing – Select VS Poll VS Epoll</h1>
 
@@ -203,7 +228,7 @@
             </div>
           <span class="more-meta"> 约 3712 字 </span>
           <span class="more-meta"> 预计阅读 8 分钟 </span>
-
+        
       </div>
     </header>
 
@@ -242,7 +267,7 @@
   </div>
 </div>
     <div class="post-content">
-
+      
 
 <h3 id="导读">导读</h3>
 
@@ -419,9 +444,9 @@
 #include &lt;sys/select.h&gt;
 #include &lt;sys/time.h&gt;
 #include &lt;unistd.h&gt;
-
+ 
 #define MAXBUF 256
-
+ 
 void child_process(void)
 {
   sleep(2);
@@ -434,20 +459,20 @@ void child_process(void)
   addr.sin_family = AF_INET;
   addr.sin_port = htons(2000);
   addr.sin_addr.s_addr = inet_addr(&#34;127.0.0.1&#34;);
-
+ 
   connect(sockfd, (struct sockaddr*)&amp;addr, sizeof(addr));
-
+ 
   printf(&#34;child {%d} connected \n&#34;, getpid());
   while(1){
         int sl = (random() % 10 ) +  1;
         num++;
-       sleep(sl);
-    sprintf (msg, &#34;Test message %d from client %d&#34;, num, getpid());
-    n = write(sockfd, msg, strlen(msg));  /* Send message */
+     	sleep(sl);
+  	sprintf (msg, &#34;Test message %d from client %d&#34;, num, getpid());
+  	n = write(sockfd, msg, strlen(msg));	/* Send message */
   }
-
+ 
 }
-
+ 
 int main()
 {
   char buffer[MAXBUF];
@@ -459,46 +484,46 @@ int main()
   fd_set rset;
   for(i=0;i&lt;5;i++)
   {
-    if(fork() == 0)
-    {
-      child_process();
-      exit(0);
-    }
+  	if(fork() == 0)
+  	{
+  		child_process();
+  		exit(0);
+  	}
   }
-
+ 
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
   memset(&amp;addr, 0, sizeof (addr));
   addr.sin_family = AF_INET;
   addr.sin_port = htons(2000);
   addr.sin_addr.s_addr = INADDR_ANY;
   bind(sockfd,(struct sockaddr*)&amp;addr ,sizeof(addr));
-  listen (sockfd, 5);
-
-  for (i=0;i&lt;5;i++)
+  listen (sockfd, 5); 
+ 
+  for (i=0;i&lt;5;i++) 
   {
     memset(&amp;client, 0, sizeof (client));
     addrlen = sizeof(client);
     fds[i] = accept(sockfd,(struct sockaddr*)&amp;client, &amp;addrlen);
     if(fds[i] &gt; max)
-      max = fds[i];
+    	max = fds[i];
   }
-
+  
   while(1){
-  FD_ZERO(&amp;rset);
-    for (i = 0; i&lt; 5; i++ ) {
-      FD_SET(fds[i],&amp;rset);
-    }
-
-     puts(&#34;round again&#34;);
-  select(max+1, &amp;rset, NULL, NULL, NULL);
-
-  for(i=0;i&lt;5;i++) {
-    if (FD_ISSET(fds[i], &amp;rset)){
-      memset(buffer,0,MAXBUF);
-      read(fds[i], buffer, MAXBUF);
-      puts(buffer);
-    }
-  }
+	FD_ZERO(&amp;rset);
+  	for (i = 0; i&lt; 5; i++ ) {
+  		FD_SET(fds[i],&amp;rset);
+  	}
+ 
+   	puts(&#34;round again&#34;);
+	select(max+1, &amp;rset, NULL, NULL, NULL);
+ 
+	for(i=0;i&lt;5;i++) {
+		if (FD_ISSET(fds[i], &amp;rset)){
+			memset(buffer,0,MAXBUF);
+			read(fds[i], buffer, MAXBUF);
+			puts(buffer);
+		}
+	}	
   }
   return 0;
 }</pre></td></tr></table>
@@ -552,7 +577,7 @@ fd_set是一个元素为int,长度为32的数组(32 *32bit=1024bits,每一位代
 <td class="lntd">
 <pre class="chroma">struct pollfd {
       int fd;
-      short events;
+      short events; 
       short revents;
 };</pre></td></tr></table>
 </div>
@@ -585,7 +610,7 @@ fd_set是一个元素为int,长度为32的数组(32 *32bit=1024bits,每一位代
 </span><span class="lnt">21
 </span></pre></td>
 <td class="lntd">
-<pre class="chroma">  for (i=0;i&lt;5;i++)
+<pre class="chroma">  for (i=0;i&lt;5;i++) 
   {
     memset(&amp;client, 0, sizeof (client));
     addrlen = sizeof(client);
@@ -594,17 +619,17 @@ fd_set是一个元素为int,长度为32的数组(32 *32bit=1024bits,每一位代
   }
   sleep(1);
   while(1){
-    puts(&#34;round again&#34;);
-  poll(pollfds, 5, 50000);
-
-  for(i=0;i&lt;5;i++) {
-    if (pollfds[i].revents &amp; POLLIN){
-      pollfds[i].revents = 0;
-      memset(buffer,0,MAXBUF);
-      read(pollfds[i].fd, buffer, MAXBUF);
-      puts(buffer);
-    }
-  }
+  	puts(&#34;round again&#34;);
+	poll(pollfds, 5, 50000);
+ 
+	for(i=0;i&lt;5;i++) {
+		if (pollfds[i].revents &amp; POLLIN){
+			pollfds[i].revents = 0;
+			memset(buffer,0,MAXBUF);
+			read(pollfds[i].fd, buffer, MAXBUF);
+			puts(buffer);
+		}
+	}
   }</pre></td></tr></table>
 </div>
 </div>
@@ -672,25 +697,25 @@ fd_set是一个元素为int,长度为32的数组(32 *32bit=1024bits,每一位代
 <pre class="chroma">  int epfd = epoll_create(10);
   ...
   ...
-  for (i=0;i&lt;5;i++)
+  for (i=0;i&lt;5;i++) 
   {
     static struct epoll_event ev;
     memset(&amp;client, 0, sizeof (client));
     addrlen = sizeof(client);
     ev.data.fd = accept(sockfd,(struct sockaddr*)&amp;client, &amp;addrlen);
     ev.events = EPOLLIN;
-    epoll_ctl(epfd, EPOLL_CTL_ADD, ev.data.fd, &amp;ev);
+    epoll_ctl(epfd, EPOLL_CTL_ADD, ev.data.fd, &amp;ev); 
   }
-
+  
   while(1){
-    puts(&#34;round again&#34;);
-    nfds = epoll_wait(epfd, events, 5, 10000);
-
-  for(i=0;i&lt;nfds;i++) {
-      memset(buffer,0,MAXBUF);
-      read(events[i].data.fd, buffer, MAXBUF);
-      puts(buffer);
-  }
+  	puts(&#34;round again&#34;);
+  	nfds = epoll_wait(epfd, events, 5, 10000);
+	
+	for(i=0;i&lt;nfds;i++) {
+			memset(buffer,0,MAXBUF);
+			read(events[i].data.fd, buffer, MAXBUF);
+			puts(buffer);
+	}
   }</pre></td></tr></table>
 </div>
 </div>
@@ -753,14 +778,14 @@ fd_set是一个元素为int,长度为32的数组(32 *32bit=1024bits,每一位代
     <span class="item-title">上次更新</span>
     <span class="item-content">
         2021-02-11
-
+        
     </span>
   </p>
-
-
+  
+  
 </div>
 <footer class="post-footer">
-
+      
       <nav class="post-nav">
         <a class="prev" href="/post/cs230-career-advice-in-ai/">
             <i class="iconfont icon-left"></i>
@@ -776,11 +801,11 @@ fd_set是一个元素为int,长度为32的数组(32 *32bit=1024bits,每一位代
     </footer>
   </article>
         </div>
+        
 
+  
 
-
-
-
+  
 
       </div>
     </main>
@@ -796,15 +821,15 @@ fd_set是一个元素为int,长度为32的数组(32 *32bit=1024bits,每一位代
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    主题 -
+    主题 - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
-
+  
 
   <span class="copyright-year">
-    &copy;
-    2019 -
+    &copy; 
+    2019 - 
     2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
   </span>
 </div>
@@ -815,7 +840,7 @@ fd_set是一个元素为int,长度为32的数组(32 *32bit=1024bits,每一位代
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

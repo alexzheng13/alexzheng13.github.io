@@ -7,20 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 12 Sep 2026 21:07:45 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/tags/context-engineering/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/tags/context-engineering/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Anthropic Agent Evolution II: Context Reset and Structured Handoff</title>
       <link>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-2-context-reset-and-handoff/</link>
       <pubDate>Sat, 12 Sep 2026 21:07:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-2-context-reset-and-handoff/</guid>
       <description>&lt;p&gt;The central tension in long-running work is not whether a model can write code. It is that a task may last hours or days while every context window is finite. Replaying the entire history eventually creates both capacity and noise problems.&lt;/p&gt;
 
 &lt;p&gt;Anthropic&amp;rsquo;s first long-running agent harness answered with a simple principle: &lt;strong&gt;reset conversational context, but externalize project state into structured artifacts that the next agent can recover.&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

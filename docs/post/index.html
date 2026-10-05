@@ -58,7 +58,6 @@
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="Posts" />
 <meta property="og:description" content="Hugo theme even example site." />
 <meta property="og:type" content="website" />
@@ -131,6 +130,19 @@
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -176,6 +188,19 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/about/">关于我</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -219,7 +244,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">文章归档</h1>
-      <p>按年份浏览全部 26 篇文章</p>
+      <p>按年份浏览全部 29 篇文章</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         订阅 RSS
@@ -267,6 +292,18 @@
         <a class="blog-archive-index-item" href="/post/anthropic-agent-evolution-4-managed-agent-runtime/">
           <time datetime="2026-09-12">09-12</time>
           <span>Anthropic Agent 演进（四）：Managed Agent Runtime——Session、Harness 与 Sandbox</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/reinforcement-learning-3-exploration-and-data/">
+          <time datetime="2026-08-27">08-27</time>
+          <span>强化学习（三）：探索与利用、策略采样和数据来源</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/reinforcement-learning-2-classic-algorithms/">
+          <time datetime="2026-08-26">08-26</time>
+          <span>强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/reinforcement-learning-1-foundations/">
+          <time datetime="2026-08-25">08-25</time>
+          <span>强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程</span>
         </a>
         <a class="blog-archive-index-item" href="/post/stanford-cs329a-self-improving-ai-agents/">
           <time datetime="2026-08-11">08-11</time>

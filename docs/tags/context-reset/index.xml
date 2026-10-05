@@ -7,20 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 12 Sep 2026 21:07:45 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/tags/context-reset/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/tags/context-reset/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Anthropic Agent 演进（二）：Context Reset 与 Structured Handoff</title>
       <link>https://alexzheng13.github.io/post/anthropic-agent-evolution-2-context-reset-and-handoff/</link>
       <pubDate>Sat, 12 Sep 2026 21:07:45 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/anthropic-agent-evolution-2-context-reset-and-handoff/</guid>
       <description>&lt;p&gt;长任务的核心矛盾不是“模型能不能写代码”，而是：任务可能持续数小时或数天，但一次 Context Window 终究有限。把整个历史无限重放，会同时遇到容量和噪声问题。&lt;/p&gt;
 
 &lt;p&gt;Anthropic 第一代 Long-Running Agent Harness 的答案是：&lt;strong&gt;重置对话上下文，但把项目状态写进结构化工件，让下一轮 Agent 可以恢复工作。&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CartPole on Blowing in the wind</title>
+    <link>https://alexzheng13.github.io/tags/cartpole/</link>
+    <description>Recent content in CartPole on Blowing in the wind</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 25 Aug 2026 09:00:00 +0200</lastBuildDate>
+    
+	<atom:link href="https://alexzheng13.github.io/tags/cartpole/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程</title>
+      <link>https://alexzheng13.github.io/post/reinforcement-learning-1-foundations/</link>
+      <pubDate>Tue, 25 Aug 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/reinforcement-learning-1-foundations/</guid>
+      <description>&lt;p&gt;强化学习最容易让人困惑的地方，是算法名字很多，但它们真正回答的始终是同一个问题：&lt;strong&gt;一个智能体怎样通过与环境交互，学会做出能带来长期收益的决策？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这组文章从最基本的问题定义开始，再逐步走向 Q-Learning、DQN、Actor-Critic、PPO、探索策略以及大模型后训练。本文是系列第一篇，先建立后续所有算法共用的语言：状态、动作、策略、回报、MDP、价值函数和贝尔曼方程。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -59,7 +59,6 @@ This article organizes my notes around the Anthropic Institute essay When AI bui
 <link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
 <script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
 
-
 <meta property="og:title" content="When AI Starts Building Itself: Anthropic&#39;s Internal Practice and the Future of Recursive Self-Improvement" />
 <meta property="og:description" content="Something important is happening inside Anthropic: AI is no longer only the product being researched and built. It is increasingly participating in the process of building AI itself. Claude has progressed from completing code to editing repositories, running experiments, reviewing changes, and coordinating parallel agents.
 
@@ -152,6 +151,19 @@ This article organizes my notes around the Anthropic Institute essay When AI bui
   </nav>
 
 
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
 </nav>
 
   <div class="container" id="mobile-panel">
@@ -197,6 +209,19 @@ This article organizes my notes around the Anthropic Institute essay When AI bui
       </li><li class="menu-item">
         <a class="menu-item-link" href="/en/about/">About</a>
       </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
   </ul>
 </nav>
 
@@ -652,7 +677,11 @@ Future: AI proposes directions → AI experiments and cross-validates → humans
           <a href="/en/tags/ai-rd/">AI R&amp;D</a>
           </div>
       <nav class="post-nav">
-        
+        <a class="prev" href="/en/post/agentic-llm-1-reasoning/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Agentic LLM Reasoning (I): From Chain of Thought to Search, Reflection, and RLVR</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
         <a class="next" href="/en/post/private-ai-layer-on-base-models/">
             <span class="next-text nav-default">The Next 5–10 Years of AI: Base Models, Personal Intelligence, and Private Enterprise Layers</span>
             <span class="next-text nav-mobile">Next</span>

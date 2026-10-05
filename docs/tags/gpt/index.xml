@@ -7,15 +7,15 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Sat, 26 Sep 2026 21:00:00 +0200</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/tags/gpt/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/tags/gpt/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>nanochat 源码解读：从参数配置到单步训练</title>
       <link>https://alexzheng13.github.io/post/nanochat-gpt-pretraining-from-source/</link>
       <pubDate>Sat, 26 Sep 2026 21:00:00 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/nanochat-gpt-pretraining-from-source/</guid>
       <description>&lt;p&gt;本文沿着 &lt;code&gt;scripts/base_train.py&lt;/code&gt; 的执行顺序阅读 nanochat：从命令行参数、随机种子和 DDP 环境开始，依次进入模型构建、权重初始化、Scaling Laws、优化器、DataLoader、梯度累积与单步训练。重点不是抽象介绍 GPT，而是理解源码中的每一段配置如何落到真实训练过程里。&lt;/p&gt;
 
@@ -25,12 +25,12 @@
 &lt;p&gt;本文默认读者已经了解 token embedding、causal self-attention、MLP、残差连接和交叉熵。如果这些概念还不熟悉，建议先阅读我的简易实现文章：&lt;a href=&#34;https://alexzheng13.github.io/post/transformer-architecture/&#34;&gt;Transformer Architecture：从 Token Embedding 到训练循环&lt;/a&gt;，再回来读 nanochat 的工程化实现。&lt;/p&gt;
 &lt;/blockquote&gt;</description>
     </item>
-
+    
     <item>
       <title>Transformer Architecture：从 Token Embedding 到训练循环</title>
       <link>https://alexzheng13.github.io/post/transformer-architecture/</link>
       <pubDate>Mon, 14 Sep 2026 10:25:02 +0200</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/post/transformer-architecture/</guid>
       <description>&lt;p&gt;Transformer 看起来由许多组件组成，但一条 GPT 风格的前向路径可以概括为：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -67,6 +67,6 @@ Next-token logits → Cross-Entropy Loss&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;
 &lt;/div&gt;
 &lt;p&gt;本文从一个简单的 GPT 实现出发，沿着数据流解释每一步的作用和张量形状。完整源码放在文章最后，读完前面的原理后可以结合代码对照理解。&lt;/p&gt;</description>
     </item>
-
+    
   </channel>
 </rss>

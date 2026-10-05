@@ -7,36 +7,36 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Fri, 01 Jan 2021 12:34:14 +0800</lastBuildDate>
-
-  <atom:link href="https://alexzheng13.github.io/en/categories/go/index.xml" rel="self" type="application/rss+xml" />
-
-
+    
+	<atom:link href="https://alexzheng13.github.io/en/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>A Practical Introduction to Go Assembly (2)</title>
       <link>https://alexzheng13.github.io/en/post/introduction-to-go-assembly-2/</link>
       <pubDate>Fri, 01 Jan 2021 12:34:14 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/introduction-to-go-assembly-2/</guid>
       <description>Function call from assembly perspective ﻿ Let’s start with a simple example:
 1 2 3 4 5 6 7 8 9 10  package main func main() { add(1, 1) } func add(a, b int64) (c int64) { c = a + b return }    After executing the go tool compile -S compliation_add.go command, the assembly code is as follows
 1 2 3 4 5 6 7  .</description>
     </item>
-
+    
     <item>
       <title>A Practical Introduction to Go Assembly (1)</title>
       <link>https://alexzheng13.github.io/en/post/introduction-to-go-assembly-1/</link>
       <pubDate>Wed, 30 Dec 2020 11:25:47 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/introduction-to-go-assembly-1/</guid>
       <description>Program storage space layout  A process is an executing program instance. Each instance has its own address space and execution state. A program becomes a process when the operating system adds the appropriate information to the kernel data structures and allocates the necessary resources to run the program code.
  A thread is an abstract data type that represents a thread of execution within a process. A thread has its own execution stack, program counter value, register set and state.</description>
     </item>
-
+    
     <item>
       <title>Use a Mutex or a Channel?</title>
       <link>https://alexzheng13.github.io/en/post/use-a-mutex-or-a-channel/</link>
       <pubDate>Thu, 16 Jan 2020 11:27:00 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/use-a-mutex-or-a-channel/</guid>
       <description>Use a sync.Mutex or a channel?
  Gives us 3 channel usage scenarios respectively:
@@ -45,46 +45,46 @@
 Summary
 ﻿Go implements the CSP communication model through channels, which are mainly used for message passing and event notification between goroutines.</description>
     </item>
-
+    
     <item>
       <title>Inside Go&#39;s Channel Runtime</title>
       <link>https://alexzheng13.github.io/en/post/inside-go-channel-runtime/</link>
       <pubDate>Sun, 05 Jan 2020 11:19:10 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/inside-go-channel-runtime/</guid>
       <description>Channel is a very important type in the Go language and is the first object in Go. Through channels, Go implements memory sharing through communication. Channel is an important means of transferring data and synchronizing between multiple goroutines.  Note: All source code analysis in this article is based on Go1.13.3. Different versions may have different implementations.
 channel syntax The syntax for declaring a channel is as follows:</description>
     </item>
-
+    
     <item>
       <title>Implementing the Raft Protocol in Go (1)</title>
       <link>https://alexzheng13.github.io/en/post/implementing-raft-in-go-1/</link>
       <pubDate>Sun, 22 Dec 2019 17:13:00 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/implementing-raft-in-go-1/</guid>
       <description>Introduction  The implementation idea comes from: MIT 6.824 course Lab 2: Raft
  Before doing the experiment, you should read the raft paper carefully, here it is: raft paper raft translation
 Recommended reading: Students&amp;rsquo; Guide to Raft Raft Understandable Distributed Consensus
 lab content  In this lab, you will implement most of the Raft design described in Extended Paper, including saving persistent state and reading it after a node fails and then restarts.</description>
     </item>
-
+    
     <item>
       <title>Inside Go&#39;s Main Goroutine Scheduler (2)</title>
       <link>https://alexzheng13.github.io/en/post/go-main-goroutine-scheduler-2/</link>
       <pubDate>Wed, 13 Nov 2019 22:20:10 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/go-main-goroutine-scheduler-2/</guid>
       <description>9. Enter runtime/proc.go and scheduler initialization 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65  func schedinit() { // raceinit must be the first call to race detector.</description>
     </item>
-
+    
     <item>
       <title>Inside Go&#39;s Main Goroutine Scheduler (1)</title>
       <link>https://alexzheng13.github.io/en/post/go-main-goroutine-scheduler-1/</link>
       <pubDate>Sun, 10 Nov 2019 14:40:10 +0800</pubDate>
-
+      
       <guid>https://alexzheng13.github.io/en/post/go-main-goroutine-scheduler-1/</guid>
       <description>Under the compilation, all traces are revealed.   1.go program entry_rt0_amd64_linux: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  // The TEXT instruction defines the symbol _rt0_amd64_linux, the global data symbol is declared with DATA, and GLOBL defines the data as global. // SB SB virtual register: saves the starting address of the program address space; the value saved by this SB register is the starting address of the TEXT segment, which is mainly used to locate global symbols.</description>
     </item>
-
+    
   </channel>
 </rss>
