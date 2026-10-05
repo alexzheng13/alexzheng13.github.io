@@ -6,17 +6,71 @@
     <description>Recent content in Tags on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 29 Sep 2026 09:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 05 Oct 2026 19:30:00 +0200</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>Action</title>
+      <link>https://alexzheng13.github.io/tags/action/</link>
+      <pubDate>Mon, 05 Oct 2026 19:30:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/action/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Agentic LLM</title>
       <link>https://alexzheng13.github.io/tags/agentic-llm/</link>
-      <pubDate>Tue, 29 Sep 2026 09:00:00 +0200</pubDate>
+      <pubDate>Mon, 05 Oct 2026 19:30:00 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/tags/agentic-llm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Model-Based RL</title>
+      <link>https://alexzheng13.github.io/tags/model-based-rl/</link>
+      <pubDate>Mon, 05 Oct 2026 19:30:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/model-based-rl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Robotics</title>
+      <link>https://alexzheng13.github.io/tags/robotics/</link>
+      <pubDate>Mon, 05 Oct 2026 19:30:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/robotics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>VLA</title>
+      <link>https://alexzheng13.github.io/tags/vla/</link>
+      <pubDate>Mon, 05 Oct 2026 19:30:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/vla/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>VLM</title>
+      <link>https://alexzheng13.github.io/tags/vlm/</link>
+      <pubDate>Mon, 05 Oct 2026 19:30:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/vlm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>World Model</title>
+      <link>https://alexzheng13.github.io/tags/world-model/</link>
+      <pubDate>Mon, 05 Oct 2026 19:30:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/world-model/</guid>
       <description></description>
     </item>
     

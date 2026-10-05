@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="Part II of the Agentic LLM series: how VLMs ground visual environments, how VLAs connect language and perception to robot control, and how world models support prediction and planning." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/en/post/agentic-llm-2-action/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/agentic-llm-2-action/">
+<meta name="site-language-route" data-language="en" content="/en/post/agentic-llm-2-action/">
+<meta name="site-current-language" content="en"><script defer src="/js/language-routing.js?v=4e8327400477593ad412f438fdb86a1f"></script>
+
+<meta property="og:title" content="Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models" />
+<meta property="og:description" content="Part II of the Agentic LLM series: how VLMs ground visual environments, how VLAs connect language and perception to robot control, and how world models support prediction and planning." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/en/post/agentic-llm-2-action/" />
+<meta property="article:published_time" content="2026-10-05T19:30:00+02:00" />
+<meta property="article:modified_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models">
+<meta itemprop="description" content="Part II of the Agentic LLM series: how VLMs ground visual environments, how VLAs connect language and perception to robot control, and how world models support prediction and planning.">
+
+
+<meta itemprop="datePublished" content="2026-10-05T19:30:00&#43;02:00" />
+<meta itemprop="dateModified" content="2026-10-05T19:30:00&#43;02:00" />
+<meta itemprop="wordCount" content="2604">
+
+
+
+<meta itemprop="keywords" content="Agentic LLM,Action,VLM,VLA,World Model,Robotics,Model-Based RL," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models"/>
+<meta name="twitter:description" content="Part II of the Agentic LLM series: how VLMs ground visual environments, how VLAs connect language and perception to robot control, and how world models support prediction and planning."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/en/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/en/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/en/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/en/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/agentic-llm-2-action/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/agentic-llm-2-action/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/en/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/agentic-llm-2-action/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/agentic-llm-2-action/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/en/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/about/">About</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-10-05 </span>
+        <div class="post-category">
+            <a href="/en/categories/ai-agents/"> AI Agents </a>
+            </div>
+          <span class="more-meta"> 2604 words </span>
+          <span class="more-meta"> 13 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-action-is-more-than-outputting-a-verb">1. Action is more than outputting a verb</a></li>
+<li><a href="#2-vlms-let-the-agent-perceive-its-environment">2. VLMs: let the agent perceive its environment</a>
+<ul>
+<li><a href="#2-1-what-can-a-vlm-do">2.1 What can a VLM do?</a></li>
+<li><a href="#2-2-four-common-training-routes">2.2 Four common training routes</a></li>
+</ul></li>
+<li><a href="#3-from-vlm-to-vla-seeing-is-not-acting">3. From VLM to VLA: seeing is not acting</a></li>
+<li><a href="#4-four-representative-vla-designs">4. Four representative VLA designs</a>
+<ul>
+<li><a href="#4-1-mobility-vla-separate-semantic-navigation-into-two-levels">4.1 Mobility VLA: separate semantic navigation into two levels</a></li>
+<li><a href="#4-2-lm-nav-compose-pretrained-models-without-further-fine-tuning">4.2 LM-Nav: compose pretrained models without further fine-tuning</a></li>
+<li><a href="#4-3-rt-2-represent-robot-actions-as-tokens">4.3 RT-2: represent robot actions as tokens</a></li>
+<li><a href="#4-4-π₀-generate-continuous-actions-with-flow-matching">4.4 π₀: generate continuous actions with flow matching</a></li>
+</ul></li>
+<li><a href="#5-how-does-a-vla-learn-to-act">5. How does a VLA learn to act?</a></li>
+<li><a href="#6-world-models-predict-consequences-before-acting">6. World models: predict consequences before acting</a>
+<ul>
+<li><a href="#6-1-model-based-and-model-free-rl">6.1 Model-based and model-free RL</a></li>
+</ul></li>
+<li><a href="#7-two-directions-for-agentic-world-models">7. Two directions for agentic world models</a>
+<ul>
+<li><a href="#7-1-llm4mbrl-use-an-llm-as-a-world-model">7.1 LLM4MBRL: use an LLM as a world model</a></li>
+<li><a href="#7-2-mbrl4llm-adapt-a-model-through-environment-interaction">7.2 MBRL4LLM: adapt a model through environment interaction</a></li>
+</ul></li>
+<li><a href="#8-a-unified-comparison-llm-vlm-decision-transformer-vla-and-world-model">8. A unified comparison: LLM, VLM, Decision Transformer, VLA, and world model</a></li>
+<li><a href="#9-what-is-still-missing-between-a-demo-and-deployment">9. What is still missing between a demo and deployment?</a>
+<ul>
+<li><a href="#9-1-grounding-and-executability">9.1 Grounding and executability</a></li>
+<li><a href="#9-2-uncertainty-and-recovery">9.2 Uncertainty and recovery</a></li>
+<li><a href="#9-3-permissions-and-safety-boundaries">9.3 Permissions and safety boundaries</a></li>
+<li><a href="#9-4-end-to-end-metrics">9.4 End-to-end metrics</a></li>
+</ul></li>
+<li><a href="#10-conclusion-action-is-a-chain-from-semantics-to-consequences">10. Conclusion: action is a chain from semantics to consequences</a></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>Reasoning proposes what should happen next. An agent begins to affect the world only when that decision becomes an API call, a mouse click, or a robot trajectory.</p>
+
+<p>That is the fundamental difference between <strong>action</strong> and ordinary text generation. A bad sentence can be regenerated; an action may change state, consume resources, or produce an irreversible result. An agent must therefore understand which actions are available, predict their consequences, and continue from the next observation.</p>
+
+<p>This is the <strong>second article in the Agentic Large Language Models series</strong>. <a href="/en/post/agentic-llm-1-reasoning/">Part I</a> covered reasoning from Chain of Thought and search to reflection and RLVR. This article follows a different progression:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Perceive the environment (VLM)
+             ↓
+Map intent to action (VLA)
+             ↓
+Predict what follows (World Model)
+             ↓
+Plan, compare, and revise before execution</code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p><strong>Series</strong>: <a href="/en/post/agentic-llm-1-reasoning/">(I) Reasoning</a> · <strong>(II) Action</strong> · (III) Interaction (coming next)</p>
+</blockquote>
+
+<h2 id="1-action-is-more-than-outputting-a-verb">1. Action is more than outputting a verb</h2>
+
+<p>For a chatbot, generated tokens are usually the final product. For an agent, tokens often serve as input to an execution system.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Chatbot:  Prompt → Tokens
+
+Agent:    Goal → Reasoning → Action → Environment
+                    ↑                     ↓
+                    └──── Observation ────┘</code></pre></td></tr></table>
+</div>
+</div>
+<p>Let <code>o_t</code> be the observation at time <code>t</code>, <code>g</code> the user goal, and <code>h_t</code> the previous action history. A policy can be written as:</p>
+
+<div class="math-display">
+\[
+a_t \sim \pi_{\theta}\!\left(a\mid o_{\le t}, g, h_t\right)
+\]
+</div>
+
+<p>After receiving an action, the environment produces a new state, observation, and reward:</p>
+
+<div class="math-display">
+\[
+s_{t+1},\,o_{t+1},\,r_t \sim P\!\left(\cdot\mid s_t,a_t\right)
+\]
+</div>
+
+<p>The action <code>a_t</code> may belong to very different spaces:</p>
+
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Action representation</th>
+<th>Executor</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Tool agent</td>
+<td>JSON, function name, parameters</td>
+<td>API / tool runtime</td>
+</tr>
+
+<tr>
+<td>Computer-use agent</td>
+<td>Mouse, keyboard, GUI coordinates</td>
+<td>Browser or operating system</td>
+</tr>
+
+<tr>
+<td>Code agent</td>
+<td>Patches, shell commands, test instructions</td>
+<td>Sandbox / terminal</td>
+</tr>
+
+<tr>
+<td>Embodied agent</td>
+<td>Velocity, pose, joints, or trajectories</td>
+<td>Robot controller</td>
+</tr>
+</tbody>
+</table>
+
+<p>This article focuses on the clearest path from understanding to physical behavior: <strong>Vision-Language Models (VLMs)</strong>, <strong>Vision-Language-Action Models (VLAs)</strong>, and <strong>world models</strong>. Software tools and API actions will return in the Interaction article alongside observations, state management, and permissions.</p>
+
+<p><img src="/img/posts/agentic-llm-2-action/action-taxonomy.webp" alt="A taxonomy of Agentic LLM action methods, covering multimodal models, robotic control, tool use, and software agents" /></p>
+
+<p><em>Action spans robots, tools, software assistants, and world models. Each must translate model output into constrained, executable, and verifiable operations.</em></p>
+
+<h2 id="2-vlms-let-the-agent-perceive-its-environment">2. VLMs: let the agent perceive its environment</h2>
+
+<p>A language-only model can process only the world that has already been converted into tokens. Real environments first arrive as images, video, audio, and sensor state. A VLM maps visual information into representations that a language model can use.</p>
+
+<p>A typical VLM contains four parts:</p>
+
+<ol>
+<li><strong>Vision encoder</strong>: a CNN or Vision Transformer encodes an image into visual features.</li>
+<li><strong>Text encoder / tokenizer</strong>: processes questions, instructions, and text history.</li>
+<li><strong>Multimodal projector</strong>: maps visual features into the language model&rsquo;s embedding space.</li>
+<li><strong>Text decoder</strong>: generates output conditioned on both visual and text tokens.</li>
+</ol>
+
+<p><img src="/img/posts/agentic-llm-2-action/vlm-architecture.webp" alt="A typical VLM architecture in which a multimodal projector aligns visual features with tokens consumed by a text decoder" /></p>
+
+<p><em>In LLaVA-style systems, the projector need not turn an image into a caption first. It aligns visual features directly with token representations the language model can consume.</em></p>
+
+<p>If the visual encoder produces <code>z_v</code>, the projection is <code>W_p</code>, and the text embedding is <code>z_x</code>, the language-model input can be summarized as:</p>
+
+<div class="math-display">
+\[
+z=\left[W_p z_v\,;\,z_x\right],\qquad
+p(y\mid I,x)=\prod_{t=1}^{T}p\!\left(y_t\mid z,y_{<t}\right)
+\]
+</div>
+
+<h3 id="2-1-what-can-a-vlm-do">2.1 What can a VLM do?</h3>
+
+<p>Common tasks include:</p>
+
+<ul>
+<li><strong>Visual question answering</strong> from an image or video.</li>
+<li><strong>Image captioning</strong>, from short summaries to detailed descriptions.</li>
+<li><strong>Detection, grounding, and segmentation</strong> that connect language to image regions.</li>
+<li><strong>Text-to-image generation</strong> and editing.</li>
+<li><strong>Multimodal retrieval</strong> from text to image or image to related content.</li>
+</ul>
+
+<p>Evaluation has expanded from object recognition to cultural, regional, and fine-grained understanding. Established VQA and captioning datasets include MS-COCO, NoCaps, MSR-VTT, and VATEX. DetailCaps, VDC, and CapArena target more detailed captions, while MMMU evaluates broad multimodal reasoning across academic disciplines. The source notes also highlight MOSAIC, GLOBAL-RG, CultureVQA, FoodieQA, and MaRVL for multilingual, regional, and culturally grounded understanding.</p>
+
+<h3 id="2-2-four-common-training-routes">2.2 Four common training routes</h3>
+
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Representative method</th>
+<th>What it learns</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Contrastive learning</td>
+<td>CLIP</td>
+<td>Pull matched image–text pairs together and separate mismatched pairs</td>
+</tr>
+
+<tr>
+<td>Masked modeling</td>
+<td>FLAVA</td>
+<td>Recover masked language or image regions</td>
+</tr>
+
+<tr>
+<td>Generative modeling</td>
+<td>Diffusion models</td>
+<td>Generate images from noise and conditions</td>
+</tr>
+
+<tr>
+<td>Projector + LLM</td>
+<td>LLaVA</td>
+<td>Connect a pretrained vision encoder to an LLM and apply visual instruction tuning</td>
+</tr>
+</tbody>
+</table>
+
+<p><img src="/img/posts/agentic-llm-2-action/stable-diffusion-architecture.webp" alt="How visual and text conditions enter a Stable Diffusion generation architecture" /></p>
+
+<p><em>Generative VLMs ask how to produce visual content from a condition. Action-oriented VLMs ask how to extract a decision-relevant state from visual content. Both are multimodal, but their output objectives differ.</em></p>
+
+<h2 id="3-from-vlm-to-vla-seeing-is-not-acting">3. From VLM to VLA: seeing is not acting</h2>
+
+<p>A VLM may answer “which cup is red?” without knowing how a robot should approach, grasp, and place it. Visual-language alignment alone does not provide:</p>
+
+<ul>
+<li>three-dimensional position, reachability, and affordances;</li>
+<li>continuous-time control and action history;</li>
+<li>embodiment-specific joint, velocity, and safety constraints;</li>
+<li>recovery after an object moves or an execution attempt fails.</li>
+</ul>
+
+<p>A VLA joins vision, language, and action in a single policy. Training examples are no longer only image–text pairs; they are trajectories containing observations and actions:</p>
+
+<div class="math-display">
+\[
+\tau=\left(o_1,\ell,a_1,o_2,a_2,\ldots,o_T,a_T\right)
+\]
+</div>
+
+<p>Here, <code>ℓ</code> is the language instruction, <code>o_t</code> may include camera images and robot state, and <code>a_t</code> is the action at step <code>t</code>. The policy learns:</p>
+
+<div class="math-display">
+\[
+\pi_{\theta}(a_t\mid o_{\le t},\ell,a_{<t})
+\]
+</div>
+
+<p>RT-2 represents discretized robot actions as text tokens, allowing a pretrained VLM to learn language answers and robot control through the same autoregressive objective. Not every VLA must “write an action as text,” however. For high-frequency continuous control, models such as π₀ directly generate continuous action chunks and learn their distribution with flow matching.</p>
+
+<p>The common property is not the output encoding. It is the <strong>connection between visual-semantic knowledge and an executable closed-loop policy</strong>.</p>
+
+<h2 id="4-four-representative-vla-designs">4. Four representative VLA designs</h2>
+
+<h3 id="4-1-mobility-vla-separate-semantic-navigation-into-two-levels">4.1 Mobility VLA: separate semantic navigation into two levels</h3>
+
+<p><a href="https://arxiv.org/abs/2407.07775">Mobility VLA</a> addresses Multimodal Instruction Navigation with demonstration Tours (MINT). A user can provide both natural-language instructions and a demonstration video as prior knowledge about the environment.</p>
+
+<p>Instead of asking one large model to emit every motor command, the system uses a hierarchy:</p>
+
+<ol>
+<li>A long-context VLM reads the tour and instruction to identify a goal frame.</li>
+<li>A low-level policy localizes and plans over a pre-built topological graph.</li>
+<li>A navigation controller generates robot actions at each time step.</li>
+</ol>
+
+<p><img src="/img/posts/agentic-llm-2-action/mobility-vla.webp" alt="Mobility VLA uses a long-context VLM for goal understanding and a topological graph with a low-level policy for navigation" /></p>
+
+<p><em>The design separates semantic understanding, where a VLM is strong, from localization and path following, where conventional navigation machinery is more reliable.</em></p>
+
+<h3 id="4-2-lm-nav-compose-pretrained-models-without-further-fine-tuning">4.2 LM-Nav: compose pretrained models without further fine-tuning</h3>
+
+<p><a href="https://arxiv.org/abs/2207.04429">LM-Nav</a> shows that action does not always require a newly trained end-to-end model. It composes three existing modules:</p>
+
+<ul>
+<li>an LLM extracts landmarks from a natural-language instruction;</li>
+<li>a VLM grounds those landmarks in a visual route;</li>
+<li>a visual navigation model executes local navigation.</li>
+</ul>
+
+<p><img src="/img/posts/agentic-llm-2-action/lm-nav.webp" alt="LM-Nav uses an LLM to extract landmarks, a VLM to align them with a route, and a VNM to execute navigation" /></p>
+
+<p><em>LM-Nav requires neither language-annotated robot trajectories nor task-specific fine-tuning. Its modules are reusable, although upstream grounding errors can propagate into navigation.</em></p>
+
+<h3 id="4-3-rt-2-represent-robot-actions-as-tokens">4.3 RT-2: represent robot actions as tokens</h3>
+
+<p>The central move in <a href="https://arxiv.org/abs/2307.15818">RT-2</a> is to co-fine-tune Internet-scale vision-language tasks and robot trajectories rather than training a robot policy in isolation:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Web-scale VQA / caption data ─┐
+                              ├─→ VLM → Action tokens → Robot control
+Robot observation + action ───┘</code></pre></td></tr></table>
+</div>
+</div>
+<p><img src="/img/posts/agentic-llm-2-action/rt-2.webp" alt="RT-2 jointly trains on Internet vision-language data and robot trajectories, then decodes action tokens into closed-loop control" /></p>
+
+<p><em>Encoding actions in the text output vocabulary lets the model transfer object concepts and semantic relationships learned from the web into robot control.</em></p>
+
+<p>The transfer is the important part. Robot trajectories are scarce compared with web image–text data, while a VLM already understands many objects, attributes, and commonsense relationships. Co-training gives the model a chance to turn “an energy drink is useful when someone is tired” into “select and grasp the energy drink on the table.”</p>
+
+<h3 id="4-4-π₀-generate-continuous-actions-with-flow-matching">4.4 π₀: generate continuous actions with flow matching</h3>
+
+<p><a href="https://arxiv.org/abs/2410.24164">π₀</a> adds an action expert to a pretrained VLM and trains across data from multiple robot embodiments. Instead of discretizing all low-level control into text tokens, it uses flow matching to generate continuous action chunks, which is better suited to dexterous, high-dimensional control.</p>
+
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>High-level semantics</th>
+<th>Action generation</th>
+<th>Distinguishing idea</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Mobility VLA</td>
+<td>Long-context VLM</td>
+<td>Topological graph + low-level policy</td>
+<td>Hierarchical navigation</td>
+</tr>
+
+<tr>
+<td>LM-Nav</td>
+<td>GPT-3 + CLIP</td>
+<td>Pretrained visual navigation model</td>
+<td>Modular composition, no extra fine-tuning</td>
+</tr>
+
+<tr>
+<td>RT-2</td>
+<td>Web-scale VLM</td>
+<td>Discrete action tokens</td>
+<td>End-to-end co-fine-tuning and web knowledge transfer</td>
+</tr>
+
+<tr>
+<td>π₀</td>
+<td>Pretrained VLM</td>
+<td>Continuous action chunks via flow matching</td>
+<td>Cross-embodiment dexterous control</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="5-how-does-a-vla-learn-to-act">5. How does a VLA learn to act?</h2>
+
+<p>A practical training pipeline usually combines three layers of data:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Internet image–text data
+          ↓
+Visual-semantic pretraining: objects, attributes, relations, knowledge
+          ↓
+Robot trajectories: (observation, instruction, action)
+          ↓
+Behavior cloning / action prediction / co-fine-tuning
+          ↓
+Simulation or real-world adaptation, reinforcement learning, safety constraints</code></pre></td></tr></table>
+</div>
+</div>
+<p>The most common base objective is behavior cloning: maximize the likelihood of a demonstrated action under the current observation and instruction.</p>
+
+<div class="math-display">
+\[
+\mathcal{L}_{\text{BC}}(\theta)
+=-\sum_{t=1}^{T}\log \pi_{\theta}
+\!\left(a_t\mid o_{\le t},\ell,a_{<t}\right)
+\]
+</div>
+
+<p>Transformers over <code>(state, action, reward)</code> sequences predate VLAs. <a href="https://arxiv.org/abs/2106.01345">Decision Transformer</a> casts offline RL as conditional sequence modeling: given a desired return and a history of states and actions, predict the next action. A VLA adds raw vision, natural-language instructions, and embodiment state while inheriting semantic knowledge from a VLM.</p>
+
+<p>That combination exposes the difficult parts:</p>
+
+<ol>
+<li><strong>Robot data are expensive.</strong> The web offers vast image–text corpora but nothing comparable in high-quality control trajectories.</li>
+<li><strong>Embodiments differ.</strong> The same intention maps to different parameters across arms, cameras, and grippers.</li>
+<li><strong>Distribution shift compounds.</strong> Small changes in lighting, position, or objects can accumulate into control error.</li>
+<li><strong>Long-horizon credit assignment is hard.</strong> A failure may originate in a grasp error dozens of steps earlier.</li>
+<li><strong>Safety constrains exploration.</strong> A physical robot cannot retry as freely as a text model.</li>
+</ol>
+
+<h2 id="6-world-models-predict-consequences-before-acting">6. World models: predict consequences before acting</h2>
+
+<p>A policy that maps the current image directly to an action is reactive. It can work, but it cannot explicitly answer a crucial question:</p>
+
+<blockquote>
+<p>What is likely to happen if I take this action?</p>
+</blockquote>
+
+<p>A world model learns transition and reward dynamics. If the real dynamics and reward functions are <code>T</code> and <code>R</code>, a learned local approximation estimates:</p>
+
+<div class="math-display">
+\[
+\hat{s}_{t+1}=\hat{T}_{\phi}(s_t,a_t),\qquad
+\hat{r}_t=\hat{R}_{\phi}(s_t,a_t)
+\]
+</div>
+
+<p>The agent can now roll out candidate actions internally rather than testing every possibility in an expensive or dangerous environment:</p>
+
+<div class="math-display">
+\[
+a_t^{*}=\underset{a_t}{\operatorname{arg\,max}}
+\;\mathbb{E}_{\hat{T}_{\phi}}
+\left[\sum_{k=0}^{H-1}\gamma^k\hat{r}_{t+k}\right]
+\]
+</div>
+
+<p><img src="/img/posts/agentic-llm-2-action/model-based-rl.webp" alt="Model-based reinforcement learning improves a local world model from real experience and uses the model for planning or policy learning" /></p>
+
+<p><em>The real environment provides ground truth but is expensive to sample. The local model is cheap but imperfect. Model-based RL trades off these two sources of experience.</em></p>
+
+<h3 id="6-1-model-based-and-model-free-rl">6.1 Model-based and model-free RL</h3>
+
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>What it learns</th>
+<th>Advantage</th>
+<th>Risk</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Model-free RL</td>
+<td>A policy or value function directly</td>
+<td>Avoids explicit model bias</td>
+<td>Requires more real interaction</td>
+</tr>
+
+<tr>
+<td>Model-based RL</td>
+<td>Dynamics and reward, then planning or policy learning</td>
+<td>Better sample efficiency; simulate before acting</td>
+<td>Model error compounds across long rollouts</td>
+</tr>
+</tbody>
+</table>
+
+<p>Model-based RL reconnects modern agents with classical planning. Tree search, graph search, and symbolic planners compare paths explicitly; neural models supply perception, state compression, and approximate dynamics.</p>
+
+<p>JEPA suggests another useful distinction: the model need not reconstruct every pixel of the next frame. It can predict a future representation in latent space. For planning, “the cup will move right and remain reachable” is often more useful than a photorealistic rendering of every pixel.</p>
+
+<h2 id="7-two-directions-for-agentic-world-models">7. Two directions for agentic world models</h2>
+
+<p>The relationship between LLMs and model-based RL can be read in two directions.</p>
+
+<h3 id="7-1-llm4mbrl-use-an-llm-as-a-world-model">7.1 LLM4MBRL: use an LLM as a world model</h3>
+
+<p>Pretrained LLMs contain substantial knowledge about websites, game rules, commonsense, and physical relationships. A system can ask an LLM to predict the outcome of candidate actions, then use tree search or model-predictive control to choose among them.</p>
+
+<p><a href="https://arxiv.org/abs/2411.06559">WebDreamer</a> uses an LLM to “imagine” the outcome of a web action. Instead of trying an irreversible purchase on the live website, the agent first compares what might happen after each click. This is <strong>model-based speculative planning</strong>.</p>
+
+<p><a href="https://arxiv.org/abs/2404.18202">WorldGPT</a> learns cross-modal state transitions from multimodal sequences, extending an LLM-like core toward the prediction of changes in images, video, and audio.</p>
+
+<h3 id="7-2-mbrl4llm-adapt-a-model-through-environment-interaction">7.2 MBRL4LLM: adapt a model through environment interaction</h3>
+
+<p>The opposite direction does not treat a pretrained LLM as a static simulator. It updates transition hypotheses from new environmental feedback.</p>
+
+<p><a href="https://arxiv.org/abs/2402.12275">WorldCoder</a> asks an agent to write a Python program representing the rules of the world. When an observation contradicts the program, the agent edits the code; a planner then searches the executable model for a high-reward path. Knowledge about dynamics becomes explicit, inspectable, executable, and revisable rather than remaining only in a prompt.</p>
+
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Source of the world model</th>
+<th>How it improves</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>LLM4MBRL</td>
+<td>Knowledge already present in a pretrained model</td>
+<td>Prompts, search, external memory, planning harness</td>
+</tr>
+
+<tr>
+<td>MBRL4LLM</td>
+<td>Dynamics learned or reconstructed from environment trajectories</td>
+<td>Fine-tuning, RL, program repair, continual interaction</td>
+</tr>
+</tbody>
+</table>
+
+<p>The first direction starts quickly but may simulate confidently and incorrectly. The second adapts to a specific environment but requires reliable interaction data and stable updates.</p>
+
+<h2 id="8-a-unified-comparison-llm-vlm-decision-transformer-vla-and-world-model">8. A unified comparison: LLM, VLM, Decision Transformer, VLA, and world model</h2>
+
+<p>These labels often appear together, but they define different interfaces.</p>
+
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Main input</th>
+<th>Main output</th>
+<th>Primary objective</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>LLM</td>
+<td>Text tokens</td>
+<td>Text tokens</td>
+<td>Model language, knowledge, and reasoning patterns</td>
+</tr>
+
+<tr>
+<td>VLM</td>
+<td>Image / video + text</td>
+<td>Text or visual content</td>
+<td>Connect visual semantics and language</td>
+</tr>
+
+<tr>
+<td>Decision Transformer</td>
+<td>Return + state + action history</td>
+<td>Next action</td>
+<td>Cast offline RL as conditional sequence modeling</td>
+</tr>
+
+<tr>
+<td>VLA</td>
+<td>Vision + instruction + robot state</td>
+<td>Robot action / action chunk</td>
+<td>Connect semantic understanding to executable control</td>
+</tr>
+
+<tr>
+<td>World model</td>
+<td>State + candidate action</td>
+<td>Future state + reward / outcome</td>
+<td>Predict environmental change before execution</td>
+</tr>
+</tbody>
+</table>
+
+<p>They are not mutually exclusive. A modern embodied agent may use all of them:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">VLM: understand the current scene
+  ↓
+LLM / planner: decompose the goal and propose actions
+  ↓
+World model: simulate candidate outcomes
+  ↓
+VLA / controller: turn the selected action into continuous control
+  ↓
+Environment: return a new observation</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="9-what-is-still-missing-between-a-demo-and-deployment">9. What is still missing between a demo and deployment?</h2>
+
+<p>Research demos often show an action model succeeding. A deployed system must also handle failure, permissions, and uncertainty.</p>
+
+<h3 id="9-1-grounding-and-executability">9.1 Grounding and executability</h3>
+
+<p>A linguistically plausible plan may refer to a missing object, an unreachable pose, or a capability the robot does not have. The real environment must define the available action space; the model cannot invent it freely.</p>
+
+<h3 id="9-2-uncertainty-and-recovery">9.2 Uncertainty and recovery</h3>
+
+<p>The system needs more than an action. It must know when to stop, observe again, request confirmation, or roll back. Closed-loop reliability often depends more on recovery than on single-step accuracy.</p>
+
+<h3 id="9-3-permissions-and-safety-boundaries">9.3 Permissions and safety boundaries</h3>
+
+<p>The ability to generate an action is not authorization to execute it:</p>
+
+<div class="math-display">
+\[
+\text{Can Propose} \;\neq\; \text{Can Execute} \;\neq\; \text{Can Execute Without Approval}
+\]
+</div>
+
+<h3 id="9-4-end-to-end-metrics">9.4 End-to-end metrics</h3>
+
+<p>High VQA accuracy does not imply successful robot behavior. Action systems must ultimately be judged by task success, completion time, intervention rate, safety violations, recovery success, and real operating cost.</p>
+
+<h2 id="10-conclusion-action-is-a-chain-from-semantics-to-consequences">10. Conclusion: action is a chain from semantics to consequences</h2>
+
+<p>Action is not a function call appended to the end of model output. It requires a system to answer four questions:</p>
+
+<ol>
+<li><strong>Perception</strong>: what is in the environment?</li>
+<li><strong>Grounding</strong>: which objects, locations, and constraints correspond to the goal?</li>
+<li><strong>Control</strong>: how does the goal become an executable operation?</li>
+<li><strong>Prediction</strong>: what will happen next, and how should failure be handled?</li>
+</ol>
+
+<p>VLMs let an agent perceive and understand its environment. VLAs map vision and language into behavior. World models let the agent compare possible futures before committing to one. Together, they allow reasoning to cross the boundary from text into consequential action.</p>
+
+<p>The next article will cover <strong>Interaction</strong>: how an agent consumes observations after acting, manages changing state, collaborates with people or other agents, and maintains a reliable loop over long-running tasks.</p>
+
+<h2 id="references">References</h2>
+
+<ul>
+<li><a href="https://arxiv.org/abs/2304.08485">Visual Instruction Tuning (LLaVA)</a></li>
+<li><a href="https://arxiv.org/abs/2207.04429">LM-Nav: Robotic Navigation with Large Pre-Trained Models of Language, Vision, and Action</a></li>
+<li><a href="https://arxiv.org/abs/2307.15818">RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control</a></li>
+<li><a href="https://arxiv.org/abs/2407.07775">Mobility VLA: Multimodal Instruction Navigation with Long-Context VLMs and Topological Graphs</a></li>
+<li><a href="https://arxiv.org/abs/2410.24164">π₀: A Vision-Language-Action Flow Model for General Robot Control</a></li>
+<li><a href="https://arxiv.org/abs/2106.01345">Decision Transformer: Reinforcement Learning via Sequence Modeling</a></li>
+<li><a href="https://arxiv.org/abs/2301.08243">Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture</a></li>
+<li><a href="https://arxiv.org/abs/2404.18202">WorldGPT: Empowering LLM as Multimodal World Model</a></li>
+<li><a href="https://arxiv.org/abs/2411.06559">WebDreamer: Model-Based Planning for Web Agents</a></li>
+<li><a href="https://arxiv.org/abs/2402.12275">WorldCoder, a Model-Based LLM Agent</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-10-05
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/en/tags/agentic-llm/">Agentic LLM</a>
+          <a href="/en/tags/action/">Action</a>
+          <a href="/en/tags/vlm/">VLM</a>
+          <a href="/en/tags/vla/">VLA</a>
+          <a href="/en/tags/world-model/">World Model</a>
+          <a href="/en/tags/robotics/">Robotics</a>
+          <a href="/en/tags/model-based-rl/">Model-Based RL</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/en/post/agentic-llm-1-reasoning/">
+            <span class="next-text nav-default">Agentic LLM Reasoning (I): From Chain of Thought to Search, Reflection, and RLVR</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

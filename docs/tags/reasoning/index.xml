@@ -29,7 +29,7 @@
 &lt;li&gt;&lt;strong&gt;Interaction&lt;/strong&gt;：读取行动结果，与环境或其他 Agent 持续交换信息并修正策略。&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;本文是 &lt;strong&gt;Agentic Large Language Models 系列的第一篇&lt;/strong&gt;。我不会把 Reasoning 当成一串孤立术语来罗列，而会沿着同一个问题展开：&lt;strong&gt;当一次生成或一条推理链不够可靠时，系统还能增加什么？&lt;/strong&gt; 后续两篇将分别讨论 Action 和 Interaction。&lt;/p&gt;</description>
+&lt;p&gt;本文是 &lt;strong&gt;Agentic Large Language Models 系列的第一篇&lt;/strong&gt;。我不会把 Reasoning 当成一串孤立术语来罗列，而会沿着同一个问题展开：&lt;strong&gt;当一次生成或一条推理链不够可靠时，系统还能增加什么？&lt;/strong&gt; 第二篇将继续讨论 Action，第三篇讨论 Interaction。&lt;/p&gt;</description>
     </item>
     
     <item>

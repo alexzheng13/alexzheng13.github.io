@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/post/" />
 
-<meta property="og:updated_time" content="2026-09-29T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">文章归档</h1>
-      <p>按年份浏览全部 29 篇文章</p>
+      <p>按年份浏览全部 30 篇文章</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         订阅 RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="按年份排列的文章">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/post/agentic-llm-2-action/">
+          <time datetime="2026-10-05">10-05</time>
+          <span>Agentic LLM（二）：Action——从多模态感知到 VLA 与世界模型</span>
+        </a>
         <a class="blog-archive-index-item" href="/post/agentic-llm-1-reasoning/">
           <time datetime="2026-09-29">09-29</time>
           <span>Agentic LLM Reasoning（一）：从 Chain of Thought 到搜索、反思与 RLVR</span>
@@ -377,6 +381,63 @@
   <div class="blog-recent-posts" aria-label="最近文章">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/post/agentic-llm-2-action/">Agentic LLM（二）：Action——从多模态感知到 VLA 与世界模型</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-10-05">2026年10月05日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 11 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>推理给出了“下一步应该做什么”，但只有当这个决定被翻译成一次 API 调用、一次鼠标点击，或者机器人的一段运动时，Agent 才真正开始影响环境。</p>
+
+<p>这也是 <strong>Action</strong> 与普通文本生成的根本区别：文本答错了可以重新生成，动作却可能改变状态、消耗资源，甚至产生不可逆的结果。Agent 因此不能只会“想”，还要理解环境允许哪些动作、预测动作的后果，并根据新的观察继续决策。</p>
+
+<p>本文是 <strong>Agentic Large Language Models 系列的第二篇</strong>。上一篇讨论了 <a href="/post/agentic-llm-1-reasoning/">Reasoning：从 Chain of Thought 到搜索、反思与 RLVR</a>；这一篇沿着下面这条主线展开：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">看见环境（VLM）
+      ↓
+把意图映射为动作（VLA）
+      ↓
+预测动作之后会发生什么（World Model）
+      ↓
+在真实执行前规划、比较与修正</code></pre></td></tr></table>
+</div>
+</div></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="标签">
+              <span class="blog-summary-tags-label">标签</span>
+              <ul>
+                  <li><a href="/tags/agentic-llm/">Agentic LLM</a></li>
+                  <li><a href="/tags/action/">Action</a></li>
+                  <li><a href="/tags/vlm/">VLM</a></li>
+                  <li><a href="/tags/vla/">VLA</a></li>
+                  <li><a href="/tags/world-model/">World Model</a></li>
+                  <li><a href="/tags/robotics/">Robotics</a></li>
+                  <li><a href="/tags/model-based-rl/">Model-Based RL</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/post/agentic-llm-2-action/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/post/agentic-llm-1-reasoning/">Agentic LLM Reasoning（一）：从 Chain of Thought 到搜索、反思与 RLVR</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-09-29">2026年09月29日</time>
@@ -399,7 +460,7 @@
 <li><strong>Interaction</strong>：读取行动结果，与环境或其他 Agent 持续交换信息并修正策略。</li>
 </ol>
 
-<p>本文是 <strong>Agentic Large Language Models 系列的第一篇</strong>。我不会把 Reasoning 当成一串孤立术语来罗列，而会沿着同一个问题展开：<strong>当一次生成或一条推理链不够可靠时，系统还能增加什么？</strong> 后续两篇将分别讨论 Action 和 Interaction。</p></div>
+<p>本文是 <strong>Agentic Large Language Models 系列的第一篇</strong>。我不会把 Reasoning 当成一串孤立术语来罗列，而会沿着同一个问题展开：<strong>当一次生成或一条推理链不够可靠时，系统还能增加什么？</strong> 第二篇将继续讨论 Action，第三篇讨论 Interaction。</p></div>
           </div>
         </div>
 
@@ -521,43 +582,6 @@
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/post/llm-agent-benchmarks-guide/">阅读全文<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/post/nanochat-gpt-pretraining-from-source/">nanochat 源码解读：从参数配置到单步训练</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-09-26">2026年09月26日</time>
-            <span aria-hidden="true">·</span>
-            <span>预计阅读 14 分钟</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>本文沿着 <code>scripts/base_train.py</code> 的执行顺序阅读 nanochat：从命令行参数、随机种子和 DDP 环境开始，依次进入模型构建、权重初始化、Scaling Laws、优化器、DataLoader、梯度累积与单步训练。重点不是抽象介绍 GPT，而是理解源码中的每一段配置如何落到真实训练过程里。</p>
-
-<blockquote>
-<p><strong>前置知识</strong></p>
-
-<p>本文默认读者已经了解 token embedding、causal self-attention、MLP、残差连接和交叉熵。如果这些概念还不熟悉，建议先阅读我的简易实现文章：<a href="https://alexzheng13.github.io/post/transformer-architecture/">Transformer Architecture：从 Token Embedding 到训练循环</a>，再回来读 nanochat 的工程化实现。</p>
-</blockquote></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="标签">
-              <span class="blog-summary-tags-label">标签</span>
-              <ul>
-                  <li><a href="/tags/nanochat/">nanochat</a></li>
-                  <li><a href="/tags/gpt/">GPT</a></li>
-                  <li><a href="/tags/transformer/">Transformer</a></li>
-                  <li><a href="/tags/llm-training/">LLM Training</a></li>
-                  <li><a href="/tags/pytorch/">PyTorch</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/post/nanochat-gpt-pretraining-from-source/">阅读全文<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

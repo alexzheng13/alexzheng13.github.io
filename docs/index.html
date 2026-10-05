@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/" />
 
-<meta property="og:updated_time" content="2026-09-29T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -211,13 +211,60 @@
           <section id="posts" class="posts">
       <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/agentic-llm-2-action/">Agentic LLM（二）：Action——从多模态感知到 VLA 与世界模型</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-10-05 </span>
+      <div class="post-category">
+          <a href="/categories/ai-agents/"> AI Agents </a>
+          </div>
+        <span class="more-meta"> 约 5363 字 </span>
+        <span class="more-meta"> 预计阅读 11 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>推理给出了“下一步应该做什么”，但只有当这个决定被翻译成一次 API 调用、一次鼠标点击，或者机器人的一段运动时，Agent 才真正开始影响环境。</p>
+
+<p>这也是 <strong>Action</strong> 与普通文本生成的根本区别：文本答错了可以重新生成，动作却可能改变状态、消耗资源，甚至产生不可逆的结果。Agent 因此不能只会“想”，还要理解环境允许哪些动作、预测动作的后果，并根据新的观察继续决策。</p>
+
+<p>本文是 <strong>Agentic Large Language Models 系列的第二篇</strong>。上一篇讨论了 <a href="/post/agentic-llm-1-reasoning/">Reasoning：从 Chain of Thought 到搜索、反思与 RLVR</a>；这一篇沿着下面这条主线展开：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">看见环境（VLM）
+      ↓
+把意图映射为动作（VLA）
+      ↓
+预测动作之后会发生什么（World Model）
+      ↓
+在真实执行前规划、比较与修正</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+    <div class="read-more">
+      <a href="/post/agentic-llm-2-action/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+      <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/agentic-llm-1-reasoning/">Agentic LLM Reasoning（一）：从 Chain of Thought 到搜索、反思与 RLVR</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2026-09-29 </span>
       <div class="post-category">
           <a href="/categories/ai-agents/"> AI Agents </a>
           </div>
-        <span class="more-meta"> 约 6165 字 </span>
+        <span class="more-meta"> 约 6170 字 </span>
         <span class="more-meta"> 预计阅读 13 分钟 </span>
     </div>
   </header>
@@ -236,7 +283,7 @@
 <li><strong>Interaction</strong>：读取行动结果，与环境或其他 Agent 持续交换信息并修正策略。</li>
 </ol>
 
-<p>本文是 <strong>Agentic Large Language Models 系列的第一篇</strong>。我不会把 Reasoning 当成一串孤立术语来罗列，而会沿着同一个问题展开：<strong>当一次生成或一条推理链不够可靠时，系统还能增加什么？</strong> 后续两篇将分别讨论 Action 和 Interaction。</p>
+<p>本文是 <strong>Agentic Large Language Models 系列的第一篇</strong>。我不会把 Reasoning 当成一串孤立术语来罗列，而会沿着同一个问题展开：<strong>当一次生成或一条推理链不够可靠时，系统还能增加什么？</strong> 第二篇将继续讨论 Action，第三篇讨论 Interaction。</p>
     </div>
     <div class="read-more">
       <a href="/post/agentic-llm-1-reasoning/" class="read-more-link">阅读更多</a>
@@ -427,31 +474,6 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
     </div>
     <div class="read-more">
       <a href="/post/anthropic-agent-evolution-1-from-workflows-to-agents/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/anthropic-agent-evolution-2-context-reset-and-handoff/">Anthropic Agent 演进（二）：Context Reset 与 Structured Handoff</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-09-12 </span>
-      <div class="post-category">
-          <a href="/categories/ai-agents/"> AI Agents </a>
-          </div>
-        <span class="more-meta"> 约 1704 字 </span>
-        <span class="more-meta"> 预计阅读 4 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>长任务的核心矛盾不是“模型能不能写代码”，而是：任务可能持续数小时或数天，但一次 Context Window 终究有限。把整个历史无限重放，会同时遇到容量和噪声问题。</p>
-
-<p>Anthropic 第一代 Long-Running Agent Harness 的答案是：<strong>重置对话上下文，但把项目状态写进结构化工件，让下一轮 Agent 可以恢复工作。</strong></p>
-    </div>
-    <div class="read-more">
-      <a href="/post/anthropic-agent-evolution-2-context-reset-and-handoff/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>

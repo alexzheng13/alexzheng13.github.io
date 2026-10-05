@@ -20,11 +20,11 @@ A complete agent system needs at least three capabilities:
 2. **Action**: call tools and translate decisions into external operations.
 3. **Interaction**: observe outcomes, exchange information with the environment or other agents, and revise the strategy.
 
-This is the **first article in the Agentic Large Language Models series**. Rather than listing reasoning terms in isolation, it follows one question: **when one generation or one reasoning path is unreliable, what can the system add?** The next two articles will cover Action and Interaction.
+This is the **first article in the Agentic Large Language Models series**. Rather than listing reasoning terms in isolation, it follows one question: **when one generation or one reasoning path is unreliable, what can the system add?** Part II covers Action, followed by Interaction in Part III.
 
 <!--more-->
 
-> **Series**: **(I) Reasoning** · (II) Action (coming next) · (III) Interaction (coming next)
+> **Series**: **(I) Reasoning** · [(II) Action](/en/post/agentic-llm-2-action/) · (III) Interaction (coming next)
 
 ## 1. First define the boundary: what is an Agentic LLM?
 
@@ -521,7 +521,7 @@ Reasoning alone cannot change the world. A correct plan remains text if it canno
 
 The next two articles will examine:
 
-- **Action**: planning, tool use, world models, vision-language-action models, and the translation from tokens to operations.
+- **[Action](/en/post/agentic-llm-2-action/)**: planning, tool use, world models, vision-language-action models, and the translation from tokens to operations.
 - **Interaction**: observations, environmental feedback, multi-agent coordination, state management, and continual adaptation.
 
 Reasoning decides what should happen next. Action determines how to do it. Interaction tells the system what happened afterward. Together, they form an Agentic Large Language Model.

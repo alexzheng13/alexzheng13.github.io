@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-09-29T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 29 posts by year</p>
+      <p>Browse all 30 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/agentic-llm-2-action/">
+          <time datetime="2026-10-05">10-05</time>
+          <span>Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/agentic-llm-1-reasoning/">
           <time datetime="2026-09-29">09-29</time>
           <span>Agentic LLM Reasoning (I): From Chain of Thought to Search, Reflection, and RLVR</span>
@@ -375,6 +379,56 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="Recent posts">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/en/post/nanochat-gpt-pretraining-from-source/">Reading nanochat Source: From Configuration to a Training Step</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-09-26">September 26, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>7 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>This article follows the execution order of <code>scripts/base_train.py</code>: command-line arguments, random seeds, DDP setup, model construction, weight initialization, scaling laws, optimizers, data loading, gradient accumulation, and finally one complete training step.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">documents → tokenizer and sequence packing → inputs/targets
+          → GPT forward → cross-entropy loss
+          → backward and gradient accumulation → optimizer step
+          → evaluation, sampling, checkpointing, and resume</code></pre></td></tr></table>
+</div>
+</div>
+<p>The organization and code-reading path follow my nanochat Notion notes. The prose has been edited for clarity, while the source snippets and their original reading sequence are preserved.</p>
+
+<blockquote>
+<p><strong>Prerequisite:</strong> If token embeddings, causal self-attention, MLPs, residual connections, or next-token loss are still unfamiliar, start with <a href="https://alexzheng13.github.io/en/post/transformer-architecture/">Transformer Architecture: From Token Embedding to the Training Loop</a> and then return to this source-level walkthrough.</p>
+</blockquote></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/nanochat/">nanochat</a></li>
+                  <li><a href="/en/tags/gpt/">GPT</a></li>
+                  <li><a href="/en/tags/transformer/">Transformer</a></li>
+                  <li><a href="/en/tags/llm-training/">LLM Training</a></li>
+                  <li><a href="/en/tags/pytorch/">PyTorch</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/nanochat-gpt-pretraining-from-source/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/en/post/transformer-architecture/">Transformer Architecture: From Token Embeddings to the Training Loop</a></h2>
@@ -536,40 +590,6 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/en/post/anthropic-agent-evolution-3-planner-generator-evaluator/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/anthropic-agent-evolution-4-managed-agent-runtime/">Anthropic Agent Evolution IV: Managed Agent Runtime—Session, Harness, and Sandbox</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-09-12">September 12, 2026</time>
-            <span aria-hidden="true">·</span>
-            <span>5 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>Earlier harnesses focused on how a model could continue work and improve quality. A managed service introduces system questions: how is a session persisted, how does work recover after a harness crash, how can sandboxes be replaced, how do customer VPCs connect, and how are credentials kept away from model-generated code?</p>
-
-<p>Anthropic Managed Agents answers by <strong>decoupling the brain, hands, and session behind stable interfaces.</strong></p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="Tags">
-              <span class="blog-summary-tags-label">Tags</span>
-              <ul>
-                  <li><a href="/en/tags/anthropic-agent-evolution/">Anthropic Agent Evolution</a></li>
-                  <li><a href="/en/tags/managed-agents/">Managed Agents</a></li>
-                  <li><a href="/en/tags/agent-runtime/">Agent Runtime</a></li>
-                  <li><a href="/en/tags/sandbox/">Sandbox</a></li>
-                  <li><a href="/en/tags/session/">Session</a></li>
-                  <li><a href="/en/tags/codex/">Codex</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/en/post/anthropic-agent-evolution-4-managed-agent-runtime/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

@@ -20,11 +20,11 @@ mathjaxEnableSingleDollar: true
 2. **Action**：调用工具，把决策转化为对外部世界的操作；
 3. **Interaction**：读取行动结果，与环境或其他 Agent 持续交换信息并修正策略。
 
-本文是 **Agentic Large Language Models 系列的第一篇**。我不会把 Reasoning 当成一串孤立术语来罗列，而会沿着同一个问题展开：**当一次生成或一条推理链不够可靠时，系统还能增加什么？** 后续两篇将分别讨论 Action 和 Interaction。
+本文是 **Agentic Large Language Models 系列的第一篇**。我不会把 Reasoning 当成一串孤立术语来罗列，而会沿着同一个问题展开：**当一次生成或一条推理链不够可靠时，系统还能增加什么？** 第二篇将继续讨论 Action，第三篇讨论 Interaction。
 
 <!--more-->
 
-> **系列导航**：**（一）Reasoning** · （二）Action（待续） · （三）Interaction（待续）
+> **系列导航**：**（一）Reasoning** · [（二）Action](/post/agentic-llm-2-action/) · （三）Interaction（待续）
 
 ## 1. 先定义边界：什么是 Agentic LLM？
 
@@ -539,7 +539,7 @@ Direct Generation
 
 因此接下来的两篇会讨论：
 
-- **Action**：Planning、Tool Use、World Model、Vision-Language-Action Model，以及模型如何把 Token 转成真实操作；
+- **[Action](/post/agentic-llm-2-action/)**：Planning、Tool Use、World Model、Vision-Language-Action Model，以及模型如何把 Token 转成真实操作；
 - **Interaction**：Observation、环境反馈、多 Agent 协作、状态管理与持续学习。
 
 Reasoning 决定“下一步应该做什么”，Action 决定“如何做”，Interaction 则让系统知道“做完之后发生了什么”。三者结合，才构成真正的 Agentic Large Language Model。

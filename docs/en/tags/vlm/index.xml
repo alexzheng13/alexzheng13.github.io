@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>VLM on Blowing in the wind</title>
+    <link>https://alexzheng13.github.io/en/tags/vlm/</link>
+    <description>Recent content in VLM on Blowing in the wind</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 05 Oct 2026 19:30:00 +0200</lastBuildDate>
+    
+	<atom:link href="https://alexzheng13.github.io/en/tags/vlm/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</title>
+      <link>https://alexzheng13.github.io/en/post/agentic-llm-2-action/</link>
+      <pubDate>Mon, 05 Oct 2026 19:30:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/post/agentic-llm-2-action/</guid>
+      <description>&lt;p&gt;Reasoning proposes what should happen next. An agent begins to affect the world only when that decision becomes an API call, a mouse click, or a robot trajectory.&lt;/p&gt;
+
+&lt;p&gt;That is the fundamental difference between &lt;strong&gt;action&lt;/strong&gt; and ordinary text generation. A bad sentence can be regenerated; an action may change state, consume resources, or produce an irreversible result. An agent must therefore understand which actions are available, predict their consequences, and continue from the next observation.&lt;/p&gt;
+
+&lt;p&gt;This is the &lt;strong&gt;second article in the Agentic Large Language Models series&lt;/strong&gt;. &lt;a href=&#34;https://alexzheng13.github.io/en/post/agentic-llm-1-reasoning/&#34;&gt;Part I&lt;/a&gt; covered reasoning from Chain of Thought and search to reflection and RLVR. This article follows a different progression:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;Perceive the environment (VLM)
+             ↓
+Map intent to action (VLA)
+             ↓
+Predict what follows (World Model)
+             ↓
+Plan, compare, and revise before execution&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

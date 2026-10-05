@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/" />
 
-<meta property="og:updated_time" content="2026-09-29T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -211,13 +211,60 @@
           <section id="posts" class="posts">
       <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/agentic-llm-2-action/">Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-10-05 </span>
+      <div class="post-category">
+          <a href="/en/categories/ai-agents/"> AI Agents </a>
+          </div>
+        <span class="more-meta"> 2604 words </span>
+        <span class="more-meta"> 13 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>Reasoning proposes what should happen next. An agent begins to affect the world only when that decision becomes an API call, a mouse click, or a robot trajectory.</p>
+
+<p>That is the fundamental difference between <strong>action</strong> and ordinary text generation. A bad sentence can be regenerated; an action may change state, consume resources, or produce an irreversible result. An agent must therefore understand which actions are available, predict their consequences, and continue from the next observation.</p>
+
+<p>This is the <strong>second article in the Agentic Large Language Models series</strong>. <a href="/en/post/agentic-llm-1-reasoning/">Part I</a> covered reasoning from Chain of Thought and search to reflection and RLVR. This article follows a different progression:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Perceive the environment (VLM)
+             ↓
+Map intent to action (VLA)
+             ↓
+Predict what follows (World Model)
+             ↓
+Plan, compare, and revise before execution</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+    <div class="read-more">
+      <a href="/en/post/agentic-llm-2-action/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+      <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/en/post/agentic-llm-1-reasoning/">Agentic LLM Reasoning (I): From Chain of Thought to Search, Reflection, and RLVR</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2026-09-29 </span>
       <div class="post-category">
           <a href="/en/categories/ai-agents/"> AI Agents </a>
           </div>
-        <span class="more-meta"> 2936 words </span>
+        <span class="more-meta"> 2935 words </span>
         <span class="more-meta"> 14 mins read </span>
     </div>
   </header>
@@ -236,7 +283,7 @@
 <li><strong>Interaction</strong>: observe outcomes, exchange information with the environment or other agents, and revise the strategy.</li>
 </ol>
 
-<p>This is the <strong>first article in the Agentic Large Language Models series</strong>. Rather than listing reasoning terms in isolation, it follows one question: <strong>when one generation or one reasoning path is unreliable, what can the system add?</strong> The next two articles will cover Action and Interaction.</p>
+<p>This is the <strong>first article in the Agentic Large Language Models series</strong>. Rather than listing reasoning terms in isolation, it follows one question: <strong>when one generation or one reasoning path is unreliable, what can the system add?</strong> Part II covers Action, followed by Interaction in Part III.</p>
     </div>
     <div class="read-more">
       <a href="/en/post/agentic-llm-1-reasoning/" class="read-more-link">Read more...</a>
@@ -440,31 +487,6 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
     </div>
     <div class="read-more">
       <a href="/en/post/anthropic-agent-evolution-1-from-workflows-to-agents/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/en/post/anthropic-agent-evolution-2-context-reset-and-handoff/">Anthropic Agent Evolution II: Context Reset and Structured Handoff</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-09-12 </span>
-      <div class="post-category">
-          <a href="/en/categories/ai-agents/"> AI Agents </a>
-          </div>
-        <span class="more-meta"> 739 words </span>
-        <span class="more-meta"> 4 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>The central tension in long-running work is not whether a model can write code. It is that a task may last hours or days while every context window is finite. Replaying the entire history eventually creates both capacity and noise problems.</p>
-
-<p>Anthropic&rsquo;s first long-running agent harness answered with a simple principle: <strong>reset conversational context, but externalize project state into structured artifacts that the next agent can recover.</strong></p>
-    </div>
-    <div class="read-more">
-      <a href="/en/post/anthropic-agent-evolution-2-context-reset-and-handoff/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>

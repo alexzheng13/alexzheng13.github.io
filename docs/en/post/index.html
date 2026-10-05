@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-09-29T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 29 posts by year</p>
+      <p>Browse all 30 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/agentic-llm-2-action/">
+          <time datetime="2026-10-05">10-05</time>
+          <span>Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/agentic-llm-1-reasoning/">
           <time datetime="2026-09-29">09-29</time>
           <span>Agentic LLM Reasoning (I): From Chain of Thought to Search, Reflection, and RLVR</span>
@@ -377,6 +381,63 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/agentic-llm-2-action/">Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-10-05">October 5, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>13 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>Reasoning proposes what should happen next. An agent begins to affect the world only when that decision becomes an API call, a mouse click, or a robot trajectory.</p>
+
+<p>That is the fundamental difference between <strong>action</strong> and ordinary text generation. A bad sentence can be regenerated; an action may change state, consume resources, or produce an irreversible result. An agent must therefore understand which actions are available, predict their consequences, and continue from the next observation.</p>
+
+<p>This is the <strong>second article in the Agentic Large Language Models series</strong>. <a href="/en/post/agentic-llm-1-reasoning/">Part I</a> covered reasoning from Chain of Thought and search to reflection and RLVR. This article follows a different progression:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Perceive the environment (VLM)
+             ↓
+Map intent to action (VLA)
+             ↓
+Predict what follows (World Model)
+             ↓
+Plan, compare, and revise before execution</code></pre></td></tr></table>
+</div>
+</div></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/agentic-llm/">Agentic LLM</a></li>
+                  <li><a href="/en/tags/action/">Action</a></li>
+                  <li><a href="/en/tags/vlm/">VLM</a></li>
+                  <li><a href="/en/tags/vla/">VLA</a></li>
+                  <li><a href="/en/tags/world-model/">World Model</a></li>
+                  <li><a href="/en/tags/robotics/">Robotics</a></li>
+                  <li><a href="/en/tags/model-based-rl/">Model-Based RL</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/agentic-llm-2-action/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/agentic-llm-1-reasoning/">Agentic LLM Reasoning (I): From Chain of Thought to Search, Reflection, and RLVR</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-09-29">September 29, 2026</time>
@@ -399,7 +460,7 @@
 <li><strong>Interaction</strong>: observe outcomes, exchange information with the environment or other agents, and revise the strategy.</li>
 </ol>
 
-<p>This is the <strong>first article in the Agentic Large Language Models series</strong>. Rather than listing reasoning terms in isolation, it follows one question: <strong>when one generation or one reasoning path is unreliable, what can the system add?</strong> The next two articles will cover Action and Interaction.</p></div>
+<p>This is the <strong>first article in the Agentic Large Language Models series</strong>. Rather than listing reasoning terms in isolation, it follows one question: <strong>when one generation or one reasoning path is unreliable, what can the system add?</strong> Part II covers Action, followed by Interaction in Part III.</p></div>
           </div>
         </div>
 
@@ -521,56 +582,6 @@
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/en/post/llm-agent-benchmarks-guide/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/nanochat-gpt-pretraining-from-source/">Reading nanochat Source: From Configuration to a Training Step</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-09-26">September 26, 2026</time>
-            <span aria-hidden="true">·</span>
-            <span>7 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>This article follows the execution order of <code>scripts/base_train.py</code>: command-line arguments, random seeds, DDP setup, model construction, weight initialization, scaling laws, optimizers, data loading, gradient accumulation, and finally one complete training step.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">documents → tokenizer and sequence packing → inputs/targets
-          → GPT forward → cross-entropy loss
-          → backward and gradient accumulation → optimizer step
-          → evaluation, sampling, checkpointing, and resume</code></pre></td></tr></table>
-</div>
-</div>
-<p>The organization and code-reading path follow my nanochat Notion notes. The prose has been edited for clarity, while the source snippets and their original reading sequence are preserved.</p>
-
-<blockquote>
-<p><strong>Prerequisite:</strong> If token embeddings, causal self-attention, MLPs, residual connections, or next-token loss are still unfamiliar, start with <a href="https://alexzheng13.github.io/en/post/transformer-architecture/">Transformer Architecture: From Token Embedding to the Training Loop</a> and then return to this source-level walkthrough.</p>
-</blockquote></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="Tags">
-              <span class="blog-summary-tags-label">Tags</span>
-              <ul>
-                  <li><a href="/en/tags/nanochat/">nanochat</a></li>
-                  <li><a href="/en/tags/gpt/">GPT</a></li>
-                  <li><a href="/en/tags/transformer/">Transformer</a></li>
-                  <li><a href="/en/tags/llm-training/">LLM Training</a></li>
-                  <li><a href="/en/tags/pytorch/">PyTorch</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/en/post/nanochat-gpt-pretraining-from-source/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>
