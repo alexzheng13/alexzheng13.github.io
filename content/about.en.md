@@ -9,7 +9,7 @@ heading: "I'm Bobo."
 deck: "I care about how complex systems remain reliable and efficient in the real world, and how the same engineering mindset can help us build better AI systems."
 ---
 
-<img class="about-portrait" src="/img/about/zheng-xuzhang.jpg" alt="Bobo working at a laptop">
+<img class="about-portrait" src="/img/about/bobo-seaside.jpg" alt="Bobo walking toward the sea">
 
 For more than five years, I worked on the core engineering and technical leadership of real-time collaborative documents at Kingsoft Office. My work spanned system and application architecture, core implementation, code review, performance engineering, and team delivery. I care about more than making a feature run: I want systems to remain understandable, reliable, and evolvable under high concurrency, long-lived connections, and failure.
 
