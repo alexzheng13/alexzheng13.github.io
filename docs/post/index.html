@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/post/" />
 
-<meta property="og:updated_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">文章归档</h1>
-      <p>按年份浏览全部 30 篇文章</p>
+      <p>按年份浏览全部 31 篇文章</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         订阅 RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="按年份排列的文章">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/post/cs329z-rag-agentic-retrieval/">
+          <time datetime="2026-10-06">10-06</time>
+          <span>CS 329Z：从 RAG 到 Agentic RAG——检索、重排与闭环决策</span>
+        </a>
         <a class="blog-archive-index-item" href="/post/agentic-llm-2-action/">
           <time datetime="2026-10-05">10-05</time>
           <span>Agentic LLM（二）：Action——从多模态感知到 VLA 与世界模型</span>
@@ -379,6 +383,55 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="最近文章">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/post/cs329z-rag-agentic-retrieval/">CS 329Z：从 RAG 到 Agentic RAG——检索、重排与闭环决策</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-10-06">2026年10月06日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 11 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>RAG 经常被概括为“从向量数据库中找几段文本，再塞进 Prompt”。这个描述没有错，但它忽略了真正困难的部分：<strong>怎样切分知识、怎样兼顾语义与精确匹配、怎样重排、怎样判断证据是否足够，以及什么时候应该再次检索。</strong></p>
+
+<p>从这个角度看，RAG 不是一个简单的外挂知识库，而是一条围绕证据构建的决策管线：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">文档 → 切分与索引 → 多路召回 → 融合与重排 → 阅读与生成
+                                ↑                    ↓
+                                └── 评估证据、改写查询、再次检索 ──┘</code></pre></td></tr></table>
+</div>
+</div>
+<p>本文根据我的 <strong>Stanford CS 329Z: Engineering AI Agents</strong> 笔记中的 RAG 章节整理。前半部分讨论经典 RAG 的检索与评测，后半部分把检索放回 Agent 循环，解释为什么下一步会自然走向 <strong>Agentic RAG</strong>。</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="标签">
+              <span class="blog-summary-tags-label">标签</span>
+              <ul>
+                  <li><a href="/tags/rag/">RAG</a></li>
+                  <li><a href="/tags/agentic-rag/">Agentic RAG</a></li>
+                  <li><a href="/tags/retrieval/">Retrieval</a></li>
+                  <li><a href="/tags/bm25/">BM25</a></li>
+                  <li><a href="/tags/dpr/">DPR</a></li>
+                  <li><a href="/tags/colbert/">ColBERT</a></li>
+                  <li><a href="/tags/graphrag/">GraphRAG</a></li>
+                  <li><a href="/tags/contextual-retrieval/">Contextual Retrieval</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/post/cs329z-rag-agentic-retrieval/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/post/agentic-llm-2-action/">Agentic LLM（二）：Action——从多模态感知到 VLA 与世界模型</a></h2>
@@ -551,40 +604,6 @@
           </a>
         </footer>
       </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/post/llm-agent-benchmarks-guide/">大模型与 AI Agent Benchmark 全景指南：它们究竟在评估什么</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-09-26">2026年09月26日</time>
-            <span aria-hidden="true">·</span>
-            <span>预计阅读 16 分钟</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>看模型发布报告时，我们经常会遇到一长串名字：Artificial Analysis Intelligence Index、LMArena、HELM、ARC-E、MMLU、GSM8K、SWE-bench、GAIA、WebArena、OSWorld……它们的分数不能直接横向比较，因为这里既有综合指数和排行榜，也有单项 benchmark；各自测量的能力、输入形式、可用工具和评分方式都不同。</p>
-
-<p>本文整理一张从“大模型答题”到“Agent 完成真实任务”的评测地图，并解释每个常见 benchmark 究竟是什么、适合测什么，以及不能从分数中推出什么结论。</p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="标签">
-              <span class="blog-summary-tags-label">标签</span>
-              <ul>
-                  <li><a href="/tags/llm/">LLM</a></li>
-                  <li><a href="/tags/ai-agent/">AI Agent</a></li>
-                  <li><a href="/tags/benchmark/">Benchmark</a></li>
-                  <li><a href="/tags/evaluation/">Evaluation</a></li>
-                  <li><a href="/tags/reasoning/">Reasoning</a></li>
-                  <li><a href="/tags/coding/">Coding</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/post/llm-agent-benchmarks-guide/">阅读全文<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
       <nav class="blog-pagination" aria-label="博客分页">
         <div class="blog-pagination-pages">
               <span class="blog-pagination-number is-current" aria-current="page" aria-label="当前第 1 页">
@@ -605,6 +624,9 @@
               <a class="blog-pagination-number" href="/post/page/6/" aria-label="第 6 页">
                 6
               </a>
+              <a class="blog-pagination-number" href="/post/page/7/" aria-label="第 7 页">
+                7
+              </a>
             <a class="blog-pagination-direction" href="/post/page/2/" rel="next">
               下一页
               <span aria-hidden="true">›</span>
@@ -612,11 +634,11 @@
         </div>
 
         <div class="blog-pagination-status">
-          <span>第 <strong>1</strong> / 6 页</span>
+          <span>第 <strong>1</strong> / 7 页</span>
 
-          <form class="blog-pagination-jump" data-pagination-base="/post/" data-total-pages="6">
+          <form class="blog-pagination-jump" data-pagination-base="/post/" data-total-pages="7">
             <label for="blog-page-jump">跳至</label>
-            <input id="blog-page-jump" name="page" type="number" min="1" max="6" value="1" inputmode="numeric">
+            <input id="blog-page-jump" name="page" type="number" min="1" max="7" value="1" inputmode="numeric">
             <button type="submit">跳转</button>
           </form>
         </div>

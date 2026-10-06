@@ -6,10 +6,34 @@
     <description>Recent content in Posts on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 05 Oct 2026 19:30:00 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 06 Oct 2026 09:00:00 +0200</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CS 329Z：从 RAG 到 Agentic RAG——检索、重排与闭环决策</title>
+      <link>https://alexzheng13.github.io/post/cs329z-rag-agentic-retrieval/</link>
+      <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/cs329z-rag-agentic-retrieval/</guid>
+      <description>&lt;p&gt;RAG 经常被概括为“从向量数据库中找几段文本，再塞进 Prompt”。这个描述没有错，但它忽略了真正困难的部分：&lt;strong&gt;怎样切分知识、怎样兼顾语义与精确匹配、怎样重排、怎样判断证据是否足够，以及什么时候应该再次检索。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;从这个角度看，RAG 不是一个简单的外挂知识库，而是一条围绕证据构建的决策管线：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;文档 → 切分与索引 → 多路召回 → 融合与重排 → 阅读与生成
+                                ↑                    ↓
+                                └── 评估证据、改写查询、再次检索 ──┘&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;本文根据我的 &lt;strong&gt;Stanford CS 329Z: Engineering AI Agents&lt;/strong&gt; 笔记中的 RAG 章节整理。前半部分讨论经典 RAG 的检索与评测，后半部分把检索放回 Agent 循环，解释为什么下一步会自然走向 &lt;strong&gt;Agentic RAG&lt;/strong&gt;。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Agentic LLM（二）：Action——从多模态感知到 VLA 与世界模型</title>

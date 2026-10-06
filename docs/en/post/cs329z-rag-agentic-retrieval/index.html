@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="A structured guide to RAG based on Stanford CS 329Z notes: Retriever–Reader, chunking, BM25, DPR, ColBERT, hybrid search, reranking, evaluation, GraphRAG, Self-RAG, CRAG, and Search-R1." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/en/post/cs329z-rag-agentic-retrieval/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/cs329z-rag-agentic-retrieval/">
+<meta name="site-language-route" data-language="en" content="/en/post/cs329z-rag-agentic-retrieval/">
+<meta name="site-current-language" content="en"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions" />
+<meta property="og:description" content="A structured guide to RAG based on Stanford CS 329Z notes: Retriever–Reader, chunking, BM25, DPR, ColBERT, hybrid search, reranking, evaluation, GraphRAG, Self-RAG, CRAG, and Search-R1." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/en/post/cs329z-rag-agentic-retrieval/" />
+<meta property="article:published_time" content="2026-10-06T09:00:00+02:00" />
+<meta property="article:modified_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions">
+<meta itemprop="description" content="A structured guide to RAG based on Stanford CS 329Z notes: Retriever–Reader, chunking, BM25, DPR, ColBERT, hybrid search, reranking, evaluation, GraphRAG, Self-RAG, CRAG, and Search-R1.">
+
+
+<meta itemprop="datePublished" content="2026-10-06T09:00:00&#43;02:00" />
+<meta itemprop="dateModified" content="2026-10-06T09:00:00&#43;02:00" />
+<meta itemprop="wordCount" content="2717">
+
+
+
+<meta itemprop="keywords" content="RAG,Agentic RAG,Retrieval,BM25,DPR,ColBERT,GraphRAG,Contextual Retrieval," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions"/>
+<meta name="twitter:description" content="A structured guide to RAG based on Stanford CS 329Z notes: Retriever–Reader, chunking, BM25, DPR, ColBERT, hybrid search, reranking, evaluation, GraphRAG, Self-RAG, CRAG, and Search-R1."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/en/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/en/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/en/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/en/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/cs329z-rag-agentic-retrieval/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/cs329z-rag-agentic-retrieval/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/en/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/cs329z-rag-agentic-retrieval/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/cs329z-rag-agentic-retrieval/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/en/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/about/">About</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-10-06 </span>
+        <div class="post-category">
+            <a href="/en/categories/ai-agents/"> AI Agents </a>
+            </div>
+          <span class="more-meta"> 2717 words </span>
+          <span class="more-meta"> 13 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-why-do-capable-models-still-need-retrieval">1. Why do capable models still need retrieval?</a>
+<ul>
+<li><a href="#1-1-retriever-reader-the-minimal-rag-abstraction">1.1 Retriever–Reader: the minimal RAG abstraction</a></li>
+</ul></li>
+<li><a href="#2-rag-is-not-one-fixed-architecture">2. RAG is not one fixed architecture</a></li>
+<li><a href="#3-chunking-retrieval-quality-starts-before-the-index">3. Chunking: retrieval quality starts before the index</a>
+<ul>
+<li><a href="#3-1-fixed-length-chunks">3.1 Fixed-length chunks</a></li>
+<li><a href="#3-2-structural-and-dynamic-chunking">3.2 Structural and dynamic chunking</a></li>
+</ul></li>
+<li><a href="#4-contextual-retrieval-add-context-then-combine-lexical-and-semantic-search">4. Contextual Retrieval: add context, then combine lexical and semantic search</a>
+<ul>
+<li><a href="#4-1-late-chunking-understand-the-document-before-pooling-the-chunk">4.1 Late Chunking: understand the document before pooling the chunk</a></li>
+</ul></li>
+<li><a href="#5-retrievers-from-exact-terms-to-semantic-matching">5. Retrievers: from exact terms to semantic matching</a>
+<ul>
+<li><a href="#5-1-bm25-exact-matching-still-matters">5.1 BM25: exact matching still matters</a></li>
+<li><a href="#5-2-dpr-put-queries-and-passages-in-one-vector-space">5.2 DPR: put queries and passages in one vector space</a></li>
+<li><a href="#5-3-colbert-preserve-token-level-evidence">5.3 ColBERT: preserve token-level evidence</a></li>
+</ul></li>
+<li><a href="#6-hybrid-search-and-reranking">6. Hybrid Search and reranking</a>
+<ul>
+<li><a href="#6-1-rrf-merge-ranks-rather-than-incompatible-scores">6.1 RRF: merge ranks rather than incompatible scores</a></li>
+<li><a href="#6-2-cross-encoders-let-the-query-and-passage-attend-jointly">6.2 Cross-Encoders: let the query and passage attend jointly</a></li>
+</ul></li>
+<li><a href="#7-how-should-a-retriever-be-evaluated">7. How should a Retriever be evaluated?</a>
+<ul>
+<li><a href="#7-1-hit-k-and-failed-k">7.1 Hit@K and Failed@K</a></li>
+<li><a href="#7-2-recall-k">7.2 Recall@K</a></li>
+<li><a href="#7-3-mrr-k">7.3 MRR@K</a></li>
+<li><a href="#7-4-ndcg-k">7.4 nDCG@K</a></li>
+</ul></li>
+<li><a href="#8-graphrag-when-the-answer-depends-on-relationships-and-global-structure">8. GraphRAG: when the answer depends on relationships and global structure</a></li>
+<li><a href="#9-agentic-rag-make-retrieval-an-action">9. Agentic RAG: make retrieval an action</a>
+<ul>
+<li><a href="#9-1-self-rag-reflect-on-retrieval-and-evidence">9.1 Self-RAG: reflect on retrieval and evidence</a></li>
+<li><a href="#9-2-crag-let-a-critic-decide-how-to-handle-the-result">9.2 CRAG: let a critic decide how to handle the result</a></li>
+<li><a href="#9-3-search-r1-learn-a-search-policy-with-reinforcement-learning">9.3 Search-R1: learn a search policy with reinforcement learning</a></li>
+</ul></li>
+<li><a href="#10-where-does-rag-fail">10. Where does RAG fail?</a>
+<ul>
+<li><a href="#10-1-retrieval-failures">10.1 Retrieval failures</a></li>
+<li><a href="#10-2-reader-failures">10.2 Reader failures</a></li>
+<li><a href="#10-3-agent-loop-failures">10.3 Agent-loop failures</a></li>
+</ul></li>
+<li><a href="#11-a-practical-implementation-order">11. A practical implementation order</a></li>
+<li><a href="#conclusion-rag-is-about-controlling-evidence">Conclusion: RAG is about controlling evidence</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>RAG is often summarized as “retrieve a few passages from a vector database and put them in the prompt.” That description is not wrong, but it hides the difficult questions: <strong>How should knowledge be chunked? How do we combine semantic and exact matching? How should candidates be reranked? How do we know whether the evidence is sufficient, and when should the system search again?</strong></p>
+
+<p>Seen this way, RAG is not merely an external knowledge store. It is an evidence-centered decision pipeline:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Documents → Chunk and index → Multi-path recall → Fuse and rerank → Read and generate
+                                      ↑                              ↓
+                                      └── Evaluate, rewrite, search again ──┘</code></pre></td></tr></table>
+</div>
+</div>
+<p>This article reorganizes the RAG chapter from my <strong>Stanford CS 329Z: Engineering AI Agents</strong> notes. The first half develops retrieval and evaluation. The second puts retrieval back inside the agent loop and explains why the architecture naturally evolves toward <strong>Agentic RAG</strong>.</p>
+
+<h2 id="1-why-do-capable-models-still-need-retrieval">1. Why do capable models still need retrieval?</h2>
+
+<p>Language models compress a great deal of public knowledge into their parameters, but parametric memory is a poor home for every kind of knowledge:</p>
+
+<ul>
+<li><strong>Knowledge changes</strong>: product documentation, prices, policies, and company data can become stale quickly.</li>
+<li><strong>Private data is absent from pretraining</strong>: internal documents, personal files, and live business state must come from elsewhere.</li>
+<li><strong>Answers need evidence</strong>: users often need to inspect where a conclusion came from, not just read the conclusion.</li>
+<li><strong>Context has limits</strong>: a longer context window does not guarantee that every relevant fact will be used reliably.</li>
+</ul>
+
+<p>Retrieval avoids asking the model to memorize everything in advance. It supplies the most relevant, useful, and traceable evidence at the moment an answer is produced. Updating an index is usually easier than retraining a model, while returned sources make the answer more auditable than a purely parametric response.</p>
+
+<h3 id="1-1-retriever-reader-the-minimal-rag-abstraction">1.1 Retriever–Reader: the minimal RAG abstraction</h3>
+
+<p>Let the document collection be:</p>
+
+<div class="math-display">
+\[
+\mathcal{D}=\{D_1,D_2,\ldots,D_n\}
+\]
+</div>
+
+<p>Given a query <code>Q</code>, the Retriever selects <code>K</code> candidate passages:</p>
+
+<div class="math-display">
+\[
+f(\mathcal{D},Q)\rightarrow \{P_1,P_2,\ldots,P_K\}
+\]
+</div>
+
+<p>The Reader combines the question and evidence to produce answer <code>A</code>:</p>
+
+<div class="math-display">
+\[
+g\!\left(Q,\{P_1,P_2,\ldots,P_K\}\right)\rightarrow A
+\]
+</div>
+
+<p><code>K</code> might be five, or it might be one hundred candidates followed by a reranker. Earlier systems often paired sparse retrievers such as TF-IDF or BM25 with a trained reading-comprehension model. Today the Reader is often an LLM, but the two-stage abstraction still holds.</p>
+
+<p><img src="/img/posts/cs329z-rag/retriever-reader.webp" alt="Retriever–Reader framework: a retriever selects evidence and a reader answers from the query and retrieved passages" /></p>
+
+<h2 id="2-rag-is-not-one-fixed-architecture">2. RAG is not one fixed architecture</h2>
+
+<p>One source of variation is the granularity of the retrieved representation. The embedding determines what a single vector stands for:</p>
+
+<table>
+<thead>
+<tr>
+<th>Granularity</th>
+<th>Typical methods</th>
+<th>One vector represents</th>
+<th>Best suited to</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Static word</td>
+<td>word2vec, GloVe</td>
+<td>A word type</td>
+<td>Word-level similarity</td>
+</tr>
+
+<tr>
+<td>Contextual token</td>
+<td>BERT, RoBERTa</td>
+<td>A token in context</td>
+<td>Local meaning and entities</td>
+</tr>
+
+<tr>
+<td>Passage</td>
+<td>Sentence-BERT, DPR, E5</td>
+<td>A chunk</td>
+<td>Large-scale semantic recall</td>
+</tr>
+
+<tr>
+<td>Multimodal</td>
+<td>CLIP</td>
+<td>Text or image</td>
+<td>Cross-modal retrieval</td>
+</tr>
+
+<tr>
+<td>Graph</td>
+<td>node2vec, GNN encoder</td>
+<td>A node or relation</td>
+<td>Structured relation queries</td>
+</tr>
+</tbody>
+</table>
+
+<p>At the system level, RAG designs are often grouped into three forms:</p>
+
+<ul>
+<li><strong>Naive RAG</strong>: one query, one retrieval pass, one generation pass;</li>
+<li><strong>Advanced RAG</strong>: query rewriting, hybrid recall, reranking, compression, and verification;</li>
+<li><strong>Modular or Agentic RAG</strong>: the model dynamically chooses sources, retrieval methods, and stopping conditions.</li>
+</ul>
+
+<p><img src="/img/posts/cs329z-rag/rag-variants.webp" alt="The evolution from Naive RAG to Advanced RAG and Modular RAG" /></p>
+
+<p>The key transition is not whether the application has a vector database. It is whether retrieval remains a fixed preprocessing step or becomes an <strong>action that can be planned, evaluated, and repeated</strong>.</p>
+
+<h2 id="3-chunking-retrieval-quality-starts-before-the-index">3. Chunking: retrieval quality starts before the index</h2>
+
+<p>Long documents are usually divided into chunks before indexing. This looks like simple preprocessing, but it directly limits the best recall the system can achieve.</p>
+
+<h3 id="3-1-fixed-length-chunks">3.1 Fixed-length chunks</h3>
+
+<p>A common baseline uses 100–500 tokens per chunk with roughly 10–20% overlap:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Chunk 1: token 1   ───────── token 300
+Chunk 2:                 token 271 ───────── token 570
+                              └─ overlap ─┘</code></pre></td></tr></table>
+</div>
+</div>
+<p>Overlap keeps a sentence from disappearing when it crosses a boundary, but it does not resolve the underlying tradeoff:</p>
+
+<ul>
+<li>If a chunk is too small, its embedding lacks context. “Revenue grew by 3%” does not say which company or quarter.</li>
+<li>If a chunk is too large, one vector averages several topics and can wash out the relevant detail.</li>
+</ul>
+
+<h3 id="3-2-structural-and-dynamic-chunking">3.2 Structural and dynamic chunking</h3>
+
+<p>A stronger design respects document structure: sentences, paragraphs, headings, and sections. Two extensions can add useful context:</p>
+
+<ol>
+<li><strong>Context-enriched chunking</strong> adds a title, source, date, or summary.</li>
+<li><strong>AI dynamic chunking</strong> asks a model to locate semantic breakpoints rather than cutting at a fixed token count.</li>
+</ol>
+
+<p>More complexity is not automatically better. FAQs, source code, financial reports, and chat logs have different structures. Chunking should be tested against the actual data and queries instead of using one global length for every collection.</p>
+
+<h2 id="4-contextual-retrieval-add-context-then-combine-lexical-and-semantic-search">4. Contextual Retrieval: add context, then combine lexical and semantic search</h2>
+
+<p>Suppose the original chunk contains only:</p>
+
+<blockquote>
+<p>The company&rsquo;s revenue grew by 3% over the previous quarter.</p>
+</blockquote>
+
+<p>The sentence is meaningful, but it omits the company, date, and document type. A query such as “How much did ACME&rsquo;s revenue grow in Q2 2023?” may fail to retrieve it.</p>
+
+<p>Contextual Retrieval first generates a short description for each chunk, for example:</p>
+
+<blockquote>
+<p>This chunk is from ACME Corp&rsquo;s Q2 2023 SEC filing and discusses quarterly revenue growth.</p>
+</blockquote>
+
+<p>The system then indexes the context together with the original chunk.</p>
+
+<p><img src="/img/posts/cs329z-rag/contextualized-chunk-example.webp" alt="An original chunk compared with a context-enriched version" /></p>
+
+<p>This retains two complementary signals:</p>
+
+<ul>
+<li><strong>Embeddings</strong> capture meaning, paraphrases, and related expressions.</li>
+<li><strong>BM25</strong> captures exact company names, dates, numbers, error codes, and other literal terms.</li>
+</ul>
+
+<p><img src="/img/posts/cs329z-rag/contextual-retrieval-overview.webp" alt="Contextual Retrieval enriches each chunk before building semantic and lexical indexes" /></p>
+
+<p><img src="/img/posts/cs329z-rag/contextual-retrieval-hybrid.webp" alt="The hybrid-search flow used by Contextual Retrieval" /></p>
+
+<p>The experiment in the notes illustrates the direction of the effect. Combining embeddings with BM25 reduces retrieval failure from 5.7% to 5.0%; adding chunk context brings it down further to 2.9%. These numbers belong to a specific experimental setup and should not be generalized blindly. The more durable lesson is that <strong>context enrichment and complementary lexical and semantic signals can produce more reliable gains than swapping embedding models alone</strong>.</p>
+
+<p><img src="/img/posts/cs329z-rag/contextual-retrieval-failure-rate.webp" alt="Retrieval failure rates across embedding, BM25, and contextual-retrieval configurations" /></p>
+
+<h3 id="4-1-late-chunking-understand-the-document-before-pooling-the-chunk">4.1 Late Chunking: understand the document before pooling the chunk</h3>
+
+<p>The conventional pipeline chunks first and encodes each chunk independently. Late Chunking reverses that order:</p>
+
+<ol>
+<li>Encode the full document with a long-context encoder.</li>
+<li>Obtain token representations that have seen the surrounding document.</li>
+<li>Mean-pool the token spans belonging to each chunk.</li>
+</ol>
+
+<p>The resulting chunk vectors remain suitable for vector search, but they carry information from the broader document.</p>
+
+<p><img src="/img/posts/cs329z-rag/late-chunking.webp" alt="Naive Chunking compared with Late Chunking" /></p>
+
+<p>Contextual Retrieval adds explicit textual context. Late Chunking encodes context implicitly into token representations. Both address the same failure: <strong>a local passage should not be forced to stand alone after being detached from its source</strong>.</p>
+
+<h2 id="5-retrievers-from-exact-terms-to-semantic-matching">5. Retrievers: from exact terms to semantic matching</h2>
+
+<h3 id="5-1-bm25-exact-matching-still-matters">5.1 BM25: exact matching still matters</h3>
+
+<p>BM25 balances three signals:</p>
+
+<ul>
+<li>how frequently a term appears in the current document;</li>
+<li>how rare the term is across the collection;</li>
+<li>document length, so longer documents are not rewarded merely for containing more words.</li>
+</ul>
+
+<p>A common form is:</p>
+
+<div class="math-display">
+\[
+\operatorname{BM25}(Q,D)=
+\sum_{q_i\in Q}
+\operatorname{IDF}(q_i)
+\cdot
+\frac{f(q_i,D)(k_1+1)}
+{f(q_i,D)+k_1\left(1-b+b\frac{|D|}{\operatorname{avgdl}}\right)}
+\]
+</div>
+
+<p>Here, <code>f(q_i,D)</code> is term frequency, <code>|D|</code> is document length, and <code>avgdl</code> is the average document length. IDF can be written as:</p>
+
+<div class="math-display">
+\[
+\operatorname{IDF}(q_i)=
+\log\!\left(
+\frac{N-n(q_i)+0.5}{n(q_i)+0.5}+1
+\right)
+\]
+</div>
+
+<p><img src="/img/posts/cs329z-rag/bm25-formula.webp" alt="The term-frequency, length-normalization, and IDF components of BM25" /></p>
+
+<p>BM25 does not understand meaning, but it excels at product IDs, function names, people, and error codes. For a rare literal such as <code>ERR_CONN_RESET_1042</code>, exact matching is often more reliable than a dense embedding.</p>
+
+<h3 id="5-2-dpr-put-queries-and-passages-in-one-vector-space">5.2 DPR: put queries and passages in one vector space</h3>
+
+<p>Dense Passage Retrieval uses separate encoders for the query and passage, then compares their vectors by dot product:</p>
+
+<div class="math-display">
+\[
+s(q,p)=E_Q(q)^{\top}E_P(p)
+\]
+</div>
+
+<p>Passage vectors can be computed offline and placed in an approximate-nearest-neighbor index. At query time, the system only encodes the query and retrieves the Top-K passages.</p>
+
+<p><img src="/img/posts/cs329z-rag/dpr-architecture.webp" alt="DPR's offline passage encoding and online query retrieval pipeline" /></p>
+
+<p>DPR can retrieve semantic neighbors that share no keywords, but a single vector must compress an entire passage and may overlook rare literal evidence.</p>
+
+<h3 id="5-3-colbert-preserve-token-level-evidence">5.3 ColBERT: preserve token-level evidence</h3>
+
+<p>ColBERT does not collapse a passage into one vector. It separately pre-encodes query and document tokens, then performs <strong>Late Interaction</strong> at query time. Its MaxSim score can be written as:</p>
+
+<div class="math-display">
+\[
+S_{q,d}=\sum_{i\in q}\max_{j\in d}q_i^{\top}d_j
+\]
+</div>
+
+<p>For every query token, it finds the best matching document token and sums those scores. This retains finer evidence than DPR&rsquo;s single-vector comparison without requiring the full pairwise computation of a Cross-Encoder over the whole corpus.</p>
+
+<h2 id="6-hybrid-search-and-reranking">6. Hybrid Search and reranking</h2>
+
+<p>No retriever covers every query:</p>
+
+<ul>
+<li>BM25 can miss synonyms, paraphrases, and natural-language reformulations.</li>
+<li>Dense retrievers can miss rare entities, identifiers, and strings that must match exactly.</li>
+</ul>
+
+<p>Production systems therefore often run sparse and dense retrieval in parallel and merge their candidate lists.</p>
+
+<h3 id="6-1-rrf-merge-ranks-rather-than-incompatible-scores">6.1 RRF: merge ranks rather than incompatible scores</h3>
+
+<p>BM25 scores and vector similarities live on different scales, so adding them directly requires calibration. Reciprocal Rank Fusion uses only the rank assigned by each retriever:</p>
+
+<div class="math-display">
+\[
+\operatorname{RRF}(d)=
+\sum_{r\in\mathcal{R}}
+\frac{1}{k+\operatorname{rank}_r(d)}
+\]
+</div>
+
+<p><code>k</code> is a smoothing constant and <code>rank_r(d)</code> is the rank of document <code>d</code> under retriever <code>r</code>. A document that ranks well in several lists receives a strong fused score. RRF avoids raw-score calibration and naturally supports more than two retrievers.</p>
+
+<h3 id="6-2-cross-encoders-let-the-query-and-passage-attend-jointly">6.2 Cross-Encoders: let the query and passage attend jointly</h3>
+
+<p>A Bi-Encoder represents the query and passage independently, which enables large-scale recall. A Cross-Encoder concatenates them and uses full attention to output a relevance score.</p>
+
+<p><img src="/img/posts/cs329z-rag/bi-vs-cross-encoder.webp" alt="Bi-Encoder and Cross-Encoder architectures" /></p>
+
+<p>Cross-Encoders are usually more accurate, but every query–passage pair must be evaluated online. A practical cascade is therefore:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">BM25 / DPR       retrieve hundreds of candidates
+       ↓
+RRF              merge candidate lists
+       ↓
+ColBERT / Cross-Encoder   rerank a smaller Top-N
+       ↓
+LLM              generate from a few high-quality passages</code></pre></td></tr></table>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Representation</th>
+<th>Speed</th>
+<th>Strongest at</th>
+<th>Main limitation</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>BM25</td>
+<td>Sparse inverted index</td>
+<td>Fast</td>
+<td>Exact terms, IDs, names, code</td>
+<td>Paraphrases and synonyms</td>
+</tr>
+
+<tr>
+<td>DPR</td>
+<td>One vector per passage</td>
+<td>Fast</td>
+<td>Semantic recall at scale</td>
+<td>Rare literals and compression loss</td>
+</tr>
+
+<tr>
+<td>ColBERT</td>
+<td>One vector per token</td>
+<td>Medium</td>
+<td>Fine-grained token evidence</td>
+<td>Larger index</td>
+</tr>
+
+<tr>
+<td>Cross-Encoder</td>
+<td>Joint query–passage encoding</td>
+<td>Slow</td>
+<td>Accurate shortlist reranking</td>
+<td>Cannot scan the full corpus</td>
+</tr>
+</tbody>
+</table>
+
+<p>The goal is not to crown one “best model.” Each stage should work within the compute budget it fits: <strong>cheap components maximize recall; expensive components improve precision</strong>.</p>
+
+<h2 id="7-how-should-a-retriever-be-evaluated">7. How should a Retriever be evaluated?</h2>
+
+<p>Judging only whether the final answer sounds good mixes retrieval failures with generation failures. The Retriever needs its own evaluation.</p>
+
+<h3 id="7-1-hit-k-and-failed-k">7.1 Hit@K and Failed@K</h3>
+
+<p>A query is a hit if at least one relevant passage appears in the Top-K:</p>
+
+<div class="math-display">
+\[
+\operatorname{Hit@K}(q)=
+\mathbb{1}\!\left[\operatorname{Rel}_q\cap\operatorname{TopK}_q\neq\varnothing\right]
+\]
+</div>
+
+<p>Failed@K means there is no relevant evidence in the Top-K:</p>
+
+<div class="math-display">
+\[
+\operatorname{Failed@K}=1-\operatorname{Hit@K}
+\]
+</div>
+
+<h3 id="7-2-recall-k">7.2 Recall@K</h3>
+
+<p>When several passages are relevant, Recall@K measures how many were retrieved:</p>
+
+<div class="math-display">
+\[
+\operatorname{Recall@K}(q)=
+\frac{|\operatorname{Rel}_q\cap\operatorname{TopK}_q|}
+{|\operatorname{Rel}_q|}
+\]
+</div>
+
+<h3 id="7-3-mrr-k">7.3 MRR@K</h3>
+
+<p>Mean Reciprocal Rank measures how early the first relevant result appears:</p>
+
+<div class="math-display">
+\[
+\operatorname{MRR@K}=
+\frac{1}{|Q|}\sum_{q\in Q}
+\begin{cases}
+\frac{1}{\operatorname{rank}_q}, & \operatorname{rank}_q\le K\\[4pt]
+0, & \text{otherwise}
+\end{cases}
+\]
+</div>
+
+<h3 id="7-4-ndcg-k">7.4 nDCG@K</h3>
+
+<p>When relevance has multiple grades rather than a binary label, nDCG discounts relevant results that appear lower in the list:</p>
+
+<div class="math-display">
+\[
+\operatorname{DCG@K}=\sum_{i=1}^{K}
+\frac{2^{\operatorname{rel}_i}-1}{\log_2(i+1)},
+\qquad
+\operatorname{nDCG@K}=\frac{\operatorname{DCG@K}}{\operatorname{IDCG@K}}
+\]
+</div>
+
+<p><img src="/img/posts/cs329z-rag/retrieval-metrics.webp" alt="Retrieval metrics including Hit, Failed, Recall, MRR, and nDCG" /></p>
+
+<p>Evaluation should also be sliced by query type: exact entities, paraphrased questions, multi-hop tasks, time-sensitive facts, and permission-sensitive requests can expose very different weaknesses. A high average score can still hide failure on the most important business queries.</p>
+
+<h2 id="8-graphrag-when-the-answer-depends-on-relationships-and-global-structure">8. GraphRAG: when the answer depends on relationships and global structure</h2>
+
+<p>Vector retrieval is good at finding local passages similar to a query. Some questions, however, are not asking “which passage looks most similar?” They ask:</p>
+
+<ul>
+<li>How are people, organizations, and events connected?</li>
+<li>What themes recur across a large collection?</li>
+<li>What happened within the local relationship network of an entity?</li>
+</ul>
+
+<p>GraphRAG extracts entities and relationships, builds a knowledge graph, detects communities, and produces reports that summarize those communities.</p>
+
+<p><img src="/img/posts/cs329z-rag/graphrag-communities.webp" alt="Communities formed by entities and relations in GraphRAG" /></p>
+
+<p><img src="/img/posts/cs329z-rag/graphrag-pipeline.webp" alt="The GraphRAG pipeline from source documents and text units to entities, communities, and local or global answers" /></p>
+
+<p>This supports two broad answer modes:</p>
+
+<ul>
+<li><strong>Local answers</strong> begin with nodes, relationships, and source passages near a particular entity.</li>
+<li><strong>Global answers</strong> combine community reports to address collection-wide questions.</li>
+</ul>
+
+<p>GraphRAG is not a default upgrade for every application. Entity resolution, relation extraction, graph updates, and community summaries add cost. The structure is most justified when queries genuinely depend on multi-hop relationships or global themes.</p>
+
+<h2 id="9-agentic-rag-make-retrieval-an-action">9. Agentic RAG: make retrieval an action</h2>
+
+<p>Classic RAG retrieves once for every question and accepts the first result set. Agentic RAG asks the model to make three decisions inside a loop:</p>
+
+<ol>
+<li><strong>Should I retrieve?</strong> Is the current knowledge sufficient?</li>
+<li><strong>What should I retrieve?</strong> How should the task be rewritten or split into subquestions?</li>
+<li><strong>Is the evidence good enough?</strong> Is it relevant, trustworthy, and consistent, or should the system search again?</li>
+</ol>
+
+<p>Retrieval becomes an action selected by a policy rather than a mandatory pipeline stage:</p>
+
+<div class="math-display">
+\[
+a_t\in\{\text{answer},\ \text{retrieve}(q),\ \text{rewrite}(q),\ \text{verify},\ \text{stop}\}
+\]
+</div>
+
+<p><img src="/img/posts/cs329z-rag/self-rag-retrieve-on-demand.webp" alt="On-demand retrieval, candidate generation, critique, and answer selection" /></p>
+
+<h3 id="9-1-self-rag-reflect-on-retrieval-and-evidence">9.1 Self-RAG: reflect on retrieval and evidence</h3>
+
+<p>Self-RAG introduces reflection tokens that express decisions such as:</p>
+
+<ul>
+<li>whether retrieval is necessary;</li>
+<li>whether a retrieved passage is relevant;</li>
+<li>whether the generated statement is supported by evidence;</li>
+<li>whether the answer is useful or another retrieval pass is needed.</li>
+</ul>
+
+<p>Its important contribution is not simply “retrieve more.” It places <strong>retrieval decisions, evidence judgments, and generation</strong> inside one learnable process.</p>
+
+<h3 id="9-2-crag-let-a-critic-decide-how-to-handle-the-result">9.2 CRAG: let a critic decide how to handle the result</h3>
+
+<p>Corrective RAG adds a critic that evaluates the retrieved evidence before choosing a strategy:</p>
+
+<table>
+<thead>
+<tr>
+<th>Critic judgment</th>
+<th>Next action</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Correct</td>
+<td>Use the high-quality evidence directly</td>
+</tr>
+
+<tr>
+<td>Ambiguous</td>
+<td>Rewrite, retrieve more, or add sources</td>
+</tr>
+
+<tr>
+<td>Incorrect</td>
+<td>Discard the result and use an alternative source</td>
+</tr>
+</tbody>
+</table>
+
+<p><img src="/img/posts/cs329z-rag/crag-critic.webp" alt="CRAG routes retrieval results according to Correct, Ambiguous, and Incorrect judgments" /></p>
+
+<h3 id="9-3-search-r1-learn-a-search-policy-with-reinforcement-learning">9.3 Search-R1: learn a search policy with reinforcement learning</h3>
+
+<p>Search-R1 treats search as a multi-step decision process and learns trajectories such as:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Think → Search → Read → Think → Search → … → Answer</code></pre></td></tr></table>
+</div>
+</div>
+<p><img src="/img/posts/cs329z-rag/search-r1.webp" alt="Search-R1 learns a multi-round reasoning and search policy through reinforcement learning" /></p>
+
+<p>This is different from merely prompting a model to search first. Reinforcement learning optimizes the whole trajectory: when to query, how to use observations, when to continue, and when to stop. The eventual answer reward shapes the policy that produced the search sequence.</p>
+
+<h2 id="10-where-does-rag-fail">10. Where does RAG fail?</h2>
+
+<p>Once RAG is viewed as a closed-loop system, failures fall into three layers.</p>
+
+<h3 id="10-1-retrieval-failures">10.1 Retrieval failures</h3>
+
+<ul>
+<li><strong>Recall ceiling</strong>: if the first stage never retrieves the evidence, neither reranking nor a stronger LLM can recover it.</li>
+<li><strong>Stale index</strong>: the source changed but the embedding or inverted index did not.</li>
+<li><strong>Permission leak</strong>: the system retrieves a document the user is not authorized to read.</li>
+<li><strong>Query mismatch</strong>: the user&rsquo;s intent is not translated into a form that fits the collection.</li>
+</ul>
+
+<h3 id="10-2-reader-failures">10.2 Reader failures</h3>
+
+<ul>
+<li><strong>Lost in the middle</strong>: the evidence is present but buried in long context.</li>
+<li><strong>Distraction</strong>: highly similar yet irrelevant passages pull the model away from the answer.</li>
+<li><strong>Evidence conflict</strong>: sources from different dates or systems disagree.</li>
+<li><strong>Unsupported synthesis</strong>: several true fragments are combined into a conclusion supported by none of them.</li>
+</ul>
+
+<h3 id="10-3-agent-loop-failures">10.3 Agent-loop failures</h3>
+
+<ul>
+<li><strong>Compounding error</strong>: a bad query produces bad evidence, which drives another bad query.</li>
+<li><strong>No stopping rule</strong>: the agent keeps searching without gaining information.</li>
+<li><strong>Prompt injection</strong>: instructions inside retrieved documents are mistaken for system commands.</li>
+<li><strong>Cost explosion</strong>: rewriting, reranking, and repeated search have no budget.</li>
+</ul>
+
+<p>A production system therefore needs document-level authorization, source and timestamp metadata, citation tracing, search-round and cost limits, conflict handling, and a strict separation between retrieved content and trusted instructions.</p>
+
+<h2 id="11-a-practical-implementation-order">11. A practical implementation order</h2>
+
+<p>If I were building a RAG system from scratch, I would iterate in this order:</p>
+
+<ol>
+<li>Build a real query set with passage relevance labels and define evaluation first.</li>
+<li>Establish an interpretable baseline with structural chunking and BM25.</li>
+<li>Add a dense retriever and combine it with BM25 through RRF.</li>
+<li>Inspect Failed@K before deciding whether Contextual Retrieval or Late Chunking is necessary.</li>
+<li>Use ColBERT or a Cross-Encoder only on a smaller candidate set.</li>
+<li>Evaluate retrieval and final answers separately instead of conflating their errors.</li>
+<li>Introduce query planning, critics, and agent loops only when a single retrieval pass is demonstrably insufficient.</li>
+<li>Add higher-maintenance structures such as GraphRAG only when the task requires them.</li>
+</ol>
+
+<p>The principle is simple: <strong>make a measurable single retrieval pass work before turning it into a multi-step agent action</strong>. Otherwise, the agent merely automates repeated calls to an unstable retriever.</p>
+
+<h2 id="conclusion-rag-is-about-controlling-evidence">Conclusion: RAG is about controlling evidence</h2>
+
+<p>The real value of RAG is not placing more tokens into a context window. It is controlling which evidence the answer is allowed to use:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Recall determines whether the correct evidence can be seen.
+Ranking determines whether it appears early enough.
+Reading determines whether the model uses it correctly.
+Agent policy determines when to search, how to revise, and when to stop.</code></pre></td></tr></table>
+</div>
+</div>
+<p>Classic RAG asks, “Given this query, what should I retrieve?” Agentic RAG adds, “Should I search now, how should I search, and is the evidence sufficient?” Once retrieval becomes an action, RAG is no longer only a knowledge attachment. It becomes a central mechanism through which an agent observes the external world, verifies its beliefs, and corrects its next move.</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-10-06
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/en/tags/rag/">RAG</a>
+          <a href="/en/tags/agentic-rag/">Agentic RAG</a>
+          <a href="/en/tags/retrieval/">Retrieval</a>
+          <a href="/en/tags/bm25/">BM25</a>
+          <a href="/en/tags/dpr/">DPR</a>
+          <a href="/en/tags/colbert/">ColBERT</a>
+          <a href="/en/tags/graphrag/">GraphRAG</a>
+          <a href="/en/tags/contextual-retrieval/">Contextual Retrieval</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/en/post/agentic-llm-2-action/">
+            <span class="next-text nav-default">Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 30 posts by year</p>
+      <p>Browse all 31 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/cs329z-rag-agentic-retrieval/">
+          <time datetime="2026-10-06">10-06</time>
+          <span>CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/agentic-llm-2-action/">
           <time datetime="2026-10-05">10-05</time>
           <span>Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</span>
@@ -381,6 +385,40 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/stanford-cs329a-self-improving-ai-agents/">Stanford CS329A: A Complete Framework for Self-Improving AI Agents</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-08-11">August 11, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>13 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>Self-Improving AI Agent is not a mysterious system that recursively modifies itself indefinitely. A more practical understanding is: Agent forms a closed loop between generation, action, observation and verification, and uses the feedback obtained during reasoning to improve current answers, subsequent decisions, and even the next round of training.</p>
+
+<p>This article follows the main line of the Stanford CS329A course and strings together test-time calculations, verifiers, tool feedback, planning search, reinforcement learning, in-depth research and long-term evaluation into a complete framework.</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/ai-agents/">AI Agents</a></li>
+                  <li><a href="/en/tags/test-time-compute/">Test-Time Compute</a></li>
+                  <li><a href="/en/tags/verifier/">Verifier</a></li>
+                  <li><a href="/en/tags/react/">ReAct</a></li>
+                  <li><a href="/en/tags/lats/">LATS</a></li>
+                  <li><a href="/en/tags/reinforcement-learning/">Reinforcement Learning</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/stanford-cs329a-self-improving-ai-agents/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/stanford-cs230-career-advice-in-ai/">Stanford CS230: Career Advice for the AI Era</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-03-23">March 23, 2026</time>
@@ -479,28 +517,6 @@ The following is the text of the article    One of the basic concepts of Linux
           </a>
         </footer>
       </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/introduction-to-go-assembly-1/">A Practical Introduction to Go Assembly (1)</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2020-12-30">December 30, 2020</time>
-            <span aria-hidden="true">·</span>
-            <span>10 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">Program storage space layout  A process is an executing program instance. Each instance has its own address space and execution state. A program becomes a process when the operating system adds the appropriate information to the kernel data structures and allocates the necessary resources to run the program code.
- A thread is an abstract data type that represents a thread of execution within a process. A thread has its own execution stack, program counter value, register set and state.</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/introduction-to-go-assembly-1/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
       <nav class="blog-pagination" aria-label="Blog pagination">
         <div class="blog-pagination-pages">
             <a class="blog-pagination-direction" href="/en/post/page/3/" rel="prev">
@@ -525,6 +541,9 @@ The following is the text of the article    One of the basic concepts of Linux
               <a class="blog-pagination-number" href="/en/post/page/6/" aria-label="Page 6">
                 6
               </a>
+              <a class="blog-pagination-number" href="/en/post/page/7/" aria-label="Page 7">
+                7
+              </a>
             <a class="blog-pagination-direction" href="/en/post/page/5/" rel="next">
               Next
               <span aria-hidden="true">›</span>
@@ -532,11 +551,11 @@ The following is the text of the article    One of the basic concepts of Linux
         </div>
 
         <div class="blog-pagination-status">
-          <span>Page <strong>4</strong> of 6</span>
+          <span>Page <strong>4</strong> of 7</span>
 
-          <form class="blog-pagination-jump" data-pagination-base="/en/post/" data-total-pages="6">
+          <form class="blog-pagination-jump" data-pagination-base="/en/post/" data-total-pages="7">
             <label for="blog-page-jump">Go to</label>
-            <input id="blog-page-jump" name="page" type="number" min="1" max="6" value="4" inputmode="numeric">
+            <input id="blog-page-jump" name="page" type="number" min="1" max="7" value="4" inputmode="numeric">
             <button type="submit">Go</button>
           </form>
         </div>

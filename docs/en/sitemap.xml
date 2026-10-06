@@ -2,6 +2,104 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://alexzheng13.github.io/en/tags/agentic-rag/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/categories/ai-agents/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/bm25/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/categories/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/colbert/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/contextual-retrieval/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/post/cs329z-rag-agentic-retrieval/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/dpr/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/graphrag/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/post/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/rag/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/retrieval/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/</loc>
+    <lastmod>2026-10-06T09:00:00+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://alexzheng13.github.io/en/tags/action/</loc>
     <lastmod>2026-10-05T19:30:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -23,27 +121,6 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/categories/ai-agents/</loc>
-    <lastmod>2026-10-05T19:30:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/</loc>
-    <lastmod>2026-10-05T19:30:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/categories/</loc>
-    <lastmod>2026-10-05T19:30:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://alexzheng13.github.io/en/tags/model-based-rl/</loc>
     <lastmod>2026-10-05T19:30:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -51,21 +128,7 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/post/</loc>
-    <lastmod>2026-10-05T19:30:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://alexzheng13.github.io/en/tags/robotics/</loc>
-    <lastmod>2026-10-05T19:30:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/tags/</loc>
     <lastmod>2026-10-05T19:30:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -227,13 +290,6 @@
   
   <url>
     <loc>https://alexzheng13.github.io/en/tags/privacy/</loc>
-    <lastmod>2026-09-27T11:27:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/tags/rag/</loc>
     <lastmod>2026-09-27T11:27:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -674,14 +730,14 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/categories/career-development/</loc>
+    <loc>https://alexzheng13.github.io/en/tags/career-development/</loc>
     <lastmod>2026-03-23T12:22:13+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/tags/career-development/</loc>
+    <loc>https://alexzheng13.github.io/en/categories/career-development/</loc>
     <lastmod>2026-03-23T12:22:13+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

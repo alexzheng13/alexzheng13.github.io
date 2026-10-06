@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -106,27 +106,27 @@
       </a>
   </ul>
 
-
+  
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/post/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/en/post/" lang="en" hreflang="en" data-language-choice="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
@@ -156,23 +156,23 @@
 
   <nav class="language-selector" aria-label="Language selector">
     <ul class="languages-list">
-
-
-
+      
+        
+        
         <li class="language-item ">
-
+          
             <a href="/post/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
-
+          
         </li>
-
-
-
+      
+        
+        
         <li class="language-item active">
-
+          
             <a href="/en/post/" lang="en" hreflang="en" data-language-choice="en">EN</a>
-
+          
         </li>
-
+      
     </ul>
   </nav>
 
@@ -209,7 +209,7 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <style>
-
+   
   @media (min-width: 560px) and (max-width: 767px) {
     .blog-archive-layout {
       grid-template-columns: 170px minmax(0, 1fr);
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 30 posts by year</p>
+      <p>Browse all 31 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/cs329z-rag-agentic-retrieval/">
+          <time datetime="2026-10-06">10-06</time>
+          <span>CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/agentic-llm-2-action/">
           <time datetime="2026-10-05">10-05</time>
           <span>Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</span>
@@ -381,6 +385,28 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/inside-go-channel-runtime/">Inside Go&#39;s Channel Runtime</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2020-01-05">January 5, 2020</time>
+            <span aria-hidden="true">·</span>
+            <span>27 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">Channel is a very important type in the Go language and is the first object in Go. Through channels, Go implements memory sharing through communication. Channel is an important means of transferring data and synchronizing between multiple goroutines.  Note: All source code analysis in this article is based on Go1.13.3. Different versions may have different implementations.
+channel syntax The syntax for declaring a channel is as follows:</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/en/post/inside-go-channel-runtime/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/implementing-raft-in-go-1/">Implementing the Raft Protocol in Go (1)</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2019-12-22">December 22, 2019</time>
@@ -468,27 +494,6 @@ Why?  The current stack splitting mechanism has a &ldquo;hot split&rdquo; proble
           </a>
         </footer>
       </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/go-main-goroutine-scheduler-1/">Inside Go&#39;s Main Goroutine Scheduler (1)</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2019-11-10">November 10, 2019</time>
-            <span aria-hidden="true">·</span>
-            <span>11 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">Under the compilation, all traces are revealed.   1.go program entry_rt0_amd64_linux: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  // The TEXT instruction defines the symbol _rt0_amd64_linux, the global data symbol is declared with DATA, and GLOBL defines the data as global. // SB SB virtual register: saves the starting address of the program address space; the value saved by this SB register is the starting address of the TEXT segment, which is mainly used to locate global symbols.</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/go-main-goroutine-scheduler-1/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
       <nav class="blog-pagination" aria-label="Blog pagination">
         <div class="blog-pagination-pages">
             <a class="blog-pagination-direction" href="/en/post/page/5/" rel="prev">
@@ -513,14 +518,21 @@ Why?  The current stack splitting mechanism has a &ldquo;hot split&rdquo; proble
               <span class="blog-pagination-number is-current" aria-current="page" aria-label="Current page, page 6">
                 6
               </span>
+              <a class="blog-pagination-number" href="/en/post/page/7/" aria-label="Page 7">
+                7
+              </a>
+            <a class="blog-pagination-direction" href="/en/post/page/7/" rel="next">
+              Next
+              <span aria-hidden="true">›</span>
+            </a>
         </div>
 
         <div class="blog-pagination-status">
-          <span>Page <strong>6</strong> of 6</span>
+          <span>Page <strong>6</strong> of 7</span>
 
-          <form class="blog-pagination-jump" data-pagination-base="/en/post/" data-total-pages="6">
+          <form class="blog-pagination-jump" data-pagination-base="/en/post/" data-total-pages="7">
             <label for="blog-page-jump">Go to</label>
-            <input id="blog-page-jump" name="page" type="number" min="1" max="6" value="6" inputmode="numeric">
+            <input id="blog-page-jump" name="page" type="number" min="1" max="7" value="6" inputmode="numeric">
             <button type="submit">Go</button>
           </form>
         </div>
@@ -549,7 +561,7 @@ Why?  The current stack splitting mechanism has a &ldquo;hot split&rdquo; proble
   </div>
 </section>
         </div>
-
+        
 
       </div>
     </main>
@@ -565,15 +577,15 @@ Why?  The current stack splitting mechanism has a &ldquo;hot split&rdquo; proble
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    Theme -
+    Theme - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
-
+  
 
   <span class="copyright-year">
-    &copy;
-    2019 -
+    &copy; 
+    2019 - 
     2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
   </span>
 </div>
@@ -584,7 +596,7 @@ Why?  The current stack splitting mechanism has a &ldquo;hot split&rdquo; proble
       <i class="iconfont icon-up"></i>
     </div>
   </div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>

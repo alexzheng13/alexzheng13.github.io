@@ -6,10 +6,82 @@
     <description>Recent content in Tags on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 05 Oct 2026 19:30:00 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 06 Oct 2026 09:00:00 +0200</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/en/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Agentic RAG</title>
+      <link>https://alexzheng13.github.io/en/tags/agentic-rag/</link>
+      <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/agentic-rag/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>BM25</title>
+      <link>https://alexzheng13.github.io/en/tags/bm25/</link>
+      <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/bm25/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ColBERT</title>
+      <link>https://alexzheng13.github.io/en/tags/colbert/</link>
+      <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/colbert/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Contextual Retrieval</title>
+      <link>https://alexzheng13.github.io/en/tags/contextual-retrieval/</link>
+      <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/contextual-retrieval/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>DPR</title>
+      <link>https://alexzheng13.github.io/en/tags/dpr/</link>
+      <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/dpr/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GraphRAG</title>
+      <link>https://alexzheng13.github.io/en/tags/graphrag/</link>
+      <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/graphrag/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>RAG</title>
+      <link>https://alexzheng13.github.io/en/tags/rag/</link>
+      <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/rag/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Retrieval</title>
+      <link>https://alexzheng13.github.io/en/tags/retrieval/</link>
+      <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/retrieval/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Action</title>
@@ -224,15 +296,6 @@
       <pubDate>Sun, 27 Sep 2026 11:27:00 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/en/tags/privacy/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>RAG</title>
-      <link>https://alexzheng13.github.io/en/tags/rag/</link>
-      <pubDate>Sun, 27 Sep 2026 11:27:00 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/en/tags/rag/</guid>
       <description></description>
     </item>
     

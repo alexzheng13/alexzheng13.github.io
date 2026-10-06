@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/" />
 
-<meta property="og:updated_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,44 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/cs329z-rag-agentic-retrieval/">CS 329Z：从 RAG 到 Agentic RAG——检索、重排与闭环决策</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-10-06 </span>
+      <div class="post-category">
+          <a href="/categories/ai-agents/"> AI Agents </a>
+          </div>
+        <span class="more-meta"> 约 5332 字 </span>
+        <span class="more-meta"> 预计阅读 11 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>RAG 经常被概括为“从向量数据库中找几段文本，再塞进 Prompt”。这个描述没有错，但它忽略了真正困难的部分：<strong>怎样切分知识、怎样兼顾语义与精确匹配、怎样重排、怎样判断证据是否足够，以及什么时候应该再次检索。</strong></p>
+
+<p>从这个角度看，RAG 不是一个简单的外挂知识库，而是一条围绕证据构建的决策管线：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">文档 → 切分与索引 → 多路召回 → 融合与重排 → 阅读与生成
+                                ↑                    ↓
+                                └── 评估证据、改写查询、再次检索 ──┘</code></pre></td></tr></table>
+</div>
+</div>
+<p>本文根据我的 <strong>Stanford CS 329Z: Engineering AI Agents</strong> 笔记中的 RAG 章节整理。前半部分讨论经典 RAG 的检索与评测，后半部分把检索放回 Agent 循环，解释为什么下一步会自然走向 <strong>Agentic RAG</strong>。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/cs329z-rag-agentic-retrieval/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/agentic-llm-2-action/">Agentic LLM（二）：Action——从多模态感知到 VLA 与世界模型</a></h1>
@@ -449,31 +487,6 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
     </div>
     <div class="read-more">
       <a href="/post/transformer-architecture/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/anthropic-agent-evolution-1-from-workflows-to-agents/">Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-09-12 </span>
-      <div class="post-category">
-          <a href="/categories/ai-agents/"> AI Agents </a>
-          </div>
-        <span class="more-meta"> 约 1712 字 </span>
-        <span class="more-meta"> 预计阅读 4 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>“Agent” 经常被当作一个宽泛标签：只要模型调用了工具、执行了多步任务，就被称为 Agent。Anthropic 的工程实践给出了一个更有用的区分：<strong>Workflow 的路径由代码预先定义；Agent 则由模型根据环境反馈动态决定下一步。</strong></p>
-
-<p>这是“Anthropic Agent 演进”系列的第一篇。我们先建立共同语言：从增强型 LLM、固定 Workflow，一直到真正的自主 Agent，并解释为什么模型外部还需要一层 Harness。</p>
-    </div>
-    <div class="read-more">
-      <a href="/post/anthropic-agent-evolution-1-from-workflows-to-agents/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>

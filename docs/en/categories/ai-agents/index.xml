@@ -6,10 +6,34 @@
     <description>Recent content in AI Agents on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 05 Oct 2026 19:30:00 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 06 Oct 2026 09:00:00 +0200</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/en/categories/ai-agents/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions</title>
+      <link>https://alexzheng13.github.io/en/post/cs329z-rag-agentic-retrieval/</link>
+      <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/post/cs329z-rag-agentic-retrieval/</guid>
+      <description>&lt;p&gt;RAG is often summarized as “retrieve a few passages from a vector database and put them in the prompt.” That description is not wrong, but it hides the difficult questions: &lt;strong&gt;How should knowledge be chunked? How do we combine semantic and exact matching? How should candidates be reranked? How do we know whether the evidence is sufficient, and when should the system search again?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Seen this way, RAG is not merely an external knowledge store. It is an evidence-centered decision pipeline:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;Documents → Chunk and index → Multi-path recall → Fuse and rerank → Read and generate
+                                      ↑                              ↓
+                                      └── Evaluate, rewrite, search again ──┘&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;This article reorganizes the RAG chapter from my &lt;strong&gt;Stanford CS 329Z: Engineering AI Agents&lt;/strong&gt; notes. The first half develops retrieval and evaluation. The second puts retrieval back inside the agent loop and explains why the architecture naturally evolves toward &lt;strong&gt;Agentic RAG&lt;/strong&gt;.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</title>

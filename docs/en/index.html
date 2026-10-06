@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/" />
 
-<meta property="og:updated_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,44 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/cs329z-rag-agentic-retrieval/">CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-10-06 </span>
+      <div class="post-category">
+          <a href="/en/categories/ai-agents/"> AI Agents </a>
+          </div>
+        <span class="more-meta"> 2717 words </span>
+        <span class="more-meta"> 13 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>RAG is often summarized as “retrieve a few passages from a vector database and put them in the prompt.” That description is not wrong, but it hides the difficult questions: <strong>How should knowledge be chunked? How do we combine semantic and exact matching? How should candidates be reranked? How do we know whether the evidence is sufficient, and when should the system search again?</strong></p>
+
+<p>Seen this way, RAG is not merely an external knowledge store. It is an evidence-centered decision pipeline:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Documents → Chunk and index → Multi-path recall → Fuse and rerank → Read and generate
+                                      ↑                              ↓
+                                      └── Evaluate, rewrite, search again ──┘</code></pre></td></tr></table>
+</div>
+</div>
+<p>This article reorganizes the RAG chapter from my <strong>Stanford CS 329Z: Engineering AI Agents</strong> notes. The first half develops retrieval and evaluation. The second puts retrieval back inside the agent loop and explains why the architecture naturally evolves toward <strong>Agentic RAG</strong>.</p>
+    </div>
+    <div class="read-more">
+      <a href="/en/post/cs329z-rag-agentic-retrieval/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/en/post/agentic-llm-2-action/">Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</a></h1>
@@ -462,31 +500,6 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
     </div>
     <div class="read-more">
       <a href="/en/post/transformer-architecture/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/en/post/anthropic-agent-evolution-1-from-workflows-to-agents/">Anthropic Agent Evolution I: From Workflows to Agents—and Why Harnesses Matter</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-09-12 </span>
-      <div class="post-category">
-          <a href="/en/categories/ai-agents/"> AI Agents </a>
-          </div>
-        <span class="more-meta"> 707 words </span>
-        <span class="more-meta"> 4 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>“Agent” is often used as a broad label for any system that calls tools or takes multiple steps. Anthropic&rsquo;s engineering work offers a more useful distinction: <strong>a workflow follows code paths defined in advance; an agent lets the model dynamically choose its process from environmental feedback.</strong></p>
-
-<p>This first article in the “Anthropic Agent Evolution” series establishes the vocabulary: augmented LLMs, fixed workflows, autonomous agents, and the harness that surrounds the model.</p>
-    </div>
-    <div class="read-more">
-      <a href="/en/post/anthropic-agent-evolution-1-from-workflows-to-agents/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>

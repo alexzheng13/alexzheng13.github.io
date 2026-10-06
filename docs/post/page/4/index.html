@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/post/" />
 
-<meta property="og:updated_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">文章归档</h1>
-      <p>按年份浏览全部 30 篇文章</p>
+      <p>按年份浏览全部 31 篇文章</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         订阅 RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="按年份排列的文章">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/post/cs329z-rag-agentic-retrieval/">
+          <time datetime="2026-10-06">10-06</time>
+          <span>CS 329Z：从 RAG 到 Agentic RAG——检索、重排与闭环决策</span>
+        </a>
         <a class="blog-archive-index-item" href="/post/agentic-llm-2-action/">
           <time datetime="2026-10-05">10-05</time>
           <span>Agentic LLM（二）：Action——从多模态感知到 VLA 与世界模型</span>
@@ -381,6 +385,40 @@
   <div class="blog-recent-posts" aria-label="最近文章">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/post/stanford-cs329a-self-improving-ai-agents/">Stanford CS329A：Self-Improving AI Agents 的完整技术框架</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-08-11">2026年08月11日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 9 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>Self-Improving AI Agent 并不是一个会无限递归修改自己的神秘系统。更实际的理解是：Agent 在生成、行动、观察和验证之间形成闭环，把推理时获得的反馈用于改进当前答案、后续决策，甚至下一轮训练。</p>
+
+<p>这篇文章沿着 Stanford CS329A 的课程主线，把测试时计算、验证器、工具反馈、规划搜索、强化学习、深度研究与长程评测串成一个完整框架。</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="标签">
+              <span class="blog-summary-tags-label">标签</span>
+              <ul>
+                  <li><a href="/tags/ai-agents/">AI Agents</a></li>
+                  <li><a href="/tags/test-time-compute/">Test-Time Compute</a></li>
+                  <li><a href="/tags/verifier/">Verifier</a></li>
+                  <li><a href="/tags/react/">ReAct</a></li>
+                  <li><a href="/tags/lats/">LATS</a></li>
+                  <li><a href="/tags/reinforcement-learning/">Reinforcement Learning</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/post/stanford-cs329a-self-improving-ai-agents/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/post/cs230-career-advice-in-ai/">Stanford CS230：AI 时代的职业建议</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-03-23">2026年03月23日</time>
@@ -473,27 +511,6 @@
           </a>
         </footer>
       </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/post/go%E6%B1%87%E7%BC%96%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A81/">go汇编简易入门(1)</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2020-12-30">2020年12月30日</time>
-            <span aria-hidden="true">·</span>
-            <span>预计阅读 8 分钟</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">程序的存储空间布局 &emsp;&emsp;进程(Process)是一个正在执行的程序实例(instance)。每个实例有自己的地址空间和执行</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/post/go%E6%B1%87%E7%BC%96%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A81/">阅读全文<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
       <nav class="blog-pagination" aria-label="博客分页">
         <div class="blog-pagination-pages">
             <a class="blog-pagination-direction" href="/post/page/3/" rel="prev">
@@ -518,6 +535,9 @@
               <a class="blog-pagination-number" href="/post/page/6/" aria-label="第 6 页">
                 6
               </a>
+              <a class="blog-pagination-number" href="/post/page/7/" aria-label="第 7 页">
+                7
+              </a>
             <a class="blog-pagination-direction" href="/post/page/5/" rel="next">
               下一页
               <span aria-hidden="true">›</span>
@@ -525,11 +545,11 @@
         </div>
 
         <div class="blog-pagination-status">
-          <span>第 <strong>4</strong> / 6 页</span>
+          <span>第 <strong>4</strong> / 7 页</span>
 
-          <form class="blog-pagination-jump" data-pagination-base="/post/" data-total-pages="6">
+          <form class="blog-pagination-jump" data-pagination-base="/post/" data-total-pages="7">
             <label for="blog-page-jump">跳至</label>
-            <input id="blog-page-jump" name="page" type="number" min="1" max="6" value="4" inputmode="numeric">
+            <input id="blog-page-jump" name="page" type="number" min="1" max="7" value="4" inputmode="numeric">
             <button type="submit">跳转</button>
           </form>
         </div>
