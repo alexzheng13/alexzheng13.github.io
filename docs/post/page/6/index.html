@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>归档 - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="Hugo theme even example site." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/post/" />
+  <link href="https://alexzheng13.github.io/post/index.xml" rel="alternate" type="application/rss+xml" title="Blowing in the wind" />
+  <link href="https://alexzheng13.github.io/post/index.xml" rel="feed" type="application/rss+xml" title="Blowing in the wind" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/">
+<meta name="site-language-route" data-language="en" content="/en/post/">
+<meta name="site-current-language" content="zh-cn"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="Posts" />
+<meta property="og:description" content="Hugo theme even example site." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://alexzheng13.github.io/post/" />
+
+<meta property="og:updated_time" content="2026-10-05T19:30:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="Posts">
+<meta itemprop="description" content="Hugo theme even example site.">
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Posts"/>
+<meta name="twitter:description" content="Hugo theme even example site."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+
+
+
+        <li class="language-item active">
+
+            <a href="/post/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+
+        </li>
+
+
+
+        <li class="language-item ">
+
+            <a href="/en/post/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+
+        </li>
+
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+
+
+
+        <li class="language-item active">
+
+            <a href="/post/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+
+        </li>
+
+
+
+        <li class="language-item ">
+
+            <a href="/en/post/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+
+        </li>
+
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <style>
+
+  @media (min-width: 560px) and (max-width: 767px) {
+    .blog-archive-layout {
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    .blog-archive-sidebar {
+      position: sticky;
+      top: 16px;
+      max-height: calc(100vh - 32px);
+      padding: 2px 12px 6px 0;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .blog-archive-sidebar-header h1 {
+      font-size: 19px;
+    }
+
+    .blog-archive-index-item {
+      grid-template-columns: 38px minmax(0, 1fr);
+      gap: 4px;
+      padding: 5px 0;
+      font-size: 12px;
+    }
+  }
+</style>
+
+<section class="blog-archive-layout">
+  <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
+    <div class="blog-archive-sidebar-header">
+      <h1 id="blog-archive-title">文章归档</h1>
+      <p>按年份浏览全部 30 篇文章</p>
+      <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
+        <span class="iconfont icon-rss" aria-hidden="true"></span>
+        订阅 RSS
+      </a>
+    </div>
+
+    <nav class="blog-archive-years" aria-label="按年份排列的文章">
+          <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/post/agentic-llm-2-action/">
+          <time datetime="2026-10-05">10-05</time>
+          <span>Agentic LLM（二）：Action——从多模态感知到 VLA 与世界模型</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/agentic-llm-1-reasoning/">
+          <time datetime="2026-09-29">09-29</time>
+          <span>Agentic LLM Reasoning（一）：从 Chain of Thought 到搜索、反思与 RLVR</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/anthropic-recursive-self-improvement/">
+          <time datetime="2026-09-28">09-28</time>
+          <span>当 AI 开始构建自己：Anthropic 内部实践与递归自我改进的未来</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/private-ai-layer-on-base-models/">
+          <time datetime="2026-09-27">09-27</time>
+          <span>未来 5—10 年的 AI 架构推演：Base Model、个人智能与企业私有能力层</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/llm-agent-benchmarks-guide/">
+          <time datetime="2026-09-26">09-26</time>
+          <span>大模型与 AI Agent Benchmark 全景指南：它们究竟在评估什么</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/nanochat-gpt-pretraining-from-source/">
+          <time datetime="2026-09-26">09-26</time>
+          <span>nanochat 源码解读：从参数配置到单步训练</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/transformer-architecture/">
+          <time datetime="2026-09-14">09-14</time>
+          <span>Transformer Architecture：从 Token Embedding 到训练循环</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/anthropic-agent-evolution-1-from-workflows-to-agents/">
+          <time datetime="2026-09-12">09-12</time>
+          <span>Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/anthropic-agent-evolution-2-context-reset-and-handoff/">
+          <time datetime="2026-09-12">09-12</time>
+          <span>Anthropic Agent 演进（二）：Context Reset 与 Structured Handoff</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/anthropic-agent-evolution-3-planner-generator-evaluator/">
+          <time datetime="2026-09-12">09-12</time>
+          <span>Anthropic Agent 演进（三）：Planner–Generator–Evaluator 质量闭环</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/anthropic-agent-evolution-4-managed-agent-runtime/">
+          <time datetime="2026-09-12">09-12</time>
+          <span>Anthropic Agent 演进（四）：Managed Agent Runtime——Session、Harness 与 Sandbox</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/reinforcement-learning-3-exploration-and-data/">
+          <time datetime="2026-08-27">08-27</time>
+          <span>强化学习（三）：探索与利用、策略采样和数据来源</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/reinforcement-learning-2-classic-algorithms/">
+          <time datetime="2026-08-26">08-26</time>
+          <span>强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/reinforcement-learning-1-foundations/">
+          <time datetime="2026-08-25">08-25</time>
+          <span>强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/stanford-cs329a-self-improving-ai-agents/">
+          <time datetime="2026-08-11">08-11</time>
+          <span>Stanford CS329A：Self-Improving AI Agents 的完整技术框架</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/cs230-career-advice-in-ai/">
+          <time datetime="2026-03-23">03-23</time>
+          <span>Stanford CS230：AI 时代的职业建议</span>
+        </a>
+          <h2 class="blog-archive-year" id="year-2021">2021</h2>
+        <a class="blog-archive-index-item" href="/post/%E8%AF%91liunx-io-multiplexing-select-vs-poll-vs-epoll/">
+          <time datetime="2021-02-11">02-11</time>
+          <span>（译）Liunx – IO Multiplexing – Select VS Poll VS Epoll</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/domain-driven-design/">
+          <time datetime="2021-02-02">02-02</time>
+          <span>（译）Domain-Driven Design:Everything You Always Wanted to Know About it, But Were Afraid to Ask(1)</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/go%E6%B1%87%E7%BC%96%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A82/">
+          <time datetime="2021-01-01">01-01</time>
+          <span>go汇编简易入门(Ⅱ)</span>
+        </a>
+          <h2 class="blog-archive-year" id="year-2020">2020</h2>
+        <a class="blog-archive-index-item" href="/post/go%E6%B1%87%E7%BC%96%E7%AE%80%E6%98%93%E5%85%A5%E9%97%A81/">
+          <time datetime="2020-12-30">12-30</time>
+          <span>go汇编简易入门(1)</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/cap%E4%B8%8E%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E7%BB%84%E4%BB%B6%E6%AF%94%E8%BE%83/">
+          <time datetime="2020-02-29">02-29</time>
+          <span>CAP与服务发现组件比较</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/%E7%90%86%E8%A7%A3io-%E9%9A%8F%E6%9C%BA%E5%92%8C%E9%A1%BA%E5%BA%8F/">
+          <time datetime="2020-02-06">02-06</time>
+          <span>理解I/O：随机和顺序</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/use-a-mutex-or-a-channel/">
+          <time datetime="2020-01-16">01-16</time>
+          <span>Use a Mutex or a channel ?</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/http1.1%E4%B8%8Ehttp2%E7%9A%84%E5%8C%BA%E5%88%AB/">
+          <time datetime="2020-01-16">01-16</time>
+          <span>http1.1与http2的区别</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/runtime-channel/">
+          <time datetime="2020-01-05">01-05</time>
+          <span>channel runtime源码分析</span>
+        </a>
+          <h2 class="blog-archive-year" id="year-2019">2019</h2>
+        <a class="blog-archive-index-item" href="/post/go%E5%AE%9E%E7%8E%B0raft%E5%8D%8F%E8%AE%AE/">
+          <time datetime="2019-12-22">12-22</time>
+          <span>Go实现raft协议(1)</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/%E8%AF%91contiguous-stacks/">
+          <time datetime="2019-11-30">11-30</time>
+          <span>(译)Contiguous stacks</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/runtime-main-2/">
+          <time datetime="2019-11-13">11-13</time>
+          <span>main goroutine调度源码分析(2)</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/why-quicksort-better-than-mergesort/">
+          <time datetime="2019-11-13">11-13</time>
+          <span>为什么都用快排而不用归并排序？</span>
+        </a>
+        <a class="blog-archive-index-item" href="/post/runtime-main-1/">
+          <time datetime="2019-11-10">11-10</time>
+          <span>main goroutine调度源码分析(1)</span>
+        </a>
+    </nav>
+  </aside>
+
+  <div class="blog-recent-posts" aria-label="最近文章">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/post/go%E5%AE%9E%E7%8E%B0raft%E5%8D%8F%E8%AE%AE/">Go实现raft协议(1)</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2019-12-22">2019年12月22日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 11 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">导读 &emsp;&emsp;实现思路来自于:MIT 6.824课程 Lab 2: Raft &emsp;&emsp;做实验前，你应该熟读raft论文，这里是: ra</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/post/go%E5%AE%9E%E7%8E%B0raft%E5%8D%8F%E8%AE%AE/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/post/%E8%AF%91contiguous-stacks/">(译)Contiguous stacks</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2019-11-30">2019年11月30日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 7 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">Contiguous stacks原文地址 &emsp;&emsp;为每一个go协程分配一块连续的栈内存空间，内存在用完的时候会重新分配/复制增长。 为什么？ 目前的</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/post/%E8%AF%91contiguous-stacks/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/post/runtime-main-2/">main goroutine调度源码分析(2)</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2019-11-13">2019年11月13日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 18 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">9.进入到runtime/proc.go,调度器初始化 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/post/runtime-main-2/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/post/why-quicksort-better-than-mergesort/">为什么都用快排而不用归并排序？</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2019-11-13">2019年11月13日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 3 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">汝之蜜糖，乙之砒霜。 快速排序： 1 2 3 * 最坏情况时间复杂度O(n^2) * 最好情况时间复杂度O(logn) * 平均时间复杂度O(nlgn) 归并排序</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/post/why-quicksort-better-than-mergesort/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/post/runtime-main-1/">main goroutine调度源码分析(1)</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2019-11-10">2019年11月10日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 9 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">汇编之下,一切踪迹皆显。 1.go程序入口_rt0_amd64_linux: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 // TEXT 指令定义符号 _rt0_amd64_linux, 全局数据符号用 DATA 声</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/post/runtime-main-1/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <nav class="blog-pagination" aria-label="博客分页">
+        <div class="blog-pagination-pages">
+            <a class="blog-pagination-direction" href="/post/page/5/" rel="prev">
+              <span aria-hidden="true">‹</span>
+              上一页
+            </a>
+              <a class="blog-pagination-number" href="/post/" aria-label="第 1 页">
+                1
+              </a>
+              <a class="blog-pagination-number" href="/post/page/2/" aria-label="第 2 页">
+                2
+              </a>
+              <a class="blog-pagination-number" href="/post/page/3/" aria-label="第 3 页">
+                3
+              </a>
+              <a class="blog-pagination-number" href="/post/page/4/" aria-label="第 4 页">
+                4
+              </a>
+              <a class="blog-pagination-number" href="/post/page/5/" aria-label="第 5 页">
+                5
+              </a>
+              <span class="blog-pagination-number is-current" aria-current="page" aria-label="当前第 6 页">
+                6
+              </span>
+        </div>
+
+        <div class="blog-pagination-status">
+          <span>第 <strong>6</strong> / 6 页</span>
+
+          <form class="blog-pagination-jump" data-pagination-base="/post/" data-total-pages="6">
+            <label for="blog-page-jump">跳至</label>
+            <input id="blog-page-jump" name="page" type="number" min="1" max="6" value="6" inputmode="numeric">
+            <button type="submit">跳转</button>
+          </form>
+        </div>
+      </nav>
+
+      <script>
+        (function () {
+          var form = document.querySelector('.blog-pagination-jump');
+          if (!form) return;
+
+          form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            var input = form.querySelector('input[name="page"]');
+            var target = Number(input.value);
+            var total = Number(form.getAttribute('data-total-pages'));
+            if (!Number.isInteger(target) || target < 1 || target > total) {
+              input.focus();
+              return;
+            }
+
+            var base = form.getAttribute('data-pagination-base');
+            window.location.href = target === 1 ? base : base + 'page/' + target + '/';
+          });
+        }());
+      </script>
+  </div>
+</section>
+        </div>
+
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 -
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+
+
+  <span class="copyright-year">
+    &copy;
+    2019 -
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
