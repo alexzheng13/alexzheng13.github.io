@@ -11,7 +11,7 @@ deck: "我关心复杂系统如何在真实世界里稳定、高效地工作，�
 
 <img class="about-portrait" src="/img/about/bobo-seaside.jpg" alt="Bobo 走向海边的照片">
 
-过去五年多，我在金山办公参与在线协作文档的核心研发与技术管理。我的工作横跨系统与应用架构、核心模块开发、代码评审、性能优化和团队交付。比起只让功能“跑起来”，我更在意系统在高并发、长连接和故障场景下，是否仍然清晰、可靠并且可演进。
+过去四年多，我在金山办公参与在线协作文档的核心研发与技术管理。我的工作横跨系统与应用架构、核心模块开发、代码评审、性能优化和团队交付。比起只让功能“跑起来”，我更在意系统在高并发、长连接和故障场景下，是否仍然清晰、可靠并且可演进。
 
 2025 年 9 月起，我在 [Leiden University](https://www.universiteitleiden.nl/en/education/study-programmes/master/computer-science) 攻读 Computer Science 硕士，学习重点覆盖 **Advanced Computing and Systems** 与 **Artificial Intelligence**。这段学习让我重新把工程经验放进研究视角里：从分布式系统与数据密集型应用，延伸到 AI systems、智能体和模型推理。
 
