@@ -11,7 +11,7 @@ deck: "I care about how complex systems remain reliable and efficient in the rea
 
 <img class="about-portrait" src="/img/about/bobo-seaside.jpg" alt="Bobo walking toward the sea">
 
-For more than five years, I worked on the core engineering and technical leadership of real-time collaborative documents at Kingsoft Office. My work spanned system and application architecture, core implementation, code review, performance engineering, and team delivery. I care about more than making a feature run: I want systems to remain understandable, reliable, and evolvable under high concurrency, long-lived connections, and failure.
+For more than four years, I worked on the core engineering and technical leadership of real-time collaborative documents at Kingsoft Office. My work spanned system and application architecture, core implementation, code review, performance engineering, and team delivery. I care about more than making a feature run: I want systems to remain understandable, reliable, and evolvable under high concurrency, long-lived connections, and failure.
 
 Since September 2025, I have been pursuing an MSc in Computer Science at [Leiden University](https://www.universiteitleiden.nl/en/education/study-programmes/master/computer-science), with a focus on **Advanced Computing and Systems** and **Artificial Intelligence**. This has given me a research lens for ideas I first encountered in production: distributed systems and data-intensive applications, now extended to AI systems, agents, and model inference.
 
