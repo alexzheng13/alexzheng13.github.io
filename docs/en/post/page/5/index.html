@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 31 posts by year</p>
+      <p>Browse all 32 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/cs329z-frameworks-orchestration/">
+          <time datetime="2026-10-09">10-09</time>
+          <span>CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/cs329z-rag-agentic-retrieval/">
           <time datetime="2026-10-06">10-06</time>
           <span>CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions</span>
@@ -385,6 +389,29 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/introduction-to-go-assembly-2/">A Practical Introduction to Go Assembly (2)</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2021-01-01">January 1, 2021</time>
+            <span aria-hidden="true">·</span>
+            <span>8 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">Function call from assembly perspective ﻿ Let’s start with a simple example:
+1 2 3 4 5 6 7 8 9 10  package main func main() { add(1, 1) } func add(a, b int64) (c int64) { c = a + b return }    After executing the go tool compile -S compliation_add.go command, the assembly code is as follows
+1 2 3 4 5 6 7  .</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/en/post/introduction-to-go-assembly-2/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/introduction-to-go-assembly-1/">A Practical Introduction to Go Assembly (1)</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2020-12-30">December 30, 2020</time>
@@ -473,28 +500,6 @@ Summary
 
         <footer class="blog-summary-footer">
           <a class="blog-summary-read-more" href="/en/post/use-a-mutex-or-a-channel/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/http-1-1-vs-http-2/">HTTP/1.1 vs. HTTP/2</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2020-01-16">January 16, 2020</time>
-            <span aria-hidden="true">·</span>
-            <span>6 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">HTTP 1.1 In January 1997, HTTP/1.1 version was released, only half a year later than version 1.0. It further improved the HTTP protocol and has been used to this day 20 years later, and is still the most popular version. Main optimization points:
- Support long connection by default  HTTP/1.1 supports persistent connections and request pipelining. Persistent connections reuse established TCP connections and avoid repeating the RTT cost of the three-way handshake.</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/http-1-1-vs-http-2/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

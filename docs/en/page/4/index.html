@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/" />
 
-<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,34 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/use-a-mutex-or-a-channel/">Use a Mutex or a Channel?</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2020-01-16 </span>
+      <div class="post-category">
+          <a href="/en/categories/go/"> Go </a>
+          </div>
+        <span class="more-meta"> 151 words </span>
+        <span class="more-meta"> 1 min read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      Use a sync.Mutex or a channel?
+ Gives us 3 channel usage scenarios respectively:
+ 1. Transfer ownership of data 2. Assign work units 3. Convey asynchronous results  Usage scenarios of 2 mutex:
+ 1. Cache 2. Status  Chapter 2 &ldquo;Go&rsquo;s Philosophy on Concurrency&rdquo; in the book &ldquo;Concurrency In Go&rdquo; also has a decision tree and detailed discussion
+Summary
+﻿Go implements the CSP communication model through channels, which are mainly used for message passing and event notification between goroutines.
+    </div>
+    <div class="read-more">
+      <a href="/en/post/use-a-mutex-or-a-channel/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/en/post/http-1-1-vs-http-2/">HTTP/1.1 vs. HTTP/2</a></h1>

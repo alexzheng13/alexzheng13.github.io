@@ -6,10 +6,48 @@
     <description>Recent content in AI Agents on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 06 Oct 2026 09:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 09 Oct 2026 09:00:00 +0200</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/categories/ai-agents/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CS 329Z：Frameworks &amp; Orchestration——从 Agent Harness 到可靠执行与可观测性</title>
+      <link>https://alexzheng13.github.io/post/cs329z-frameworks-orchestration/</link>
+      <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/cs329z-frameworks-orchestration/</guid>
+      <description>&lt;p&gt;一个模型能调用工具，并不等于我们已经拥有一个可以上线的 Agent。&lt;/p&gt;
+
+&lt;p&gt;真正的 Agent 系统还需要回答一系列工程问题：状态保存在哪里？失败后从哪一步恢复？上下文怎样重建？工具权限如何控制？长任务由谁调度？每一步如何追踪？系统变慢、变贵或答错时，又该怎样定位原因？&lt;/p&gt;
+
+&lt;p&gt;这些问题横跨不同层次，常被笼统地塞进“Agent Framework”这个词里。更清晰的理解方式是把系统拆开：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;模型与数据
+    ↓
+LLM Program / Workflow        决定调用逻辑
+    ↓
+Agent Harness                 提供工具、记忆、上下文与执行环境
+    ↓
+Durable Orchestration         让长任务能重试、恢复并跑到底
+    ↓
+Telemetry + Evals             让系统可观察、可比较、可改进&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;本文根据我的 &lt;strong&gt;Stanford CS 329Z: Engineering AI Agents&lt;/strong&gt; 笔记中 Lecture 5 的内容整理。重点不是教你押注某个框架，而是建立一张架构地图：每一层解决什么问题，什么时候值得引入，以及为什么同一个模型放进不同 Harness，最终能力可能差很多。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>CS 329Z：从 RAG 到 Agentic RAG——检索、重排与闭环决策</title>

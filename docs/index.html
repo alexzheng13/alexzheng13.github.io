@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/" />
 
-<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,58 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/cs329z-frameworks-orchestration/">CS 329Z：Frameworks &amp; Orchestration——从 Agent Harness 到可靠执行与可观测性</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-10-09 </span>
+      <div class="post-category">
+          <a href="/categories/ai-agents/"> AI Agents </a>
+          </div>
+        <span class="more-meta"> 约 5421 字 </span>
+        <span class="more-meta"> 预计阅读 11 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>一个模型能调用工具，并不等于我们已经拥有一个可以上线的 Agent。</p>
+
+<p>真正的 Agent 系统还需要回答一系列工程问题：状态保存在哪里？失败后从哪一步恢复？上下文怎样重建？工具权限如何控制？长任务由谁调度？每一步如何追踪？系统变慢、变贵或答错时，又该怎样定位原因？</p>
+
+<p>这些问题横跨不同层次，常被笼统地塞进“Agent Framework”这个词里。更清晰的理解方式是把系统拆开：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">模型与数据
+    ↓
+LLM Program / Workflow        决定调用逻辑
+    ↓
+Agent Harness                 提供工具、记忆、上下文与执行环境
+    ↓
+Durable Orchestration         让长任务能重试、恢复并跑到底
+    ↓
+Telemetry + Evals             让系统可观察、可比较、可改进</code></pre></td></tr></table>
+</div>
+</div>
+<p>本文根据我的 <strong>Stanford CS 329Z: Engineering AI Agents</strong> 笔记中 Lecture 5 的内容整理。重点不是教你押注某个框架，而是建立一张架构地图：每一层解决什么问题，什么时候值得引入，以及为什么同一个模型放进不同 Harness，最终能力可能差很多。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/cs329z-frameworks-orchestration/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/cs329z-rag-agentic-retrieval/">CS 329Z：从 RAG 到 Agentic RAG——检索、重排与闭环决策</a></h1>
@@ -431,62 +483,6 @@
     </div>
     <div class="read-more">
       <a href="/post/nanochat-gpt-pretraining-from-source/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/transformer-architecture/">Transformer Architecture：从 Token Embedding 到训练循环</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-09-14 </span>
-      <div class="post-category">
-          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"> 人工智能 </a>
-          </div>
-        <span class="more-meta"> 约 2926 字 </span>
-        <span class="more-meta"> 预计阅读 6 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>Transformer 看起来由许多组件组成，但一条 GPT 风格的前向路径可以概括为：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">Token IDs
-   ↓
-Token Embedding + Position Embedding
-   ↓
-[LayerNorm → Self-Attention → Residual]
-   ↓
-[LayerNorm → FFN → Residual]
-   ↓
-重复多个 Transformer Blocks
-   ↓
-Final LayerNorm → LM Head
-   ↓
-Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
-</div>
-</div>
-<p>本文从一个简单的 GPT 实现出发，沿着数据流解释每一步的作用和张量形状。完整源码放在文章最后，读完前面的原理后可以结合代码对照理解。</p>
-    </div>
-    <div class="read-more">
-      <a href="/post/transformer-architecture/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>

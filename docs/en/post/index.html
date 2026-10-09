@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 31 posts by year</p>
+      <p>Browse all 32 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/cs329z-frameworks-orchestration/">
+          <time datetime="2026-10-09">10-09</time>
+          <span>CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/cs329z-rag-agentic-retrieval/">
           <time datetime="2026-10-06">10-06</time>
           <span>CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions</span>
@@ -383,6 +387,69 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="Recent posts">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/en/post/cs329z-frameworks-orchestration/">CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-10-09">October 9, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>12 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>A model that can call tools is not yet a production-ready agent.</p>
+
+<p>An agent system must also answer a long list of engineering questions. Where is state stored? Where does a failed run resume? How is context reconstructed? Who controls tool permissions? What schedules a long-running task? How is every step traced? When the system becomes slower, more expensive, or less accurate, how do we find the cause?</p>
+
+<p>These concerns are often compressed into the vague label “agent framework.” A clearer approach is to separate the stack into layers:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Models and data
+      ↓
+LLM program / workflow         defines application logic
+      ↓
+Agent harness                  provides tools, memory, context, and execution
+      ↓
+Durable orchestration          survives retries, waits, and process failures
+      ↓
+Telemetry + evals              makes the system observable and improvable</code></pre></td></tr></table>
+</div>
+</div>
+<p>This article reorganizes Lecture 5 from my <strong>Stanford CS 329Z: Engineering AI Agents</strong> notes. The goal is not to promote one framework. It is to build an architectural map: what each layer solves, when it becomes necessary, and why the same model can behave very differently inside different harnesses.</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/ai-agents/">AI Agents</a></li>
+                  <li><a href="/en/tags/agent-harness/">Agent Harness</a></li>
+                  <li><a href="/en/tags/orchestration/">Orchestration</a></li>
+                  <li><a href="/en/tags/langgraph/">LangGraph</a></li>
+                  <li><a href="/en/tags/dspy/">DSPy</a></li>
+                  <li><a href="/en/tags/temporal/">Temporal</a></li>
+                  <li><a href="/en/tags/observability/">Observability</a></li>
+                  <li><a href="/en/tags/meta-harness/">Meta-Harness</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/cs329z-frameworks-orchestration/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/en/post/cs329z-rag-agentic-retrieval/">CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions</a></h2>
@@ -566,41 +633,6 @@ Plan, compare, and revise before execution</code></pre></td></tr></table>
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/en/post/anthropic-recursive-self-improvement/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/private-ai-layer-on-base-models/">The Next 5–10 Years of AI: Base Models, Personal Intelligence, and Private Enterprise Layers</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-09-27">September 27, 2026</time>
-            <span aria-hidden="true">·</span>
-            <span>12 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>My central thesis for the next five to ten years is that we will not train a complete model for every person or company. Instead, individuals and organizations will attach a private cognitive layer to shared base models.</p>
-
-<p>The base model supplies general intelligence. Personal data supplies identity and continuity. Enterprise data supplies domain knowledge and operating rules. Agent systems turn those capabilities into action.</p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="Tags">
-              <span class="blog-summary-tags-label">Tags</span>
-              <ul>
-                  <li><a href="/en/tags/personal-ai/">Personal AI</a></li>
-                  <li><a href="/en/tags/base-model/">Base Model</a></li>
-                  <li><a href="/en/tags/lora/">LoRA</a></li>
-                  <li><a href="/en/tags/rag/">RAG</a></li>
-                  <li><a href="/en/tags/memory/">Memory</a></li>
-                  <li><a href="/en/tags/privacy/">Privacy</a></li>
-                  <li><a href="/en/tags/ai-agent/">AI Agent</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/en/post/private-ai-layer-on-base-models/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

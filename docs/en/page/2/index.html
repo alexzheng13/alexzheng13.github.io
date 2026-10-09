@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/" />
 
-<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,62 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/transformer-architecture/">Transformer Architecture: From Token Embeddings to the Training Loop</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-09-14 </span>
+      <div class="post-category">
+          <a href="/en/categories/artificial-intelligence/"> Artificial Intelligence </a>
+          </div>
+        <span class="more-meta"> 2014 words </span>
+        <span class="more-meta"> 10 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>Transformer appears to be made up of many components, but a GPT-style forward path can be summarized as:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Token IDs
+   ↓
+Token Embedding + Position Embedding
+   ↓
+[LayerNorm → Self-Attention → Residual]
+   ↓
+[LayerNorm → FFN → Residual]
+   ↓
+Repeat for multiple Transformer blocks
+   ↓
+Final LayerNorm → LM Head
+   ↓
+Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
+</div>
+</div>
+<p>This article starts from a simple GPT implementation and explains the role and tensor shape of each step along the data flow. The complete source code is placed at the end of the article. After reading the previous principles, you can compare and understand it with the code.</p>
+    </div>
+    <div class="read-more">
+      <a href="/en/post/transformer-architecture/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/en/post/anthropic-agent-evolution-1-from-workflows-to-agents/">Anthropic Agent Evolution I: From Workflows to Agents—and Why Harnesses Matter</a></h1>
@@ -380,31 +436,6 @@
     </div>
     <div class="read-more">
       <a href="/en/post/reinforcement-learning-1-foundations/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/en/post/stanford-cs329a-self-improving-ai-agents/">Stanford CS329A: A Complete Framework for Self-Improving AI Agents</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-08-11 </span>
-      <div class="post-category">
-          <a href="/en/categories/ai-agents/"> AI Agents </a>
-          </div>
-        <span class="more-meta"> 2573 words </span>
-        <span class="more-meta"> 13 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>Self-Improving AI Agent is not a mysterious system that recursively modifies itself indefinitely. A more practical understanding is: Agent forms a closed loop between generation, action, observation and verification, and uses the feedback obtained during reasoning to improve current answers, subsequent decisions, and even the next round of training.</p>
-
-<p>This article follows the main line of the Stanford CS329A course and strings together test-time calculations, verifiers, tool feedback, planning search, reinforcement learning, in-depth research and long-term evaluation into a complete framework.</p>
-    </div>
-    <div class="read-more">
-      <a href="/en/post/stanford-cs329a-self-improving-ai-agents/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>

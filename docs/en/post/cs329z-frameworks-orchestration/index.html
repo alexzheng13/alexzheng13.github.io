@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="A structured guide to Stanford CS 329Z Lecture 5: DSPy, LangGraph, agent harnesses, OpenHands, Pi Agent, OpenClaw, Meta-Harness, Temporal, observability, Shepherd, and system-level evals." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/en/post/cs329z-frameworks-orchestration/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/cs329z-frameworks-orchestration/">
+<meta name="site-language-route" data-language="en" content="/en/post/cs329z-frameworks-orchestration/">
+<meta name="site-current-language" content="en"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution" />
+<meta property="og:description" content="A structured guide to Stanford CS 329Z Lecture 5: DSPy, LangGraph, agent harnesses, OpenHands, Pi Agent, OpenClaw, Meta-Harness, Temporal, observability, Shepherd, and system-level evals." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/en/post/cs329z-frameworks-orchestration/" />
+<meta property="article:published_time" content="2026-10-09T09:00:00+02:00" />
+<meta property="article:modified_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution">
+<meta itemprop="description" content="A structured guide to Stanford CS 329Z Lecture 5: DSPy, LangGraph, agent harnesses, OpenHands, Pi Agent, OpenClaw, Meta-Harness, Temporal, observability, Shepherd, and system-level evals.">
+
+
+<meta itemprop="datePublished" content="2026-10-09T09:00:00&#43;02:00" />
+<meta itemprop="dateModified" content="2026-10-09T09:00:00&#43;02:00" />
+<meta itemprop="wordCount" content="2516">
+
+
+
+<meta itemprop="keywords" content="AI Agents,Agent Harness,Orchestration,LangGraph,DSPy,Temporal,Observability,Meta-Harness," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution"/>
+<meta name="twitter:description" content="A structured guide to Stanford CS 329Z Lecture 5: DSPy, LangGraph, agent harnesses, OpenHands, Pi Agent, OpenClaw, Meta-Harness, Temporal, observability, Shepherd, and system-level evals."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/en/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/en/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/en/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/en/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/cs329z-frameworks-orchestration/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/cs329z-frameworks-orchestration/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/en/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/cs329z-frameworks-orchestration/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/cs329z-frameworks-orchestration/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/en/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/about/">About</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-10-09 </span>
+        <div class="post-category">
+            <a href="/en/categories/ai-agents/"> AI Agents </a>
+            </div>
+          <span class="more-meta"> 2516 words </span>
+          <span class="more-meta"> 12 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-the-three-pillars-of-an-ai-system">1. The three pillars of an AI system</a></li>
+<li><a href="#2-the-framework-landscape-separate-layers-before-choosing-tools">2. The framework landscape: separate layers before choosing tools</a></li>
+<li><a href="#3-dspy-langgraph-and-temporal-solve-different-problems">3. DSPy, LangGraph, and Temporal solve different problems</a>
+<ul>
+<li><a href="#3-1-dspy-optimize-the-llm-program-instead-of-hand-tuning-every-prompt">3.1 DSPy: optimize the LLM program instead of hand-tuning every prompt</a></li>
+<li><a href="#3-2-langgraph-represent-the-agent-as-a-stateful-graph">3.2 LangGraph: represent the agent as a stateful graph</a></li>
+<li><a href="#3-3-temporal-make-an-already-designed-process-finish-reliably">3.3 Temporal: make an already-designed process finish reliably</a></li>
+</ul></li>
+<li><a href="#4-what-is-an-agent-harness">4. What is an agent harness?</a></li>
+<li><a href="#5-three-harness-philosophies-openhands-pi-agent-and-openclaw">5. Three harness philosophies: OpenHands, Pi Agent, and OpenClaw</a>
+<ul>
+<li><a href="#5-1-openhands-event-history-and-a-persistent-terminal">5.1 OpenHands: event history and a persistent terminal</a></li>
+<li><a href="#5-2-pi-agent-a-tiny-tool-surface-and-branching-history">5.2 Pi Agent: a tiny tool surface and branching history</a></li>
+<li><a href="#5-3-openclaw-a-long-lived-personal-agent">5.3 OpenClaw: a long-lived personal agent</a></li>
+</ul></li>
+<li><a href="#6-the-same-model-can-become-a-different-agent-under-a-different-harness">6. The same model can become a different agent under a different harness</a></li>
+<li><a href="#7-meta-harness-search-the-harness-design-space-automatically">7. Meta-Harness: search the harness design space automatically</a></li>
+<li><a href="#8-why-agents-need-durable-orchestration">8. Why agents need durable orchestration</a></li>
+<li><a href="#9-telemetry-without-a-trace-an-agent-cannot-be-debugged">9. Telemetry: without a trace, an agent cannot be debugged</a></li>
+<li><a href="#10-shepherd-make-execution-inspectable-and-reversible">10. Shepherd: make execution inspectable and reversible</a></li>
+<li><a href="#11-let-evals-choose-the-architecture-not-framework-popularity">11. Let evals choose the architecture, not framework popularity</a></li>
+<li><a href="#conclusion-the-model-is-the-engine-the-harness-determines-how-it-works">Conclusion: the model is the engine; the harness determines how it works</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>A model that can call tools is not yet a production-ready agent.</p>
+
+<p>An agent system must also answer a long list of engineering questions. Where is state stored? Where does a failed run resume? How is context reconstructed? Who controls tool permissions? What schedules a long-running task? How is every step traced? When the system becomes slower, more expensive, or less accurate, how do we find the cause?</p>
+
+<p>These concerns are often compressed into the vague label “agent framework.” A clearer approach is to separate the stack into layers:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Models and data
+      ↓
+LLM program / workflow         defines application logic
+      ↓
+Agent harness                  provides tools, memory, context, and execution
+      ↓
+Durable orchestration          survives retries, waits, and process failures
+      ↓
+Telemetry + evals              makes the system observable and improvable</code></pre></td></tr></table>
+</div>
+</div>
+<p>This article reorganizes Lecture 5 from my <strong>Stanford CS 329Z: Engineering AI Agents</strong> notes. The goal is not to promote one framework. It is to build an architectural map: what each layer solves, when it becomes necessary, and why the same model can behave very differently inside different harnesses.</p>
+
+<blockquote>
+<p><strong>Related course note</strong>: <a href="/en/post/cs329z-rag-agentic-retrieval/">From RAG to Agentic RAG: Retrieval, Reranking, and Closed-Loop Decisions</a></p>
+</blockquote>
+
+<h2 id="1-the-three-pillars-of-an-ai-system">1. The three pillars of an AI system</h2>
+
+<p>Before discussing frameworks, it helps to reduce a complete AI system to three pillars:</p>
+
+<ol>
+<li><strong>Data</strong>: training data, rollouts, demonstrations, human feedback, and runtime retrieval;</li>
+<li><strong>System or model</strong>: a language model, compound AI system, workflow, or agentic system;</li>
+<li><strong>Evaluation + metric</strong>: pass rate, exact match, LLM judges, cost, latency, safety, and consistency.</li>
+</ol>
+
+<p><img src="/img/posts/cs329z-frameworks-orchestration/three-pillars.webp" alt="The three pillars of an AI system: data, system or model, and evaluation plus metrics" /></p>
+
+<p>The important implication is that <strong>a model is only one component, and a system is meaningful only when placed inside an evaluation loop</strong>.</p>
+
+<p>If the model changes while tasks and data also change, it is impossible to attribute an improvement. If a workflow is built without recording cost and failure trajectories, it is equally hard to know whether it actually became better. Framework decisions must eventually be compared on the same representative tasks and metrics.</p>
+
+<h2 id="2-the-framework-landscape-separate-layers-before-choosing-tools">2. The framework landscape: separate layers before choosing tools</h2>
+
+<p>Lecture 5 divides the agent stack into several layers. Model interfaces sit at the bottom. Workflows and compound AI systems add program logic. Agents give the model more control over execution. Reliability and observability cut across the entire stack.</p>
+
+<p><img src="/img/posts/cs329z-frameworks-orchestration/framework-landscape.webp" alt="The AI-agent framework landscape across models, workflows, agents, reliability, and observability" /></p>
+
+<p>The common tools can be mapped to responsibilities rather than placed in one undifferentiated list:</p>
+
+<table>
+<thead>
+<tr>
+<th>Tool or category</th>
+<th>Primary responsibility</th>
+<th>Question it answers</th>
+<th>Typical uses</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Model API</td>
+<td>Supply inference</td>
+<td>“Which model should generate or judge?”</td>
+<td>OpenAI, Anthropic, LiteLLM, and similar interfaces</td>
+</tr>
+
+<tr>
+<td>DSPy</td>
+<td>Optimize an LLM program</td>
+<td>“How can these modules and prompts perform better?”</td>
+<td>RAG, QA, reasoning, few-shot selection, prompt optimization</td>
+</tr>
+
+<tr>
+<td>LangGraph</td>
+<td>Orchestrate state and control flow</td>
+<td>“What happens next, and how does state move?”</td>
+<td>Branches, loops, tool use, human-in-the-loop, multi-agent systems</td>
+</tr>
+
+<tr>
+<td>Agent harness</td>
+<td>Provide the operating environment</td>
+<td>“What can the model see and do, and how does it keep working?”</td>
+<td>Coding agents, computer-use agents, persistent assistants</td>
+</tr>
+
+<tr>
+<td>Temporal</td>
+<td>Durable execution</td>
+<td>“How does a long task survive failure, restart, or timeout?”</td>
+<td>Retries, timeouts, asynchronous tasks, crash recovery</td>
+</tr>
+
+<tr>
+<td>MLflow / LangSmith / Langfuse</td>
+<td>Telemetry and experiment management</td>
+<td>“What happened in this run, and why did it slow down or fail?”</td>
+<td>Traces, cost, latency, datasets, evaluation, production monitoring</td>
+</tr>
+</tbody>
+</table>
+
+<p>A frequent mistake is asking one framework to own every responsibility. LangGraph can express loops and state transitions, but this does not automatically provide cross-process crash recovery. Temporal can execute a workflow reliably, but it does not design the agent&rsquo;s context and tools. Langfuse can record a trace, but it does not automatically improve task success.</p>
+
+<h2 id="3-dspy-langgraph-and-temporal-solve-different-problems">3. DSPy, LangGraph, and Temporal solve different problems</h2>
+
+<h3 id="3-1-dspy-optimize-the-llm-program-instead-of-hand-tuning-every-prompt">3.1 DSPy: optimize the LLM program instead of hand-tuning every prompt</h3>
+
+<p>DSPy treats LLM calls as modules with input and output signatures. Given examples and an evaluation metric, it can optimize prompts, few-shot demonstrations, or program configurations.</p>
+
+<p>Its central loop looks like this:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Fixed tasks and metric
+        ↓
+Try prompt / example / program configurations
+        ↓
+Select a better-performing LLM program</code></pre></td></tr></table>
+</div>
+</div>
+<p>DSPy is therefore closer to compiling and optimizing an LLM program than managing the lifecycle of a long-running job.</p>
+
+<h3 id="3-2-langgraph-represent-the-agent-as-a-stateful-graph">3.2 LangGraph: represent the agent as a stateful graph</h3>
+
+<p>LangGraph is useful when an agent naturally forms nodes, edges, conditional branches, and loops:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">User request
+     ↓
+Planner ──→ Tool executor ──→ Evaluator
+   ↑               │               │
+   └──── revise ───┴── retry ──────┘</code></pre></td></tr></table>
+</div>
+</div>
+<p>State travels through the graph, and a node may be a model call, a tool, or a human approval step. LangGraph primarily solves <strong>application-level control flow</strong>: when to call a tool, loop, ask the user, or stop.</p>
+
+<h3 id="3-3-temporal-make-an-already-designed-process-finish-reliably">3.3 Temporal: make an already-designed process finish reliably</h3>
+
+<p>Temporal is concerned with execution reliability rather than model reasoning: how an activity is retried, how execution resumes after a worker restarts, how state survives a long wait, and how a workflow running for hours or days continues from the correct point.</p>
+
+<p>The shortest distinction is:</p>
+
+<blockquote>
+<p>LangGraph primarily describes what should happen next. Temporal primarily ensures that the process can continue from the correct state when something goes wrong.</p>
+</blockquote>
+
+<p>They can be combined rather than treated as mutually exclusive alternatives.</p>
+
+<h2 id="4-what-is-an-agent-harness">4. What is an agent harness?</h2>
+
+<p>An agent harness is the operating system around the model. It determines which tools are available, what history is remembered, how context is assembled, how the environment is manipulated, and how a run terminates when it succeeds, fails, or becomes stuck.</p>
+
+<p><img src="/img/posts/cs329z-frameworks-orchestration/agent-harness-anatomy.webp" alt="Anatomy of an agent harness: planning, memory, LLM core, tools, actions, and the environment" /></p>
+
+<p>A typical harness contains at least:</p>
+
+<ul>
+<li><strong>Planning and reasoning</strong> for decomposition, next-step selection, and reflection;</li>
+<li><strong>Memory</strong> for conversation history, working state, and long-term knowledge;</li>
+<li><strong>Context management</strong> for selecting files, tool results, and prior events;</li>
+<li><strong>Tools</strong> such as read, edit, shell, retrieval, browser, or business APIs;</li>
+<li><strong>Execution environment</strong> such as a terminal, sandbox, desktop, database, or physical device;</li>
+<li><strong>Control and safety</strong> through permissions, approvals, budgets, stopping rules, and rollback.</li>
+</ul>
+
+<p>A good harness is not the one with the most tools. It balances four competing goals:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Task success  ↔  Cost  ↔  Latency  ↔  User control</code></pre></td></tr></table>
+</div>
+</div>
+<p>There is no universal optimum. Code completion and production-database modification require entirely different permission and approval policies even if they use the same model.</p>
+
+<h2 id="5-three-harness-philosophies-openhands-pi-agent-and-openclaw">5. Three harness philosophies: OpenHands, Pi Agent, and OpenClaw</h2>
+
+<p>Lecture 5 uses three systems to illustrate the harness design space. They differ not merely in feature count but in their choices around state, tools, autonomy, and user control.</p>
+
+<h3 id="5-1-openhands-event-history-and-a-persistent-terminal">5.1 OpenHands: event history and a persistent terminal</h3>
+
+<p>OpenHands resembles a complete software-engineering environment:</p>
+
+<ul>
+<li>Every step is stored as an event, with one JSON record per event on disk.</li>
+<li>Messages sent to the model are reconstructed from the event history on each step.</li>
+<li>A persistent <code>tmux</code> session preserves the terminal state, including the working directory, environment variables, and virtual environments.</li>
+<li>A stuck detector terminates runs after repeated identical actions and results—for example, four repetitions.</li>
+</ul>
+
+<p>The event log improves reconstruction and debugging, while the persistent terminal gives the agent a continuous environment. The cost is more state and a larger security boundary to manage.</p>
+
+<h3 id="5-2-pi-agent-a-tiny-tool-surface-and-branching-history">5.2 Pi Agent: a tiny tool surface and branching history</h3>
+
+<p>Pi Agent deliberately chooses minimalism:</p>
+
+<ul>
+<li>Only four primitive tools: <code>read</code>, <code>write</code>, <code>edit</code>, and <code>bash</code>;</li>
+<li>A system prompt under 1,000 tokens;</li>
+<li>No separate permission system—the process inherits the permissions with which it was launched;</li>
+<li>History stored as a tree, allowing the user to return to an earlier message and branch;</li>
+<li>No plan mode and no sub-agent tool by design.</li>
+</ul>
+
+<p>The premise is that a few general primitives can compose into complex behavior. This keeps the system and context small, but isolation and authorization must be supplied by the surrounding runtime.</p>
+
+<h3 id="5-3-openclaw-a-long-lived-personal-agent">5.3 OpenClaw: a long-lived personal agent</h3>
+
+<p>OpenClaw emphasizes persistence and proactive operation:</p>
+
+<ul>
+<li>A heartbeat wakes the agent on a schedule, such as every 30 minutes; it returns <code>NO_REPLY</code> when there is nothing to report.</li>
+<li>One long-lived gateway owns the chat channels.</li>
+<li><code>AGENTS.md</code>, <code>SOUL.md</code>, <code>IDENTITY.md</code>, <code>USER.md</code>, and <code>MEMORY.md</code> are placed into context to define identity and the relationship with the user.</li>
+<li>A nightly background job reviews the day&rsquo;s notes and consolidates durable information into long-term memory.</li>
+</ul>
+
+<p>Compared with a one-shot coding task, this design cares more about lifecycle, identity continuity, proactive triggers, and memory consolidation.</p>
+
+<table>
+<thead>
+<tr>
+<th>Design dimension</th>
+<th>OpenHands</th>
+<th>Pi Agent</th>
+<th>OpenClaw</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Core use case</td>
+<td>Software-engineering tasks</td>
+<td>Minimal coding agent</td>
+<td>Persistent personal assistant</td>
+</tr>
+
+<tr>
+<td>State representation</td>
+<td>Event log</td>
+<td>Branching conversation tree</td>
+<td>Long-lived gateway plus Markdown memory</td>
+</tr>
+
+<tr>
+<td>Execution environment</td>
+<td>Persistent terminal</td>
+<td>Four primitive tools</td>
+<td>Chat channels and scheduled runs</td>
+</tr>
+
+<tr>
+<td>Main tradeoff</td>
+<td>Reconstructable and debuggable, but heavier</td>
+<td>Simple and token-efficient, but relies on external permissions</td>
+<td>Proactive and continuous, but lifecycle management is harder</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="6-the-same-model-can-become-a-different-agent-under-a-different-harness">6. The same model can become a different agent under a different harness</h2>
+
+<p>Model evaluations often treat the model name as the only independent variable. Agent performance also depends on prompts, tool schemas, context selection, terminal persistence, error recovery, and stopping rules.</p>
+
+<p>The Terminal-Bench 2 comparison shown in Lecture 5 places the same models in harnesses such as Pi, Codex, and Claude Code. Both success rate and rollout cost change materially across harnesses.</p>
+
+<p><img src="/img/posts/cs329z-frameworks-orchestration/harness-performance.webp" alt="Cost and success-rate differences when the same model is placed inside different agent harnesses" /></p>
+
+<p>Two conclusions follow:</p>
+
+<ol>
+<li>“Agent ability” is rarely a pure model property; it is the joint result of <strong>model × harness × environment</strong>.</li>
+<li>Changing the harness can change model rankings, so a model leaderboard cannot replace a system evaluation.</li>
+</ol>
+
+<h2 id="7-meta-harness-search-the-harness-design-space-automatically">7. Meta-Harness: search the harness design space automatically</h2>
+
+<p>A harness contains many hand-designed choices: tool sets, prompts, context policies, and stopping strategies. These choices can themselves become an optimization space.</p>
+
+<p>The Meta-Harness loop works as follows:</p>
+
+<ol>
+<li>Read candidate source code, prior traces, and evaluation results.</li>
+<li>Propose new harness code or configuration.</li>
+<li>Combine the harness with an LLM and run evaluation tasks.</li>
+<li>Store code, reasoning traces, scores, and logs.</li>
+<li>Use the results to propose the next candidate.</li>
+</ol>
+
+<p><img src="/img/posts/cs329z-frameworks-orchestration/meta-harness-loop.webp" alt="The Meta-Harness loop proposes, executes, and evaluates new harnesses" /></p>
+
+<p>In the experiments shown in the notes, Meta-Harness finds configurations that outperform several hand-written defaults within a small number of evaluations. The Terminal-Bench 2 chart also shows the searched harness outperforming the displayed manual baselines under that setup.</p>
+
+<p><img src="/img/posts/cs329z-frameworks-orchestration/meta-harness-results.webp" alt="Meta-Harness search progress and Terminal-Bench 2 evaluation results" /></p>
+
+<p>The lasting idea is not one particular score. It is the shift in design method: agent scaffolds that engineers once tuned manually are becoming code and configuration spaces that can be generated, executed, and evaluated automatically.</p>
+
+<p>Meta-Harness also amplifies evaluation bias. If the task set does not represent real users, automated search will simply overfit the wrong objective faster.</p>
+
+<h2 id="8-why-agents-need-durable-orchestration">8. Why agents need durable orchestration</h2>
+
+<p>Agents can now work on increasingly long tasks. Network errors, process crashes, API limits, and waits for human input may be rare over a few minutes but become inevitable over several hours.</p>
+
+<p>Temporal separates execution into two important concepts:</p>
+
+<ul>
+<li>An <strong>Activity</strong> is a unit that performs real external work. It may fail and be retried.</li>
+<li>A <strong>Workflow</strong> connects activities, while its history and state are persisted.</li>
+</ul>
+
+<p><img src="/img/posts/cs329z-frameworks-orchestration/temporal-execution-model.webp" alt="Temporal's execution model with client, task queues, workflow workers, activity workers, and persisted history" /></p>
+
+<p>In the diagram, a client submits work; the server maintains workflow and activity queues plus execution history; workflow workers determine the next step, and activity workers perform external actions. A temporary worker failure does not require the system to start again from the first line of the prompt.</p>
+
+<p>Durable execution is especially useful for:</p>
+
+<ul>
+<li>operations that wait for human approval;</li>
+<li>long jobs spanning several external APIs;</li>
+<li>tool calls with retries, timeouts, and backoff;</li>
+<li>scheduled research or monitoring that runs for days;</li>
+<li>business processes that must retain progress through process restarts.</li>
+</ul>
+
+<p>Retries cannot mean unconditional repetition. Side-effecting activities such as sending email, making a payment, or opening a ticket need idempotency keys or explicit compensating actions. Otherwise, “reliable retry” can create duplicate effects.</p>
+
+<h2 id="9-telemetry-without-a-trace-an-agent-cannot-be-debugged">9. Telemetry: without a trace, an agent cannot be debugged</h2>
+
+<p>A conventional request may have one input, one response, and a short log. An agent run can contain dozens of model calls, tool calls, retrievals, branches, and retries. Saving only the final answer makes several questions almost impossible to answer:</p>
+
+<ul>
+<li>Did the model reason incorrectly, or did the tool return bad data?</li>
+<li>Why did cost suddenly increase?</li>
+<li>At which step did the run diverge from the goal?</li>
+<li>Why did the same task succeed yesterday and fail today?</li>
+</ul>
+
+<p>The tools discussed in Lecture 5 have different emphases:</p>
+
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Primary focus</th>
+<th>Typical records</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>MLflow</td>
+<td>Experiment and model lifecycle</td>
+<td>Parameters, model versions, datasets, metrics, prompt and agent runs</td>
+</tr>
+
+<tr>
+<td>LangSmith</td>
+<td>LangChain and LangGraph development lifecycle</td>
+<td>Traces, datasets, evaluations, production monitoring</td>
+</tr>
+
+<tr>
+<td>Langfuse</td>
+<td>LLM application observability</td>
+<td>Traces, token cost, latency, user feedback, dashboards; self-hosting support</td>
+</tr>
+</tbody>
+</table>
+
+<p>A useful trace is not merely a chronological log. It connects the user goal, model inputs and outputs, tool parameters and results, state transitions, errors, retries, cost, latency, final evaluation, and version metadata.</p>
+
+<p>Telemetry is therefore not a dashboard to bolt on after launch. It is part of the agent architecture.</p>
+
+<h2 id="10-shepherd-make-execution-inspectable-and-reversible">10. Shepherd: make execution inspectable and reversible</h2>
+
+<p>Some agents modify source code, files, or a working environment. If every step permanently changes the real environment, even a perfect log may arrive too late.</p>
+
+<p><a href="https://github.com/shepherd-agents/shepherd">Shepherd</a> takes a runtime-substrate approach. It records agent work as a <strong>durable, inspectable, and reversible</strong> execution trace and preserves workspace outputs for review.</p>
+
+<p>Before applying the result, the user can choose to:</p>
+
+<ul>
+<li><code>accept / apply</code>;</li>
+<li><code>reject / discard</code>;</li>
+<li><code>rollback</code>;</li>
+<li>modify the result and run again.</li>
+</ul>
+
+<p>The key separation is between “the agent computed a result” and “the result permanently changed the environment.” For code changes, infrastructure configuration, and high-risk business operations, reversibility and supervision may matter more than another small gain in single-run success.</p>
+
+<h2 id="11-let-evals-choose-the-architecture-not-framework-popularity">11. Let evals choose the architecture, not framework popularity</h2>
+
+<p>Framework choices need evaluation support. At minimum, an agent system should track:</p>
+
+<ul>
+<li><strong>Task quality</strong>: accuracy, pass rate, and final environment state;</li>
+<li><strong>Reliability</strong>: repeated-run consistency, recovery rate, and stuck-run frequency;</li>
+<li><strong>Efficiency</strong>: token, API, and compute cost plus end-to-end latency;</li>
+<li><strong>Safety</strong>: permission violations, harmful side effects, prompt injection, and sensitive-data exposure;</li>
+<li><strong>User control</strong>: approval burden, interruptibility, review, and rollback.</li>
+</ul>
+
+<p>For a domain-specific agent, chasing a general benchmark such as SWE-bench is not enough. A more useful dataset comes from real user tasks and includes common paths, edge cases, external-service failures, missing information, and cases that should be refused.</p>
+
+<p>A practical adoption order is:</p>
+
+<ol>
+<li>Establish a baseline with a minimal tool set and representative tasks.</li>
+<li>Add an optimization layer such as DSPy when prompts and examples are unstable.</li>
+<li>Introduce state-graph orchestration when branches, loops, and human approval appear.</li>
+<li>Add a durable workflow when jobs cross processes or hours and must recover.</li>
+<li>Record traces, cost, versions, and evaluation results from the beginning.</li>
+<li>Keep a new framework layer only when it improves the fixed evaluation set.</li>
+</ol>
+
+<h2 id="conclusion-the-model-is-the-engine-the-harness-determines-how-it-works">Conclusion: the model is the engine; the harness determines how it works</h2>
+
+<p>The most important lesson from Lecture 5 is to separate agent capability from the model name:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Model          supplies reasoning and generation
+Workflow       expresses task logic
+Harness        defines tools, context, memory, and environment
+Orchestrator   keeps long-running work progressing reliably
+Telemetry      makes every step observable and debuggable
+Evals          decide whether the system actually improved</code></pre></td></tr></table>
+</div>
+</div>
+<p>Agent engineering is not about making a model complete a task once. It is about making the whole system repeatable, observable, recoverable, evaluable, and continuously improvable.</p>
+
+<p>Once a task grows from one model call into dozens of steps, several hours, or a persistent service, product quality is determined not only by the model but by the harness and runtime infrastructure built around it.</p>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-10-09
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/en/tags/ai-agents/">AI Agents</a>
+          <a href="/en/tags/agent-harness/">Agent Harness</a>
+          <a href="/en/tags/orchestration/">Orchestration</a>
+          <a href="/en/tags/langgraph/">LangGraph</a>
+          <a href="/en/tags/dspy/">DSPy</a>
+          <a href="/en/tags/temporal/">Temporal</a>
+          <a href="/en/tags/observability/">Observability</a>
+          <a href="/en/tags/meta-harness/">Meta-Harness</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/en/post/cs329z-rag-agentic-retrieval/">
+            <span class="next-text nav-default">CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

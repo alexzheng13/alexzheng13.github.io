@@ -6,10 +6,82 @@
     <description>Recent content in Tags on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 06 Oct 2026 09:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 09 Oct 2026 09:00:00 +0200</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Agent Harness</title>
+      <link>https://alexzheng13.github.io/tags/agent-harness/</link>
+      <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/agent-harness/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>AI Agents</title>
+      <link>https://alexzheng13.github.io/tags/ai-agents/</link>
+      <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/ai-agents/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>DSPy</title>
+      <link>https://alexzheng13.github.io/tags/dspy/</link>
+      <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/dspy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>LangGraph</title>
+      <link>https://alexzheng13.github.io/tags/langgraph/</link>
+      <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/langgraph/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Meta-Harness</title>
+      <link>https://alexzheng13.github.io/tags/meta-harness/</link>
+      <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/meta-harness/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Observability</title>
+      <link>https://alexzheng13.github.io/tags/observability/</link>
+      <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/observability/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Orchestration</title>
+      <link>https://alexzheng13.github.io/tags/orchestration/</link>
+      <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/orchestration/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Temporal</title>
+      <link>https://alexzheng13.github.io/tags/temporal/</link>
+      <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/temporal/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Agentic RAG</title>
@@ -404,24 +476,6 @@
       <pubDate>Sat, 12 Sep 2026 21:08:45 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/tags/aci/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Agent Harness</title>
-      <link>https://alexzheng13.github.io/tags/agent-harness/</link>
-      <pubDate>Sat, 12 Sep 2026 21:08:45 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/tags/agent-harness/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>AI Agents</title>
-      <link>https://alexzheng13.github.io/tags/ai-agents/</link>
-      <pubDate>Sat, 12 Sep 2026 21:08:45 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/tags/ai-agents/</guid>
       <description></description>
     </item>
     

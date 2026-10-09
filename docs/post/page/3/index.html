@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/post/" />
 
-<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">文章归档</h1>
-      <p>按年份浏览全部 31 篇文章</p>
+      <p>按年份浏览全部 32 篇文章</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         订阅 RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="按年份排列的文章">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/post/cs329z-frameworks-orchestration/">
+          <time datetime="2026-10-09">10-09</time>
+          <span>CS 329Z：Frameworks &amp; Orchestration——从 Agent Harness 到可靠执行与可观测性</span>
+        </a>
         <a class="blog-archive-index-item" href="/post/cs329z-rag-agentic-retrieval/">
           <time datetime="2026-10-06">10-06</time>
           <span>CS 329Z：从 RAG 到 Agentic RAG——检索、重排与闭环决策</span>
@@ -383,6 +387,39 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="最近文章">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/post/anthropic-agent-evolution-2-context-reset-and-handoff/">Anthropic Agent 演进（二）：Context Reset 与 Structured Handoff</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-09-12">2026年09月12日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 4 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>长任务的核心矛盾不是“模型能不能写代码”，而是：任务可能持续数小时或数天，但一次 Context Window 终究有限。把整个历史无限重放，会同时遇到容量和噪声问题。</p>
+
+<p>Anthropic 第一代 Long-Running Agent Harness 的答案是：<strong>重置对话上下文，但把项目状态写进结构化工件，让下一轮 Agent 可以恢复工作。</strong></p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="标签">
+              <span class="blog-summary-tags-label">标签</span>
+              <ul>
+                  <li><a href="/tags/anthropic-agent-%E6%BC%94%E8%BF%9B/">Anthropic Agent 演进</a></li>
+                  <li><a href="/tags/agent-harness/">Agent Harness</a></li>
+                  <li><a href="/tags/context-engineering/">Context Engineering</a></li>
+                  <li><a href="/tags/context-reset/">Context Reset</a></li>
+                  <li><a href="/tags/long-running-agents/">Long-Running Agents</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/post/anthropic-agent-evolution-2-context-reset-and-handoff/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/post/anthropic-agent-evolution-3-planner-generator-evaluator/">Anthropic Agent 演进（三）：Planner–Generator–Evaluator 质量闭环</a></h2>
@@ -518,39 +555,6 @@
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/post/reinforcement-learning-2-classic-algorithms/">阅读全文<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/post/reinforcement-learning-1-foundations/">强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-08-25">2026年08月25日</time>
-            <span aria-hidden="true">·</span>
-            <span>预计阅读 6 分钟</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>强化学习最容易让人困惑的地方，是算法名字很多，但它们真正回答的始终是同一个问题：<strong>一个智能体怎样通过与环境交互，学会做出能带来长期收益的决策？</strong></p>
-
-<p>这组文章从最基本的问题定义开始，再逐步走向 Q-Learning、DQN、Actor-Critic、PPO、探索策略以及大模型后训练。本文是系列第一篇，先建立后续所有算法共用的语言：状态、动作、策略、回报、MDP、价值函数和贝尔曼方程。</p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="标签">
-              <span class="blog-summary-tags-label">标签</span>
-              <ul>
-                  <li><a href="/tags/reinforcement-learning/">Reinforcement Learning</a></li>
-                  <li><a href="/tags/mdp/">MDP</a></li>
-                  <li><a href="/tags/bellman-equation/">Bellman Equation</a></li>
-                  <li><a href="/tags/cartpole/">CartPole</a></li>
-                  <li><a href="/tags/value-function/">Value Function</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/post/reinforcement-learning-1-foundations/">阅读全文<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/" />
 
-<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,62 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/transformer-architecture/">Transformer Architecture：从 Token Embedding 到训练循环</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-09-14 </span>
+      <div class="post-category">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"> 人工智能 </a>
+          </div>
+        <span class="more-meta"> 约 2926 字 </span>
+        <span class="more-meta"> 预计阅读 6 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>Transformer 看起来由许多组件组成，但一条 GPT 风格的前向路径可以概括为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Token IDs
+   ↓
+Token Embedding + Position Embedding
+   ↓
+[LayerNorm → Self-Attention → Residual]
+   ↓
+[LayerNorm → FFN → Residual]
+   ↓
+重复多个 Transformer Blocks
+   ↓
+Final LayerNorm → LM Head
+   ↓
+Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
+</div>
+</div>
+<p>本文从一个简单的 GPT 实现出发，沿着数据流解释每一步的作用和张量形状。完整源码放在文章最后，读完前面的原理后可以结合代码对照理解。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/transformer-architecture/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/anthropic-agent-evolution-1-from-workflows-to-agents/">Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness</a></h1>
@@ -382,31 +438,6 @@
     </div>
     <div class="read-more">
       <a href="/post/reinforcement-learning-1-foundations/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/stanford-cs329a-self-improving-ai-agents/">Stanford CS329A：Self-Improving AI Agents 的完整技术框架</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-08-11 </span>
-      <div class="post-category">
-          <a href="/categories/ai-agents/"> AI Agents </a>
-          </div>
-        <span class="more-meta"> 约 4434 字 </span>
-        <span class="more-meta"> 预计阅读 9 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>Self-Improving AI Agent 并不是一个会无限递归修改自己的神秘系统。更实际的理解是：Agent 在生成、行动、观察和验证之间形成闭环，把推理时获得的反馈用于改进当前答案、后续决策，甚至下一轮训练。</p>
-
-<p>这篇文章沿着 Stanford CS329A 的课程主线，把测试时计算、验证器、工具反馈、规划搜索、强化学习、深度研究与长程评测串成一个完整框架。</p>
-    </div>
-    <div class="read-more">
-      <a href="/post/stanford-cs329a-self-improving-ai-agents/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>

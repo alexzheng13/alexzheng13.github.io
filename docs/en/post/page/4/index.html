@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-06T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 31 posts by year</p>
+      <p>Browse all 32 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/cs329z-frameworks-orchestration/">
+          <time datetime="2026-10-09">10-09</time>
+          <span>CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/cs329z-rag-agentic-retrieval/">
           <time datetime="2026-10-06">10-06</time>
           <span>CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions</span>
@@ -385,6 +389,39 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/reinforcement-learning-1-foundations/">Reinforcement Learning I: From CartPole to MDPs and Bellman Equations</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-08-25">August 25, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>5 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>Reinforcement learning has many algorithms, but they all address the same question: <strong>how can an agent learn decisions that produce high long-term reward through interaction with an environment?</strong></p>
+
+<p>This series starts with the common language behind those algorithms, then moves toward Q-Learning, DQN, Actor-Critic, PPO, exploration, data collection, and eventually LLM post-training. This first article establishes the foundation: states, actions, policies, returns, MDPs, value functions, and Bellman equations.</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/reinforcement-learning/">Reinforcement Learning</a></li>
+                  <li><a href="/en/tags/mdp/">MDP</a></li>
+                  <li><a href="/en/tags/bellman-equation/">Bellman Equation</a></li>
+                  <li><a href="/en/tags/cartpole/">CartPole</a></li>
+                  <li><a href="/en/tags/value-function/">Value Function</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/reinforcement-learning-1-foundations/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/stanford-cs329a-self-improving-ai-agents/">Stanford CS329A: A Complete Framework for Self-Improving AI Agents</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-08-11">August 11, 2026</time>
@@ -491,29 +528,6 @@ The following is the text of the article    One of the basic concepts of Linux
 
         <footer class="blog-summary-footer">
           <a class="blog-summary-read-more" href="/en/post/domain-driven-design-everything-you-wanted-to-know-1/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/introduction-to-go-assembly-2/">A Practical Introduction to Go Assembly (2)</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2021-01-01">January 1, 2021</time>
-            <span aria-hidden="true">·</span>
-            <span>8 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">Function call from assembly perspective ﻿ Let’s start with a simple example:
-1 2 3 4 5 6 7 8 9 10  package main func main() { add(1, 1) } func add(a, b int64) (c int64) { c = a + b return }    After executing the go tool compile -S compliation_add.go command, the assembly code is as follows
-1 2 3 4 5 6 7  .</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/introduction-to-go-assembly-2/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>
