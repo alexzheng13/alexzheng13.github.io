@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 32 posts by year</p>
+      <p>Browse all 33 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/cs329z-context-management-patterns/">
+          <time datetime="2026-10-12">10-12</time>
+          <span>CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/cs329z-frameworks-orchestration/">
           <time datetime="2026-10-09">10-09</time>
           <span>CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution</span>
@@ -389,6 +393,40 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/reinforcement-learning-2-classic-algorithms/">Reinforcement Learning II: From Q-Learning and DQN to Actor-Critic and PPO</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-08-26">August 26, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>5 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p><a href="/en/post/reinforcement-learning-1-foundations/">Part I</a> established MDPs, value functions, and Bellman equations. Now the practical question is: <strong>when the environment is unknown, states cannot be enumerated, and policies are neural networks, how do we actually learn values or policies?</strong></p>
+
+<p>The progression is continuous. Dynamic programming assumes a model. Monte Carlo uses complete trajectories. Temporal difference learning updates before an episode ends. Q-Learning targets optimal action values. DQN scales Q-functions to high-dimensional inputs. Actor-Critic and PPO optimize policies while controlling unstable updates.</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/reinforcement-learning/">Reinforcement Learning</a></li>
+                  <li><a href="/en/tags/q-learning/">Q-Learning</a></li>
+                  <li><a href="/en/tags/dqn/">DQN</a></li>
+                  <li><a href="/en/tags/actor-critic/">Actor-Critic</a></li>
+                  <li><a href="/en/tags/ppo/">PPO</a></li>
+                  <li><a href="/en/tags/temporal-difference/">Temporal Difference</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/reinforcement-learning-2-classic-algorithms/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/reinforcement-learning-1-foundations/">Reinforcement Learning I: From CartPole to MDPs and Bellman Equations</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-08-25">August 25, 2026</time>
@@ -505,29 +543,6 @@ The following is the text of the article    One of the basic concepts of Linux
 
         <footer class="blog-summary-footer">
           <a class="blog-summary-read-more" href="/en/post/linux-io-multiplexing-select-poll-epoll/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/domain-driven-design-everything-you-wanted-to-know-1/">Translation: Domain-Driven Design - Everything You Always Wanted to Know (1)</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2021-02-02">February 2, 2021</time>
-            <span aria-hidden="true">·</span>
-            <span>15 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">Domain-Driven Design original address
- As a personal code base grows, its complexity inevitably increases. As this happens, it becomes very difficult to maintain the organization and structure of the code as originally intended, which is known as &ldquo;software entropy&rdquo;. After a series of iterations, maintaining good focus points and correctly decoupling classes and modules becomes more challenging if strict architectural guidelines are not enforced.
-﻿In a traditional Model-View-Controller (MVC) structure, the “M” layer would retain all business logic but provide no clear guidelines on how to properly delineate responsibilities.</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/domain-driven-design-everything-you-wanted-to-know-1/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

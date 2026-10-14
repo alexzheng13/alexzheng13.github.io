@@ -3,35 +3,91 @@
   
   <url>
     <loc>https://alexzheng13.github.io/tags/agent-harness/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/categories/ai-agents/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://alexzheng13.github.io/tags/ai-agents/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/categories/ai-agents/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://alexzheng13.github.io/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://alexzheng13.github.io/categories/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/tags/compaction/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/tags/context-engineering/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/tags/context-management/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/post/cs329z-context-management-patterns/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/tags/memory/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/tags/observation-masking/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/post/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/tags/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -73,20 +129,6 @@
   
   <url>
     <loc>https://alexzheng13.github.io/tags/orchestration/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/post/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/tags/</loc>
     <lastmod>2026-10-09T09:00:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -331,13 +373,6 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/tags/memory/</loc>
-    <lastmod>2026-09-27T11:27:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://alexzheng13.github.io/tags/personal-ai/</loc>
     <lastmod>2026-09-27T11:27:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -506,13 +541,6 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/tags/context-engineering/</loc>
-    <lastmod>2026-09-12T21:07:45+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://alexzheng13.github.io/tags/context-reset/</loc>
     <lastmod>2026-09-12T21:07:45+02:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -625,14 +653,14 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/categories/reinforcement-learning/</loc>
+    <loc>https://alexzheng13.github.io/tags/reinforcement-learning/</loc>
     <lastmod>2026-08-27T09:00:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/tags/reinforcement-learning/</loc>
+    <loc>https://alexzheng13.github.io/categories/reinforcement-learning/</loc>
     <lastmod>2026-08-27T09:00:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

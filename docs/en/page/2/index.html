@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/" />
 
-<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,48 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/nanochat-gpt-pretraining-from-source/">Reading nanochat Source: From Configuration to a Training Step</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-09-26 </span>
+      <div class="post-category">
+          <a href="/en/categories/artificial-intelligence/"> Artificial Intelligence </a>
+          </div>
+        <span class="more-meta"> 1322 words </span>
+        <span class="more-meta"> 7 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>This article follows the execution order of <code>scripts/base_train.py</code>: command-line arguments, random seeds, DDP setup, model construction, weight initialization, scaling laws, optimizers, data loading, gradient accumulation, and finally one complete training step.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">documents → tokenizer and sequence packing → inputs/targets
+          → GPT forward → cross-entropy loss
+          → backward and gradient accumulation → optimizer step
+          → evaluation, sampling, checkpointing, and resume</code></pre></td></tr></table>
+</div>
+</div>
+<p>The organization and code-reading path follow my nanochat Notion notes. The prose has been edited for clarity, while the source snippets and their original reading sequence are preserved.</p>
+
+<blockquote>
+<p><strong>Prerequisite:</strong> If token embeddings, causal self-attention, MLPs, residual connections, or next-token loss are still unfamiliar, start with <a href="https://alexzheng13.github.io/en/post/transformer-architecture/">Transformer Architecture: From Token Embedding to the Training Loop</a> and then return to this source-level walkthrough.</p>
+</blockquote>
+    </div>
+    <div class="read-more">
+      <a href="/en/post/nanochat-gpt-pretraining-from-source/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/en/post/transformer-architecture/">Transformer Architecture: From Token Embeddings to the Training Loop</a></h1>
@@ -415,31 +457,6 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
   </div>
 </article>
 
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/en/post/reinforcement-learning-1-foundations/">Reinforcement Learning I: From CartPole to MDPs and Bellman Equations</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-08-25 </span>
-      <div class="post-category">
-          <a href="/en/categories/reinforcement-learning/"> Reinforcement Learning </a>
-          </div>
-        <span class="more-meta"> 913 words </span>
-        <span class="more-meta"> 5 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>Reinforcement learning has many algorithms, but they all address the same question: <strong>how can an agent learn decisions that produce high long-term reward through interaction with an environment?</strong></p>
-
-<p>This series starts with the common language behind those algorithms, then moves toward Q-Learning, DQN, Actor-Critic, PPO, exploration, data collection, and eventually LLM post-training. This first article establishes the foundation: states, actions, policies, returns, MDPs, value functions, and Bellman equations.</p>
-    </div>
-    <div class="read-more">
-      <a href="/en/post/reinforcement-learning-1-foundations/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
   </section>
     <nav class="blog-pagination homepage-pagination" aria-label="Homepage pagination">
       <div class="blog-pagination-pages">
@@ -459,6 +476,9 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
             <a class="blog-pagination-number" href="/en/page/4/" aria-label="Page 4">
               4
             </a>
+            <a class="blog-pagination-number" href="/en/page/5/" aria-label="Page 5">
+              5
+            </a>
           <a class="blog-pagination-direction" href="/en/page/3/" rel="next">
             Next
             <span aria-hidden="true">›</span>
@@ -466,11 +486,11 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
       </div>
 
       <div class="blog-pagination-status">
-        <span>Page <strong>2</strong> of 4</span>
+        <span>Page <strong>2</strong> of 5</span>
 
-        <form class="blog-pagination-jump" data-pagination-base="/en/" data-total-pages="4">
+        <form class="blog-pagination-jump" data-pagination-base="/en/" data-total-pages="5">
           <label for="homepage-page-jump">Go to</label>
-          <input id="homepage-page-jump" name="page" type="number" min="1" max="4" value="2" inputmode="numeric">
+          <input id="homepage-page-jump" name="page" type="number" min="1" max="5" value="2" inputmode="numeric">
           <button type="submit">Go</button>
         </form>
       </div>

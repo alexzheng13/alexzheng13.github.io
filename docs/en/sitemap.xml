@@ -3,35 +3,91 @@
   
   <url>
     <loc>https://alexzheng13.github.io/en/tags/agent-harness/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/tags/ai-agents/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://alexzheng13.github.io/en/categories/ai-agents/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/ai-agents/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://alexzheng13.github.io/en/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://alexzheng13.github.io/en/categories/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/compaction/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/context-engineering/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/context-management/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/post/cs329z-context-management-patterns/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/memory/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/observation-masking/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/post/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/</loc>
+    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -73,20 +129,6 @@
   
   <url>
     <loc>https://alexzheng13.github.io/en/tags/orchestration/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/post/</loc>
-    <lastmod>2026-10-09T09:00:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/tags/</loc>
     <lastmod>2026-10-09T09:00:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -338,13 +380,6 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/tags/memory/</loc>
-    <lastmod>2026-09-27T11:27:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://alexzheng13.github.io/en/tags/personal-ai/</loc>
     <lastmod>2026-09-27T11:27:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -500,13 +535,6 @@
   
   <url>
     <loc>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-2-context-reset-and-handoff/</loc>
-    <lastmod>2026-09-12T21:07:45+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/tags/context-engineering/</loc>
     <lastmod>2026-09-12T21:07:45+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -779,14 +807,14 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/tags/career-development/</loc>
+    <loc>https://alexzheng13.github.io/en/categories/career-development/</loc>
     <lastmod>2026-03-23T12:22:13+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/categories/career-development/</loc>
+    <loc>https://alexzheng13.github.io/en/tags/career-development/</loc>
     <lastmod>2026-03-23T12:22:13+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

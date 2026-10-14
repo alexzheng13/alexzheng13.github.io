@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="Five context management patterns from Stanford CS329Z Lecture 6: persistent event logs, memory offloading, compaction, observation masking, and context isolation, with progressive disclosure and a practical combination strategy." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/en/post/cs329z-context-management-patterns/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/cs329z-context-management-patterns/">
+<meta name="site-language-route" data-language="en" content="/en/post/cs329z-context-management-patterns/">
+<meta name="site-current-language" content="en"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks" />
+<meta property="og:description" content="Five context management patterns from Stanford CS329Z Lecture 6: persistent event logs, memory offloading, compaction, observation masking, and context isolation, with progressive disclosure and a practical combination strategy." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/en/post/cs329z-context-management-patterns/" />
+<meta property="article:published_time" content="2026-10-12T22:25:07+02:00" />
+<meta property="article:modified_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks">
+<meta itemprop="description" content="Five context management patterns from Stanford CS329Z Lecture 6: persistent event logs, memory offloading, compaction, observation masking, and context isolation, with progressive disclosure and a practical combination strategy.">
+
+
+<meta itemprop="datePublished" content="2026-10-12T22:25:07&#43;02:00" />
+<meta itemprop="dateModified" content="2026-10-12T22:25:07&#43;02:00" />
+<meta itemprop="wordCount" content="2235">
+
+
+
+<meta itemprop="keywords" content="AI Agents,Context Engineering,Context Management,Agent Harness,Memory,Compaction,Observation Masking," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks"/>
+<meta name="twitter:description" content="Five context management patterns from Stanford CS329Z Lecture 6: persistent event logs, memory offloading, compaction, observation masking, and context isolation, with progressive disclosure and a practical combination strategy."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/en/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/en/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/en/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/en/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/cs329z-context-management-patterns/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/cs329z-context-management-patterns/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/en/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/cs329z-context-management-patterns/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/cs329z-context-management-patterns/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/en/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/about/">About</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-10-12 </span>
+        <div class="post-category">
+            <a href="/en/categories/ai-agents/"> AI Agents </a>
+            </div>
+          <span class="more-meta"> 2235 words </span>
+          <span class="more-meta"> 11 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-two-principles-focus-and-continuity">1. Two principles: focus and continuity</a>
+<ul>
+<li><a href="#focus-include-what-the-current-task-needs">Focus: include what the current task needs</a></li>
+<li><a href="#continuity-continue-working-after-context-changes">Continuity: continue working after context changes</a></li>
+<li><a href="#semantic-continuity-and-kv-caching-are-separate-concerns">Semantic continuity and KV caching are separate concerns</a></li>
+</ul></li>
+<li><a href="#2-persistent-event-logs-preserve-history-and-construct-inputs-as-needed">2. Persistent event logs: preserve history and construct inputs as needed</a></li>
+<li><a href="#3-memory-offloading-place-knowledge-outside-the-window">3. Memory offloading: place knowledge outside the window</a></li>
+<li><a href="#4-compaction-turn-history-into-a-useful-handoff">4. Compaction: turn history into a useful handoff</a></li>
+<li><a href="#5-observation-masking-start-with-the-bulky-tool-outputs">5. Observation masking: start with the bulky tool outputs</a>
+<ul>
+<li><a href="#how-it-differs-from-compaction">How it differs from compaction</a></li>
+<li><a href="#what-the-experiment-shows">What the experiment shows</a></li>
+</ul></li>
+<li><a href="#6-context-isolation-give-subtasks-their-own-working-space">6. Context isolation: give subtasks their own working space</a>
+<ul>
+<li><a href="#progressive-disclosure-load-details-when-they-become-relevant">Progressive disclosure: load details when they become relevant</a></li>
+</ul></li>
+<li><a href="#7-how-the-five-patterns-work-together">7. How the five patterns work together</a></li>
+<li><a href="#8-check-the-design-with-write-select-compress-and-isolate">8. Check the design with Write, Select, Compress, and Isolate</a></li>
+<li><a href="#9-how-to-evaluate-context-management">9. How to evaluate context management</a></li>
+<li><a href="#sources-and-further-reading">Sources and further reading</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>A coding agent usually begins a bug fix with a clear objective: find the cause, change the code, and run tests. Dozens of turns later, its context may be full of search results, file fragments, terminal logs, and abandoned approaches. The user&rsquo;s original constraints still exist somewhere in history, but the next decision may no longer use them correctly.</p>
+
+<p>Long tasks require information to accumulate and to be reorganized. <strong>Context management decides what enters each model call, what stays in external storage, and what can temporarily be hidden.</strong></p>
+
+<p>Stanford CS 329Z Lecture 6 identifies five patterns:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Persistent event log   Store events and reconstruct model inputs
+Memory offloading     Move knowledge into memory or files
+Compaction            Replace longer histories with summaries
+Observation masking   Hide old tool outputs, retain action structure
+Context isolation     Give subtasks their own context</code></pre></td></tr></table>
+</div>
+</div>
+<p>This article explains each pattern through the same bug-fixing example. The lecture&rsquo;s context management section supplies the main framework; the handoff template, combined pipeline, and evaluation suggestions are my engineering synthesis.</p>
+
+<blockquote>
+<p><strong>Related course articles</strong>: <a href="/en/post/cs329z-frameworks-orchestration/">Frameworks &amp; Orchestration</a> · <a href="/en/post/cs329z-rag-agentic-retrieval/">From RAG to Agentic RAG</a></p>
+</blockquote>
+
+<h2 id="1-two-principles-focus-and-continuity">1. Two principles: focus and continuity</h2>
+
+<p>The lecture begins with <strong>Focus the Context</strong> and <strong>Preserve Continuity</strong>. Both goals must be satisfied together.</p>
+
+<h3 id="focus-include-what-the-current-task-needs">Focus: include what the current task needs</h3>
+
+<p>A larger context window increases input capacity. The application still needs to select the information that matters.</p>
+
+<p>A test command may return thousands of log lines, while the next decision needs only the failing test, exception location, and a short stack trace. Accumulating redundant output obscures useful evidence and increases processing cost.</p>
+
+<p>For the coding agent, priority should go to the user&rsquo;s objective, active constraints, relevant code, current test results, and unresolved issues.</p>
+
+<h3 id="continuity-continue-working-after-context-changes">Continuity: continue working after context changes</h3>
+
+<p>Keeping only recent turns can erase an early instruction such as “do not change the public API.” It can also make the agent repeat a fix that already failed.</p>
+
+<p>Context management therefore needs to preserve task state as well as facts:</p>
+
+<ul>
+<li>the original goal and subsequent user corrections;</li>
+<li>constraints that remain active;</li>
+<li>completed and verified steps;</li>
+<li>rejected approaches and the evidence against them;</li>
+<li>unfinished work and the next useful check.</li>
+</ul>
+
+<p>A useful compressed context should let the next model invocation continue without repeating the investigation.</p>
+
+<h3 id="semantic-continuity-and-kv-caching-are-separate-concerns">Semantic continuity and KV caching are separate concerns</h3>
+
+<p>The lecture also mentions preserving the KV cache. There are two distinct goals here: <strong>preserving task meaning</strong> and <strong>reusing computation</strong>.</p>
+
+<p>Goals, constraints, and progress preserve semantic continuity. In common autoregressive inference, KV reuse depends on an unchanged token prefix and compatible computation settings. Rewriting earlier history generally prevents direct reuse of the affected suffix; keeping a stable prefix and appending information is more cache-friendly.</p>
+
+<p>Compaction can shorten future inputs while introducing a summary call and some new prefill work. Its trigger should balance context quality against total execution cost.</p>
+
+<h2 id="2-persistent-event-logs-preserve-history-and-construct-inputs-as-needed">2. Persistent event logs: preserve history and construct inputs as needed</h2>
+
+<p>A persistent event log records execution as a sequence of appended events. Each model call receives an input constructed from that record.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">User message / Agent action / Tool result
+                     ↓
+             Append-only event log
+                     ↓
+        Select → Mask → Summarize → Format
+                     ↓
+                Next LLM input</code></pre></td></tr></table>
+</div>
+</div>
+<p>The lecture uses OpenHands as an example. Events remain available as they occurred even when the model-facing input changes. The system reconstructs input for each call, and external observers can monitor events to inspect its state.</p>
+
+<p><img src="/img/posts/cs329z-context-management/event-log.webp" alt="OpenHands event stream connecting the user interface, agent, stored history, and execution environment" /></p>
+
+<p><em>Lecture slide 62; original figure credited to the OpenHands paper.</em></p>
+
+<p>During a bug fix, the log can preserve the first failing test, each patch, and later test results. The current model input may contain only the latest failure and relevant action records. Earlier evidence remains available for inspection.</p>
+
+<p>This supports auditing, debugging, and context pruning together. However, <strong>replaying recorded history does not make external actions safe to repeat</strong>. Reconstructing a model input is different from sending an email or updating a database again; those operations require separate recovery or idempotency mechanisms.</p>
+
+<h2 id="3-memory-offloading-place-knowledge-outside-the-window">3. Memory offloading: place knowledge outside the window</h2>
+
+<p>Memory offloading writes useful information into memory or files so that the corresponding material can be removed from the active window. Retrieval or tools bring it back when needed.</p>
+
+<p>The lecture illustrates this with MemGPT: a finite working context is connected to external storage through explicit reads and writes. The <a href="https://arxiv.org/abs/2310.08560">MemGPT paper</a> describes virtual context management inspired by hierarchical memory in operating systems.</p>
+
+<p><img src="/img/posts/cs329z-context-management/memory-offloading.webp" alt="MemGPT stores information and recalls it in a later conversation" /></p>
+
+<p><em>Lecture slide 64.</em></p>
+
+<p>In an implementation, I would distinguish three kinds of external state:</p>
+
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Contents</th>
+<th>Lifetime</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Task state</td>
+<td>Goal, current step, verified results, pending work</td>
+<td>Current task</td>
+</tr>
+
+<tr>
+<td>Scratchpad</td>
+<td>Investigation notes, hypotheses, evidence locations</td>
+<td>Session or project</td>
+</tr>
+
+<tr>
+<td>Long-term memory</td>
+<td>Confirmed preferences and durable knowledge</td>
+<td>Across sessions</td>
+</tr>
+</tbody>
+</table>
+
+<p>For example, a full test log can live in a file while the context retains its failure summary and path. A discovered call chain can go into a scratchpad. A single failing test should not automatically become permanent knowledge: code and environments change.</p>
+
+<p>Offloaded information needs a usable index. “There was an error earlier” is difficult to retrieve. A test name, file location, timestamp, version, and evidence path make recovery possible.</p>
+
+<p><strong>Successful storage is only the first step; later tasks must be able to retrieve the right record.</strong> Active constraints may still need to remain in the current context even when a copy exists on disk.</p>
+
+<h2 id="4-compaction-turn-history-into-a-useful-handoff">4. Compaction: turn history into a useful handoff</h2>
+
+<p>Compaction asks an LLM to compress earlier reasoning, actions, and observations into a shorter description. The summary and recent interactions form the next context.</p>
+
+<p><img src="/img/posts/cs329z-context-management/compaction.webp" alt="Compaction replaces older trajectory segments with a summary while retaining recent interactions" /></p>
+
+<p><em>Lecture slide 65.</em></p>
+
+<p>This helps when useful facts are scattered across repetitive history. Compression ratio alone is insufficient, though. “Investigated login and implemented a fix” is short but does not enable the next step.</p>
+
+<p>Here is a structured handoff I would use for the running example:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">goal<span class="p">:</span><span class="w"> </span>Fix<span class="w"> </span>intermittent<span class="w"> </span>session<span class="w"> </span>loss<span class="w"> </span>after<span class="w"> </span>login<span class="w">
+</span><span class="w"></span>constraints<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>Do<span class="w"> </span>not<span class="w"> </span>change<span class="w"> </span>the<span class="w"> </span>public<span class="w"> </span>API<span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>Preserve<span class="w"> </span>existing<span class="w"> </span>cookie<span class="w"> </span>behavior<span class="w">
+</span><span class="w"></span>verified<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>Reproduced<span class="w"> </span>concurrent<span class="w"> </span>requests<span class="w"> </span>overwriting<span class="w"> </span>session<span class="w"> </span>state<span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>Updated<span class="w"> </span>the<span class="w"> </span>write<span class="w"> </span>logic<span class="w"> </span>in<span class="w"> </span>session_store.py<span class="w">
+</span><span class="w"></span>rejected<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>Extra<span class="w"> </span>retries<span class="w"> </span>do<span class="w"> </span>not<span class="w"> </span>eliminate<span class="w"> </span>the<span class="w"> </span>concurrent<span class="w"> </span>overwrite<span class="w">
+</span><span class="w"></span>pending<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>Run<span class="w"> </span>concurrency<span class="w"> </span>regression<span class="w"> </span>tests<span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>Check<span class="w"> </span>cookie<span class="w"> </span>compatibility<span class="w">
+</span><span class="w"></span>evidence<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>logs/session-race.txt<span class="w">
+</span><span class="w"></span>next_step<span class="p">:</span><span class="w"> </span>Run<span class="w"> </span>concurrency<span class="w"> </span>tests<span class="p">,</span><span class="w"> </span>then<span class="w"> </span>inspect<span class="w"> </span>the<span class="w"> </span>full<span class="w"> </span>test<span class="w"> </span>suite</code></pre></td></tr></table>
+</div>
+</div>
+<p>A summary should distinguish verified findings from hypotheses. Otherwise, an uncertain guess can become an apparently established fact after compaction.</p>
+
+<p>The lecture also suggests making compaction itself agentic: the summarizer can inspect stored records, check evidence, and then produce a handoff. This may reduce omissions but adds calls and coordination, so its benefit needs evaluation.</p>
+
+<h2 id="5-observation-masking-start-with-the-bulky-tool-outputs">5. Observation masking: start with the bulky tool outputs</h2>
+
+<p>Observations often consume more context than actions. A file read, search, or test can return a large body of text, while its tool arguments occupy only a few lines.</p>
+
+<p>The lecture&rsquo;s raw-agent distribution shows 83.9% observation tokens, 6.5% action tokens, and 9.6% reasoning tokens. These are measurements from that experimental setup, not universal proportions.</p>
+
+<p><img src="/img/posts/cs329z-context-management/token-distribution.webp" alt="Token distribution in the measured raw agent: observations account for most tokens" /></p>
+
+<p><em>Lecture slide 66; figure credited to The Complexity Trap.</em></p>
+
+<p>Observation masking retains earlier action structure and tool calls while replacing older outputs with placeholders or truncated content. Recent observations remain visible.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Action: Read session_store.py
+Observation: [Old output hidden; recover from the event log or file]
+
+Action: Run concurrency regression tests
+Observation: [Old log hidden; full output in logs/session-race.txt]
+
+Action: Run the latest regression tests
+Observation: Keep the current output in full</code></pre></td></tr></table>
+</div>
+</div>
+<p><img src="/img/posts/cs329z-context-management/observation-masking.webp" alt="Observation masking compared with LLM summarization" /></p>
+
+<p><em>Lecture slide 67.</em></p>
+
+<h3 id="how-it-differs-from-compaction">How it differs from compaction</h3>
+
+<p>Masking primarily hides or truncates material and usually requires no additional model call. Compaction performs semantic summarization: it can retain information from a wider range of history but may omit details or change meaning.</p>
+
+<p>Masking has a cost too. The agent can remember running a test while losing the reason it failed. Preserve tool names, arguments, call associations, ways to recover the output, and findings still needed for the next decision.</p>
+
+<h3 id="what-the-experiment-shows">What the experiment shows</h3>
+
+<p>The lecture compares cost and solve rate for Gemini 2.5 Flash, its Thinking configuration, and Qwen3-Coder 480B. Both masking and LLM summaries substantially reduce instance cost. Quality differences depend on the model and configuration.</p>
+
+<p><img src="/img/posts/cs329z-context-management/masking-evaluation.webp" alt="Cost and solve-rate comparisons for the raw agent, observation masking, and LLM summaries" /></p>
+
+<p><em>Lecture slide 68; instance cost is on the horizontal axis and solve rate on the vertical axis.</em></p>
+
+<p>The corresponding paper, <a href="https://arxiv.org/abs/2508.21433v3">The Complexity Trap, v3</a>, finds competitive efficiency and performance from simple observation masking in settings including SWE-agent on SWE-bench Verified. For applications dominated by tool logs, masking is therefore a useful baseline to test. Whether a more complex summarizer adds value should be established on the target tasks.</p>
+
+<h2 id="6-context-isolation-give-subtasks-their-own-working-space">6. Context isolation: give subtasks their own working space</h2>
+
+<p>When a task contains relatively independent branches, the main agent does not need every branch&rsquo;s complete exploration history.</p>
+
+<p>Context isolation gives each subtask a separate context and returns the findings and evidence the parent needs.</p>
+
+<p><img src="/img/posts/cs329z-context-management/context-isolation.webp" alt="Context isolation assigns subtasks to separate windows and returns selected results" /></p>
+
+<p><em>Lecture slide 69.</em></p>
+
+<p>For the login bug, one subtask might investigate session updates while another checks cookie compatibility. The main agent receives locations, findings, verification status, and unresolved issues.</p>
+
+<p>Isolation can reduce interference and support parallel work. Decomposition and aggregation also add cost. If the subtask drops its evidence, the parent cannot assess its conclusion. A useful return contract includes:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Finding / Evidence location / Verification / Uncertainty / Next step</code></pre></td></tr></table>
+</div>
+</div>
+<p>Context isolation does not imply permission isolation. Two agents with separate histories may still share files and credentials. Separate sandboxes are another architectural decision.</p>
+
+<h3 id="progressive-disclosure-load-details-when-they-become-relevant">Progressive disclosure: load details when they become relevant</h3>
+
+<p>The lecture places progressive disclosure in this section. Instead of loading every tool description and instruction at initialization, the system exposes a small capability index and loads detailed material when needed, for example through skill files.</p>
+
+<p><img src="/img/posts/cs329z-context-management/progressive-disclosure.webp" alt="Progressive disclosure loads detailed skill instructions on demand" /></p>
+
+<p><em>Lecture slide 70.</em></p>
+
+<p>This relates to sub-agent isolation but uses a different mechanism. Sub-agents separate working contexts; progressive disclosure controls when information enters a context.</p>
+
+<p>The coding agent might begin with a tool list and project index, read testing conventions when it starts validation, and load release instructions only when publishing becomes relevant. This reduces persistent irrelevant context, provided the index makes the capabilities discoverable.</p>
+
+<h2 id="7-how-the-five-patterns-work-together">7. How the five patterns work together</h2>
+
+<p>The lecture stresses that these patterns are compatible. A system can retain a complete event log while masking old observations in model inputs. It can also offload knowledge before compacting the remaining history.</p>
+
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>What changes</th>
+<th>Main benefit</th>
+<th>Main concern</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Event log</td>
+<td>How history is stored and reconstructed</td>
+<td>Traceability and reconstruction</td>
+<td>Stored history need not all enter the prompt</td>
+</tr>
+
+<tr>
+<td>Memory offloading</td>
+<td>Where information lives</td>
+<td>Retention across turns or sessions</td>
+<td>Retrieval accuracy and freshness</td>
+</tr>
+
+<tr>
+<td>Compaction</td>
+<td>How history is represented</td>
+<td>Continuity with fewer tokens</td>
+<td>Omissions and hardened assumptions</td>
+</tr>
+
+<tr>
+<td>Observation masking</td>
+<td>Visibility of old tool outputs</td>
+<td>Less historical log volume</td>
+<td>Recoverability of important evidence</td>
+</tr>
+
+<tr>
+<td>Context isolation</td>
+<td>Context boundaries between subtasks</td>
+<td>Less interference</td>
+<td>Handoff quality and coordination cost</td>
+</tr>
+</tbody>
+</table>
+
+<p>A combined pipeline for the coding task could be:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Append every step to the event log
+             ↓
+Store large outputs externally; retain findings and references
+             ↓
+Mask older observations; keep recent results visible
+             ↓
+Near the budget, compact goals, constraints, and progress
+             ↓
+Isolate independent investigations; load instructions on demand
+             ↓
+Recover evidence when needed and continue the next decision</code></pre></td></tr></table>
+</div>
+</div>
+<p>The lecture&rsquo;s later Pi example also combines event-log-to-input conversion, progressive disclosure through skills, and compaction. A small set of mechanisms can form a complete design when their interfaces work together.</p>
+
+<h2 id="8-check-the-design-with-write-select-compress-and-isolate">8. Check the design with Write, Select, Compress, and Isolate</h2>
+
+<p>The lecture uses LangChain&rsquo;s taxonomy to place these patterns in a broader design space:</p>
+
+<p><img src="/img/posts/cs329z-context-management/context-taxonomy.webp" alt="Context management taxonomy: write, select, compress, and isolate" /></p>
+
+<p><em>Lecture slide 73.</em></p>
+
+<ul>
+<li><strong>Write</strong> stores information in task state, scratchpads, or long-term memory.</li>
+<li><strong>Select</strong> brings relevant tools, knowledge, and historical records into the current context.</li>
+<li><strong>Compress</strong> summarizes useful content and trims redundant material.</li>
+<li><strong>Isolate</strong> assigns information to separate state or context boundaries.</li>
+</ul>
+
+<p>Masking is trimming-based compression; compaction is summary-based compression. Memory offloading connects writing with later selection. Progressive disclosure emphasizes selecting information when needed. Event logs provide the historical foundation for these transformations.</p>
+
+<p>The taxonomy helps expose systems that compress history but have no adequate storage, retrieval, or task decomposition strategy.</p>
+
+<h2 id="9-how-to-evaluate-context-management">9. How to evaluate context management</h2>
+
+<p>Fewer tokens are one metric. My main question would be whether the agent still completes the same task while respecting the user&rsquo;s requirements.</p>
+
+<p>Fix the task set and compare raw history, masking, compaction, and hybrid strategies. Record:</p>
+
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>What to measure</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Task success</td>
+<td>Correct changes and final test results</td>
+</tr>
+
+<tr>
+<td>Continuity</td>
+<td>Forgotten constraints, repeated failed approaches, missing work</td>
+</tr>
+
+<tr>
+<td>Evidence recovery</td>
+<td>Ability to locate and reload hidden information</td>
+</tr>
+
+<tr>
+<td>Cost and latency</td>
+<td>Including summaries, tool rereads, and fresh prefill</td>
+</tr>
+
+<tr>
+<td>Long-run stability</td>
+<td>Accuracy of task state after repeated context changes</td>
+</tr>
+</tbody>
+</table>
+
+<p>Include early constraints, facts needed much later, large tool outputs, and mid-task user corrections. These cases reveal whether the system selects information effectively or merely removes content that happens not to matter yet.</p>
+
+<p>The design principle I take from this section is to <strong>keep complete records in appropriate storage and give the current window enough information for the next action</strong>. Event logs supply history; memory and retrieval supply capacity; compaction and masking control input size; isolation controls information boundaries. Their combination supports sustained work on long tasks.</p>
+
+<h2 id="sources-and-further-reading">Sources and further reading</h2>
+
+<p>The main source is <strong>CS329Z Lecture 6: Agent Design Patterns and Scaffolds</strong>, slides 55–75, with the Pi context-management example on slide 81. The lecture lists Diyi Yang, Michael Ryan, and John Yang. Figures were rendered from the supplied PDF pages and retain the original credits. The article date follows the PDF&rsquo;s creation timestamp.</p>
+
+<ul>
+<li><a href="https://arxiv.org/abs/2407.16741">OpenHands paper</a>: the persistent event-log example.</li>
+<li><a href="https://arxiv.org/abs/2310.08560">MemGPT: Towards LLMs as Operating Systems</a>: hierarchical memory and offloading.</li>
+<li><a href="https://arxiv.org/abs/2508.21433v3">The Complexity Trap, v3</a>: observation masking compared with LLM summarization.</li>
+<li><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Anthropic: Effective context engineering for AI agents</a>: context engineering and long-running work.</li>
+<li><a href="https://www.langchain.com/blog/context-engineering-for-agents">LangChain: Context Engineering for Agents</a>: the Write, Select, Compress, and Isolate taxonomy.</li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-10-12
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/en/tags/ai-agents/">AI Agents</a>
+          <a href="/en/tags/context-engineering/">Context Engineering</a>
+          <a href="/en/tags/context-management/">Context Management</a>
+          <a href="/en/tags/agent-harness/">Agent Harness</a>
+          <a href="/en/tags/memory/">Memory</a>
+          <a href="/en/tags/compaction/">Compaction</a>
+          <a href="/en/tags/observation-masking/">Observation Masking</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/en/post/cs329z-frameworks-orchestration/">
+            <span class="next-text nav-default">CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

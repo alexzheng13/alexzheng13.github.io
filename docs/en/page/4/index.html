@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/" />
 
-<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,30 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/understanding-random-and-sequential-io/">Understanding I/O: Random and Sequential Access</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2020-02-06 </span>
+      <div class="post-category">
+          <a href="/en/categories/operating-systems/"> Operating Systems </a>
+          </div>
+        <span class="more-meta"> 3120 words </span>
+        <span class="more-meta"> 15 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      Transfer: https://blog.csdn.net/BaiWfg2/article/details/52885287
+&emsp;&emsp;Storage for DBAs: Ever been to one of those sushi restaurants where the food comes round in dishes on a conveyor belt? As each dish travels around the loop you eye it up and, as long as you can make your mind up in time, grab it. However, if you are as indecisive as me, there’s a chance it will be out of range before you come to your senses – in which case you have to wait for it to complete a further full revolution before getting another chance.
+    </div>
+    <div class="read-more">
+      <a href="/en/post/understanding-random-and-sequential-io/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/en/post/use-a-mutex-or-a-channel/">Use a Mutex or a Channel?</a></h1>
@@ -382,29 +406,6 @@ Why?  The current stack splitting mechanism has a &ldquo;hot split&rdquo; proble
   </div>
 </article>
 
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/en/post/go-main-goroutine-scheduler-1/">Inside Go&#39;s Main Goroutine Scheduler (1)</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2019-11-10 </span>
-      <div class="post-category">
-          <a href="/en/categories/go/"> Go </a>
-          </div>
-        <span class="more-meta"> 2232 words </span>
-        <span class="more-meta"> 11 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      Under the compilation, all traces are revealed.   1.go program entry_rt0_amd64_linux: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  // The TEXT instruction defines the symbol _rt0_amd64_linux, the global data symbol is declared with DATA, and GLOBL defines the data as global. // SB SB virtual register: saves the starting address of the program address space; the value saved by this SB register is the starting address of the TEXT segment, which is mainly used to locate global symbols.
-    </div>
-    <div class="read-more">
-      <a href="/en/post/go-main-goroutine-scheduler-1/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
   </section>
     <nav class="blog-pagination homepage-pagination" aria-label="Homepage pagination">
       <div class="blog-pagination-pages">
@@ -424,14 +425,21 @@ Why?  The current stack splitting mechanism has a &ldquo;hot split&rdquo; proble
             <span class="blog-pagination-number is-current" aria-current="page" aria-label="Current page, page 4">
               4
             </span>
+            <a class="blog-pagination-number" href="/en/page/5/" aria-label="Page 5">
+              5
+            </a>
+          <a class="blog-pagination-direction" href="/en/page/5/" rel="next">
+            Next
+            <span aria-hidden="true">›</span>
+          </a>
       </div>
 
       <div class="blog-pagination-status">
-        <span>Page <strong>4</strong> of 4</span>
+        <span>Page <strong>4</strong> of 5</span>
 
-        <form class="blog-pagination-jump" data-pagination-base="/en/" data-total-pages="4">
+        <form class="blog-pagination-jump" data-pagination-base="/en/" data-total-pages="5">
           <label for="homepage-page-jump">Go to</label>
-          <input id="homepage-page-jump" name="page" type="number" min="1" max="4" value="4" inputmode="numeric">
+          <input id="homepage-page-jump" name="page" type="number" min="1" max="5" value="4" inputmode="numeric">
           <button type="submit">Go</button>
         </form>
       </div>

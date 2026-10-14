@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/" />
 
-<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,50 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/cs329z-context-management-patterns/">CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-10-12 </span>
+      <div class="post-category">
+          <a href="/en/categories/ai-agents/"> AI Agents </a>
+          </div>
+        <span class="more-meta"> 2235 words </span>
+        <span class="more-meta"> 11 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>A coding agent usually begins a bug fix with a clear objective: find the cause, change the code, and run tests. Dozens of turns later, its context may be full of search results, file fragments, terminal logs, and abandoned approaches. The user&rsquo;s original constraints still exist somewhere in history, but the next decision may no longer use them correctly.</p>
+
+<p>Long tasks require information to accumulate and to be reorganized. <strong>Context management decides what enters each model call, what stays in external storage, and what can temporarily be hidden.</strong></p>
+
+<p>Stanford CS 329Z Lecture 6 identifies five patterns:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Persistent event log   Store events and reconstruct model inputs
+Memory offloading     Move knowledge into memory or files
+Compaction            Replace longer histories with summaries
+Observation masking   Hide old tool outputs, retain action structure
+Context isolation     Give subtasks their own context</code></pre></td></tr></table>
+</div>
+</div>
+<p>This article explains each pattern through the same bug-fixing example. The lecture&rsquo;s context management section supplies the main framework; the handoff template, combined pipeline, and evaluation suggestions are my engineering synthesis.</p>
+    </div>
+    <div class="read-more">
+      <a href="/en/post/cs329z-context-management-patterns/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/en/post/cs329z-frameworks-orchestration/">CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution</a></h1>
@@ -458,48 +502,6 @@ Plan, compare, and revise before execution</code></pre></td></tr></table>
   </div>
 </article>
 
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/en/post/nanochat-gpt-pretraining-from-source/">Reading nanochat Source: From Configuration to a Training Step</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-09-26 </span>
-      <div class="post-category">
-          <a href="/en/categories/artificial-intelligence/"> Artificial Intelligence </a>
-          </div>
-        <span class="more-meta"> 1322 words </span>
-        <span class="more-meta"> 7 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>This article follows the execution order of <code>scripts/base_train.py</code>: command-line arguments, random seeds, DDP setup, model construction, weight initialization, scaling laws, optimizers, data loading, gradient accumulation, and finally one complete training step.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">documents → tokenizer and sequence packing → inputs/targets
-          → GPT forward → cross-entropy loss
-          → backward and gradient accumulation → optimizer step
-          → evaluation, sampling, checkpointing, and resume</code></pre></td></tr></table>
-</div>
-</div>
-<p>The organization and code-reading path follow my nanochat Notion notes. The prose has been edited for clarity, while the source snippets and their original reading sequence are preserved.</p>
-
-<blockquote>
-<p><strong>Prerequisite:</strong> If token embeddings, causal self-attention, MLPs, residual connections, or next-token loss are still unfamiliar, start with <a href="https://alexzheng13.github.io/en/post/transformer-architecture/">Transformer Architecture: From Token Embedding to the Training Loop</a> and then return to this source-level walkthrough.</p>
-</blockquote>
-    </div>
-    <div class="read-more">
-      <a href="/en/post/nanochat-gpt-pretraining-from-source/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
   </section>
     <nav class="blog-pagination homepage-pagination" aria-label="Homepage pagination">
       <div class="blog-pagination-pages">
@@ -515,6 +517,9 @@ Plan, compare, and revise before execution</code></pre></td></tr></table>
             <a class="blog-pagination-number" href="/en/page/4/" aria-label="Page 4">
               4
             </a>
+            <a class="blog-pagination-number" href="/en/page/5/" aria-label="Page 5">
+              5
+            </a>
           <a class="blog-pagination-direction" href="/en/page/2/" rel="next">
             Next
             <span aria-hidden="true">›</span>
@@ -522,11 +527,11 @@ Plan, compare, and revise before execution</code></pre></td></tr></table>
       </div>
 
       <div class="blog-pagination-status">
-        <span>Page <strong>1</strong> of 4</span>
+        <span>Page <strong>1</strong> of 5</span>
 
-        <form class="blog-pagination-jump" data-pagination-base="/en/" data-total-pages="4">
+        <form class="blog-pagination-jump" data-pagination-base="/en/" data-total-pages="5">
           <label for="homepage-page-jump">Go to</label>
-          <input id="homepage-page-jump" name="page" type="number" min="1" max="4" value="1" inputmode="numeric">
+          <input id="homepage-page-jump" name="page" type="number" min="1" max="5" value="1" inputmode="numeric">
           <button type="submit">Go</button>
         </form>
       </div>

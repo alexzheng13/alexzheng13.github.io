@@ -6,10 +6,40 @@
     <description>Recent content in Memory on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 27 Sep 2026 11:27:00 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 12 Oct 2026 22:25:07 +0200</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/en/tags/memory/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks</title>
+      <link>https://alexzheng13.github.io/en/post/cs329z-context-management-patterns/</link>
+      <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/post/cs329z-context-management-patterns/</guid>
+      <description>&lt;p&gt;A coding agent usually begins a bug fix with a clear objective: find the cause, change the code, and run tests. Dozens of turns later, its context may be full of search results, file fragments, terminal logs, and abandoned approaches. The user&amp;rsquo;s original constraints still exist somewhere in history, but the next decision may no longer use them correctly.&lt;/p&gt;
+
+&lt;p&gt;Long tasks require information to accumulate and to be reorganized. &lt;strong&gt;Context management decides what enters each model call, what stays in external storage, and what can temporarily be hidden.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Stanford CS 329Z Lecture 6 identifies five patterns:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;Persistent event log   Store events and reconstruct model inputs
+Memory offloading     Move knowledge into memory or files
+Compaction            Replace longer histories with summaries
+Observation masking   Hide old tool outputs, retain action structure
+Context isolation     Give subtasks their own context&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;This article explains each pattern through the same bug-fixing example. The lecture&amp;rsquo;s context management section supplies the main framework; the handoff template, combined pipeline, and evaluation suggestions are my engineering synthesis.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>The Next 5–10 Years of AI: Base Models, Personal Intelligence, and Private Enterprise Layers</title>

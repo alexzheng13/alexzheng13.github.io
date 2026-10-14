@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/post/" />
 
-<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">文章归档</h1>
-      <p>按年份浏览全部 32 篇文章</p>
+      <p>按年份浏览全部 33 篇文章</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         订阅 RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="按年份排列的文章">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/post/cs329z-context-management-patterns/">
+          <time datetime="2026-10-12">10-12</time>
+          <span>CS 329Z：Context Management Patterns——让 Agent 在长任务中保持专注与连续性</span>
+        </a>
         <a class="blog-archive-index-item" href="/post/cs329z-frameworks-orchestration/">
           <time datetime="2026-10-09">10-09</time>
           <span>CS 329Z：Frameworks &amp; Orchestration——从 Agent Harness 到可靠执行与可观测性</span>
@@ -389,6 +393,40 @@
   <div class="blog-recent-posts" aria-label="最近文章">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/post/reinforcement-learning-2-classic-algorithms/">强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-08-26">2026年08月26日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 7 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p><a href="/post/reinforcement-learning-1-foundations/">上一篇</a>建立了 MDP、价值函数与贝尔曼方程。接下来要回答的是：<strong>当环境模型未知、状态无法枚举、策略又由神经网络表示时，怎样真的把价值或策略学出来？</strong></p>
+
+<p>本文沿着一条连续的演进路径展开：动态规划需要完整模型；蒙特卡洛只依赖完整轨迹；时序差分可以边走边学；Q-Learning 学最优动作价值；DQN 用神经网络处理高维状态；Actor-Critic 与 PPO 则直接优化策略，并控制每次更新不要走得太远。</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="标签">
+              <span class="blog-summary-tags-label">标签</span>
+              <ul>
+                  <li><a href="/tags/reinforcement-learning/">Reinforcement Learning</a></li>
+                  <li><a href="/tags/q-learning/">Q-Learning</a></li>
+                  <li><a href="/tags/dqn/">DQN</a></li>
+                  <li><a href="/tags/actor-critic/">Actor-Critic</a></li>
+                  <li><a href="/tags/ppo/">PPO</a></li>
+                  <li><a href="/tags/temporal-difference/">Temporal Difference</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/post/reinforcement-learning-2-classic-algorithms/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/post/reinforcement-learning-1-foundations/">强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-08-25">2026年08月25日</time>
@@ -503,27 +541,6 @@
 
         <footer class="blog-summary-footer">
           <a class="blog-summary-read-more" href="/post/%E8%AF%91liunx-io-multiplexing-select-vs-poll-vs-epoll/">阅读全文<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/post/domain-driven-design/">（译）Domain-Driven Design:Everything You Always Wanted to Know About it, But Were Afraid to Ask(1)</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2021-02-02">2021年02月02日</time>
-            <span aria-hidden="true">·</span>
-            <span>预计阅读 11 分钟</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">Domain-Driven Design原文地址 &emsp;&emsp;随着个人代码库的扩展,其复杂性也不可避免地会随之增加。随着这种情况发生,按原本的意图去保持代码</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/post/domain-driven-design/">阅读全文<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

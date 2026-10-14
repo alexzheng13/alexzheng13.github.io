@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/post/" />
 
-<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">文章归档</h1>
-      <p>按年份浏览全部 32 篇文章</p>
+      <p>按年份浏览全部 33 篇文章</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         订阅 RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="按年份排列的文章">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/post/cs329z-context-management-patterns/">
+          <time datetime="2026-10-12">10-12</time>
+          <span>CS 329Z：Context Management Patterns——让 Agent 在长任务中保持专注与连续性</span>
+        </a>
         <a class="blog-archive-index-item" href="/post/cs329z-frameworks-orchestration/">
           <time datetime="2026-10-09">10-09</time>
           <span>CS 329Z：Frameworks &amp; Orchestration——从 Agent Harness 到可靠执行与可观测性</span>
@@ -387,6 +391,41 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="最近文章">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/post/anthropic-recursive-self-improvement/">当 AI 开始构建自己：Anthropic 内部实践与递归自我改进的未来</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-09-28">2026年09月28日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 12 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>Anthropic 内部正在发生一个值得关注的变化：AI 不再只是被研究和开发的产品，也开始参与开发 AI 的过程。从补全代码，到自主修改代码库、运行实验、组织并行 Agent，Claude 正逐渐进入模型研发循环本身。</p>
+
+<p>如果这条路径继续延伸，终点可能是 <strong>Recursive Self-Improvement（递归自我改进，RSI）</strong>：一个 AI 系统能够自主设计、训练和评估自己的继任者，让“模型进步”本身成为下一轮模型进步的加速器。</p>
+
+<p>本文根据我的笔记与 Anthropic Institute 的文章 <a href="https://www.anthropic.com/institute/recursive-self-improvement">When AI builds itself</a> 整理。重点不是断言 RSI 一定发生，而是理解：Anthropic 内部已经把哪些工作交给 Claude，距离真正闭环还缺什么，以及这条趋势可能把人类角色推向哪里。</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="标签">
+              <span class="blog-summary-tags-label">标签</span>
+              <ul>
+                  <li><a href="/tags/anthropic/">Anthropic</a></li>
+                  <li><a href="/tags/claude/">Claude</a></li>
+                  <li><a href="/tags/recursive-self-improvement/">Recursive Self-Improvement</a></li>
+                  <li><a href="/tags/autonomous-agents/">Autonomous Agents</a></li>
+                  <li><a href="/tags/ai-rd/">AI R&amp;D</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/post/anthropic-recursive-self-improvement/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/post/private-ai-layer-on-base-models/">未来 5—10 年的 AI 架构推演：Base Model、个人智能与企业私有能力层</a></h2>
@@ -554,39 +593,6 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/post/transformer-architecture/">阅读全文<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/post/anthropic-agent-evolution-1-from-workflows-to-agents/">Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-09-12">2026年09月12日</time>
-            <span aria-hidden="true">·</span>
-            <span>预计阅读 4 分钟</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>“Agent” 经常被当作一个宽泛标签：只要模型调用了工具、执行了多步任务，就被称为 Agent。Anthropic 的工程实践给出了一个更有用的区分：<strong>Workflow 的路径由代码预先定义；Agent 则由模型根据环境反馈动态决定下一步。</strong></p>
-
-<p>这是“Anthropic Agent 演进”系列的第一篇。我们先建立共同语言：从增强型 LLM、固定 Workflow，一直到真正的自主 Agent，并解释为什么模型外部还需要一层 Harness。</p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="标签">
-              <span class="blog-summary-tags-label">标签</span>
-              <ul>
-                  <li><a href="/tags/anthropic-agent-%E6%BC%94%E8%BF%9B/">Anthropic Agent 演进</a></li>
-                  <li><a href="/tags/ai-agents/">AI Agents</a></li>
-                  <li><a href="/tags/agent-harness/">Agent Harness</a></li>
-                  <li><a href="/tags/workflow/">Workflow</a></li>
-                  <li><a href="/tags/aci/">ACI</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/post/anthropic-agent-evolution-1-from-workflows-to-agents/">阅读全文<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/" />
 
-<meta property="og:updated_time" content="2026-10-09T09:00:00+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,35 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/nanochat-gpt-pretraining-from-source/">nanochat 源码解读：从参数配置到单步训练</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-09-26 </span>
+      <div class="post-category">
+          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"> 人工智能 </a>
+          </div>
+        <span class="more-meta"> 约 6675 字 </span>
+        <span class="more-meta"> 预计阅读 14 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>本文沿着 <code>scripts/base_train.py</code> 的执行顺序阅读 nanochat：从命令行参数、随机种子和 DDP 环境开始，依次进入模型构建、权重初始化、Scaling Laws、优化器、DataLoader、梯度累积与单步训练。重点不是抽象介绍 GPT，而是理解源码中的每一段配置如何落到真实训练过程里。</p>
+
+<blockquote>
+<p><strong>前置知识</strong></p>
+
+<p>本文默认读者已经了解 token embedding、causal self-attention、MLP、残差连接和交叉熵。如果这些概念还不熟悉，建议先阅读我的简易实现文章：<a href="https://alexzheng13.github.io/post/transformer-architecture/">Transformer Architecture：从 Token Embedding 到训练循环</a>，再回来读 nanochat 的工程化实现。</p>
+</blockquote>
+    </div>
+    <div class="read-more">
+      <a href="/post/nanochat-gpt-pretraining-from-source/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/transformer-architecture/">Transformer Architecture：从 Token Embedding 到训练循环</a></h1>
@@ -417,31 +446,6 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
   </div>
 </article>
 
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/reinforcement-learning-1-foundations/">强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-08-25 </span>
-      <div class="post-category">
-          <a href="/categories/reinforcement-learning/"> Reinforcement Learning </a>
-          </div>
-        <span class="more-meta"> 约 2890 字 </span>
-        <span class="more-meta"> 预计阅读 6 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>强化学习最容易让人困惑的地方，是算法名字很多，但它们真正回答的始终是同一个问题：<strong>一个智能体怎样通过与环境交互，学会做出能带来长期收益的决策？</strong></p>
-
-<p>这组文章从最基本的问题定义开始，再逐步走向 Q-Learning、DQN、Actor-Critic、PPO、探索策略以及大模型后训练。本文是系列第一篇，先建立后续所有算法共用的语言：状态、动作、策略、回报、MDP、价值函数和贝尔曼方程。</p>
-    </div>
-    <div class="read-more">
-      <a href="/post/reinforcement-learning-1-foundations/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
   </section>
     <nav class="blog-pagination homepage-pagination" aria-label="首页分页">
       <div class="blog-pagination-pages">
@@ -461,6 +465,9 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
             <a class="blog-pagination-number" href="/page/4/" aria-label="第 4 页">
               4
             </a>
+            <a class="blog-pagination-number" href="/page/5/" aria-label="第 5 页">
+              5
+            </a>
           <a class="blog-pagination-direction" href="/page/3/" rel="next">
             下一页
             <span aria-hidden="true">›</span>
@@ -468,11 +475,11 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
       </div>
 
       <div class="blog-pagination-status">
-        <span>第 <strong>2</strong> / 4 页</span>
+        <span>第 <strong>2</strong> / 5 页</span>
 
-        <form class="blog-pagination-jump" data-pagination-base="/" data-total-pages="4">
+        <form class="blog-pagination-jump" data-pagination-base="/" data-total-pages="5">
           <label for="homepage-page-jump">跳至</label>
-          <input id="homepage-page-jump" name="page" type="number" min="1" max="4" value="2" inputmode="numeric">
+          <input id="homepage-page-jump" name="page" type="number" min="1" max="5" value="2" inputmode="numeric">
           <button type="submit">跳转</button>
         </form>
       </div>

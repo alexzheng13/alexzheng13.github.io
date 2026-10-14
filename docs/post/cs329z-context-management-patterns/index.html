@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CS 329Z：Context Management Patterns——让 Agent 在长任务中保持专注与连续性 - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="整理 Stanford CS329Z Lecture 6 的上下文管理章节：Persistent Event Log、Memory Offloading、Compaction、Observation Masking、Context Isolation 与 Progressive Disclosure，并解释它们如何组合支撑长任务。" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/post/cs329z-context-management-patterns/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/cs329z-context-management-patterns/">
+<meta name="site-language-route" data-language="en" content="/en/post/cs329z-context-management-patterns/">
+<meta name="site-current-language" content="zh-cn"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="CS 329Z：Context Management Patterns——让 Agent 在长任务中保持专注与连续性" />
+<meta property="og:description" content="整理 Stanford CS329Z Lecture 6 的上下文管理章节：Persistent Event Log、Memory Offloading、Compaction、Observation Masking、Context Isolation 与 Progressive Disclosure，并解释它们如何组合支撑长任务。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/post/cs329z-context-management-patterns/" />
+<meta property="article:published_time" content="2026-10-12T22:25:07+02:00" />
+<meta property="article:modified_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="CS 329Z：Context Management Patterns——让 Agent 在长任务中保持专注与连续性">
+<meta itemprop="description" content="整理 Stanford CS329Z Lecture 6 的上下文管理章节：Persistent Event Log、Memory Offloading、Compaction、Observation Masking、Context Isolation 与 Progressive Disclosure，并解释它们如何组合支撑长任务。">
+
+
+<meta itemprop="datePublished" content="2026-10-12T22:25:07&#43;02:00" />
+<meta itemprop="dateModified" content="2026-10-12T22:25:07&#43;02:00" />
+<meta itemprop="wordCount" content="5101">
+
+
+
+<meta itemprop="keywords" content="AI Agents,Context Engineering,Context Management,Agent Harness,Memory,Compaction,Observation Masking," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CS 329Z：Context Management Patterns——让 Agent 在长任务中保持专注与连续性"/>
+<meta name="twitter:description" content="整理 Stanford CS329Z Lecture 6 的上下文管理章节：Persistent Event Log、Memory Offloading、Compaction、Observation Masking、Context Isolation 与 Progressive Disclosure，并解释它们如何组合支撑长任务。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/cs329z-context-management-patterns/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/cs329z-context-management-patterns/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/cs329z-context-management-patterns/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/cs329z-context-management-patterns/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">CS 329Z：Context Management Patterns——让 Agent 在长任务中保持专注与连续性</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-10-12 </span>
+        <div class="post-category">
+            <a href="/categories/ai-agents/"> AI Agents </a>
+            </div>
+          <span class="more-meta"> 约 5101 字 </span>
+          <span class="more-meta"> 预计阅读 11 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-两个原则-保持专注-保留连续性">1. 两个原则：保持专注，保留连续性</a>
+<ul>
+<li><a href="#保持专注-只带入当前任务真正需要的信息">保持专注：只带入当前任务真正需要的信息</a></li>
+<li><a href="#保留连续性-压缩之后还能接着工作">保留连续性：压缩之后还能接着工作</a></li>
+<li><a href="#连续性与-kv-cache-是两个层面">连续性与 KV Cache 是两个层面</a></li>
+</ul></li>
+<li><a href="#2-persistent-event-log-历史完整保存-模型输入按需构建">2. Persistent Event Log：历史完整保存，模型输入按需构建</a></li>
+<li><a href="#3-memory-offloading-把知识放到窗口之外">3. Memory Offloading：把知识放到窗口之外</a></li>
+<li><a href="#4-compaction-把历史压缩成可继续执行的状态">4. Compaction：把历史压缩成可继续执行的状态</a></li>
+<li><a href="#5-observation-masking-先处理最占空间的旧工具输出">5. Observation Masking：先处理最占空间的旧工具输出</a>
+<ul>
+<li><a href="#它与-compaction-的差别">它与 Compaction 的差别</a></li>
+<li><a href="#实验说明了什么">实验说明了什么？</a></li>
+</ul></li>
+<li><a href="#6-context-isolation-让子任务拥有自己的上下文">6. Context Isolation：让子任务拥有自己的上下文</a>
+<ul>
+<li><a href="#progressive-disclosure-需要时再加载">Progressive Disclosure：需要时再加载</a></li>
+</ul></li>
+<li><a href="#7-五种模式怎样组合">7. 五种模式怎样组合？</a></li>
+<li><a href="#8-用-write-select-compress-isolate-检查设计">8. 用 Write、Select、Compress、Isolate 检查设计</a></li>
+<li><a href="#9-怎样判断上下文管理有效">9. 怎样判断上下文管理有效？</a></li>
+<li><a href="#来源与延伸阅读">来源与延伸阅读</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>一个编码 Agent 刚开始修 Bug 时，往往很清楚目标：找到原因、修改代码、运行测试。几十轮之后，上下文里却堆满了搜索结果、文件片段、终端日志和已经放弃的方案。用户最初提出的约束仍在历史里，但下一次决策未必还能正确利用它们。</p>
+
+<p>长任务需要持续积累信息，也需要主动整理信息。<strong>Context Management 决定每次调用模型时，哪些内容进入上下文、哪些保存到外部，以及哪些细节暂时隐藏。</strong></p>
+
+<p>Stanford CS 329Z Lecture 6 把这件事归纳为五种模式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Persistent Event Log   保存完整事件，按需重建输入
+Memory Offloading     将知识移到记忆或文件
+Compaction            用摘要替换较长的历史
+Observation Masking   隐藏旧工具输出，保留行动线索
+Context Isolation     为子任务建立独立上下文</code></pre></td></tr></table>
+</div>
+</div>
+<p>本文围绕这五种模式展开，并用同一个修 Bug 场景说明它们怎样组合。内容以讲义的 Context Management 章节为主；文中的任务摘要模板、组合流程与评测建议是我的工程化整理。</p>
+
+<blockquote>
+<p><strong>同课程文章</strong>：<a href="/post/cs329z-frameworks-orchestration/">Frameworks &amp; Orchestration：从 Agent Harness 到可靠执行与可观测性</a> · <a href="/post/cs329z-rag-agentic-retrieval/">从 RAG 到 Agentic RAG</a></p>
+</blockquote>
+
+<h2 id="1-两个原则-保持专注-保留连续性">1. 两个原则：保持专注，保留连续性</h2>
+
+<p>讲义先给出两个原则：<strong>Focus the Context</strong> 与 <strong>Preserve Continuity</strong>。这两个目标需要同时满足。</p>
+
+<h3 id="保持专注-只带入当前任务真正需要的信息">保持专注：只带入当前任务真正需要的信息</h3>
+
+<p>模型能够接收更长的 Context Window，意味着可输入的容量增加了；实际任务中的信息筛选工作仍然存在。</p>
+
+<p>一次工具调用可能返回几千行测试日志，但下一步决策可能只需要失败的测试名、异常位置和一段堆栈。历史越长，这类冗余内容越容易遮住重要信息，也会增加处理成本。</p>
+
+<p>对修 Bug 的 Agent 来说，当前窗口应该优先保留：用户目标、有效约束、相关代码、最新测试结果，以及尚未解决的问题。</p>
+
+<h3 id="保留连续性-压缩之后还能接着工作">保留连续性：压缩之后还能接着工作</h3>
+
+<p>如果只保留最近几轮，Agent 可能忘记“不能修改公共 API”，也可能再次尝试已经失败的修复。</p>
+
+<p>因此，整理上下文时要保留的不只是事实，还包括任务状态：</p>
+
+<ul>
+<li>用户希望完成什么，以及最近追加的要求；</li>
+<li>哪些约束仍然有效；</li>
+<li>已经完成和验证了哪些步骤；</li>
+<li>哪些方案被排除，依据是什么；</li>
+<li>哪些事项未完成，下一步应该检查什么。</li>
+</ul>
+
+<p>一个合格的压缩结果，应让接手任务的模型无需重新探索就能继续推进。</p>
+
+<h3 id="连续性与-kv-cache-是两个层面">连续性与 KV Cache 是两个层面</h3>
+
+<p>讲义也提到尽量保留 KV Cache。这里需要区分<strong>语义连续性</strong>与<strong>计算复用</strong>。</p>
+
+<p>语义连续性由目标、约束和进度信息来维持。常见自回归推理中的 KV Cache，则依赖可复用的 Token 前缀及其计算条件。重写前面的历史，通常会使后续部分无法直接沿用旧缓存；保留稳定前缀、向后追加，更有利于缓存复用。</p>
+
+<p>Compaction 可能减少后续输入长度，同时付出摘要调用和部分重新 Prefill 的成本。选择触发时机时，要一起考虑上下文质量与端到端开销。</p>
+
+<h2 id="2-persistent-event-log-历史完整保存-模型输入按需构建">2. Persistent Event Log：历史完整保存，模型输入按需构建</h2>
+
+<p>Persistent Event Log 的思路，是把 Agent 的执行过程记录为持续追加的事件流，再从事件中构建每次模型调用的输入。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">User Message / Agent Action / Tool Result
+                     ↓
+             Append-only Event Log
+                     ↓
+        Select → Mask → Summarize → Format
+                     ↓
+                Next LLM Input</code></pre></td></tr></table>
+</div>
+</div>
+<p>讲义以 OpenHands 为例：系统保留发生过的事件，即使模型输入需要调整，原始历史仍可以保持不变。每次调用模型时，都从 Event Log 重建上下文；外部观察者也可以通过事件监听运行状态。</p>
+
+<p><img src="/img/posts/cs329z-context-management/event-log.webp" alt="OpenHands 的 Event Stream：用户界面、Agent、事件历史与执行环境之间的关系" /></p>
+
+<p><em>讲义第 62 页；原图来源为 OpenHands 论文。</em></p>
+
+<p>在修 Bug 的场景里，完整日志可以保存第一次测试输出、修改 Patch、第二次测试结果。模型当前只看到最新失败和必要的行动记录；需要复查时，再定位原始事件。</p>
+
+<p>这样做使审计、调试与上下文裁剪可以同时成立。不过，<strong>事件可回放不代表外部操作可以安全重做</strong>。重建模型输入与重新发送邮件、修改数据库是两回事；后者仍需要幂等或恢复机制。</p>
+
+<h2 id="3-memory-offloading-把知识放到窗口之外">3. Memory Offloading：把知识放到窗口之外</h2>
+
+<p>Memory Offloading 将值得保留的信息写入外部记忆或文件，让当前上下文可以删去相应内容。以后需要时，再通过检索或工具读回来。</p>
+
+<p>讲义用 MemGPT 展示这种分层记忆思路：有限的上下文承担当前工作，外部存储承担长期信息，通过读写把两者连接起来。<a href="https://arxiv.org/abs/2310.08560">MemGPT 论文</a>将其描述为受操作系统分层内存启发的 Virtual Context Management。</p>
+
+<p><img src="/img/posts/cs329z-context-management/memory-offloading.webp" alt="MemGPT 示例：将信息写入记忆，在后续对话中按需召回" /></p>
+
+<p><em>讲义第 64 页。</em></p>
+
+<p>在工程上，我会区分三种外部状态：</p>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>保存什么</th>
+<th>生命周期</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Task State</td>
+<td>任务目标、当前步骤、已验证结果、待办事项</td>
+<td>当前任务</td>
+</tr>
+
+<tr>
+<td>Scratchpad / 工作笔记</td>
+<td>排查记录、候选方案、证据路径</td>
+<td>当前会话或项目</td>
+</tr>
+
+<tr>
+<td>Long-term Memory</td>
+<td>经确认的用户偏好、长期有效的知识</td>
+<td>跨会话</td>
+</tr>
+</tbody>
+</table>
+
+<p>例如，测试日志可以保存在文件里，窗口中只保留失败摘要与路径。已经定位的调用链可以写入工作笔记。单次测试失败则不适合直接成为长期记忆，因为代码和环境还可能变化。</p>
+
+<p>外置之后，要保留足够的索引信息。只有“之前见过一个错误”很难召回；记录测试名、文件位置、时间、版本与证据路径，才有机会找回正确内容。</p>
+
+<p><strong>写入外部存储只是第一步，还要验证后续任务能否正确读取。</strong> 对仍然生效的关键约束，也不能因为“已经存盘”就从当前窗口里全部移除。</p>
+
+<h2 id="4-compaction-把历史压缩成可继续执行的状态">4. Compaction：把历史压缩成可继续执行的状态</h2>
+
+<p>Compaction 使用 LLM 将此前的 Reasoning、Action 和 Observation 压缩成较短描述，再与近期轨迹一起作为新上下文。</p>
+
+<p><img src="/img/posts/cs329z-context-management/compaction.webp" alt="Compaction：将较早的行动轨迹压缩成 Summary，保留近期完整交互" /></p>
+
+<p><em>讲义第 65 页。</em></p>
+
+<p>它适合处理历史中有用信息分散、重复内容较多的情况。但摘要质量不能只用压缩率衡量。“讨论过登录问题，已经进行修复”虽然很短，却不足以支持继续工作。</p>
+
+<p>下面是我会给修 Bug 任务使用的结构化摘要示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">goal<span class="p">:</span><span class="w"> </span>修复登录后偶发的<span class="w"> </span>session<span class="w"> </span>丢失<span class="w">
+</span><span class="w"></span>constraints<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>不修改公共<span class="w"> </span>API<span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>保持现有<span class="w"> </span>cookie<span class="w"> </span>行为<span class="w">
+</span><span class="w"></span>verified<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>已复现并发请求覆盖<span class="w"> </span>session<span class="w"> </span>的问题<span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>已修改<span class="w"> </span>session_store.py<span class="w"> </span>的更新逻辑<span class="w">
+</span><span class="w"></span>rejected<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>单纯增加重试不能消除并发覆盖<span class="w">
+</span><span class="w"></span>pending<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>运行并发回归测试<span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>检查<span class="w"> </span>cookie<span class="w"> </span>兼容性<span class="w">
+</span><span class="w"></span>evidence<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>logs/session-race.txt<span class="w">
+</span><span class="w"></span>next_step<span class="p">:</span><span class="w"> </span>先运行并发测试，再检查完整测试集</code></pre></td></tr></table>
+</div>
+</div>
+<p>摘要应明确区分“已经验证”与“仍是假设”。否则，一次不确定推测经过压缩后，可能变成后续模型确信的事实。</p>
+
+<p>讲义进一步提出，Compaction 本身也可以是 Agentic 的：整理过程可以读取外部记录、补查证据，再生成交接状态。这样能减少遗漏，但会增加调用与调度成本，需要评测收益。</p>
+
+<h2 id="5-observation-masking-先处理最占空间的旧工具输出">5. Observation Masking：先处理最占空间的旧工具输出</h2>
+
+<p>Agent 的长上下文里，Observation 往往比 Action 更占空间。一次 <code>read</code>、搜索或测试可能返回大量文本，而发起它的工具参数只有几行。</p>
+
+<p>讲义引用的 Raw Agent 分布图中，Observation 占 83.9%，Action 占 6.5%，Reasoning 占 9.6%。这是该实验设置的统计，并非所有 Agent 的固定比例。</p>
+
+<p><img src="/img/posts/cs329z-context-management/token-distribution.webp" alt="Raw Agent 的 Token 分布：Observation 占据主要部分" /></p>
+
+<p><em>讲义第 66 页；来源为 The Complexity Trap。</em></p>
+
+<p>Observation Masking 利用这个特点：保留早期的行动线索与工具调用结构，把旧输出替换成标记或截断版本，同时保留近期观察。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Action: 读取 session_store.py
+Observation: [旧输出已隐藏；可从事件记录或文件重读]
+
+Action: 运行并发回归测试
+Observation: [旧日志已隐藏；完整结果保存在 logs/session-race.txt]
+
+Action: 运行最新回归测试
+Observation: 保留当前完整输出</code></pre></td></tr></table>
+</div>
+</div>
+<p><img src="/img/posts/cs329z-context-management/observation-masking.webp" alt="Observation Masking 与 LLM Summary：前者遮蔽旧观察，后者概括历史轨迹" /></p>
+
+<p><em>讲义第 67 页。</em></p>
+
+<h3 id="它与-compaction-的差别">它与 Compaction 的差别</h3>
+
+<p>Masking 主要执行“隐藏或截断”，通常不需要额外 LLM 调用。Compaction 则通过语义总结保留信息，能够压缩更广泛的历史，但可能遗漏细节或改变含义。</p>
+
+<p>Masking 同样有代价：Agent 记得自己运行过测试，却可能看不到失败原因。因此，要保留工具名、参数、调用关联、输出定位方式，以及仍然影响下一步决策的关键结果。</p>
+
+<h3 id="实验说明了什么">实验说明了什么？</h3>
+
+<p>讲义展示了 Gemini 2.5 Flash、其 Thinking 配置和 Qwen3-Coder 480B 的成本与 Solve Rate 对比。Masking 和 LLM Summary 都明显减少了实例成本，质量差异则取决于模型与设置。</p>
+
+<p><img src="/img/posts/cs329z-context-management/masking-evaluation.webp" alt="三组模型配置下，Raw Agent、Observation Masking 与 LLM Summary 的成本和解题率对比" /></p>
+
+<p><em>讲义第 68 页；横轴为单实例成本，纵轴为 Solve Rate。</em></p>
+
+<p>对应论文 <a href="https://arxiv.org/abs/2508.21433v3">The Complexity Trap，v3</a>在 SWE-agent / SWE-bench Verified 等设置中发现，简单遮蔽旧观察就能获得有竞争力的成本与表现。因此，面对大量工具日志时，Masking 值得成为先测试的基线；复杂摘要是否带来额外收益，应由任务评测决定。</p>
+
+<h2 id="6-context-isolation-让子任务拥有自己的上下文">6. Context Isolation：让子任务拥有自己的上下文</h2>
+
+<p>当一个任务包含几个相对独立的分支时，主 Agent 没有必要同时承载每个分支的完整探索历史。</p>
+
+<p>Context Isolation 为子任务分配独立上下文，只向主流程返回需要的结论与证据。</p>
+
+<p><img src="/img/posts/cs329z-context-management/context-isolation.webp" alt="Context Isolation：将子任务放入独立窗口，再汇总必要结果" /></p>
+
+<p><em>讲义第 69 页。</em></p>
+
+<p>例如，主 Agent 负责修复登录 Bug，一个子任务检查 Session 更新逻辑，另一个检查 Cookie 兼容性。主 Agent 接收的是定位结果、相关文件、验证情况与未解决问题。</p>
+
+<p>隔离可以减少上下文串扰，也可能支持并行工作。但拆分和汇总本身有成本；如果子任务遗漏证据，主 Agent 仍然无法判断结论。一个好的返回约定至少应包含：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">结论 / 证据位置 / 已验证内容 / 不确定性 / 后续建议</code></pre></td></tr></table>
+</div>
+</div>
+<p>上下文隔离也不等于权限隔离。两个 Agent 可以拥有不同消息历史，却仍共享文件系统和凭据；是否需要单独沙箱，是另一项架构决定。</p>
+
+<h3 id="progressive-disclosure-需要时再加载">Progressive Disclosure：需要时再加载</h3>
+
+<p>讲义把 Progressive Disclosure 放在这一部分：初始化时先提供能力名称、简短说明和索引，只有当前任务需要时才加载详细指令与资料，例如 Skill Files。</p>
+
+<p><img src="/img/posts/cs329z-context-management/progressive-disclosure.webp" alt="Progressive Disclosure：按需读取 Skill 文件中的详细内容" /></p>
+
+<p><em>讲义第 70 页。</em></p>
+
+<p>它和子 Agent 隔离相关，但机制不同：子 Agent 隔离把任务放进不同窗口；Progressive Disclosure 控制同一窗口中信息进入的时机。</p>
+
+<p>对于修 Bug 的 Agent，初始输入可以只有工具说明和项目索引。开始运行测试时，再读取测试约定；涉及发布时，再加载发布流程。这能减少无关说明的常驻开销，但要求索引足够清晰，让 Agent 知道何时该读取什么。</p>
+
+<h2 id="7-五种模式怎样组合">7. 五种模式怎样组合？</h2>
+
+<p>讲义强调，这些策略彼此兼容。一个系统可以保存完整 Event Log，同时对模型输入中的旧 Observation 做 Masking；也可以先把知识写到外部，再压缩历史。</p>
+
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>主要改变什么</th>
+<th>解决的问题</th>
+<th>需要留意</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Event Log</td>
+<td>历史的存储与重建方式</td>
+<td>可追溯、可重建</td>
+<td>保存完整不等于输入完整</td>
+</tr>
+
+<tr>
+<td>Memory Offloading</td>
+<td>信息保存的位置</td>
+<td>跨轮、跨会话保留知识</td>
+<td>能否正确召回，是否过期</td>
+</tr>
+
+<tr>
+<td>Compaction</td>
+<td>历史的表达形式</td>
+<td>用少量 Token 维持任务连续性</td>
+<td>摘要遗漏与假设固化</td>
+</tr>
+
+<tr>
+<td>Observation Masking</td>
+<td>旧工具输出的可见性</td>
+<td>减少大量历史日志</td>
+<td>关键证据是否仍可恢复</td>
+</tr>
+
+<tr>
+<td>Context Isolation</td>
+<td>子任务的上下文边界</td>
+<td>减少不同分支的互相干扰</td>
+<td>交接质量与协调成本</td>
+</tr>
+</tbody>
+</table>
+
+<p>针对前面的编码任务，一个组合流程可以是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">每一步写入 Event Log
+        ↓
+大输出保存在文件，窗口保留关键结果与定位信息
+        ↓
+旧 Observation 做 Masking，近期结果完整保留
+        ↓
+接近预算时，将目标、约束、进度压缩成任务摘要
+        ↓
+独立调查交给隔离的子任务，详细规则按需加载
+        ↓
+按需重读证据，继续下一轮决策</code></pre></td></tr></table>
+</div>
+</div>
+<p>讲义后面的 Pi 案例也展示了组合方式：Event Log 到 LLM Input 的转换、通过 Skill Files 渐进加载，以及 Compaction。这个例子说明，较少的机制也能组成完整的上下文管理方案，关键在于它们如何衔接。</p>
+
+<h2 id="8-用-write-select-compress-isolate-检查设计">8. 用 Write、Select、Compress、Isolate 检查设计</h2>
+
+<p>讲义借用 LangChain 的四类划分，把上下文管理放进更大的设计空间：</p>
+
+<p><img src="/img/posts/cs329z-context-management/context-taxonomy.webp" alt="Context Management Taxonomy：Write、Select、Compress 与 Isolate" /></p>
+
+<p><em>讲义第 73 页。</em></p>
+
+<ul>
+<li><strong>Write</strong>：把信息写到任务状态、Scratchpad 或长期记忆；</li>
+<li><strong>Select</strong>：选择当前相关的工具、知识和历史记录；</li>
+<li><strong>Compress</strong>：总结有用内容，裁掉冗余内容；</li>
+<li><strong>Isolate</strong>：把不同任务的信息分配到不同状态或上下文。</li>
+</ul>
+
+<p>其中，Masking 属于裁剪式压缩，Compaction 属于摘要式压缩；Memory Offloading 连接 Write 与 Select；Progressive Disclosure 则强调按需选择信息。Event Log 是支持这些变换的历史基础设施。</p>
+
+<p>这张分类图能帮助检查一个系统是否只做了“压缩”，却没有解决存储、召回或任务分工。</p>
+
+<h2 id="9-怎样判断上下文管理有效">9. 怎样判断上下文管理有效？</h2>
+
+<p>更少的 Token 只是一个指标。我的评测重点会是：整理后，Agent 是否仍然完成同一个任务，并保留用户要求。</p>
+
+<p>可以固定任务集，对比 Raw History、Masking、Compaction 和组合策略，同时记录：</p>
+
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>观察什么</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>任务成功率</td>
+<td>修改结果与最终测试是否正确</td>
+</tr>
+
+<tr>
+<td>连续性</td>
+<td>是否忘记约束、重复失败方案或漏掉待办</td>
+</tr>
+
+<tr>
+<td>信息恢复</td>
+<td>能否定位并读回已隐藏的证据</td>
+</tr>
+
+<tr>
+<td>成本与延迟</td>
+<td>包括摘要调用、工具重读和重新 Prefill</td>
+</tr>
+
+<tr>
+<td>长程稳定性</td>
+<td>多次整理之后，任务状态是否仍准确</td>
+</tr>
+</tbody>
+</table>
+
+<p>测试中要刻意放入早期约束、很晚才需要的事实、较长日志，以及在中途变更的用户要求。这样才能看出系统是在有效筛选信息，还是碰巧删掉了暂时没用的内容。</p>
+
+<p>对我来说，这一章最有价值的设计原则是：<strong>完整记录保存在合适的位置，当前窗口保留足以支持下一步行动的信息。</strong> Event Log 提供历史，外部记忆与按需读取提供容量，Compaction 和 Masking 控制输入长度，Isolation 控制任务之间的信息边界。它们组合起来，才让 Agent 有机会在长任务中持续工作。</p>
+
+<h2 id="来源与延伸阅读">来源与延伸阅读</h2>
+
+<p>本文主要整理自 <strong>CS329Z Lecture 6: Agent Design Patterns and Scaffolds</strong> 的第 55–75 页，并参考第 81 页的 Pi Context Management 案例。讲义提供者为 Diyi Yang、Michael Ryan、John Yang；本文插图由所提供 PDF 对应页面渲染，保留了讲义中的原始来源标注。文章日期沿用该 PDF 的创建时间。</p>
+
+<ul>
+<li><a href="https://arxiv.org/abs/2407.16741">OpenHands 论文</a>：讲义中的 Persistent Event Log 案例。</li>
+<li><a href="https://arxiv.org/abs/2310.08560">MemGPT: Towards LLMs as Operating Systems</a>：分层记忆与 Memory Offloading。</li>
+<li><a href="https://arxiv.org/abs/2508.21433v3">The Complexity Trap，v3</a>：Observation Masking 与 LLM Summarization 的对比。</li>
+<li><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Anthropic：Effective context engineering for AI agents</a>：上下文工程与长程任务。</li>
+<li><a href="https://www.langchain.com/blog/context-engineering-for-agents">LangChain：Context Engineering for Agents</a>：Write、Select、Compress、Isolate 分类。</li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2026-10-12
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/ai-agents/">AI Agents</a>
+          <a href="/tags/context-engineering/">Context Engineering</a>
+          <a href="/tags/context-management/">Context Management</a>
+          <a href="/tags/agent-harness/">Agent Harness</a>
+          <a href="/tags/memory/">Memory</a>
+          <a href="/tags/compaction/">Compaction</a>
+          <a href="/tags/observation-masking/">Observation Masking</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/cs329z-frameworks-orchestration/">
+            <span class="next-text nav-default">CS 329Z：Frameworks &amp; Orchestration——从 Agent Harness 到可靠执行与可观测性</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

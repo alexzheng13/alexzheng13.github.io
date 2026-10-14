@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Fri, 09 Oct 2026 09:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 12 Oct 2026 22:25:07 +0200</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>Agent Harness</title>
       <link>https://alexzheng13.github.io/tags/agent-harness/</link>
-      <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
+      <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/tags/agent-harness/</guid>
       <description></description>
@@ -23,9 +23,54 @@
     <item>
       <title>AI Agents</title>
       <link>https://alexzheng13.github.io/tags/ai-agents/</link>
-      <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
+      <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/tags/ai-agents/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Compaction</title>
+      <link>https://alexzheng13.github.io/tags/compaction/</link>
+      <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/compaction/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Context Engineering</title>
+      <link>https://alexzheng13.github.io/tags/context-engineering/</link>
+      <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/context-engineering/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Context Management</title>
+      <link>https://alexzheng13.github.io/tags/context-management/</link>
+      <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/context-management/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Memory</title>
+      <link>https://alexzheng13.github.io/tags/memory/</link>
+      <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/memory/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Observation Masking</title>
+      <link>https://alexzheng13.github.io/tags/observation-masking/</link>
+      <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/observation-masking/</guid>
       <description></description>
     </item>
     
@@ -345,15 +390,6 @@
     </item>
     
     <item>
-      <title>Memory</title>
-      <link>https://alexzheng13.github.io/tags/memory/</link>
-      <pubDate>Sun, 27 Sep 2026 11:27:00 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/tags/memory/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Personal AI</title>
       <link>https://alexzheng13.github.io/tags/personal-ai/</link>
       <pubDate>Sun, 27 Sep 2026 11:27:00 +0200</pubDate>
@@ -494,15 +530,6 @@
       <pubDate>Sat, 12 Sep 2026 21:08:45 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/tags/workflow/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Context Engineering</title>
-      <link>https://alexzheng13.github.io/tags/context-engineering/</link>
-      <pubDate>Sat, 12 Sep 2026 21:07:45 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/tags/context-engineering/</guid>
       <description></description>
     </item>
     
