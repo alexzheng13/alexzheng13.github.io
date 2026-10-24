@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-14T21:42:43+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-19T09:00:16+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 34 posts by year</p>
+      <p>Browse all 35 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/christopher-kerr-end-of-life-dreams-and-meaning/">
+          <time datetime="2026-10-19">10-19</time>
+          <span>What Matters at Life’s End: Christopher Kerr on Connection, Hope, and Care</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/cs329z-agent-memory-architectures/">
           <time datetime="2026-10-14">10-14</time>
           <span>CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation</span>
@@ -395,6 +399,39 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="Recent posts">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/en/post/christopher-kerr-end-of-life-dreams-and-meaning/">What Matters at Life’s End: Christopher Kerr on Connection, Hope, and Care</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-10-19">October 19, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>5 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>It is easy to measure the present against a future milestone: another qualification, more money, one more completed project. Life will begin properly after that. But if the time available to us became much shorter, would those measures still be enough?</p>
+
+<p>Christopher Kerr’s interview explores dreams, relationships, and hope near the end of life. The question I want to take from it is closer to home: <strong>Are the things receiving most of our attention also the things we would least want to lose?</strong></p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/meaning-of-life/">Meaning of Life</a></li>
+                  <li><a href="/en/tags/relationships/">Relationships</a></li>
+                  <li><a href="/en/tags/hospice-care/">Hospice Care</a></li>
+                  <li><a href="/en/tags/christopher-kerr/">Christopher Kerr</a></li>
+                  <li><a href="/en/tags/interview-notes/">Interview Notes</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/christopher-kerr-end-of-life-dreams-and-meaning/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/en/post/cs329z-agent-memory-architectures/">CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation</a></h2>
@@ -620,63 +657,6 @@ Telemetry + evals              makes the system observable and improvable</code>
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/en/post/cs329z-rag-agentic-retrieval/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/agentic-llm-2-action/">Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-10-05">October 5, 2026</time>
-            <span aria-hidden="true">·</span>
-            <span>13 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>Reasoning proposes what should happen next. An agent begins to affect the world only when that decision becomes an API call, a mouse click, or a robot trajectory.</p>
-
-<p>That is the fundamental difference between <strong>action</strong> and ordinary text generation. A bad sentence can be regenerated; an action may change state, consume resources, or produce an irreversible result. An agent must therefore understand which actions are available, predict their consequences, and continue from the next observation.</p>
-
-<p>This is the <strong>second article in the Agentic Large Language Models series</strong>. <a href="/en/post/agentic-llm-1-reasoning/">Part I</a> covered reasoning from Chain of Thought and search to reflection and RLVR. This article follows a different progression:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">Perceive the environment (VLM)
-             ↓
-Map intent to action (VLA)
-             ↓
-Predict what follows (World Model)
-             ↓
-Plan, compare, and revise before execution</code></pre></td></tr></table>
-</div>
-</div></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="Tags">
-              <span class="blog-summary-tags-label">Tags</span>
-              <ul>
-                  <li><a href="/en/tags/agentic-llm/">Agentic LLM</a></li>
-                  <li><a href="/en/tags/action/">Action</a></li>
-                  <li><a href="/en/tags/vlm/">VLM</a></li>
-                  <li><a href="/en/tags/vla/">VLA</a></li>
-                  <li><a href="/en/tags/world-model/">World Model</a></li>
-                  <li><a href="/en/tags/robotics/">Robotics</a></li>
-                  <li><a href="/en/tags/model-based-rl/">Model-Based RL</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/en/post/agentic-llm-2-action/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>
