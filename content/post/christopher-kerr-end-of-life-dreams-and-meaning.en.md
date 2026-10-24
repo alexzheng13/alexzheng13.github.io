@@ -10,39 +10,31 @@ toc: true
 
 What matters when time is running out: regrets, companionship, or simply more time? What becomes of hope when recovery is no longer possible?
 
-This account follows hospice physician Christopher Kerr’s Diary Of A CEO interview chronologically, presenting the conversation without additional personal commentary.
+This account follows hospice physician Christopher Kerr’s Diary Of A CEO interview in its original sequence.
 
 <!--more-->
 
-[![Christopher Kerr and Steven Bartlett: watch the original interview](/img/posts/christopher-kerr-end-of-life/video-cover.jpg)](https://www.youtube.com/watch?v=GlaSnROMqRY)
+![Christopher Kerr and Steven Bartlett](/img/posts/christopher-kerr-end-of-life/video-cover.jpg)
 
-*Source: [The Deathbed Doctor: Weeks Before Death, Patients Start Having Visions!](https://www.youtube.com/watch?v=GlaSnROMqRY), published October 19, 2026; approximately 83 minutes. Cover from the original video. Section links open the corresponding passages. This is a paraphrased account, not medical advice.*
+*Interview published October 19, 2026. Cover from the original video. This is a paraphrased account, not medical advice.*
 
 ## 1. Starting with patients’ experiences: dreams and connection
 
-### 02:05 | Why listen directly to dying patients?
+### Why listen directly to dying patients?
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=125s)
+Fighting disease is an important medical task, but dying patients also have emotional lives, relationships, and wishes. Understanding their experience requires listening to them directly.
 
-Kerr contrasts training to fight disease with learning to understand patients’ emotional lives, relationships, and wishes.
+### Dreams or visions of deceased loved ones
 
-### 03:23 | Dreams or visions of deceased loved ones
-
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=203s)
-
-Some patients report vivid encounters with familiar loved ones. Kerr emphasizes the comfort and connection these experiences can bring, without claiming certainty about an afterlife.
+Some patients report vivid dreams or a sense that deceased loved ones are present. Familiar encounters and companionship can bring comfort and a continued feeling of being loved. These experiences do not establish certainty about an afterlife.
 
 ## 2. Regret and priorities: what patients care about
 
-### 18:18 | Do people really have regrets at the end?
+### Do people really have regrets at the end?
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1098s)
+Being able to name regrets does not make them the centre of one’s remaining life. Immediate relationships, companionship, and comfort may matter more.
 
-Kerr distinguishes being able to name regrets from making them the centre of one’s remaining life.
-
-### 19:11 | What matters to hospice patients?
-
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1151s)
+### What matters to hospice patients?
 
 The episode presents this ranking:
 
@@ -60,123 +52,87 @@ The episode presents this ranking:
 | 10 | Put financial affairs in order |
 | 11 | Settle interpersonal conflicts |
 
-*Individual priorities differ. Kerr also discusses inner peace beyond religious belief. [Ranking source](https://doi.org/10.1177/1049909120934737) · [Full overview](https://www.1800hospice.com/blog/doctors-understand-hospice-patients/).*
+*Individual priorities differ. The fourth item also includes inner peace beyond religious belief.*
 
 Medical students placed a meaningful life second, versus eighth for patients, and resolving conflicts seventh, versus eleventh. Their expectations did not always match patients’ priorities.
 
-### 21:23 | Are we pursuing the wrong things?
+### Are we pursuing the wrong things?
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1283s)
+**Belonging** and **interdependency** become especially clear in vulnerability. Beyond a position or possessions, a person is also someone’s child, sibling, friend, or partner. Yet everyday schedules often give achievements more space than these relationships.
 
-Kerr emphasizes **belonging** and **interdependency**: vulnerability makes relationships especially important. The host contrasts that with time allocated to achievement and possessions.
-
-### 26:33–31:31 | Pain, comfort, and care at home
-
-[Pain](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1593s) · [Hospital and home care](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1716s)
+### Pain, comfort, and care at home
 
 The discussion turns to easing suffering and respecting patients’ wishes, including familiar surroundings and companionship—not prescribing one place of death for everyone.
 
-### 33:36 | Facing extreme regret
+### Facing extreme regret
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=2016s)
-
-Kerr acknowledges distress about past wrongdoing; he does not portray every ending as peaceful or reconciled.
+Some patients are distressed by past wrongdoing; some find comfort or reconciliation. Not every ending is peaceful, but intense regret does not define every patient’s experience.
 
 ## 3. More time, or better time?
 
-### 41:06 | Do dying people want more time?
-
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=2466s)
+### Do dying people want more time?
 
 The distinction is between extending life at any cost and living as well as possible for as long as possible.
 
-### 42:42 | Is the longevity movement missing the point?
+### Is the longevity movement missing the point?
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=2562s)
+Treating life extension as the only goal can obscure the quality of the time gained. Living well matters alongside living longer; specific longevity practices should not be treated as guarantees.
 
-Kerr questions excessive certainty about life-extension efforts and redirects attention toward living well, not a guaranteed longevity formula.
+### What contributes to a peaceful death?
 
-### 43:44 | What contributes to a peaceful death?
+Peace need not depend on accomplishment. Love given and received can provide a sense of connection and fulfillment even in an outwardly ordinary life.
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=2624s)
+### What happens when someone dies alone?
 
-Asked about accomplishment, Kerr instead emphasizes love given and received.
+The interview includes a patient whose life involved deprivation and harmful relationships. Loneliness concerns not only who is at the bedside, but whether reliable connection has been part of a person’s life.
 
-### 44:24 | What happens when someone dies alone?
+### When old wounds surface
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=2664s)
+Dreams can bring old wounds into focus, and some patients experience emotional relief. This does not mean every trauma resolves before death.
 
-A patient’s history of deprivation and harmful relationships shows that his account also includes loneliness and painful endings.
-
-### 46:47 | When old wounds surface
-
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=2807s)
-
-Kerr describes experiences of emotional relief without establishing that every trauma resolves before death.
-
-### 51:35 | Should we worry about regrets?
-
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=3095s)
+### Should we worry about regrets?
 
 The conversation returns to the difference between having regrets and giving them highest priority.
 
 ## 4. Grief, changing hope, and continuing to live
 
-### 53:20 | Coping with a loved one’s death
+### Coping with a loved one’s death
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=3200s)
+Honest communication, presence, and shared support leave room for a goodbye. Denial can take away opportunities to arrange time and express what matters.
 
-Kerr emphasizes honest communication, presence, and shared support rather than denying an approaching death.
+### Losing his father
 
-### 58:59 | Losing his father
+Kerr lost his father as a boy, an experience that shaped his sensitivity to suffering. Grief can be carried forward rather than simply erased.
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=3539s)
-
-He connects childhood loss with his later sensitivity to suffering, describing grief as something carried forward rather than simply erased.
-
-### 01:04:58 | How hope changes
-
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=3898s)
+### How hope changes
 
 Hope shifts from recovery to comfort and family time, then toward others’ well-being.
 
-### 01:07:17 | Do people stop living once they know they are dying?
+### Do people stop living once they know they are dying?
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=4037s)
+Physical decline can coexist with continuing adaptation, connection, and changes in understanding. Approaching death does not mean emotional life has already stopped.
 
-Kerr describes continuing adaptation and connection alongside physical decline.
+### Do we all die alone?
 
-### 01:07:55 | Do we all die alone?
+Connection can persist through inner experiences and through families gathering. This does not make actual companionship unnecessary or deny loneliness.
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=4075s)
+### Reconciliation and the language of fighting
 
-He discusses connection through inner experiences and families gathering. This does not make actual companionship unnecessary or deny loneliness.
-
-### 01:09:04–01:10:20 | Reconciliation and the language of fighting
-
-[Repair and reconciliation](https://www.youtube.com/watch?v=GlaSnROMqRY&t=4144s) · [Fighting death](https://www.youtube.com/watch?v=GlaSnROMqRY&t=4220s)
-
-Kerr describes some reconciliations and questions whether battle metaphors obscure patients’ wishes for care and connection.
+Some families reconcile during a goodbye. Describing dying only as a battle can obscure the care, companionship, and connection a person wants in the present.
 
 ## 5. Illness, attention, and meaning
 
-### 01:12:40 | What his own cancer changed
+### What his own cancer changed
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=4360s)
+Cancer and recovery slowed Kerr’s life. He noticed the beauty of willow trees planted years earlier: the trees had not suddenly changed, but his attention had.
 
-During recovery, Kerr noticed the beauty of willow trees planted years earlier. The change, he explains, was in his own attention.
+### What is the meaning of life?
 
-### 01:15:56 | What is the meaning of life?
+Meaning here rests in love, mutual reliance, and facing difficulty together—in giving care and being able to receive it.
 
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=4556s)
+### Children’s experiences
 
-His answer returns to love, mutual reliance, and facing difficulty together.
-
-### 01:17:15 | Children’s experiences
-
-[Watch](https://www.youtube.com/watch?v=GlaSnROMqRY&t=4635s)
-
-He closes with children’s experiences of comfort, emphasizing how some also worry about and try to protect their parents’ feelings.
+Some children find comfort in familiar people, animals, or safe places. Even during their illness, they may worry about and try to protect their parents’ feelings.
 
 ## Video and related sources
 
