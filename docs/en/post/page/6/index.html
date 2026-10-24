@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 35 posts by year</p>
+      <p>Browse all 36 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -336,6 +336,10 @@
           <time datetime="2026-03-23">03-23</time>
           <span>Stanford CS230: Career Advice for the AI Era</span>
         </a>
+        <a class="blog-archive-index-item" href="/en/post/langchain-agent-builder-memory-system/">
+          <time datetime="2026-02-21">02-21</time>
+          <span>LangChain Agent Builder’s Memory System</span>
+        </a>
           <h2 class="blog-archive-year" id="year-2021">2021</h2>
         <a class="blog-archive-index-item" href="/en/post/linux-io-multiplexing-select-poll-epoll/">
           <time datetime="2021-02-11">02-11</time>
@@ -399,6 +403,28 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="Recent posts">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/en/post/introduction-to-go-assembly-1/">A Practical Introduction to Go Assembly (1)</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2020-12-30">December 30, 2020</time>
+            <span aria-hidden="true">·</span>
+            <span>10 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">Program storage space layout  A process is an executing program instance. Each instance has its own address space and execution state. A program becomes a process when the operating system adds the appropriate information to the kernel data structures and allocates the necessary resources to run the program code.
+ A thread is an abstract data type that represents a thread of execution within a process. A thread has its own execution stack, program counter value, register set and state.</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/en/post/introduction-to-go-assembly-1/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/en/post/cap-and-service-discovery-systems/">CAP and a Comparison of Service Discovery Systems</a></h2>
@@ -492,28 +518,6 @@ Summary
           </a>
         </footer>
       </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/inside-go-channel-runtime/">Inside Go&#39;s Channel Runtime</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2020-01-05">January 5, 2020</time>
-            <span aria-hidden="true">·</span>
-            <span>27 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">Channel is a very important type in the Go language and is the first object in Go. Through channels, Go implements memory sharing through communication. Channel is an important means of transferring data and synchronizing between multiple goroutines.  Note: All source code analysis in this article is based on Go1.13.3. Different versions may have different implementations.
-channel syntax The syntax for declaring a channel is as follows:</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/inside-go-channel-runtime/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
       <nav class="blog-pagination" aria-label="Blog pagination">
         <div class="blog-pagination-pages">
             <a class="blog-pagination-direction" href="/en/post/page/5/" rel="prev">
@@ -541,6 +545,9 @@ channel syntax The syntax for declaring a channel is as follows:</div>
               <a class="blog-pagination-number" href="/en/post/page/7/" aria-label="Page 7">
                 7
               </a>
+              <a class="blog-pagination-number" href="/en/post/page/8/" aria-label="Page 8">
+                8
+              </a>
             <a class="blog-pagination-direction" href="/en/post/page/7/" rel="next">
               Next
               <span aria-hidden="true">›</span>
@@ -548,11 +555,11 @@ channel syntax The syntax for declaring a channel is as follows:</div>
         </div>
 
         <div class="blog-pagination-status">
-          <span>Page <strong>6</strong> of 7</span>
+          <span>Page <strong>6</strong> of 8</span>
 
-          <form class="blog-pagination-jump" data-pagination-base="/en/post/" data-total-pages="7">
+          <form class="blog-pagination-jump" data-pagination-base="/en/post/" data-total-pages="8">
             <label for="blog-page-jump">Go to</label>
-            <input id="blog-page-jump" name="page" type="number" min="1" max="7" value="6" inputmode="numeric">
+            <input id="blog-page-jump" name="page" type="number" min="1" max="8" value="6" inputmode="numeric">
             <button type="submit">Go</button>
           </form>
         </div>

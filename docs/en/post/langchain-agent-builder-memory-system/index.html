@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>LangChain Agent Builder’s Memory System - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="How Agent Builder represents memory as files, turns feedback into future instructions, and uses AGENTS.md, skills, filesystem tools, and persistent storage." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/en/post/langchain-agent-builder-memory-system/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/langchain-agent-builder-memory-system/">
+<meta name="site-language-route" data-language="en" content="/en/post/langchain-agent-builder-memory-system/">
+<meta name="site-current-language" content="en"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="LangChain Agent Builder’s Memory System" />
+<meta property="og:description" content="How Agent Builder represents memory as files, turns feedback into future instructions, and uses AGENTS.md, skills, filesystem tools, and persistent storage." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/en/post/langchain-agent-builder-memory-system/" />
+<meta property="article:published_time" content="2026-02-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2026-02-21T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="LangChain Agent Builder’s Memory System">
+<meta itemprop="description" content="How Agent Builder represents memory as files, turns feedback into future instructions, and uses AGENTS.md, skills, filesystem tools, and persistent storage.">
+
+
+<meta itemprop="datePublished" content="2026-02-21T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2026-02-21T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1556">
+
+
+
+<meta itemprop="keywords" content="AI Agents,Agent Memory,LangChain,Deep Agents,AGENTS.md,Skills,Context Engineering," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LangChain Agent Builder’s Memory System"/>
+<meta name="twitter:description" content="How Agent Builder represents memory as files, turns feedback into future instructions, and uses AGENTS.md, skills, filesystem tools, and persistent storage."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/en/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/en/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/en/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/en/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/langchain-agent-builder-memory-system/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/langchain-agent-builder-memory-system/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/en/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/langchain-agent-builder-memory-system/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/langchain-agent-builder-memory-system/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/en/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/about/">About</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">LangChain Agent Builder’s Memory System</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-02-21 </span>
+        <div class="post-category">
+            <a href="/en/categories/ai-agents/"> AI Agents </a>
+            </div>
+          <span class="more-meta"> 1556 words </span>
+          <span class="more-meta"> 8 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-why-prioritize-memory-for-repeated-tasks">1. Why prioritize memory for repeated tasks?</a></li>
+<li><a href="#2-remembering-facts-and-remembering-methods">2. Remembering facts and remembering methods</a></li>
+<li><a href="#3-why-represent-memory-as-files">3. Why represent memory as files?</a>
+<ul>
+<li><a href="#a-file-interface-does-not-require-disk-storage">A file interface does not require disk storage</a></li>
+</ul></li>
+<li><a href="#4-from-a-correction-to-future-behavior">4. From a correction to future behavior</a></li>
+<li><a href="#5-why-edit-agents-md-rather-than-another-file">5. Why edit AGENTS.md rather than another file?</a></li>
+<li><a href="#6-finding-memory-with-glob-and-grep">6. Finding memory with glob and grep</a></li>
+<li><a href="#7-why-file-based-memory-remains-difficult">7. Why file-based memory remains difficult</a>
+<ul>
+<li><a href="#deciding-what-to-remember-and-where">Deciding what to remember and where</a></li>
+<li><a href="#a-successful-edit-can-still-produce-an-invalid-file">A successful edit can still produce an invalid file</a></li>
+<li><a href="#accumulating-cases-is-not-generalizing">Accumulating cases is not generalizing</a></li>
+<li><a href="#write-access-needs-boundaries">Write access needs boundaries</a></li>
+</ul></li>
+<li><a href="#8-how-this-changes-agent-building">8. How this changes agent building</a>
+<ul>
+<li><a href="#no-code-without-another-unfamiliar-language">No-code without another unfamiliar language</a></li>
+<li><a href="#build-through-use-feedback-and-revision">Build through use, feedback, and revision</a></li>
+<li><a href="#portable-files-still-require-a-compatible-runtime">Portable files still require a compatible runtime</a></li>
+</ul></li>
+<li><a href="#9-what-the-original-roadmap-still-proposed">9. What the original roadmap still proposed</a></li>
+<li><a href="#10-connecting-the-pieces">10. Connecting the pieces</a></li>
+<li><a href="#sources-and-further-reading">Sources and further reading</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>A meeting assistant writes paragraphs. You ask for lists instead. At the next meeting, it follows that preference without another reminder.</p>
+
+<p>This kind of memory changes how an agent works, not merely what it can recall. Agent Builder represents instructions, capabilities, and knowledge as files so feedback can become rules available to future runs.</p>
+
+<p>This article draws on LangChain’s <a href="https://www.langchain.com/blog/how-we-built-agent-builders-memory-system">How we built Agent Builder’s memory system</a>, published <strong>February 21, 2026</strong>. Product status and roadmap items refer to that account. File examples illustrate the mechanism, not the product’s complete internal configuration.</p>
+
+<h2 id="1-why-prioritize-memory-for-repeated-tasks">1. Why prioritize memory for repeated tasks?</h2>
+
+<p>A general assistant may switch between unrelated activities. An agent dedicated to meeting notes, email, or recruiting repeatedly encounters similar work. A correction is therefore more likely to remain useful.</p>
+
+<p>Without memory, users repeatedly explain formatting, redaction, or task conventions. The useful unit to preserve is not necessarily an entire conversation: it may be a working agreement extracted from feedback.</p>
+
+<p>Memory can provide value inside one workflow without first becoming a comprehensive model of the user’s life.</p>
+
+<h2 id="2-remembering-facts-and-remembering-methods">2. Remembering facts and remembering methods</h2>
+
+<p>The original article uses CoALA’s distinction between:</p>
+
+<ul>
+<li><strong>Semantic memory:</strong> facts and knowledge.</li>
+<li><strong>Procedural memory:</strong> instructions and methods that shape behavior.</li>
+<li><strong>Episodic memory:</strong> particular past experiences and their sequence.</li>
+</ul>
+
+<p>A customer’s name, a rule for handling customer meetings, and a transcript of one meeting serve different purposes. Searching historical conversations does not by itself establish which lessons should guide future work.</p>
+
+<p>For more background, see <a href="/en/post/cs329z-agent-memory-architectures/">Agent Memory Architectures</a>.</p>
+
+<h2 id="3-why-represent-memory-as-files">3. Why represent memory as files?</h2>
+
+<p>Files offer a familiar interface: list paths, find relevant material, read it, and edit a section. The system does not need a different custom operation for every category of knowledge.</p>
+
+<p>An illustrative organization is:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">agent-memory/
+├── AGENTS.md                 Core responsibilities and behavior
+├── skills/
+│   └── meeting-summary/
+│       └── SKILL.md          Task-specific method
+├── subagents/                Delegated-agent definitions
+├── tools.json                Available tool configuration
+└── knowledge/
+    └── customer-notes.md     Business reference material</code></pre></td></tr></table>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>Main question it answers</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>AGENTS.md</code></td>
+<td>What should this agent do and follow generally?</td>
+</tr>
+
+<tr>
+<td>Skills and supporting files</td>
+<td>How should a particular task be handled?</td>
+</tr>
+
+<tr>
+<td>Subagent definitions</td>
+<td>What work is delegated to another executor?</td>
+</tr>
+
+<tr>
+<td><code>tools.json</code></td>
+<td>Which external tools are available?</td>
+</tr>
+
+<tr>
+<td>Knowledge files</td>
+<td>Which facts and materials inform the task?</td>
+</tr>
+</tbody>
+</table>
+
+<p><a href="https://agents.md/">AGENTS.md</a> is a Markdown convention for agent-facing context and instructions. <a href="https://agentskills.io/home">Agent Skills</a> package specialized instructions and supporting resources. Their contents can span knowledge categories; a filename alone does not determine a memory type.</p>
+
+<h3 id="a-file-interface-does-not-require-disk-storage">A file interface does not require disk storage</h3>
+
+<p>In the original design, Postgres stores the data behind a virtual filesystem. The agent works with paths and content; the backend handles persistence.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Agent
+  │ list, search, read, edit
+  ▼
+Filesystem interface: paths and content
+  │ backend storage operations
+  ▼
+Persistent data in Postgres</code></pre></td></tr></table>
+</div>
+</div>
+<p>The interface organizes interaction; the backend determines storage. <a href="https://docs.langchain.com/oss/python/deepagents/backends">Deep Agents backends</a> distinguish thread-local state, local files, and durable storage.</p>
+
+<p>Being able to write a file does not automatically mean another conversation can retrieve it. Persistence and access scope must be configured appropriately.</p>
+
+<h2 id="4-from-a-correction-to-future-behavior">4. From a correction to future behavior</h2>
+
+<p>The meeting-assistant example involves two changes: correcting the current response and changing a rule for later runs.</p>
+
+<p>An illustrative instruction after the first correction might be:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="gh"># Summary requirements
+</span><span class="gh"></span>
+- Organize summaries as concise lists.</code></pre></td></tr></table>
+</div>
+</div>
+<p>A later request to separate follow-up work could produce:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="gh"># Summary requirements
+</span><span class="gh"></span>
+<span class="k">-</span> Organize summaries as concise lists.
+- Finish with a separate action-items section.</code></pre></td></tr></table>
+</div>
+</div>
+<p>This updates external instructions, not model weights. The next run still needs to load or retrieve them. <a href="https://docs.langchain.com/oss/python/deepagents/memory">Deep Agents memory documentation</a> describes specifying paths, reading memory, and optionally editing writable files.</p>
+
+<p>The complete process includes identifying durable feedback, proposing changes, validation and approval where required, persistence, and later retrieval. A saved rule cannot affect a run that never sees it.</p>
+
+<h2 id="5-why-edit-agents-md-rather-than-another-file">5. Why edit AGENTS.md rather than another file?</h2>
+
+<p>The system defines artifact responsibilities and guides the model to use them. A general formatting preference fits core behavior; a detailed task procedure may fit a skill; business facts belong in reference material.</p>
+
+<p>One possible division is:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">General behavior → AGENTS.md
+Specialized methods → corresponding skill
+Business facts → relevant knowledge file
+One-off requirements → current task context</code></pre></td></tr></table>
+</div>
+</div>
+<p>This is an explanatory arrangement, not a published internal prompt. The original article does not reveal the complete prompt or establish a fixed keyword-routing algorithm.</p>
+
+<p>“Only three items this time” also differs from “always use three items.” Deciding whether to persist feedback comes before selecting a file.</p>
+
+<p>The filename is not magic: current documentation also shows <code>preferences.md</code>. What matters is an explicit convention for where information belongs, how it is updated, and how it is later loaded.</p>
+
+<h2 id="6-finding-memory-with-glob-and-grep">6. Finding memory with glob and grep</h2>
+
+<p><strong>Glob matches names and paths; grep searches content.</strong> Typical path patterns include:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">AGENTS.md         A specific file
+skills/*/SKILL.md Skill files one directory below skills
+**/*.md           Recursive Markdown matching, where supported</code></pre></td></tr></table>
+</div>
+</div>
+<p>After finding a file, a command-line content search could be:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">grep -n <span class="s2">&#34;summary&#34;</span> AGENTS.md</code></pre></td></tr></table>
+</div>
+</div>
+<p>This is a shell example, not a fixed Agent Builder tool-call syntax. An agent can narrow the file set, locate relevant passages, and then read their context instead of loading every file.</p>
+
+<p>Literal matching can miss related expressions. A question about hiding personal information may not match a file using the word “redaction.” Semantic retrieval can help, but does not remove the need to check relevance and scope.</p>
+
+<h2 id="7-why-file-based-memory-remains-difficult">7. Why file-based memory remains difficult</h2>
+
+<h3 id="deciding-what-to-remember-and-where">Deciding what to remember and where</h3>
+
+<p>An agent may miss durable feedback, preserve a temporary instruction, or overload its core instructions with specialized detail. File tools provide operations, not a complete memory policy.</p>
+
+<p>Skills offer progressive loading: discover available capabilities first, then read detailed instructions when relevant. This separates generally applicable rules from specialized methods. <a href="https://docs.langchain.com/oss/python/deepagents/skills">Skills documentation</a></p>
+
+<h3 id="a-successful-edit-can-still-produce-an-invalid-file">A successful edit can still produce an invalid file</h3>
+
+<p>Free-form Markdown differs from structured tool configuration or skill metadata. The original article emphasizes validation and returning errors for correction rather than treating invalid output as a successful update.</p>
+
+<p>Persistence and usability are separate requirements.</p>
+
+<h3 id="accumulating-cases-is-not-generalizing">Accumulating cases is not generalizing</h3>
+
+<p>Consider an illustrative email assistant that keeps adding individual unsolicited senders to an ignore list. The intended preference may instead concern a category of unsolicited sales messages.</p>
+
+<p>Maintaining memory therefore involves consolidating duplicates, resolving conflicts, and extracting justified rules—not merely increasing the number of entries. The reverse mistake also matters: one exceptional case should not become an unjustified permanent rule.</p>
+
+<h3 id="write-access-needs-boundaries">Write access needs boundaries</h3>
+
+<p>The original product account describes human approval for memory edits by default, reducing the risk of turning untrusted content into durable instructions.</p>
+
+<p>A retrieved page or email is task data, not automatically user authorization. Reading knowledge, editing preferences, and changing tool configuration should not be treated as the same permission. Current memory documentation further distinguishes writable preferences, read-only policies, and access scope.</p>
+
+<h2 id="8-how-this-changes-agent-building">8. How this changes agent building</h2>
+
+<h3 id="no-code-without-another-unfamiliar-language">No-code without another unfamiliar language</h3>
+
+<p>Some no-code platforms replace programming with nodes, branches, mappings, and proprietary expressions. Complex workflows still require learning a specialized description language—a DSL.</p>
+
+<p>Files make part of configuration resemble writing a work brief. The user expresses the desired behavior; the harness supplies the execution machinery. Tool connections still need configuration, and Markdown alone does not implement an arbitrary workflow.</p>
+
+<p>“Scalable” here primarily concerns organizing and maintaining growing capabilities, not automatically increasing runtime throughput.</p>
+
+<h3 id="build-through-use-feedback-and-revision">Build through use, feedback, and revision</h3>
+
+<p>Many requirements become apparent only after seeing the agent work. It can be easier to identify an unsuitable output than to specify every behavior beforehand.</p>
+
+<p>Memory allows suitable feedback to improve later instructions as well as the current result. Agent building becomes an iterative process rather than a single configuration exercise. Updating the agent in this sense does not mean retraining its base model.</p>
+
+<h3 id="portable-files-still-require-a-compatible-runtime">Portable files still require a compatible runtime</h3>
+
+<p>Markdown and JSON are easy to inspect, export, and version. Shared conventions can make reuse across harnesses easier.</p>
+
+<p>Copying files does not copy every operational dependency. The destination still needs compatible loading behavior, tools, authentication, and permissions. Portable representation and equivalent execution are different claims.</p>
+
+<h2 id="9-what-the-original-roadmap-still-proposed">9. What the original roadmap still proposed</h2>
+
+<p>The article listed these as future directions, not completed features:</p>
+
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Intended capability</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Episodic memory</td>
+<td>Retrieve particular past experiences, not only distilled rules</td>
+</tr>
+
+<tr>
+<td>Background consolidation</td>
+<td>Review conversations and merge lessons outside the active task</td>
+</tr>
+
+<tr>
+<td>Explicit memory entry point</td>
+<td>Let users deliberately request reflection and retention</td>
+</tr>
+
+<tr>
+<td>Semantic search</td>
+<td>Go beyond filename and literal-content matching</td>
+</tr>
+
+<tr>
+<td>Additional scopes</td>
+<td>Distinguish agent-, user-, and organization-level memory</td>
+</tr>
+</tbody>
+</table>
+
+<p>These address what is retained, when it is consolidated, how it is found, and whom it applies to. The filesystem is a common interface, not a substitute for those decisions.</p>
+
+<h2 id="10-connecting-the-pieces">10. Connecting the pieces</h2>
+
+<p>The design organizes instructions and knowledge as files, persists them through a backend, and makes them available through loading, search, and editing.</p>
+
+<p>Its significance is not simply the existence of an <code>AGENTS.md</code>. Feedback must become an appropriately scoped rule that later runs can find and apply. Files preserve content; prompts and the harness determine how that content participates in action.</p>
+
+<h2 id="sources-and-further-reading">Sources and further reading</h2>
+
+<ul>
+<li><a href="https://www.langchain.com/blog/how-we-built-agent-builders-memory-system">LangChain: How we built Agent Builder’s memory system</a></li>
+<li>Deep Agents: <a href="https://docs.langchain.com/oss/python/deepagents/memory">Memory</a>, <a href="https://docs.langchain.com/oss/python/deepagents/backends">Backends</a>, <a href="https://docs.langchain.com/oss/python/deepagents/skills">Skills</a></li>
+<li><a href="https://agents.md/">AGENTS.md</a> · <a href="https://agentskills.io/home">Agent Skills</a></li>
+<li><a href="https://arxiv.org/abs/2309.02427">CoALA: Cognitive Architectures for Language Agents</a></li>
+<li>Related posts: <a href="/en/post/cs329z-agent-memory-architectures/">Agent Memory Architectures</a> · <a href="/en/post/cs329z-context-management-patterns/">Context Management Patterns</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-02-21
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/en/tags/ai-agents/">AI Agents</a>
+          <a href="/en/tags/agent-memory/">Agent Memory</a>
+          <a href="/en/tags/langchain/">LangChain</a>
+          <a href="/en/tags/deep-agents/">Deep Agents</a>
+          <a href="/en/tags/agents.md/">AGENTS.md</a>
+          <a href="/en/tags/skills/">Skills</a>
+          <a href="/en/tags/context-engineering/">Context Engineering</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/en/post/stanford-cs230-career-advice-in-ai/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Stanford CS230: Career Advice for the AI Era</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/en/post/linux-io-multiplexing-select-poll-epoll/">
+            <span class="next-text nav-default">Translation: Linux I/O Multiplexing - select vs. poll vs. epoll</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.6388abde34e31667698edd963050a5a5d32866b5dbe6b270a37d5bee36bc8beb.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

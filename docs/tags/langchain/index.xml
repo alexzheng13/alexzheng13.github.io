@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>LangChain on Blowing in the wind</title>
+    <link>https://alexzheng13.github.io/tags/langchain/</link>
+    <description>Recent content in LangChain on Blowing in the wind</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sat, 21 Feb 2026 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://alexzheng13.github.io/tags/langchain/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>LangChain Agent Builder 的记忆系统</title>
+      <link>https://alexzheng13.github.io/post/langchain-agent-builder-memory-system/</link>
+      <pubDate>Sat, 21 Feb 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/langchain-agent-builder-memory-system/</guid>
+      <description>&lt;p&gt;一个会议助手第一次把摘要写成大段文字，你纠正它：“以后用列表。”下一次整理另一场会议，它仍然沿用这个要求，而不需要重新提醒。&lt;/p&gt;
+
+&lt;p&gt;这类记忆不只是保存“聊过什么”，还会改变“以后怎样工作”。LangChain 在 Agent Builder 中采用的方式，是把指令、技能和知识表示为文件，让反馈能够变成下次运行时仍然可用的规则。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

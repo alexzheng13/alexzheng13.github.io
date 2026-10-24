@@ -211,6 +211,31 @@
           <section id="posts" class="posts">
       <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/contiguous-stacks/">Translation: Contiguous Stacks</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2019-11-30 </span>
+      <div class="post-category">
+          <a href="/en/categories/translation/"> Translation </a>
+          </div>
+        <span class="more-meta"> 1606 words </span>
+        <span class="more-meta"> 8 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      Contiguous stacks original address
+ Allocate a continuous stack memory space for each go coroutine. When the memory is used up, it will be reallocated/copied and grown.
+Why?  The current stack splitting mechanism has a &ldquo;hot split&rdquo; problem - if the stack space is almost full, calling the function will trigger the forced allocation of a new stack block. When the calling function returns, the new stack block will be released.
+    </div>
+    <div class="read-more">
+      <a href="/en/post/contiguous-stacks/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
+      <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/en/post/go-main-goroutine-scheduler-2/">Inside Go&#39;s Main Goroutine Scheduler (2)</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2019-11-13 </span>

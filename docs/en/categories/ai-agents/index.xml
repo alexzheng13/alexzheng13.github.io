@@ -263,5 +263,16 @@ Plan, compare, and revise before execution&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&l
 &lt;p&gt;This article follows the main line of the Stanford CS329A course and strings together test-time calculations, verifiers, tool feedback, planning search, reinforcement learning, in-depth research and long-term evaluation into a complete framework.&lt;/p&gt;</description>
     </item>
     
+    <item>
+      <title>LangChain Agent Builder’s Memory System</title>
+      <link>https://alexzheng13.github.io/en/post/langchain-agent-builder-memory-system/</link>
+      <pubDate>Sat, 21 Feb 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/post/langchain-agent-builder-memory-system/</guid>
+      <description>&lt;p&gt;A meeting assistant writes paragraphs. You ask for lists instead. At the next meeting, it follows that preference without another reminder.&lt;/p&gt;
+
+&lt;p&gt;This kind of memory changes how an agent works, not merely what it can recall. Agent Builder represents instructions, capabilities, and knowledge as files so feedback can become rules available to future runs.&lt;/p&gt;</description>
+    </item>
+    
   </channel>
 </rss>

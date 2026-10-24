@@ -90,5 +90,16 @@ Context Isolation     为子任务建立独立上下文&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Anthropic 第一代 Long-Running Agent Harness 的答案是：&lt;strong&gt;重置对话上下文，但把项目状态写进结构化工件，让下一轮 Agent 可以恢复工作。&lt;/strong&gt;&lt;/p&gt;</description>
     </item>
     
+    <item>
+      <title>LangChain Agent Builder 的记忆系统</title>
+      <link>https://alexzheng13.github.io/post/langchain-agent-builder-memory-system/</link>
+      <pubDate>Sat, 21 Feb 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/langchain-agent-builder-memory-system/</guid>
+      <description>&lt;p&gt;一个会议助手第一次把摘要写成大段文字，你纠正它：“以后用列表。”下一次整理另一场会议，它仍然沿用这个要求，而不需要重新提醒。&lt;/p&gt;
+
+&lt;p&gt;这类记忆不只是保存“聊过什么”，还会改变“以后怎样工作”。LangChain 在 Agent Builder 中采用的方式，是把指令、技能和知识表示为文件，让反馈能够变成下次运行时仍然可用的规则。&lt;/p&gt;</description>
+    </item>
+    
   </channel>
 </rss>

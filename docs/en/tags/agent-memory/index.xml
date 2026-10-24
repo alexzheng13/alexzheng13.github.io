@@ -49,5 +49,16 @@ Retrieve → Working context → Next action
 &lt;p&gt;This article follows &lt;strong&gt;Stanford CS 329Z Lecture 7: Agent Memory Architectures&lt;/strong&gt;, moving from motivation and memory types through architectures, evaluation, and open problems. Engineering examples and implementation suggestions are my additions; experimental claims refer to their stated setups.&lt;/p&gt;</description>
     </item>
     
+    <item>
+      <title>LangChain Agent Builder’s Memory System</title>
+      <link>https://alexzheng13.github.io/en/post/langchain-agent-builder-memory-system/</link>
+      <pubDate>Sat, 21 Feb 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/post/langchain-agent-builder-memory-system/</guid>
+      <description>&lt;p&gt;A meeting assistant writes paragraphs. You ask for lists instead. At the next meeting, it follows that preference without another reminder.&lt;/p&gt;
+
+&lt;p&gt;This kind of memory changes how an agent works, not merely what it can recall. Agent Builder represents instructions, capabilities, and knowledge as files so feedback can become rules available to future runs.&lt;/p&gt;</description>
+    </item>
+    
   </channel>
 </rss>

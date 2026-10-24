@@ -49,5 +49,16 @@
 &lt;p&gt;本文根据 &lt;strong&gt;Stanford CS 329Z Lecture 7: Agent Memory Architectures&lt;/strong&gt; 整理，沿着讲义的“动机 → 类型 → 架构 → 评测 → 开放问题”展开。文中的工程示例与设计建议是我的补充；实验结果会注明其具体设置。&lt;/p&gt;</description>
     </item>
     
+    <item>
+      <title>LangChain Agent Builder 的记忆系统</title>
+      <link>https://alexzheng13.github.io/post/langchain-agent-builder-memory-system/</link>
+      <pubDate>Sat, 21 Feb 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/langchain-agent-builder-memory-system/</guid>
+      <description>&lt;p&gt;一个会议助手第一次把摘要写成大段文字，你纠正它：“以后用列表。”下一次整理另一场会议，它仍然沿用这个要求，而不需要重新提醒。&lt;/p&gt;
+
+&lt;p&gt;这类记忆不只是保存“聊过什么”，还会改变“以后怎样工作”。LangChain 在 Agent Builder 中采用的方式，是把指令、技能和知识表示为文件，让反馈能够变成下次运行时仍然可用的规则。&lt;/p&gt;</description>
+    </item>
+    
   </channel>
 </rss>
