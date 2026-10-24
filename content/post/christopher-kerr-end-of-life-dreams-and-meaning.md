@@ -14,7 +14,7 @@ toc: true
 
 <!--more-->
 
-![Christopher Kerr 与 Steven Bartlett 的访谈封面](/img/posts/christopher-kerr-end-of-life/video-cover.jpg)
+[![Christopher Kerr 与 Steven Bartlett 的访谈封面，点击观看原视频](/img/posts/christopher-kerr-end-of-life/video-cover.jpg)](https://www.youtube.com/watch?v=GlaSnROMqRY)
 
 *访谈于 2026 年 10 月 19 日发布，封面来自原视频。下文为内容整理，并非逐字翻译或医疗建议。*
 

@@ -14,7 +14,7 @@ This account follows hospice physician Christopher Kerr’s Diary Of A CEO inter
 
 <!--more-->
 
-![Christopher Kerr and Steven Bartlett](/img/posts/christopher-kerr-end-of-life/video-cover.jpg)
+[![Christopher Kerr and Steven Bartlett — click to watch the original video](/img/posts/christopher-kerr-end-of-life/video-cover.jpg)](https://www.youtube.com/watch?v=GlaSnROMqRY)
 
 *Interview published October 19, 2026. Cover from the original video. This is a paraphrased account, not medical advice.*
 
