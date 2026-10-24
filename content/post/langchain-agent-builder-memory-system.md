@@ -32,6 +32,10 @@ toc: true
 - **Procedural Memory，程序性记忆**：怎样完成任务、遵循哪些规则，例如输出摘要前先区分决定与讨论。
 - **Episodic Memory，情景记忆**：过去具体发生过什么，例如某次任务的交互与执行经过。
 
+![原文中的记忆类型示意：程序性、语义与情景长期记忆及其与工作记忆的关系](/img/posts/langchain-agent-builder-memory/coala-memory.png)
+
+图源：[LangChain 原文](https://www.langchain.com/blog/how-we-built-agent-builders-memory-system)。图中上方的三类长期记忆，对应这里讨论的程序性、语义与情景记忆。
+
 “客户的名称是什么”和“客户会议需要隐藏哪些信息”，用途并不相同。前者帮助理解对象，后者影响执行方式；某次会议的完整对话，则又不同于从对话中提炼出来的规则。
 
 因此，给所有历史记录建立一个搜索入口，还不等于已经形成了行为记忆。系统还需要知道：哪些内容只是当时发生的事，哪些值得在以后继续使用。关于这几类记忆的关系，也可以结合 [Agent Memory Architectures](/post/cs329z-agent-memory-architectures/) 阅读。
@@ -66,6 +70,10 @@ agent-memory/
 
 [AGENTS.md](https://agents.md/) 本身是提供上下文与指令的 Markdown 约定。[Agent Skills](https://agentskills.io/home) 则把任务说明、脚本、参考资料等组织成可复用的能力包。它们能够承载不同种类的知识，不能只根据文件名认定所有内容都属于同一类记忆。
 
+![LangChain 原文将不同记忆映射为指令、技能、知识与对话文件的示意图](/img/posts/langchain-agent-builder-memory/memory-filesystem.png)
+
+图源：[LangChain 原文](https://www.langchain.com/blog/how-we-built-agent-builders-memory-system)。这是原文的概念映射：图中写的是 `mcp.json`，但正文说明实际采用自定义 `tools.json` 来选择 MCP 工具子集；图中的情景记忆文件也属于当时的规划，并非已经上线。
+
 ### 看到的是文件，底层可以是数据库
 
 原文中的文件实际保存在 **Postgres**，再通过虚拟文件系统提供给 Agent。模型操作的是路径和文本，后端负责把操作转换成存储的读写。
@@ -83,6 +91,12 @@ Postgres 中的持久化数据
 文件形式解决的是交互与组织方式，数据库解决的是持久化。两者并不冲突。[Deep Agents 的 backend 文档](https://docs.langchain.com/oss/python/deepagents/backends)也区分了线程内状态、本地文件与可跨会话使用的存储后端。
 
 这一区分很重要：**能写文件，不等于文件一定能跨会话保留。** 如果底层只有当前线程的临时状态，下一段独立会话仍然可能读不到它。
+
+原文还展示了一个内部使用的 LinkedIn 招聘 Agent：主指令、搜索子 Agent、工具配置与不同岗位的招聘要求，都可以在同一个文件视图中查看和维护。
+
+![Agent Builder 中招聘 Agent 的实际记忆文件界面，包含主指令、子 Agent、工具配置与岗位资料](/img/posts/langchain-agent-builder-memory/recruiter-memory-files.png)
+
+图源：[LangChain 原文](https://www.langchain.com/blog/how-we-built-agent-builders-memory-system)。这是产品实例截图，与上面的示意目录不同。
 
 ## 4. 一次纠正，怎样变成下一次的行为？
 
@@ -216,6 +230,10 @@ Markdown 和 JSON 易于查看、导出和版本管理，采用共同约定也�
 | 更多作用域 | 区分 Agent、用户和组织层面的记忆 |
 
 这些方向分别对应“保存什么、什么时候整理、怎样找到、对谁生效”。文件系统只是统一的入口，完整的记忆能力仍然需要这些机制共同工作。
+
+![实时路径在回复用户前更新记忆，后台方式将记忆整理放到独立流程](/img/posts/langchain-agent-builder-memory/hot-path-memory.png)
+
+图源：[LangChain 原文](https://www.langchain.com/blog/how-we-built-agent-builders-memory-system)。左侧是在任务过程中更新记忆，右侧是把整理放到独立后台流程。图中的“30 minutes later”是时序示意，不是固定运行频率；后台整理在原文发布时仍属于未来方向。
 
 ## 10. 把整套机制连起来
 

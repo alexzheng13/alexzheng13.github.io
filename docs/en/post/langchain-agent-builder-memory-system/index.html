@@ -71,7 +71,7 @@
 
 <meta itemprop="datePublished" content="2026-02-21T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2026-02-21T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1556">
+<meta itemprop="wordCount" content="1702">
 
 
 
@@ -224,7 +224,7 @@
         <div class="post-category">
             <a href="/en/categories/ai-agents/"> AI Agents </a>
             </div>
-          <span class="more-meta"> 1556 words </span>
+          <span class="more-meta"> 1702 words </span>
           <span class="more-meta"> 8 mins read </span>
         
       </div>
@@ -291,6 +291,10 @@
 <li><strong>Procedural memory:</strong> instructions and methods that shape behavior.</li>
 <li><strong>Episodic memory:</strong> particular past experiences and their sequence.</li>
 </ul>
+
+<p><img src="/img/posts/langchain-agent-builder-memory/coala-memory.png" alt="The original article’s diagram of procedural, semantic, and episodic long-term memory and their relationship to working memory" /></p>
+
+<p>Source: <a href="https://www.langchain.com/blog/how-we-built-agent-builders-memory-system">LangChain’s original article</a>. The three long-term memory categories at the top correspond to the distinction discussed here.</p>
 
 <p>A customer’s name, a rule for handling customer meetings, and a transcript of one meeting serve different purposes. Searching historical conversations does not by itself establish which lessons should guide future work.</p>
 
@@ -363,6 +367,10 @@
 
 <p><a href="https://agents.md/">AGENTS.md</a> is a Markdown convention for agent-facing context and instructions. <a href="https://agentskills.io/home">Agent Skills</a> package specialized instructions and supporting resources. Their contents can span knowledge categories; a filename alone does not determine a memory type.</p>
 
+<p><img src="/img/posts/langchain-agent-builder-memory/memory-filesystem.png" alt="LangChain’s conceptual mapping of memory to instruction, skill, knowledge, and conversation files" /></p>
+
+<p>Source: <a href="https://www.langchain.com/blog/how-we-built-agent-builders-memory-system">LangChain’s original article</a>. This is the original conceptual mapping. The diagram labels tool configuration <code>mcp.json</code>, while the text describes a custom <code>tools.json</code> for selecting an MCP tool subset. Episodic conversation files were also a planned direction, not a shipped feature at publication.</p>
+
 <h3 id="a-file-interface-does-not-require-disk-storage">A file interface does not require disk storage</h3>
 
 <p>In the original design, Postgres stores the data behind a virtual filesystem. The agent works with paths and content; the backend handles persistence.</p>
@@ -389,6 +397,12 @@ Persistent data in Postgres</code></pre></td></tr></table>
 <p>The interface organizes interaction; the backend determines storage. <a href="https://docs.langchain.com/oss/python/deepagents/backends">Deep Agents backends</a> distinguish thread-local state, local files, and durable storage.</p>
 
 <p>Being able to write a file does not automatically mean another conversation can retrieve it. Persistence and access scope must be configured appropriately.</p>
+
+<p>The original article also shows an internal LinkedIn recruiting agent. Its main instructions, search subagent, tool configuration, and job requirements can be inspected and maintained in a shared file view.</p>
+
+<p><img src="/img/posts/langchain-agent-builder-memory/recruiter-memory-files.png" alt="The recruiting agent’s memory file interface with main instructions, a subagent, tool configuration, and job reference material" /></p>
+
+<p>Source: <a href="https://www.langchain.com/blog/how-we-built-agent-builders-memory-system">LangChain’s original article</a>. This is a product example, distinct from the illustrative directory above.</p>
 
 <h2 id="4-from-a-correction-to-future-behavior">4. From a correction to future behavior</h2>
 
@@ -568,6 +582,10 @@ skills/*/SKILL.md Skill files one directory below skills
 </table>
 
 <p>These address what is retained, when it is consolidated, how it is found, and whom it applies to. The filesystem is a common interface, not a substitute for those decisions.</p>
+
+<p><img src="/img/posts/langchain-agent-builder-memory/hot-path-memory.png" alt="Hot-path memory updates before responding, compared with a separate background consolidation process" /></p>
+
+<p>Source: <a href="https://www.langchain.com/blog/how-we-built-agent-builders-memory-system">LangChain’s original article</a>. The left updates memory during the active task; the right separates consolidation into a background process. “30 minutes later” illustrates timing rather than a fixed schedule. Background consolidation remained a future direction in the original account.</p>
 
 <h2 id="10-connecting-the-pieces">10. Connecting the pieces</h2>
 

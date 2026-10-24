@@ -32,6 +32,10 @@ The original article uses CoALA’s distinction between:
 - **Procedural memory:** instructions and methods that shape behavior.
 - **Episodic memory:** particular past experiences and their sequence.
 
+![The original article’s diagram of procedural, semantic, and episodic long-term memory and their relationship to working memory](/img/posts/langchain-agent-builder-memory/coala-memory.png)
+
+Source: [LangChain’s original article](https://www.langchain.com/blog/how-we-built-agent-builders-memory-system). The three long-term memory categories at the top correspond to the distinction discussed here.
+
 A customer’s name, a rule for handling customer meetings, and a transcript of one meeting serve different purposes. Searching historical conversations does not by itself establish which lessons should guide future work.
 
 For more background, see [Agent Memory Architectures](/en/post/cs329z-agent-memory-architectures/).
@@ -64,6 +68,10 @@ agent-memory/
 
 [AGENTS.md](https://agents.md/) is a Markdown convention for agent-facing context and instructions. [Agent Skills](https://agentskills.io/home) package specialized instructions and supporting resources. Their contents can span knowledge categories; a filename alone does not determine a memory type.
 
+![LangChain’s conceptual mapping of memory to instruction, skill, knowledge, and conversation files](/img/posts/langchain-agent-builder-memory/memory-filesystem.png)
+
+Source: [LangChain’s original article](https://www.langchain.com/blog/how-we-built-agent-builders-memory-system). This is the original conceptual mapping. The diagram labels tool configuration `mcp.json`, while the text describes a custom `tools.json` for selecting an MCP tool subset. Episodic conversation files were also a planned direction, not a shipped feature at publication.
+
 ### A file interface does not require disk storage
 
 In the original design, Postgres stores the data behind a virtual filesystem. The agent works with paths and content; the backend handles persistence.
@@ -81,6 +89,12 @@ Persistent data in Postgres
 The interface organizes interaction; the backend determines storage. [Deep Agents backends](https://docs.langchain.com/oss/python/deepagents/backends) distinguish thread-local state, local files, and durable storage.
 
 Being able to write a file does not automatically mean another conversation can retrieve it. Persistence and access scope must be configured appropriately.
+
+The original article also shows an internal LinkedIn recruiting agent. Its main instructions, search subagent, tool configuration, and job requirements can be inspected and maintained in a shared file view.
+
+![The recruiting agent’s memory file interface with main instructions, a subagent, tool configuration, and job reference material](/img/posts/langchain-agent-builder-memory/recruiter-memory-files.png)
+
+Source: [LangChain’s original article](https://www.langchain.com/blog/how-we-built-agent-builders-memory-system). This is a product example, distinct from the illustrative directory above.
 
 ## 4. From a correction to future behavior
 
@@ -207,6 +221,10 @@ The article listed these as future directions, not completed features:
 | Additional scopes | Distinguish agent-, user-, and organization-level memory |
 
 These address what is retained, when it is consolidated, how it is found, and whom it applies to. The filesystem is a common interface, not a substitute for those decisions.
+
+![Hot-path memory updates before responding, compared with a separate background consolidation process](/img/posts/langchain-agent-builder-memory/hot-path-memory.png)
+
+Source: [LangChain’s original article](https://www.langchain.com/blog/how-we-built-agent-builders-memory-system). The left updates memory during the active task; the right separates consolidation into a background process. “30 minutes later” illustrates timing rather than a fixed schedule. Background consolidation remained a future direction in the original account.
 
 ## 10. Connecting the pieces
 
