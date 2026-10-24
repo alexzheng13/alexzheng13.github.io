@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness - Blowing in the wind</title>
+  <title>Anthropic Agent 演进（一）：从 Workflow 到 Agent - Blowing in the wind</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -61,7 +61,7 @@
 <meta name="site-language-route" data-language="en" content="/en/post/anthropic-agent-evolution-1-from-workflows-to-agents/">
 <meta name="site-current-language" content="zh-cn"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
 
-<meta property="og:title" content="Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness" />
+<meta property="og:title" content="Anthropic Agent 演进（一）：从 Workflow 到 Agent" />
 <meta property="og:description" content="“Agent” 经常被当作一个宽泛标签：只要模型调用了工具、执行了多步任务，就被称为 Agent。Anthropic 的工程实践给出了一个更有用的区分：Workflow 的路径由代码预先定义；Agent 则由模型根据环境反馈动态决定下一步。
 
 这是“Anthropic Agent 演进”系列的第一篇。我们先建立共同语言：从增强型 LLM、固定 Workflow，一直到真正的自主 Agent，并解释为什么模型外部还需要一层 Harness。" />
@@ -69,7 +69,7 @@
 <meta property="og:url" content="https://alexzheng13.github.io/post/anthropic-agent-evolution-1-from-workflows-to-agents/" />
 <meta property="article:published_time" content="2026-09-12T21:08:45+02:00" />
 <meta property="article:modified_time" content="2026-09-12T21:08:45+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
-<meta itemprop="name" content="Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness">
+<meta itemprop="name" content="Anthropic Agent 演进（一）：从 Workflow 到 Agent">
 <meta itemprop="description" content="“Agent” 经常被当作一个宽泛标签：只要模型调用了工具、执行了多步任务，就被称为 Agent。Anthropic 的工程实践给出了一个更有用的区分：Workflow 的路径由代码预先定义；Agent 则由模型根据环境反馈动态决定下一步。
 
 这是“Anthropic Agent 演进”系列的第一篇。我们先建立共同语言：从增强型 LLM、固定 Workflow，一直到真正的自主 Agent，并解释为什么模型外部还需要一层 Harness。">
@@ -83,7 +83,7 @@
 
 <meta itemprop="keywords" content="Anthropic Agent 演进,AI Agents,Agent Harness,Workflow,ACI," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness"/>
+<meta name="twitter:title" content="Anthropic Agent 演进（一）：从 Workflow 到 Agent"/>
 <meta name="twitter:description" content="“Agent” 经常被当作一个宽泛标签：只要模型调用了工具、执行了多步任务，就被称为 Agent。Anthropic 的工程实践给出了一个更有用的区分：Workflow 的路径由代码预先定义；Agent 则由模型根据环境反馈动态决定下一步。
 
 这是“Anthropic Agent 演进”系列的第一篇。我们先建立共同语言：从增强型 LLM、固定 Workflow，一直到真正的自主 Agent，并解释为什么模型外部还需要一层 Harness。"/>
@@ -225,7 +225,7 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness</h1>
+      <h1 class="post-title">Anthropic Agent 演进（一）：从 Workflow 到 Agent</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2026-09-12 </span>

@@ -1,5 +1,5 @@
 ---
-title: "CS 329Z：Context Management Patterns——让 Agent 在长任务中保持专注与连续性"
+title: "CS 329Z：Context Management Patterns"
 date: 2026-10-12 22:25:07 +0200
 slug: "cs329z-context-management-patterns"
 description: "整理 Stanford CS329Z Lecture 6 的上下文管理章节：Persistent Event Log、Memory Offloading、Compaction、Observation Masking、Context Isolation 与 Progressive Disclosure，并解释它们如何组合支撑长任务。"

@@ -1,5 +1,5 @@
 ---
-title: "CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks"
+title: "CS 329Z: Context Management Patterns"
 date: 2026-10-12 22:25:07 +0200
 slug: "cs329z-context-management-patterns"
 description: "Five context management patterns from Stanford CS329Z Lecture 6: persistent event logs, memory offloading, compaction, observation masking, and context isolation, with progressive disclosure and a practical combination strategy."

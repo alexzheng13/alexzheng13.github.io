@@ -1,5 +1,5 @@
 ---
-title: "CS 329Z：Agent Memory Architectures——记忆类型、架构设计与评测"
+title: "CS 329Z：Agent Memory Architectures"
 date: 2026-10-14 21:42:43 +0200
 slug: "cs329z-agent-memory-architectures"
 description: "基于 Stanford CS329Z Lecture 7，梳理 Agent 的工作、情景、语义和程序性记忆，以及 Voyager、AWM、MemGPT、MemoryOS、Generative Agents、A-Mem、Mem0 等架构，并比较四类记忆评测。"

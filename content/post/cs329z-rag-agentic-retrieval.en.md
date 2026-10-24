@@ -1,5 +1,5 @@
 ---
-title: "CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions"
+title: "CS 329Z: From RAG to Agentic RAG"
 date: 2026-10-06 09:00:00 +0200
 slug: "cs329z-rag-agentic-retrieval"
 description: "A structured guide to RAG based on Stanford CS 329Z notes: Retriever–Reader, chunking, BM25, DPR, ColBERT, hybrid search, reranking, evaluation, GraphRAG, Self-RAG, CRAG, and Search-R1."

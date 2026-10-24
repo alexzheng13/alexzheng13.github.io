@@ -12,7 +12,7 @@
     
     
     <item>
-      <title>CS 329Z：Context Management Patterns——让 Agent 在长任务中保持专注与连续性</title>
+      <title>CS 329Z：Context Management Patterns</title>
       <link>https://alexzheng13.github.io/post/cs329z-context-management-patterns/</link>
       <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
       
@@ -42,7 +42,7 @@ Context Isolation     为子任务建立独立上下文&lt;/code&gt;&lt;/pre&gt;
     </item>
     
     <item>
-      <title>CS 329Z：Frameworks &amp; Orchestration——从 Agent Harness 到可靠执行与可观测性</title>
+      <title>CS 329Z：Frameworks &amp; Orchestration</title>
       <link>https://alexzheng13.github.io/post/cs329z-frameworks-orchestration/</link>
       <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
       
@@ -80,7 +80,7 @@ Telemetry + Evals             让系统可观察、可比较、可改进&lt;/cod
     </item>
     
     <item>
-      <title>Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness</title>
+      <title>Anthropic Agent 演进（一）：从 Workflow 到 Agent</title>
       <link>https://alexzheng13.github.io/post/anthropic-agent-evolution-1-from-workflows-to-agents/</link>
       <pubDate>Sat, 12 Sep 2026 21:08:45 +0200</pubDate>
       

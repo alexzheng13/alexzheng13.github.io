@@ -1,5 +1,5 @@
 ---
-title: "CS 329Z: Frameworks & Orchestration — From Agent Harnesses to Durable Execution"
+title: "CS 329Z: Frameworks & Orchestration"
 date: 2026-10-09 09:00:00 +0200
 slug: "cs329z-frameworks-orchestration"
 description: "A structured guide to Stanford CS 329Z Lecture 5: DSPy, LangGraph, agent harnesses, OpenHands, Pi Agent, OpenClaw, Meta-Harness, Temporal, observability, Shepherd, and system-level evals."

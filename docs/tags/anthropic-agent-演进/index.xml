@@ -12,7 +12,7 @@
     
     
     <item>
-      <title>Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness</title>
+      <title>Anthropic Agent 演进（一）：从 Workflow 到 Agent</title>
       <link>https://alexzheng13.github.io/post/anthropic-agent-evolution-1-from-workflows-to-agents/</link>
       <pubDate>Sat, 12 Sep 2026 21:08:45 +0200</pubDate>
       
@@ -45,7 +45,7 @@
     </item>
     
     <item>
-      <title>Anthropic Agent 演进（四）：Managed Agent Runtime——Session、Harness 与 Sandbox</title>
+      <title>Anthropic Agent 演进（四）：Managed Agent Runtime</title>
       <link>https://alexzheng13.github.io/post/anthropic-agent-evolution-4-managed-agent-runtime/</link>
       <pubDate>Sat, 12 Sep 2026 21:05:45 +0200</pubDate>
       

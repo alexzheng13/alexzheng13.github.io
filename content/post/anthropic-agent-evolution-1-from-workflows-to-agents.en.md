@@ -1,5 +1,5 @@
 ---
-title: "Anthropic Agent Evolution I: From Workflows to Agents—and Why Harnesses Matter"
+title: "Anthropic Agent Evolution I: From Workflows to Agents"
 date: 2026-09-12 21:08:45 +0200
 slug: "anthropic-agent-evolution-1-from-workflows-to-agents"
 categories: [AI Agents]

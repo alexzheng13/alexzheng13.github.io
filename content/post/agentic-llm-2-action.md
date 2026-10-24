@@ -1,5 +1,5 @@
 ---
-title: "Agentic LLM（二）：Action——从多模态感知到 VLA 与世界模型"
+title: "Agentic LLM（二）：Action"
 date: 2026-10-05 19:30:00 +0200
 slug: "agentic-llm-2-action"
 description: "Agentic LLM 系列第二篇：从 VLM 的视觉理解出发，解释 VLA 如何把语言、视觉与机器人动作连接起来，并进一步讨论 Model-Based RL、World Model 与可预测的 Agent 行动。"

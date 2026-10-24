@@ -1,5 +1,5 @@
 ---
-title: "CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation"
+title: "CS 329Z: Agent Memory Architectures"
 date: 2026-10-14 21:42:43 +0200
 slug: "cs329z-agent-memory-architectures"
 description: "Stanford CS329Z Lecture 7 on working, episodic, semantic, and procedural memory; architectures from Voyager and MemGPT to Generative Agents and Mem0; and four benchmarks for evaluating agent memory."

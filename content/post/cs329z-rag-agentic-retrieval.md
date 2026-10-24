@@ -1,5 +1,5 @@
 ---
-title: "CS 329Z：从 RAG 到 Agentic RAG——检索、重排与闭环决策"
+title: "CS 329Z：从 RAG 到 Agentic RAG"
 date: 2026-10-06 09:00:00 +0200
 slug: "cs329z-rag-agentic-retrieval"
 description: "基于 Stanford CS 329Z 笔记，系统梳理 RAG 的 Retriever–Reader 框架、Chunking、BM25、DPR、ColBERT、Hybrid Search、重排、评测、GraphRAG，以及 Self-RAG、CRAG 与 Search-R1。"

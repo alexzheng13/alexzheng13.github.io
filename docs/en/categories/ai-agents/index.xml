@@ -12,7 +12,7 @@
     
     
     <item>
-      <title>CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation</title>
+      <title>CS 329Z: Agent Memory Architectures</title>
       <link>https://alexzheng13.github.io/en/post/cs329z-agent-memory-architectures/</link>
       <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
       
@@ -50,7 +50,7 @@ Retrieve → Working context → Next action
     </item>
     
     <item>
-      <title>CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks</title>
+      <title>CS 329Z: Context Management Patterns</title>
       <link>https://alexzheng13.github.io/en/post/cs329z-context-management-patterns/</link>
       <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
       
@@ -80,7 +80,7 @@ Context isolation     Give subtasks their own context&lt;/code&gt;&lt;/pre&gt;&l
     </item>
     
     <item>
-      <title>CS 329Z: Frameworks &amp; Orchestration — From Agent Harnesses to Durable Execution</title>
+      <title>CS 329Z: Frameworks &amp; Orchestration</title>
       <link>https://alexzheng13.github.io/en/post/cs329z-frameworks-orchestration/</link>
       <pubDate>Fri, 09 Oct 2026 09:00:00 +0200</pubDate>
       
@@ -118,7 +118,7 @@ Telemetry + evals              makes the system observable and improvable&lt;/co
     </item>
     
     <item>
-      <title>CS 329Z: From RAG to Agentic RAG — Retrieval, Reranking, and Closed-Loop Decisions</title>
+      <title>CS 329Z: From RAG to Agentic RAG</title>
       <link>https://alexzheng13.github.io/en/post/cs329z-rag-agentic-retrieval/</link>
       <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
       
@@ -142,7 +142,7 @@ Telemetry + evals              makes the system observable and improvable&lt;/co
     </item>
     
     <item>
-      <title>Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models</title>
+      <title>Agentic LLM (II): Action</title>
       <link>https://alexzheng13.github.io/en/post/agentic-llm-2-action/</link>
       <pubDate>Mon, 05 Oct 2026 19:30:00 +0200</pubDate>
       
@@ -209,7 +209,7 @@ Plan, compare, and revise before execution&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&l
     </item>
     
     <item>
-      <title>Anthropic Agent Evolution I: From Workflows to Agents—and Why Harnesses Matter</title>
+      <title>Anthropic Agent Evolution I: From Workflows to Agents</title>
       <link>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-1-from-workflows-to-agents/</link>
       <pubDate>Sat, 12 Sep 2026 21:08:45 +0200</pubDate>
       
@@ -242,7 +242,7 @@ Plan, compare, and revise before execution&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&l
     </item>
     
     <item>
-      <title>Anthropic Agent Evolution IV: Managed Agent Runtime—Session, Harness, and Sandbox</title>
+      <title>Anthropic Agent Evolution IV: Managed Agent Runtime</title>
       <link>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-4-managed-agent-runtime/</link>
       <pubDate>Sat, 12 Sep 2026 21:05:45 +0200</pubDate>
       

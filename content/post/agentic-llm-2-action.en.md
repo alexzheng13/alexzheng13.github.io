@@ -1,5 +1,5 @@
 ---
-title: "Agentic LLM (II): Action — From Multimodal Perception to VLAs and World Models"
+title: "Agentic LLM (II): Action"
 date: 2026-10-05 19:30:00 +0200
 slug: "agentic-llm-2-action"
 description: "Part II of the Agentic LLM series: how VLMs ground visual environments, how VLAs connect language and perception to robot control, and how world models support prediction and planning."

@@ -1,5 +1,5 @@
 ---
-title: "What Matters at Life’s End? Christopher Kerr’s Interview, in Order"
+title: "What Matters at Life’s End?"
 date: 2026-10-19 09:00:16 +0200
 slug: "christopher-kerr-end-of-life-dreams-and-meaning"
 description: "A chronological account of Christopher Kerr’s interview: dreams, regret, patient priorities, longevity, loneliness, grief, hope, and meaning."

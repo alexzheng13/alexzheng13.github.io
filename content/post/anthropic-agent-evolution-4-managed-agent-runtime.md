@@ -1,5 +1,5 @@
 ---
-title: "Anthropic Agent 演进（四）：Managed Agent Runtime——Session、Harness 与 Sandbox"
+title: "Anthropic Agent 演进（四）：Managed Agent Runtime"
 date: 2026-09-12 21:05:45 +0200
 slug: "anthropic-agent-evolution-4-managed-agent-runtime"
 categories: [AI Agents]

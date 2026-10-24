@@ -1,5 +1,5 @@
 ---
-title: "CS 329Z：Frameworks & Orchestration——从 Agent Harness 到可靠执行与可观测性"
+title: "CS 329Z：Frameworks & Orchestration"
 date: 2026-10-09 09:00:00 +0200
 slug: "cs329z-frameworks-orchestration"
 description: "基于 Stanford CS 329Z Lecture 5，梳理 DSPy、LangGraph、Agent Harness、OpenHands、Pi Agent、OpenClaw、Meta-Harness、Temporal、MLflow、LangSmith、Langfuse 与 Shepherd 在 Agent 系统中的职责边界。"

@@ -1,5 +1,5 @@
 ---
-title: "Anthropic Agent 演进（一）：从 Workflow 到 Agent，为什么需要 Harness"
+title: "Anthropic Agent 演进（一）：从 Workflow 到 Agent"
 date: 2026-09-12 21:08:45 +0200
 slug: "anthropic-agent-evolution-1-from-workflows-to-agents"
 categories: [AI Agents]

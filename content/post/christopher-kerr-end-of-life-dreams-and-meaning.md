@@ -1,5 +1,5 @@
 ---
-title: "当人生接近终点，什么才重要？——Christopher Kerr 访谈整理"
+title: "当人生接近终点，什么才重要？"
 date: 2026-10-19 09:00:16 +0200
 slug: "christopher-kerr-end-of-life-dreams-and-meaning"
 description: "按时间顺序整理 Christopher Kerr 的访谈：临终梦境、遗憾与患者优先级、长寿与生活质量、孤独与悲伤、希望如何改变，以及生命的意义。"

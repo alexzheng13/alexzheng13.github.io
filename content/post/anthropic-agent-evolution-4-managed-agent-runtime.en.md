@@ -1,5 +1,5 @@
 ---
-title: "Anthropic Agent Evolution IV: Managed Agent Runtime—Session, Harness, and Sandbox"
+title: "Anthropic Agent Evolution IV: Managed Agent Runtime"
 date: 2026-09-12 21:05:45 +0200
 slug: "anthropic-agent-evolution-4-managed-agent-runtime"
 categories: [AI Agents]
