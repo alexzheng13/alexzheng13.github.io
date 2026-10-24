@@ -48,9 +48,41 @@ Kerr 团队 2014 年的一项纵向研究，最终纳入 59 位临终关怀住�
 
 对普通读者而言，最值得带走的可能不是一个答案，而是一种区分：**我可以认真听一个人的经历，同时承认自己不知道它的原因。**
 
-## 3. 关系重要，不意味着工作与成就不重要
+## 3. 临终关怀患者最在意什么？一张 11 项排序表
 
-访谈在[约 19:11](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1151s)讨论患者在意的事，在[约 21:23](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1283s)转向日常生活的价值排序。
+### 患者的排序，与旁人的想象并不一样
+
+访谈在[约 19:11](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1151s)开始讨论 **What matters to hospice patients（临终关怀患者最在意什么）**。这部分不只是抽象地说“关系重要”，而是比较患者自己的照护目标与医学生对患者目标的判断。
+
+对应研究是 Levy、Grant、Kerr 等人的 *Hospice Patient Care Goals and Medical Students’ Perceptions: Evidence of a Generation Gap?*，2020 年在线发表、收录于 2021 年期刊。研究调查了 **80 位临终关怀患者与 176 位医学生**，使用包含 11 项照护目标的问卷。[原始研究](https://doi.org/10.1177/1049909120934737)
+
+下面按节目展示的患者排序整理为中文；完整次序也可对照[这份研究介绍](https://www.1800hospice.com/blog/doctors-understand-hospice-patients/)。
+
+| 患者排序 | 最在意的事情 |
+| --- | --- |
+| 1 | 不成为家人的负担 |
+| 2 | 有时间与家人、朋友相处 |
+| 3 | 疼痛与其他症状得到控制 |
+| 4 | 与上帝和解、内心得到安宁 |
+| 5 | 保持清醒的意识 |
+| 6 | 能够在家中离世 |
+| 7 | 自己的照护意愿得到遵守 |
+| 8 | 感到自己的一生有意义 |
+| 9 | 尽可能延长生命 |
+| 10 | 安排好财务事务 |
+| 11 | 化解与他人的冲突 |
+
+*这是特定研究样本对给定 11 项目标的群体排序，不是每位患者的个人排序，也不是普遍适用的“人生重要性排行榜”。第 4 项原问卷表述为与上帝处于平和关系；Kerr 在[约 27:36](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1656s)进一步从信仰与存在层面的安宁来解释，不应据此认定所有患者都有宗教信仰。*
+
+### 这张表最值得注意的三点
+
+首先，排在第一位的是**不成为家人的负担**。它提醒陪伴者：除了问“你需要什么”，也可以认真听听对方是否担心拖累家人。这个担忧需要被理解，不应被当作患者真的“是负担”的证据。
+
+其次，**旁人设想的临终问题，未必就是患者当下最关心的问题**。节目中，医学生把“人生是否有意义”排在第 2 位，患者排在第 8 位；医学生把“化解冲突”排在第 7 位，患者排在第 11 位。研究摘要也指出，两组对 11 项目标中的 7 项判断存在显著差异。[访谈讨论](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1897s) · [研究结果](https://doi.org/10.1177/1049909120934737)
+
+最后，“尽可能延长生命”排第 9，**不代表患者不想活，也不代表应该停止某种治疗**。排序是在给定目标之间比较相对优先级；低位项目仍然可能重要，个体的愿望也可能不同。更合理的启发是先问本人，而不是替本人决定什么才值得。
+
+### 关系重要，不意味着工作与成就不重要
 
 我的理解不是“事业没有意义”，而是不能让事业替所有价值做决定。
 
@@ -108,6 +140,7 @@ Kerr 团队 2014 年的一项纵向研究，最终纳入 59 位临终关怀住�
 ## 原视频与延伸阅读
 
 - [完整访谈：The Diary Of A CEO × Christopher Kerr](https://www.youtube.com/watch?v=GlaSnROMqRY)
+- [Levy 等，2021：患者照护目标与医学生判断的比较研究](https://doi.org/10.1177/1049909120934737)，2020 年在线发表，DOI：10.1177/1049909120934737；[完整患者排序的研究介绍](https://www.1800hospice.com/blog/doctors-understand-hospice-patients/)。
 - [公开访谈文字稿](https://podcasts.happyscribe.com/the-diary-of-a-ceo-with-steven-bartlett/the-deathbed-doctor-at-the-end-of-your-life-only-1-thing-will-matter-dr-christopher-kerr)；自动转写可能有误，时间与表述以原视频为准。
 - [Kerr 等，2014：临终梦境与视象的纵向研究](https://pubmed.ncbi.nlm.nih.gov/24410369/)，DOI：10.1089/jpm.2013.0371。
 - [Nosek 等，2015：患者视角的定性分析](https://pubmed.ncbi.nlm.nih.gov/24443170/)，DOI：10.1177/1049909113517291。

@@ -38,9 +38,41 @@ A 2023 study interviewing 13 multidisciplinary hospice providers emphasized rapp
 
 For me, the useful distinction is simple: **I can listen seriously to someone’s experience without claiming to know why it happened.** Uncertainty need not become either dismissal or supernatural certainty.
 
-## 3. Relationships matter without making achievement meaningless
+## 3. What matters to hospice patients? Eleven ranked priorities
 
-The interview discusses patients’ priorities around [19:11](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1151s), then turns to everyday priorities around [21:23](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1283s).
+### Patients’ priorities are not always what others predict
+
+Around [19:11](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1151s), the interview introduces **what matters to hospice patients**, comparing their care goals with medical students’ predictions.
+
+The corresponding study by Levy, Grant, Kerr, and colleagues, *Hospice Patient Care Goals and Medical Students’ Perceptions: Evidence of a Generation Gap?*, appeared online in 2020 and in a 2021 journal issue. It surveyed **80 hospice patients and 176 medical students** using 11 care goals. [Original research](https://doi.org/10.1177/1049909120934737)
+
+The table paraphrases the patient priorities in the order presented in the episode. The full order is also reproduced in [this research overview](https://www.1800hospice.com/blog/doctors-understand-hospice-patients/).
+
+| Patient rank | Priority |
+| --- | --- |
+| 1 | Avoid placing a burden on family |
+| 2 | Share time with loved ones |
+| 3 | Obtain relief from pain and other symptoms |
+| 4 | Find peace in one’s relationship with God |
+| 5 | Retain mental awareness |
+| 6 | Be able to die at home |
+| 7 | Have one’s care wishes respected |
+| 8 | Feel that one’s life has had meaning |
+| 9 | Extend life as much as possible |
+| 10 | Put financial affairs in order |
+| 11 | Settle interpersonal conflicts |
+
+*This is a group ordering of 11 specified goals in a particular sample—not every participant’s personal ranking or a universal ranking of life’s values. The fourth item refers to God in the questionnaire; around [27:36](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1656s), Kerr discusses it more broadly as spiritual or existential peace. It does not establish that all patients are religious.*
+
+### Three things worth noticing
+
+First, avoiding a burden on family came first. For someone offering support, that suggests listening for concerns about the effect of illness on loved ones—not treating those concerns as evidence that the person actually is a burden.
+
+Second, an observer’s imagined end-of-life concerns may differ from the patient’s. In the episode, medical students placed a meaningful life second, compared with eighth for patients; resolving conflicts was seventh versus eleventh. The study abstract reports statistically significant differences on seven of the eleven goals. [Interview discussion](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1897s) · [Research findings](https://doi.org/10.1177/1049909120934737)
+
+Third, placing life extension ninth does **not** mean patients do not want to live, or that a treatment should be stopped. These are relative priorities among specified options. Lower-ranked goals can still matter, and individual preferences vary. The practical lesson is to ask the person rather than decide for them.
+
+### Relationships matter without making achievement meaningless
 
 My takeaway is not that careers do not matter. Work can provide security, independence, and a way to care for others. The problem begins when it gets to make every decision.
 
@@ -85,6 +117,7 @@ What I want to retain is not certainty about death, but attention to the present
 ## Sources and further reading
 
 - [Full interview: The Diary Of A CEO × Christopher Kerr](https://www.youtube.com/watch?v=GlaSnROMqRY).
+- [Levy et al., 2021: patient care goals and medical students’ perceptions](https://doi.org/10.1177/1049909120934737), published online in 2020. DOI: 10.1177/1049909120934737. [Research overview with the full patient ranking](https://www.1800hospice.com/blog/doctors-understand-hospice-patients/).
 - [Public interview transcript](https://podcasts.happyscribe.com/the-diary-of-a-ceo-with-steven-bartlett/the-deathbed-doctor-at-the-end-of-your-life-only-1-thing-will-matter-dr-christopher-kerr). Automated transcription may contain errors; the original video takes precedence.
 - [Kerr et al., 2014: longitudinal study of hospice patients’ experiences](https://pubmed.ncbi.nlm.nih.gov/24410369/). DOI: 10.1089/jpm.2013.0371.
 - [Nosek et al., 2015: a qualitative perspective from hospice patients](https://pubmed.ncbi.nlm.nih.gov/24443170/). DOI: 10.1177/1049909113517291.
