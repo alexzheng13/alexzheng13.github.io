@@ -2,7 +2,7 @@
 title: "What Matters at Life’s End: Christopher Kerr on Connection, Hope, and Care"
 date: 2026-10-19 09:00:16 +0200
 slug: "christopher-kerr-end-of-life-dreams-and-meaning"
-description: "Notes on Christopher Kerr’s Diary Of A CEO interview, with research on end-of-life dreams and reflections on relationships, hope, and being present."
+description: "Notes on Christopher Kerr’s Diary Of A CEO interview: regret, eleven ranked hospice care priorities, and reflections on relationships, hope, and being present."
 categories: [Life & Reflections]
 tags: [Meaning of Life, Relationships, Hospice Care, Christopher Kerr, Interview Notes]
 toc: true
@@ -24,19 +24,21 @@ These notes draw on the public video description, chapters, and [public intervie
 
 Kerr is a hospice physician and the author of *Death Is But a Dream*. His conversation with Steven Bartlett addresses end-of-life dreams, the importance of connection, and how hope changes when recovery is no longer possible. It should not be read as scientific proof of an afterlife. [Original interview](https://www.youtube.com/watch?v=GlaSnROMqRY)
 
-End-of-life dreams and visions, or ELDVs, concern experiences reported during dying. They are not the same research subject as near-death experiences reported after resuscitation.
+## 2. Regret: is it what matters most at the end?
 
-## 2. An experience can matter without its cause being settled
+### Having an answer is not the same as having a priority
 
-A 2014 longitudinal study by Kerr and colleagues included a final sample of 59 hospice inpatients. Repeated interviews documented dreams and visions; experiences involving deceased loved ones were often comforting. [Original study](https://pubmed.ncbi.nlm.nih.gov/24410369/)
+Around [18:18](https://www.youtube.com/watch?v=GlaSnROMqRY&t=1098s), the host brings up Bronnie Ware’s well-known accounts of end-of-life regrets. Kerr distinguishes answering a question about regret from making it a priority in everyday care. [Interview transcript](https://podcasts.happyscribe.com/the-diary-of-a-ceo-with-steven-bartlett/the-deathbed-doctor-at-the-end-of-your-life-only-1-thing-will-matter-dr-christopher-kerr)
 
-A separate qualitative analysis of 63 patients’ accounts identified themes including comforting presence, preparation to leave, encounters with the deceased, distress, and unfinished business. **Not every experience was peaceful.** [Qualitative study](https://pubmed.ncbi.nlm.nih.gov/24443170/)
+The next section’s ranking helps frame that distinction. Having unfinished business and deciding what matters now are different questions. Still, a low ranking for resolving conflicts does not establish an absence of regret: the survey was not a direct measure of it.
 
-There are important limits here. A particular hospice sample does not establish what everyone experiences. Feeling that something is real does not establish its external cause. Families should not use a narrative alone to rule out delirium, medication effects, or another medical concern.
+### This is not a claim that everyone finds peace
 
-A 2023 study interviewing 13 multidisciplinary hospice providers emphasized rapport, active listening, and individualized meaning. Its proposed care recommendations were preliminary, not a diagnostic test. [Study and recommendations](https://pubmed.ncbi.nlm.nih.gov/36603106/)
+Around [33:36](https://www.youtube.com/watch?v=GlaSnROMqRY&t=2016s), Kerr acknowledges patients distressed by past wrongdoing. His observations should not become a claim that nobody dies with regrets. The discussion returns to regret around [51:35](https://www.youtube.com/watch?v=GlaSnROMqRY&t=3095s).
 
-For me, the useful distinction is simple: **I can listen seriously to someone’s experience without claiming to know why it happened.** Uncertainty need not become either dismissal or supernatural certainty.
+My own takeaway is not to make a regret-free life another compulsory achievement. We can take responsibility for harm, repair what can be repaired, and accept that some choices have no perfect answer.
+
+For someone offering support, that means neither assuming a person needs to review every mistake nor insisting they let everything go. Listening to what they actually want to discuss matters more than arranging a tidy ending for them.
 
 ## 3. What matters to hospice patients? Eleven ranked priorities
 
@@ -119,6 +121,3 @@ What I want to retain is not certainty about death, but attention to the present
 - [Full interview: The Diary Of A CEO × Christopher Kerr](https://www.youtube.com/watch?v=GlaSnROMqRY).
 - [Levy et al., 2021: patient care goals and medical students’ perceptions](https://doi.org/10.1177/1049909120934737), published online in 2020. DOI: 10.1177/1049909120934737. [Research overview with the full patient ranking](https://www.1800hospice.com/blog/doctors-understand-hospice-patients/).
 - [Public interview transcript](https://podcasts.happyscribe.com/the-diary-of-a-ceo-with-steven-bartlett/the-deathbed-doctor-at-the-end-of-your-life-only-1-thing-will-matter-dr-christopher-kerr). Automated transcription may contain errors; the original video takes precedence.
-- [Kerr et al., 2014: longitudinal study of hospice patients’ experiences](https://pubmed.ncbi.nlm.nih.gov/24410369/). DOI: 10.1089/jpm.2013.0371.
-- [Nosek et al., 2015: a qualitative perspective from hospice patients](https://pubmed.ncbi.nlm.nih.gov/24443170/). DOI: 10.1177/1049909113517291.
-- [Grant et al., 2023: initial guidelines and recommendations](https://pubmed.ncbi.nlm.nih.gov/36603106/). DOI: 10.1089/jpm.2022.0419.
