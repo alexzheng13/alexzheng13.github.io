@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/post/" />
 
-<meta property="og:updated_time" content="2026-10-19T09:00:16+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-24T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">文章归档</h1>
-      <p>按年份浏览全部 36 篇文章</p>
+      <p>按年份浏览全部 37 篇文章</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         订阅 RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="按年份排列的文章">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/post/anthropic-agent-skills/">
+          <time datetime="2026-10-24">10-24</time>
+          <span>Anthropic Agent Skills</span>
+        </a>
         <a class="blog-archive-index-item" href="/post/christopher-kerr-end-of-life-dreams-and-meaning/">
           <time datetime="2026-10-19">10-19</time>
           <span>当人生接近终点，什么才重要？</span>
@@ -403,6 +407,40 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="最近文章">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/post/anthropic-agent-skills/">Anthropic Agent Skills</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-10-24">2026年10月24日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 10 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>让一个模型“帮我写篇博客”并不难。难的是让它每次都记得保留源码、正确处理公式、补齐中英文版本，并在发布前检查页面。模型可能具备这些单项能力，却不了解这套具体的工作方法。</p>
+
+<p>Anthropic 的 Agent Skills 解决的就是这类问题：把做事的方法、参考材料与脚本放进一个可复用的目录，让 Agent 在相关任务出现时再读取和使用。</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="标签">
+              <span class="blog-summary-tags-label">标签</span>
+              <ul>
+                  <li><a href="/tags/anthropic/">Anthropic</a></li>
+                  <li><a href="/tags/agent-skills/">Agent Skills</a></li>
+                  <li><a href="/tags/skills/">Skills</a></li>
+                  <li><a href="/tags/context-engineering/">Context Engineering</a></li>
+                  <li><a href="/tags/mcp/">MCP</a></li>
+                  <li><a href="/tags/ai-agents/">AI Agents</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/post/anthropic-agent-skills/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/post/christopher-kerr-end-of-life-dreams-and-meaning/">当人生接近终点，什么才重要？</a></h2>
@@ -612,55 +650,6 @@ Telemetry + Evals             让系统可观察、可比较、可改进</code><
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/post/cs329z-frameworks-orchestration/">阅读全文<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/post/cs329z-rag-agentic-retrieval/">CS 329Z：从 RAG 到 Agentic RAG</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-10-06">2026年10月06日</time>
-            <span aria-hidden="true">·</span>
-            <span>预计阅读 11 分钟</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>RAG 经常被概括为“从向量数据库中找几段文本，再塞进 Prompt”。这个描述没有错，但它忽略了真正困难的部分：<strong>怎样切分知识、怎样兼顾语义与精确匹配、怎样重排、怎样判断证据是否足够，以及什么时候应该再次检索。</strong></p>
-
-<p>从这个角度看，RAG 不是一个简单的外挂知识库，而是一条围绕证据构建的决策管线：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">文档 → 切分与索引 → 多路召回 → 融合与重排 → 阅读与生成
-                                ↑                    ↓
-                                └── 评估证据、改写查询、再次检索 ──┘</code></pre></td></tr></table>
-</div>
-</div>
-<p>本文根据我的 <strong>Stanford CS 329Z: Engineering AI Agents</strong> 笔记中的 RAG 章节整理。前半部分讨论经典 RAG 的检索与评测，后半部分把检索放回 Agent 循环，解释为什么下一步会自然走向 <strong>Agentic RAG</strong>。</p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="标签">
-              <span class="blog-summary-tags-label">标签</span>
-              <ul>
-                  <li><a href="/tags/rag/">RAG</a></li>
-                  <li><a href="/tags/agentic-rag/">Agentic RAG</a></li>
-                  <li><a href="/tags/retrieval/">Retrieval</a></li>
-                  <li><a href="/tags/bm25/">BM25</a></li>
-                  <li><a href="/tags/dpr/">DPR</a></li>
-                  <li><a href="/tags/colbert/">ColBERT</a></li>
-                  <li><a href="/tags/graphrag/">GraphRAG</a></li>
-                  <li><a href="/tags/contextual-retrieval/">Contextual Retrieval</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/post/cs329z-rag-agentic-retrieval/">阅读全文<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

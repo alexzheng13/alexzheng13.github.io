@@ -6,10 +6,21 @@
     <description>Recent content on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 19 Oct 2026 09:00:16 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 24 Oct 2026 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/en/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Anthropic Agent Skills</title>
+      <link>https://alexzheng13.github.io/en/post/anthropic-agent-skills/</link>
+      <pubDate>Sat, 24 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/post/anthropic-agent-skills/</guid>
+      <description>&lt;p&gt;Asking a model to write a blog post is easy. Getting it to preserve source code, handle equations, produce matching translations, and check the rendered pages every time is harder. The model may have each individual capability without knowing your particular way of working.&lt;/p&gt;
+
+&lt;p&gt;Anthropic’s Agent Skills package methods, reference material, and scripts into reusable directories that an agent can consult when a relevant task appears.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>What Matters at Life’s End?</title>

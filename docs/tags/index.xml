@@ -6,10 +6,64 @@
     <description>Recent content in Tags on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 19 Oct 2026 09:00:16 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 24 Oct 2026 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Agent Skills</title>
+      <link>https://alexzheng13.github.io/tags/agent-skills/</link>
+      <pubDate>Sat, 24 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/agent-skills/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>AI Agents</title>
+      <link>https://alexzheng13.github.io/tags/ai-agents/</link>
+      <pubDate>Sat, 24 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/ai-agents/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Anthropic</title>
+      <link>https://alexzheng13.github.io/tags/anthropic/</link>
+      <pubDate>Sat, 24 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/anthropic/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Context Engineering</title>
+      <link>https://alexzheng13.github.io/tags/context-engineering/</link>
+      <pubDate>Sat, 24 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/context-engineering/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MCP</title>
+      <link>https://alexzheng13.github.io/tags/mcp/</link>
+      <pubDate>Sat, 24 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/mcp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Skills</title>
+      <link>https://alexzheng13.github.io/tags/skills/</link>
+      <pubDate>Sat, 24 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/skills/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Christopher Kerr</title>
@@ -62,24 +116,6 @@
       <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/tags/agent-memory/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>AI Agents</title>
-      <link>https://alexzheng13.github.io/tags/ai-agents/</link>
-      <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/tags/ai-agents/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Context Engineering</title>
-      <link>https://alexzheng13.github.io/tags/context-engineering/</link>
-      <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/tags/context-engineering/</guid>
       <description></description>
     </item>
     
@@ -404,15 +440,6 @@
       <pubDate>Mon, 28 Sep 2026 09:00:00 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/tags/ai-rd/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Anthropic</title>
-      <link>https://alexzheng13.github.io/tags/anthropic/</link>
-      <pubDate>Mon, 28 Sep 2026 09:00:00 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/tags/anthropic/</guid>
       <description></description>
     </item>
     
@@ -944,15 +971,6 @@
       <pubDate>Sat, 21 Feb 2026 00:00:00 +0000</pubDate>
       
       <guid>https://alexzheng13.github.io/tags/langchain/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Skills</title>
-      <link>https://alexzheng13.github.io/tags/skills/</link>
-      <pubDate>Sat, 21 Feb 2026 00:00:00 +0000</pubDate>
-      
-      <guid>https://alexzheng13.github.io/tags/skills/</guid>
       <description></description>
     </item>
     

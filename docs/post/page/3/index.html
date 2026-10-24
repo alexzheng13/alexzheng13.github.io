@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/post/" />
 
-<meta property="og:updated_time" content="2026-10-19T09:00:16+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-24T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">文章归档</h1>
-      <p>按年份浏览全部 36 篇文章</p>
+      <p>按年份浏览全部 37 篇文章</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         订阅 RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="按年份排列的文章">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/post/anthropic-agent-skills/">
+          <time datetime="2026-10-24">10-24</time>
+          <span>Anthropic Agent Skills</span>
+        </a>
         <a class="blog-archive-index-item" href="/post/christopher-kerr-end-of-life-dreams-and-meaning/">
           <time datetime="2026-10-19">10-19</time>
           <span>当人生接近终点，什么才重要？</span>
@@ -403,6 +407,40 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="最近文章">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/post/llm-agent-benchmarks-guide/">大模型与 AI Agent Benchmark 全景指南：它们究竟在评估什么</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-09-26">2026年09月26日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 16 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>看模型发布报告时，我们经常会遇到一长串名字：Artificial Analysis Intelligence Index、LMArena、HELM、ARC-E、MMLU、GSM8K、SWE-bench、GAIA、WebArena、OSWorld……它们的分数不能直接横向比较，因为这里既有综合指数和排行榜，也有单项 benchmark；各自测量的能力、输入形式、可用工具和评分方式都不同。</p>
+
+<p>本文整理一张从“大模型答题”到“Agent 完成真实任务”的评测地图，并解释每个常见 benchmark 究竟是什么、适合测什么，以及不能从分数中推出什么结论。</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="标签">
+              <span class="blog-summary-tags-label">标签</span>
+              <ul>
+                  <li><a href="/tags/llm/">LLM</a></li>
+                  <li><a href="/tags/ai-agent/">AI Agent</a></li>
+                  <li><a href="/tags/benchmark/">Benchmark</a></li>
+                  <li><a href="/tags/evaluation/">Evaluation</a></li>
+                  <li><a href="/tags/reasoning/">Reasoning</a></li>
+                  <li><a href="/tags/coding/">Coding</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/post/llm-agent-benchmarks-guide/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/post/nanochat-gpt-pretraining-from-source/">nanochat 源码解读：从参数配置到单步训练</a></h2>
@@ -567,40 +605,6 @@ Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/post/anthropic-agent-evolution-2-context-reset-and-handoff/">阅读全文<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/post/anthropic-agent-evolution-3-planner-generator-evaluator/">Anthropic Agent 演进（三）：Planner–Generator–Evaluator 质量闭环</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-09-12">2026年09月12日</time>
-            <span aria-hidden="true">·</span>
-            <span>预计阅读 4 分钟</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>第一代 Harness 让 Agent 能跨 Context 持续工作，但“持续”不等于“高质量”。生成者评价自己的作品时，往往会把“基本能运行”误判成“已经足够好”，主观设计任务尤其明显。</p>
-
-<p>Anthropic 的下一步是把计划、生成和评价拆成三个职责，让外部 Evaluator 成为 Generator 必须面对的反馈来源。</p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="标签">
-              <span class="blog-summary-tags-label">标签</span>
-              <ul>
-                  <li><a href="/tags/anthropic-agent-%E6%BC%94%E8%BF%9B/">Anthropic Agent 演进</a></li>
-                  <li><a href="/tags/multi-agent/">Multi-Agent</a></li>
-                  <li><a href="/tags/evaluator/">Evaluator</a></li>
-                  <li><a href="/tags/agent-harness/">Agent Harness</a></li>
-                  <li><a href="/tags/playwright/">Playwright</a></li>
-                  <li><a href="/tags/software-engineering/">Software Engineering</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/post/anthropic-agent-evolution-3-planner-generator-evaluator/">阅读全文<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

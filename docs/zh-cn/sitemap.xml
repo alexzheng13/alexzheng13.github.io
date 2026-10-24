@@ -2,35 +2,91 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://alexzheng13.github.io/tags/agent-skills/</loc>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/tags/ai-agents/</loc>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/categories/ai-agents/</loc>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/tags/anthropic/</loc>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/post/anthropic-agent-skills/</loc>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://alexzheng13.github.io/</loc>
-    <lastmod>2026-10-19T09:00:16+02:00</lastmod>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://alexzheng13.github.io/categories/</loc>
-    <lastmod>2026-10-19T09:00:16+02:00</lastmod>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/tags/christopher-kerr/</loc>
-    <lastmod>2026-10-19T09:00:16+02:00</lastmod>
+    <loc>https://alexzheng13.github.io/tags/context-engineering/</loc>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/tags/mcp/</loc>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://alexzheng13.github.io/post/</loc>
-    <lastmod>2026-10-19T09:00:16+02:00</lastmod>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/tags/skills/</loc>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://alexzheng13.github.io/tags/</loc>
+    <lastmod>2026-10-24T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/tags/christopher-kerr/</loc>
     <lastmod>2026-10-19T09:00:16+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -80,27 +136,6 @@
   
   <url>
     <loc>https://alexzheng13.github.io/tags/agent-memory/</loc>
-    <lastmod>2026-10-14T21:42:43+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/categories/ai-agents/</loc>
-    <lastmod>2026-10-14T21:42:43+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/tags/ai-agents/</loc>
-    <lastmod>2026-10-14T21:42:43+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/tags/context-engineering/</loc>
     <lastmod>2026-10-14T21:42:43+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -395,13 +430,6 @@
   
   <url>
     <loc>https://alexzheng13.github.io/tags/ai-rd/</loc>
-    <lastmod>2026-09-28T09:00:00+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/tags/anthropic/</loc>
     <lastmod>2026-09-28T09:00:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -730,14 +758,14 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/tags/reinforcement-learning/</loc>
+    <loc>https://alexzheng13.github.io/categories/reinforcement-learning/</loc>
     <lastmod>2026-08-27T09:00:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/categories/reinforcement-learning/</loc>
+    <loc>https://alexzheng13.github.io/tags/reinforcement-learning/</loc>
     <lastmod>2026-08-27T09:00:00+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -948,13 +976,6 @@
   
   <url>
     <loc>https://alexzheng13.github.io/post/langchain-agent-builder-memory-system/</loc>
-    <lastmod>2026-02-21T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/tags/skills/</loc>
     <lastmod>2026-02-21T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

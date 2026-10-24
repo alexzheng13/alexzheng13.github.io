@@ -6,10 +6,21 @@
     <description>Recent content in AI Agents on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 14 Oct 2026 21:42:43 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 24 Oct 2026 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/tags/ai-agents/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Anthropic Agent Skills</title>
+      <link>https://alexzheng13.github.io/post/anthropic-agent-skills/</link>
+      <pubDate>Sat, 24 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/anthropic-agent-skills/</guid>
+      <description>&lt;p&gt;让一个模型“帮我写篇博客”并不难。难的是让它每次都记得保留源码、正确处理公式、补齐中英文版本，并在发布前检查页面。模型可能具备这些单项能力，却不了解这套具体的工作方法。&lt;/p&gt;
+
+&lt;p&gt;Anthropic 的 Agent Skills 解决的就是这类问题：把做事的方法、参考材料与脚本放进一个可复用的目录，让 Agent 在相关任务出现时再读取和使用。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>CS 329Z：Agent Memory Architectures</title>
