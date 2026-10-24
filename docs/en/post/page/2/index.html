@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-14T21:42:43+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 33 posts by year</p>
+      <p>Browse all 34 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/cs329z-agent-memory-architectures/">
+          <time datetime="2026-10-14">10-14</time>
+          <span>CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/cs329z-context-management-patterns/">
           <time datetime="2026-10-12">10-12</time>
           <span>CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks</span>
@@ -391,6 +395,51 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="Recent posts">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/en/post/agentic-llm-1-reasoning/">Agentic LLM Reasoning (I): From Chain of Thought to Search, Reflection, and RLVR</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-09-29">September 29, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>14 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>A model that can answer a question is not necessarily able to complete a task.</p>
+
+<p>A conventional chatbot receives a prompt and returns a response. An agent must decide what to do next in a changing environment, act, inspect the result, and choose whether to continue, backtrack, or try another path. That transition begins with <strong>reasoning</strong>.</p>
+
+<p>A complete agent system needs at least three capabilities:</p>
+
+<ol>
+<li><strong>Reasoning</strong>: analyze state, decompose problems, compare paths, and form decisions.</li>
+<li><strong>Action</strong>: call tools and translate decisions into external operations.</li>
+<li><strong>Interaction</strong>: observe outcomes, exchange information with the environment or other agents, and revise the strategy.</li>
+</ol>
+
+<p>This is the <strong>first article in the Agentic Large Language Models series</strong>. Rather than listing reasoning terms in isolation, it follows one question: <strong>when one generation or one reasoning path is unreliable, what can the system add?</strong> Part II covers Action, followed by Interaction in Part III.</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/agentic-llm/">Agentic LLM</a></li>
+                  <li><a href="/en/tags/reasoning/">Reasoning</a></li>
+                  <li><a href="/en/tags/chain-of-thought/">Chain of Thought</a></li>
+                  <li><a href="/en/tags/tree-of-thoughts/">Tree of Thoughts</a></li>
+                  <li><a href="/en/tags/self-reflection/">Self-Reflection</a></li>
+                  <li><a href="/en/tags/rlvr/">RLVR</a></li>
+                  <li><a href="/en/tags/grpo/">GRPO</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/agentic-llm-1-reasoning/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/en/post/anthropic-recursive-self-improvement/">When AI Starts Building Itself: Anthropic&#39;s Internal Practice and the Future of Recursive Self-Improvement</a></h2>
@@ -542,70 +591,6 @@
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/en/post/nanochat-gpt-pretraining-from-source/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/transformer-architecture/">Transformer Architecture: From Token Embeddings to the Training Loop</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-09-14">September 14, 2026</time>
-            <span aria-hidden="true">·</span>
-            <span>10 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>Transformer appears to be made up of many components, but a GPT-style forward path can be summarized as:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">Token IDs
-   ↓
-Token Embedding + Position Embedding
-   ↓
-[LayerNorm → Self-Attention → Residual]
-   ↓
-[LayerNorm → FFN → Residual]
-   ↓
-Repeat for multiple Transformer blocks
-   ↓
-Final LayerNorm → LM Head
-   ↓
-Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
-</div>
-</div>
-<p>This article starts from a simple GPT implementation and explains the role and tensor shape of each step along the data flow. The complete source code is placed at the end of the article. After reading the previous principles, you can compare and understand it with the code.</p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="Tags">
-              <span class="blog-summary-tags-label">Tags</span>
-              <ul>
-                  <li><a href="/en/tags/transformer/">Transformer</a></li>
-                  <li><a href="/en/tags/gpt/">GPT</a></li>
-                  <li><a href="/en/tags/attention/">Attention</a></li>
-                  <li><a href="/en/tags/pytorch/">PyTorch</a></li>
-                  <li><a href="/en/tags/deep-learning/">Deep Learning</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/en/post/transformer-architecture/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

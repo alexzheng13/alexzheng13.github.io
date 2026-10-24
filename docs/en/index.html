@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/" />
 
-<meta property="og:updated_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-14T21:42:43+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,58 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/cs329z-agent-memory-architectures/">CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-10-14 </span>
+      <div class="post-category">
+          <a href="/en/categories/ai-agents/"> AI Agents </a>
+          </div>
+        <span class="more-meta"> 2761 words </span>
+        <span class="more-meta"> 13 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>An assistant can give an excellent answer in one conversation, then ask you to explain your preferences, project, and completed work all over again in the next. It may reason well without connecting that ability to an ongoing history.</p>
+
+<p>Agent memory addresses this discontinuity: <strong>turning past interactions into information that can be retrieved, updated, and used correctly in later actions.</strong></p>
+
+<p>The previous article, <a href="/en/post/cs329z-context-management-patterns/">Context Management Patterns</a>, examined what should enter each model call. This article asks what happens after information leaves the window: what gets stored, when it is written and retrieved, and how to establish whether memory improves later tasks.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Experience: conversations, tool calls, environment feedback
+                         ↓
+Distillation: facts, preferences, lessons, skills, task state
+                         ↓
+Storage and maintenance: tiers, links, updates, forgetting
+                         ↓
+Retrieve → Working context → Next action
+    ↑                            ↓
+    └──────── New feedback ──────┘</code></pre></td></tr></table>
+</div>
+</div>
+<p>This article follows <strong>Stanford CS 329Z Lecture 7: Agent Memory Architectures</strong>, moving from motivation and memory types through architectures, evaluation, and open problems. Engineering examples and implementation suggestions are my additions; experimental claims refer to their stated setups.</p>
+    </div>
+    <div class="read-more">
+      <a href="/en/post/cs329z-agent-memory-architectures/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/en/post/cs329z-context-management-patterns/">CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks</a></h1>
@@ -473,31 +525,6 @@ Plan, compare, and revise before execution</code></pre></td></tr></table>
     </div>
     <div class="read-more">
       <a href="/en/post/private-ai-layer-on-base-models/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/en/post/llm-agent-benchmarks-guide/">A Field Guide to LLM and AI Agent Benchmarks</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-09-26 </span>
-      <div class="post-category">
-          <a href="/en/categories/artificial-intelligence/"> Artificial Intelligence </a>
-          </div>
-        <span class="more-meta"> 2245 words </span>
-        <span class="more-meta"> 11 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>Model reports often list the Artificial Analysis Intelligence Index, LMArena, HELM, ARC-E, MMLU, GSM8K, SWE-bench, GAIA, WebArena, and OSWorld side by side. Their scores are not interchangeable: the list mixes composite indices and leaderboards with individual benchmarks, each using different tasks, tools, environments, inference budgets, and scoring rules.</p>
-
-<p>This guide maps common evaluations from static question answering to agents completing real tasks, and explains what each benchmark can—and cannot—tell us.</p>
-    </div>
-    <div class="read-more">
-      <a href="/en/post/llm-agent-benchmarks-guide/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>

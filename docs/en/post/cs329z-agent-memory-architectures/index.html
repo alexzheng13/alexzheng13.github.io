@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="Stanford CS329Z Lecture 7 on working, episodic, semantic, and procedural memory; architectures from Voyager and MemGPT to Generative Agents and Mem0; and four benchmarks for evaluating agent memory." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/en/post/cs329z-agent-memory-architectures/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/cs329z-agent-memory-architectures/">
+<meta name="site-language-route" data-language="en" content="/en/post/cs329z-agent-memory-architectures/">
+<meta name="site-current-language" content="en"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation" />
+<meta property="og:description" content="Stanford CS329Z Lecture 7 on working, episodic, semantic, and procedural memory; architectures from Voyager and MemGPT to Generative Agents and Mem0; and four benchmarks for evaluating agent memory." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/en/post/cs329z-agent-memory-architectures/" />
+<meta property="article:published_time" content="2026-10-14T21:42:43+02:00" />
+<meta property="article:modified_time" content="2026-10-14T21:42:43+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation">
+<meta itemprop="description" content="Stanford CS329Z Lecture 7 on working, episodic, semantic, and procedural memory; architectures from Voyager and MemGPT to Generative Agents and Mem0; and four benchmarks for evaluating agent memory.">
+
+
+<meta itemprop="datePublished" content="2026-10-14T21:42:43&#43;02:00" />
+<meta itemprop="dateModified" content="2026-10-14T21:42:43&#43;02:00" />
+<meta itemprop="wordCount" content="2761">
+
+
+
+<meta itemprop="keywords" content="AI Agents,Agent Memory,Memory,Context Engineering,MemGPT,Mem0,Evaluation," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation"/>
+<meta name="twitter:description" content="Stanford CS329Z Lecture 7 on working, episodic, semantic, and procedural memory; architectures from Voyager and MemGPT to Generative Agents and Mem0; and four benchmarks for evaluating agent memory."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/en/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/en/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/en/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/en/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/cs329z-agent-memory-architectures/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/cs329z-agent-memory-architectures/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/en/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/cs329z-agent-memory-architectures/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/cs329z-agent-memory-architectures/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/en/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/about/">About</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-10-14 </span>
+        <div class="post-category">
+            <a href="/en/categories/ai-agents/"> AI Agents </a>
+            </div>
+          <span class="more-meta"> 2761 words </span>
+          <span class="more-meta"> 13 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-what-does-an-agent-lose-without-memory">1. What does an agent lose without memory?</a></li>
+<li><a href="#2-four-memory-types-current-state-experience-facts-and-skills">2. Four memory types: current state, experience, facts, and skills</a>
+<ul>
+<li><a href="#parametric-versus-contextual-memory-is-a-separate-axis">Parametric versus contextual memory is a separate axis</a></li>
+</ul></li>
+<li><a href="#3-architecture-begins-with-what-when-and-how">3. Architecture begins with What, When, and How</a>
+<ul>
+<li><a href="#what-should-be-stored-and-retrieved">What should be stored and retrieved?</a></li>
+<li><a href="#when-should-reads-and-writes-happen">When should reads and writes happen?</a></li>
+<li><a href="#how-should-information-be-stored-and-found">How should information be stored and found?</a></li>
+</ul></li>
+<li><a href="#4-pattern-one-learn-procedures-and-skills-from-experience">4. Pattern one: learn procedures and skills from experience</a>
+<ul>
+<li><a href="#voyager-store-successful-behavior-as-executable-code">Voyager: store successful behavior as executable code</a></li>
+<li><a href="#awm-induce-repeatable-workflows-from-trajectories">AWM: induce repeatable workflows from trajectories</a></li>
+<li><a href="#skill-files-package-methods-for-on-demand-use">Skill files: package methods for on-demand use</a></li>
+</ul></li>
+<li><a href="#5-pattern-two-connect-limited-context-to-tiered-memory">5. Pattern two: connect limited context to tiered memory</a>
+<ul>
+<li><a href="#memgpt-let-the-model-participate-in-memory-management">MemGPT: let the model participate in memory management</a></li>
+<li><a href="#memoryos-add-a-middle-tier-and-long-term-personal-memory">MemoryOS: add a middle tier and long-term personal memory</a></li>
+</ul></li>
+<li><a href="#6-pattern-three-reflect-on-experience-to-form-reusable-conclusions">6. Pattern three: reflect on experience to form reusable conclusions</a>
+<ul>
+<li><a href="#reflexion-preserve-improvements-derived-from-feedback">Reflexion: preserve improvements derived from feedback</a></li>
+<li><a href="#generative-agents-memory-streams-retrieval-planning-and-reflection">Generative Agents: memory streams, retrieval, planning, and reflection</a></li>
+</ul></li>
+<li><a href="#7-pattern-four-maintain-update-and-forget">7. Pattern four: maintain, update, and forget</a>
+<ul>
+<li><a href="#sleep-time-compute-process-context-between-requests">Sleep-time compute: process context between requests</a></li>
+<li><a href="#a-mem-actively-organize-the-memory-itself">A-Mem: actively organize the memory itself</a></li>
+<li><a href="#mem0-assign-explicit-update-actions-to-new-information">Mem0: assign explicit update actions to new information</a></li>
+</ul></li>
+<li><a href="#8-how-the-four-architecture-patterns-fit-together">8. How the four architecture patterns fit together</a></li>
+<li><a href="#9-evaluation-from-recalling-an-answer-to-completing-a-task">9. Evaluation: from recalling an answer to completing a task</a>
+<ul>
+<li><a href="#locomo-retrieval-and-correct-use-are-separate">LoCoMo: retrieval and correct use are separate</a></li>
+<li><a href="#personamem-track-changing-preferences">PersonaMem: track changing preferences</a></li>
+<li><a href="#longmemeval-v2-turn-environment-experience-into-colleague-like-knowledge">LongMemEval-V2: turn environment experience into colleague-like knowledge</a></li>
+<li><a href="#memoryarena-experience-must-improve-later-action">MemoryArena: experience must improve later action</a></li>
+</ul></li>
+<li><a href="#10-three-unresolved-problems">10. Three unresolved problems</a>
+<ul>
+<li><a href="#what-should-be-remembered-or-forgotten">What should be remembered or forgotten?</a></li>
+<li><a href="#trust-privacy-and-user-control">Trust, privacy, and user control</a></li>
+<li><a href="#retrieved-memory-can-still-be-misused">Retrieved memory can still be misused</a></li>
+</ul></li>
+<li><a href="#11-a-practical-memory-record">11. A practical memory record</a></li>
+<li><a href="#sources-and-further-reading">Sources and further reading</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>An assistant can give an excellent answer in one conversation, then ask you to explain your preferences, project, and completed work all over again in the next. It may reason well without connecting that ability to an ongoing history.</p>
+
+<p>Agent memory addresses this discontinuity: <strong>turning past interactions into information that can be retrieved, updated, and used correctly in later actions.</strong></p>
+
+<p>The previous article, <a href="/en/post/cs329z-context-management-patterns/">Context Management Patterns</a>, examined what should enter each model call. This article asks what happens after information leaves the window: what gets stored, when it is written and retrieved, and how to establish whether memory improves later tasks.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Experience: conversations, tool calls, environment feedback
+                         ↓
+Distillation: facts, preferences, lessons, skills, task state
+                         ↓
+Storage and maintenance: tiers, links, updates, forgetting
+                         ↓
+Retrieve → Working context → Next action
+    ↑                            ↓
+    └──────── New feedback ──────┘</code></pre></td></tr></table>
+</div>
+</div>
+<p>This article follows <strong>Stanford CS 329Z Lecture 7: Agent Memory Architectures</strong>, moving from motivation and memory types through architectures, evaluation, and open problems. Engineering examples and implementation suggestions are my additions; experimental claims refer to their stated setups.</p>
+
+<blockquote>
+<p><strong>Related course articles</strong>: <a href="/en/post/cs329z-context-management-patterns/">Context Management Patterns</a> · <a href="/en/post/cs329z-frameworks-orchestration/">Frameworks &amp; Orchestration</a> · <a href="/en/post/cs329z-rag-agentic-retrieval/">From RAG to Agentic RAG</a></p>
+</blockquote>
+
+<h2 id="1-what-does-an-agent-lose-without-memory">1. What does an agent lose without memory?</h2>
+
+<p>The lecture identifies three losses:</p>
+
+<ul>
+<li><strong>Procedure</strong>: the user must teach the same task again.</li>
+<li><strong>Knowledge</strong>: important facts, rules, and preferences disappear between sessions.</li>
+<li><strong>Progress</strong>: a long-running agent forgets completed work, early goals, or user instructions.</li>
+</ul>
+
+<p>Memory can support personalization, learning from experience, and stateful work across conversations.</p>
+
+<p>Consider “continue editing the research proposal.” A useful assistant needs the document, unresolved questions, accepted edits, and active constraints. Remembering only that the user is writing a proposal is insufficient.</p>
+
+<p>Memory quality should therefore appear in the next task: less repeated explanation, fewer repeated mistakes, and better retention of unfinished commitments.</p>
+
+<h2 id="2-four-memory-types-current-state-experience-facts-and-skills">2. Four memory types: current state, experience, facts, and skills</h2>
+
+<p>The lecture draws on CoALA, Cognitive Architectures for Language Agents, to distinguish memory by content and use.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/coala.webp" alt="CoALA connects working memory with procedural, semantic, and episodic memory" /></p>
+
+<p><em>Lecture slide 16; original figure credited to CoALA.</em></p>
+
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Main contents</th>
+<th>Example</th>
+<th>Use</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Working</td>
+<td>Currently available state and information</td>
+<td>Goal, recent tool results, relevant code</td>
+<td>Directly available to the current model call</td>
+</tr>
+
+<tr>
+<td>Episodic</td>
+<td>Specific past experiences</td>
+<td>Conversation, failed test, task trajectory</td>
+<td>Recover events and their evidence</td>
+</tr>
+
+<tr>
+<td>Semantic</td>
+<td>Facts and knowledge</td>
+<td>Preferences, project rules, environment properties</td>
+<td>Answer questions or constrain decisions</td>
+</tr>
+
+<tr>
+<td>Procedural</td>
+<td>How to perform tasks</td>
+<td>Skill code, workflow, debugging method</td>
+<td>Guide or execute later actions</td>
+</tr>
+</tbody>
+</table>
+
+<p>One experience can produce several memories. A failed deployment can remain as a raw log, yield a fact about configuration compatibility, and inspire a deployment checklist. These serve episodic, semantic, and procedural roles.</p>
+
+<h3 id="parametric-versus-contextual-memory-is-a-separate-axis">Parametric versus contextual memory is a separate axis</h3>
+
+<p>Model weights already contain knowledge and behavioral patterns, which fine-tuning can change. External facts, skill files, and conversation records must instead be read into context before they affect the current generation.</p>
+
+<p>This is compatible with the earlier taxonomy: similar knowledge can live in parameters or external storage.</p>
+
+<p>The lecture marks episodic memory as not applicable on the parametric side. The useful interpretation is that <strong>model weights cannot replace a personal event archive with precise, traceable records of particular interactions</strong>. This does not claim that models never memorize training examples; it distinguishes historical records from general parametric knowledge.</p>
+
+<h2 id="3-architecture-begins-with-what-when-and-how">3. Architecture begins with What, When, and How</h2>
+
+<p>Before choosing files, a database, or a graph, answer three questions.</p>
+
+<h3 id="what-should-be-stored-and-retrieved">What should be stored and retrieved?</h3>
+
+<p>User facts, preferences, successful trajectories, failure lessons, and conversation progress have different requirements. Should raw evidence accompany a distilled conclusion? Does a temporary hypothesis have enough support to become long-term knowledge?</p>
+
+<h3 id="when-should-reads-and-writes-happen">When should reads and writes happen?</h3>
+
+<p>Memory operations can be agent-triggered, scheduled in the background, or driven by session boundaries, tool events, and other conditions.</p>
+
+<p>Immediate writes make information available sooner but add latency. Background consolidation permits more extensive merging and checking, but must handle overlapping old and new state.</p>
+
+<h3 id="how-should-information-be-stored-and-found">How should information be stored and found?</h3>
+
+<table>
+<thead>
+<tr>
+<th>Storage</th>
+<th>Strength</th>
+<th>Main design work</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Filesystem</td>
+<td>Readable, editable, hierarchical; accessible through listing, search, and read tools</td>
+<td>Naming, indexing, concurrent edits, duplication</td>
+</tr>
+
+<tr>
+<td>Database</td>
+<td>Filters for user, time, source, and other metadata; lexical and vector retrieval</td>
+<td>Schema, query quality, update consistency</td>
+</tr>
+
+<tr>
+<td>Knowledge graph</td>
+<td>Explicit entities and relations</td>
+<td>Extraction errors, entity resolution, relation maintenance</td>
+</tr>
+</tbody>
+</table>
+
+<p>Vector search helps with semantic similarity, BM25 with exact terms, and structured databases such as SQLite with metadata queries. They can be combined, following the retrieval tradeoffs discussed in the RAG article.</p>
+
+<p>Storage solves only part of the problem. Files without a reading strategy become an archive that nobody can navigate. A vector store without updates can repeatedly return obsolete preferences.</p>
+
+<h2 id="4-pattern-one-learn-procedures-and-skills-from-experience">4. Pattern one: learn procedures and skills from experience</h2>
+
+<p>This family turns useful past behavior into reusable procedural memory, reducing the need to explore the same task again.</p>
+
+<h3 id="voyager-store-successful-behavior-as-executable-code">Voyager: store successful behavior as executable code</h3>
+
+<p><a href="https://arxiv.org/abs/2305.16291">Voyager</a> combines an automatic curriculum, feedback-driven code refinement, and a skill library in Minecraft. Skills contain code and descriptions, enabling retrieval, execution, and composition in later tasks.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/voyager-skills.webp" alt="Voyager indexes executable skills through their descriptions" /></p>
+
+<p><em>Lecture slide 32.</em></p>
+
+<p>Mining, smelting, and crafting can become reusable units. More complex tasks compose those units. The lecture&rsquo;s ablation example shows the skill library helping the system craft diamond tools in the displayed experiment, while the configuration without it did not reach that goal.</p>
+
+<p>This learning happens through external code and retrieval; it does not require updating the base model&rsquo;s weights.</p>
+
+<h3 id="awm-induce-repeatable-workflows-from-trajectories">AWM: induce repeatable workflows from trajectories</h3>
+
+<p><a href="https://arxiv.org/abs/2409.07429">Agent Workflow Memory</a> extracts recurring routines from task trajectories and provides relevant workflows to guide subsequent actions.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/awm.webp" alt="AWM collects trajectories, evaluates them, and induces reusable workflows" /></p>
+
+<p><em>Lecture slide 35.</em></p>
+
+<p>Examples include navigating a product category or editing a field and saving the result. A reusable workflow abstracts away product names and user IDs while retaining the operation structure.</p>
+
+<h3 id="skill-files-package-methods-for-on-demand-use">Skill files: package methods for on-demand use</h3>
+
+<p>Procedures can also live in instruction files, examples, and scripts. Progressive disclosure exposes a short capability description first and loads detailed instructions when needed.</p>
+
+<p>The shared limitation is environmental change. A website, API, permission, or business policy can invalidate a previously successful procedure. Skills need applicability conditions, versions, and validation as well as a success history.</p>
+
+<h2 id="5-pattern-two-connect-limited-context-to-tiered-memory">5. Pattern two: connect limited context to tiered memory</h2>
+
+<p>A hierarchy keeps a small active state in context while placing larger histories and knowledge outside it, accessible through tools.</p>
+
+<h3 id="memgpt-let-the-model-participate-in-memory-management">MemGPT: let the model participate in memory management</h3>
+
+<p>MemGPT gives the model memory operations. The lecture diagram places system instructions, writable working context, and a FIFO message queue inside the finite window, with recall and archival storage outside it.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/memgpt.webp" alt="MemGPT's finite context, message queue, recall storage, and archival storage" /></p>
+
+<p><em>Lecture slide 44; original figure credited to MemGPT.</em></p>
+
+<p>The parts serve different roles:</p>
+
+<ul>
+<li><strong>Working context</strong> holds active facts, preferences, and state that can be written or replaced.</li>
+<li><strong>Recall storage</strong> retains past interactions for content or date lookup.</li>
+<li><strong>Archival storage</strong> holds larger information collections for retrieval.</li>
+</ul>
+
+<p>There is no need to search working memory already present in context. The challenge is deciding when to bring external information in and what to replace when it arrives.</p>
+
+<h3 id="memoryos-add-a-middle-tier-and-long-term-personal-memory">MemoryOS: add a middle tier and long-term personal memory</h3>
+
+<p><a href="https://arxiv.org/abs/2506.06326">MemoryOS</a> separates short-term, mid-term, and long-term personal memory, with processes for storage, updating, retrieval, and generation.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/memoryos.webp" alt="MemoryOS updates and retrieves across short-, mid-, and long-term personal memory" /></p>
+
+<p><em>Lecture slide 49.</em></p>
+
+<p>The middle tier organizes recent interactions, while the long-term tier retains more stable information. A temporary remark need not instantly become a permanent user attribute, and recent conversations can retain structure after leaving the active window.</p>
+
+<p>The cost is management complexity: what should be promoted, demoted, merged, or expired? Rich external memory is of little help if the current task cannot retrieve the right evidence.</p>
+
+<h2 id="6-pattern-three-reflect-on-experience-to-form-reusable-conclusions">6. Pattern three: reflect on experience to form reusable conclusions</h2>
+
+<p>Raw trajectories record what happened. Reflection attempts to identify what can be learned from it.</p>
+
+<h3 id="reflexion-preserve-improvements-derived-from-feedback">Reflexion: preserve improvements derived from feedback</h3>
+
+<p>The lecture revisits Reflexion: an actor attempts a task, an evaluator provides feedback, and self-reflection converts shortcomings into language-based lessons for later attempts.</p>
+
+<p>A useful lesson from a failing test specifies the missed condition and the next check. “Be more careful” does not. This connects to <a href="/en/post/agentic-llm-1-reasoning/">reflection in the Reasoning article</a>, with the focus now on retention and reuse.</p>
+
+<h3 id="generative-agents-memory-streams-retrieval-planning-and-reflection">Generative Agents: memory streams, retrieval, planning, and reflection</h3>
+
+<p>Generative Agents write observations into a memory stream, retrieve information relevant to the current situation, and use it for action, planning, and higher-level reflection.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/generative-agents.webp" alt="Generative Agents connect perception, a memory stream, retrieval, action, planning, and reflection" /></p>
+
+<p><em>Lecture slide 54.</em></p>
+
+<p>The lecture&rsquo;s retrieval example combines <strong>recency, importance, and relevance</strong>: how recent a memory is, how much it matters, and how closely it relates to the question.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/memory-retrieval-score.webp" alt="A retrieval example combines recency, importance, and relevance" /></p>
+
+<p><em>Lecture slide 55.</em></p>
+
+<p>The weighted selection can be understood through this illustrative expression; normalization and weights depend on the implementation:</p>
+
+<div class="math-display">
+\[
+S(m,q)=\alpha R_{\mathrm{recency}}(m)
++\beta I(m)+\gamma R_{\mathrm{relevance}}(m,q)
+\]
+</div>
+
+<p>Semantic similarity alone may miss recently changed facts. Time alone may neglect an enduring commitment. Multiple signals help select what should enter the working context.</p>
+
+<p>Reflection adds abstraction and the possibility of unsupported inference. Observing two vegetarian meals does not establish that a user permanently avoids meat. Reflective conclusions should retain evidence and uncertainty.</p>
+
+<h2 id="7-pattern-four-maintain-update-and-forget">7. Pattern four: maintain, update, and forget</h2>
+
+<p>As a system runs longer, the challenge shifts from writing records to keeping them useful: deduplication, conflict resolution, index updates, links, and invalidation of obsolete information.</p>
+
+<h3 id="sleep-time-compute-process-context-between-requests">Sleep-time compute: process context between requests</h3>
+
+<p><a href="https://arxiv.org/abs/2504.13171">Sleep-time Compute</a> processes known context before a query arrives, preparing potentially useful information to reduce immediate work later.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/sleep-time-compute.webp" alt="Sleep-time compute moves some context processing ahead of the user's query" /></p>
+
+<p><em>Lecture slide 58.</em></p>
+
+<p>The lecture places it under maintenance. It need not happen at night: the principle is to move suitable preparation out of the user&rsquo;s waiting path. Benefits depend on how predictable future queries are and whether preparation can be reused enough to amortize its cost.</p>
+
+<h3 id="a-mem-actively-organize-the-memory-itself">A-Mem: actively organize the memory itself</h3>
+
+<p><a href="https://arxiv.org/abs/2502.12110">A-Mem</a> constructs notes with descriptions, keywords, and tags, identifies connections to existing memories, and can update prior representations when new information arrives.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/a-mem.webp" alt="A-Mem's note construction, link generation, memory evolution, and retrieval" /></p>
+
+<p><em>Lecture slide 62.</em></p>
+
+<p>Writing a record becomes part of organizing a knowledge network. Generated descriptions and links can also be wrong, which makes access to the original evidence essential.</p>
+
+<h3 id="mem0-assign-explicit-update-actions-to-new-information">Mem0: assign explicit update actions to new information</h3>
+
+<p>The lecture&rsquo;s Mem0 pipeline extracts candidate memories, retrieves related records, detects conflicts, and chooses an update:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">ADD      Introduce a new fact
+UPDATE   Change an existing representation
+DELETE   Remove a record that should no longer be retained
+NOOP     Leave the current memory unchanged</code></pre></td></tr></table>
+</div>
+</div>
+<p><img src="/img/posts/cs329z-agent-memory/mem0.webp" alt="Mem0 extracts facts, detects conflicts, and updates memory" /></p>
+
+<p><em>Lecture slide 64.</em></p>
+
+<p>“Tuesday used to work; Thursday works now” should not become two undated preferences that both look current. The system needs to distinguish historical state from active state.</p>
+
+<p>Here, <code>DELETE</code> is an algorithmic memory action. It does not by itself establish deletion from backups, caches, and logs; product-level deletion requires its own handling.</p>
+
+<h2 id="8-how-the-four-architecture-patterns-fit-together">8. How the four architecture patterns fit together</h2>
+
+<p>These patterns address different concerns and can coexist:</p>
+
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Stored contents</th>
+<th>Typical write trigger</th>
+<th>Benefit</th>
+<th>Tradeoff</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Learn procedures</td>
+<td>Code, workflows, skills</td>
+<td>Useful trajectories or offline induction</td>
+<td>Less repeated exploration</td>
+<td>Procedures become stale</td>
+</tr>
+
+<tr>
+<td>Tiered hierarchy</td>
+<td>Active information and external detail</td>
+<td>New information or context pressure</td>
+<td>Larger effective memory</td>
+<td>Reliable scheduling and retrieval are required</td>
+</tr>
+
+<tr>
+<td>Reflective consolidation</td>
+<td>Lessons and higher-level conclusions</td>
+<td>Feedback or accumulated observations</td>
+<td>Better reuse and transfer</td>
+<td>Unsupported inferences</td>
+</tr>
+
+<tr>
+<td>Maintenance</td>
+<td>Updated facts, links, and indexes</td>
+<td>New evidence, insertion, or background processing</td>
+<td>Fresh, organized memory</td>
+<td>Compute cost and possible information loss</td>
+</tr>
+</tbody>
+</table>
+
+<p>A research assistant might preserve task trajectories, maintain active progress in working memory, extract workflows from successful research, and update project facts in the background. Experience shapes memory, memory affects action, and new outcomes revise the memory.</p>
+
+<h2 id="9-evaluation-from-recalling-an-answer-to-completing-a-task">9. Evaluation: from recalling an answer to completing a task</h2>
+
+<p>The lecture proposes four criteria: <strong>realistic, long-context, challenging, and verifiable</strong>. Sources and queries should resemble actual work, history should be sufficiently long, tasks should reveal differences, and success should have clear evidence.</p>
+
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Memory source</th>
+<th>Main ability</th>
+<th>Interpretation limit</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>LoCoMo</td>
+<td>Long simulated conversations</td>
+<td>Cross-session facts, temporal relations, multi-hop questions</td>
+<td>Conversation recall differs from agent task completion</td>
+</tr>
+
+<tr>
+<td>PersonaMem</td>
+<td>Simulated user–assistant interactions</td>
+<td>Evolving profiles and preferences</td>
+<td>Choosing a response differs from acting on preferences</td>
+</tr>
+
+<tr>
+<td>LongMemEval-V2</td>
+<td>Historical web-agent trajectories</td>
+<td>Environment state, workflows, gotchas, premise awareness</td>
+<td>Reader models and compute budgets affect results</td>
+</tr>
+
+<tr>
+<td>MemoryArena</td>
+<td>Interdependent multi-session tasks</td>
+<td>Use earlier experience in subsequent actions</td>
+<td>Planning, tools, and execution also affect success</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="locomo-retrieval-and-correct-use-are-separate">LoCoMo: retrieval and correct use are separate</h3>
+
+<p>LoCoMo includes question answering and event summarization over long conversations. The lecture compares retrieval units and emphasizes that receiving relevant memory does not guarantee a correct answer.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/locomo.webp" alt="LoCoMo's questions, event summaries, and multimodal tasks over long conversations" /></p>
+
+<p><em>Lecture slide 71.</em></p>
+
+<p>Distinguish failure to retrieve evidence from failure to interpret or reason over retrieved evidence. Improving recall alone cannot resolve both.</p>
+
+<h3 id="personamem-track-changing-preferences">PersonaMem: track changing preferences</h3>
+
+<p>PersonaMem emphasizes evolving user profiles. A user may change a food preference across sessions; the assistant should respond to the current state rather than repeat an obsolete recommendation.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/personamem.webp" alt="PersonaMem tracks preference updates and applies them in new situations" /></p>
+
+<p><em>Lecture slide 76.</em></p>
+
+<p>This exposes systems that remember the past without updating the present. Selecting the correct candidate response still differs from using preferences in an open-ended task.</p>
+
+<h3 id="longmemeval-v2-turn-environment-experience-into-colleague-like-knowledge">LongMemEval-V2: turn environment experience into colleague-like knowledge</h3>
+
+<p>This benchmark asks whether a memory system can accumulate useful knowledge from web-agent trajectories: static state, dynamic changes, workflows, environment gotchas, and premise awareness.</p>
+
+<p>The lecture&rsquo;s figure contains 451 questions in multiple-choice, short-answer, and free-form formats, so the benchmark should not be described as exclusively multiple-choice. Histories contain hundreds of trajectories; the paper reports up to approximately 115 million tokens.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/longmemeval-types.webp" alt="LongMemEval-V2 source environments, question categories, and answer formats" /></p>
+
+<p><em>Lecture slide 83.</em></p>
+
+<p>The lecture compares RAG-based gathering with filesystem exploration by a coding agent.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/longmemeval-results.webp" alt="LongMemEval-V2 accuracy and latency comparison using different models across configurations" /></p>
+
+<p><em>Lecture slide 85.</em></p>
+
+<p>The filesystem approach performs better in the displayed setup, but the models differ too. Stronger reasoning and more active tool exploration can both contribute. <strong>This figure alone does not establish that filesystems inherently outperform vector retrieval.</strong> For deployment decisions, compare complete systems on fixed tasks, models, and budgets.</p>
+
+<h3 id="memoryarena-experience-must-improve-later-action">MemoryArena: experience must improve later action</h3>
+
+<p>MemoryArena joins memory, agents, and environments in multi-session tasks. Earlier observations, feedback, and preferences become conditions for later subtasks.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/memoryarena.webp" alt="MemoryArena's multi-session memory–agent–environment loop" /></p>
+
+<p><em>Lecture slide 88.</em></p>
+
+<p>A group travel-planning task might gather preferences first, then introduce budget or itinerary changes. The system must use memory to revise a plan and satisfy verifiable constraints.</p>
+
+<p>Some memory controllers perform poorly in the lecture&rsquo;s results, indicating substantial headroom. Yet task completion also depends on tools, planning, and reasoning. Not every failure can be attributed to memory.</p>
+
+<h2 id="10-three-unresolved-problems">10. Three unresolved problems</h2>
+
+<h3 id="what-should-be-remembered-or-forgotten">What should be remembered or forgotten?</h3>
+
+<p>Future relevance is unknown when a memory is created. Retaining everything raises retrieval, context, and maintenance cost. Aggressive forgetting can erase evidence or unfinished commitments.</p>
+
+<p>A statement might be a stable preference, temporary emotion, quotation, or joke. Looking like a fact is not enough to justify long-term storage.</p>
+
+<h3 id="trust-privacy-and-user-control">Trust, privacy, and user control</h3>
+
+<p>Procedural memories influence future action and therefore create an attack surface. Malicious content stored as a reusable procedure can affect later sessions.</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/memory-poisoning.webp" alt="Memory poisoning can influence later behavior through contaminated procedural memories" /></p>
+
+<p><em>Lecture slide 98.</em></p>
+
+<p>Retrieval does not grant a memory higher instruction authority. Users also need visibility into stored information and its source, along with correction and deletion controls.</p>
+
+<h3 id="retrieved-memory-can-still-be-misused">Retrieved memory can still be misused</h3>
+
+<p>Over-personalization is a common example: an assistant reads a preference and unnecessarily bends an unrelated answer around it.</p>
+
+<p>Better retrieval and training can help, but the system must also decide whether the task requires personal information at all. <strong>Using memory well includes knowing when to leave it unused.</strong></p>
+
+<h2 id="11-a-practical-memory-record">11. A practical memory record</h2>
+
+<p>The following is my engineering addition, turning the concepts into an explicit record:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">id<span class="p">:</span><span class="w"> </span>pref<span class="m">-0042</span><span class="w">
+</span><span class="w"></span>type<span class="p">:</span><span class="w"> </span>semantic<span class="w">
+</span><span class="w"></span>scope<span class="p">:</span><span class="w"> </span>user<span class="w">
+</span><span class="w"></span>content<span class="p">:</span><span class="w"> </span>User<span class="w"> </span>prefers<span class="w"> </span>Thursday<span class="w"> </span>meetings<span class="w"> </span>this<span class="w"> </span>semester<span class="w">
+</span><span class="w"></span>source<span class="p">:</span><span class="w"> </span>conversation<span class="m">-2026-10-14</span>-message<span class="m">-18</span><span class="w">
+</span><span class="w"></span>observed_at<span class="p">:</span><span class="w"> </span><span class="ld">2026-10-14</span><span class="w">
+</span><span class="w"></span>valid_during<span class="p">:</span><span class="w"> </span>Current<span class="w"> </span>semester<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>active<span class="w">
+</span><span class="w"></span>supersedes<span class="p">:</span><span class="w"> </span>pref<span class="m">-0017</span><span class="w">
+</span><span class="w"></span>evidence<span class="p">:</span><span class="w"> </span>User<span class="w"> </span>explicitly<span class="w"> </span>said<span class="w"> </span>Tuesday<span class="w"> </span>no<span class="w"> </span>longer<span class="w"> </span>works</code></pre></td></tr></table>
+</div>
+</div>
+<p>The record includes provenance, validity, status, and replacement history as well as content. Retrieval can filter candidates by authorization, relevance, and time, recover supporting evidence, and supply it to the answer or action module.</p>
+
+<p>A complete lifecycle could be:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Store the interaction
+    → Extract candidate facts and lessons
+    → Compare with existing memory
+    → Add, update, or leave unchanged
+    → Preserve provenance and temporal relationships
+    → Retrieve for the current task
+    → Check applicability before reasoning or acting
+    → Revise or invalidate after new feedback</code></pre></td></tr></table>
+</div>
+</div>
+<p>Evaluation should cover the entire chain: correct extraction, state updates, retrieval, appropriate use, and the resulting task outcome.</p>
+
+<p>My central lesson is that a persistent assistant must retain experience and revise its interpretation of that experience. Reliable memory emerges from the coordination of storage, retrieval, updates, and action.</p>
+
+<h2 id="sources-and-further-reading">Sources and further reading</h2>
+
+<p>The main source is <strong>CS329Z Lecture 7: Agent Memory Architectures</strong>, credited to Diyi Yang, Michael Ryan, and John Yang. Figures were rendered from the supplied PDF and retain their original source credits. The article date follows the PDF creation timestamp. Architecture and experimental descriptions refer to the lecture&rsquo;s setups rather than all later versions of the projects.</p>
+
+<ul>
+<li><a href="https://arxiv.org/abs/2309.02427">CoALA</a> · <a href="https://arxiv.org/abs/2305.16291">Voyager</a> · <a href="https://arxiv.org/abs/2409.07429">Agent Workflow Memory</a></li>
+<li><a href="https://arxiv.org/abs/2310.08560">MemGPT</a> · <a href="https://arxiv.org/abs/2506.06326">MemoryOS</a></li>
+<li><a href="https://arxiv.org/abs/2303.11366">Reflexion</a> · <a href="https://arxiv.org/abs/2304.03442">Generative Agents</a></li>
+<li><a href="https://arxiv.org/abs/2504.13171">Sleep-time Compute</a> · <a href="https://arxiv.org/abs/2502.12110">A-Mem</a> · <a href="https://arxiv.org/abs/2504.19413">Mem0</a></li>
+<li><a href="https://aclanthology.org/2024.acl-long.747/">LoCoMo</a> · <a href="https://arxiv.org/abs/2504.14225">PersonaMem</a> · <a href="https://arxiv.org/abs/2605.12493">LongMemEval-V2</a> · <a href="https://arxiv.org/abs/2602.16313">MemoryArena</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-10-14
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/en/tags/ai-agents/">AI Agents</a>
+          <a href="/en/tags/agent-memory/">Agent Memory</a>
+          <a href="/en/tags/memory/">Memory</a>
+          <a href="/en/tags/context-engineering/">Context Engineering</a>
+          <a href="/en/tags/memgpt/">MemGPT</a>
+          <a href="/en/tags/mem0/">Mem0</a>
+          <a href="/en/tags/evaluation/">Evaluation</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/en/post/cs329z-context-management-patterns/">
+            <span class="next-text nav-default">CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

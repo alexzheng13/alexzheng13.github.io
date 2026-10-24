@@ -6,10 +6,73 @@
     <description>Recent content in Tags on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 12 Oct 2026 22:25:07 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 14 Oct 2026 21:42:43 +0200</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Agent Memory</title>
+      <link>https://alexzheng13.github.io/tags/agent-memory/</link>
+      <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/agent-memory/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>AI Agents</title>
+      <link>https://alexzheng13.github.io/tags/ai-agents/</link>
+      <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/ai-agents/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Context Engineering</title>
+      <link>https://alexzheng13.github.io/tags/context-engineering/</link>
+      <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/context-engineering/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Evaluation</title>
+      <link>https://alexzheng13.github.io/tags/evaluation/</link>
+      <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/evaluation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mem0</title>
+      <link>https://alexzheng13.github.io/tags/mem0/</link>
+      <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/mem0/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MemGPT</title>
+      <link>https://alexzheng13.github.io/tags/memgpt/</link>
+      <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/memgpt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Memory</title>
+      <link>https://alexzheng13.github.io/tags/memory/</link>
+      <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/tags/memory/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Agent Harness</title>
@@ -17,15 +80,6 @@
       <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/tags/agent-harness/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>AI Agents</title>
-      <link>https://alexzheng13.github.io/tags/ai-agents/</link>
-      <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/tags/ai-agents/</guid>
       <description></description>
     </item>
     
@@ -39,29 +93,11 @@
     </item>
     
     <item>
-      <title>Context Engineering</title>
-      <link>https://alexzheng13.github.io/tags/context-engineering/</link>
-      <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/tags/context-engineering/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Context Management</title>
       <link>https://alexzheng13.github.io/tags/context-management/</link>
       <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/tags/context-management/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Memory</title>
-      <link>https://alexzheng13.github.io/tags/memory/</link>
-      <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/tags/memory/</guid>
       <description></description>
     </item>
     
@@ -422,15 +458,6 @@
       <pubDate>Sat, 26 Sep 2026 23:00:00 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/tags/coding/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Evaluation</title>
-      <link>https://alexzheng13.github.io/tags/evaluation/</link>
-      <pubDate>Sat, 26 Sep 2026 23:00:00 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/tags/evaluation/</guid>
       <description></description>
     </item>
     

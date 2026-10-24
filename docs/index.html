@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/" />
 
-<meta property="og:updated_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-14T21:42:43+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,58 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/cs329z-agent-memory-architectures/">CS 329Z：Agent Memory Architectures——记忆类型、架构设计与评测</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-10-14 </span>
+      <div class="post-category">
+          <a href="/categories/ai-agents/"> AI Agents </a>
+          </div>
+        <span class="more-meta"> 约 6549 字 </span>
+        <span class="more-meta"> 预计阅读 14 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>一个助手可以在当前对话里给出很好的答案，但到了下一次会话，又需要你重新交代偏好、解释项目、重复上一轮已经完成的工作。它也许很会推理，却没有把这些能力接到一段持续的经历上。</p>
+
+<p>Agent Memory 要解决的，就是这种跨时间的不连续：<strong>把过去的交互转成以后能够取回、更新，并正确用于行动的信息。</strong></p>
+
+<p>上一篇 <a href="/post/cs329z-context-management-patterns/">Context Management Patterns</a>讨论了每次模型调用应该看到什么。这篇进一步讨论：信息离开当前窗口之后，应该保存成什么、什么时候写入与召回，以及怎样证明记忆真的改善了后续任务。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">经历：对话、工具调用、环境反馈
+                ↓
+提炼：事实、偏好、经验、技能与任务状态
+                ↓
+存储与维护：分层、关联、更新、遗忘
+                ↓
+按需召回 → 进入工作上下文 → 影响下一次行动
+                ↑                         ↓
+                └──────── 新反馈 ────────┘</code></pre></td></tr></table>
+</div>
+</div>
+<p>本文根据 <strong>Stanford CS 329Z Lecture 7: Agent Memory Architectures</strong> 整理，沿着讲义的“动机 → 类型 → 架构 → 评测 → 开放问题”展开。文中的工程示例与设计建议是我的补充；实验结果会注明其具体设置。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/cs329z-agent-memory-architectures/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/cs329z-context-management-patterns/">CS 329Z：Context Management Patterns——让 Agent 在长任务中保持专注与连续性</a></h1>
@@ -473,31 +525,6 @@ Telemetry + Evals             让系统可观察、可比较、可改进</code><
     </div>
     <div class="read-more">
       <a href="/post/private-ai-layer-on-base-models/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/llm-agent-benchmarks-guide/">大模型与 AI Agent Benchmark 全景指南：它们究竟在评估什么</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-09-26 </span>
-      <div class="post-category">
-          <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"> 人工智能 </a>
-          </div>
-        <span class="more-meta"> 约 7583 字 </span>
-        <span class="more-meta"> 预计阅读 16 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>看模型发布报告时，我们经常会遇到一长串名字：Artificial Analysis Intelligence Index、LMArena、HELM、ARC-E、MMLU、GSM8K、SWE-bench、GAIA、WebArena、OSWorld……它们的分数不能直接横向比较，因为这里既有综合指数和排行榜，也有单项 benchmark；各自测量的能力、输入形式、可用工具和评分方式都不同。</p>
-
-<p>本文整理一张从“大模型答题”到“Agent 完成真实任务”的评测地图，并解释每个常见 benchmark 究竟是什么、适合测什么，以及不能从分数中推出什么结论。</p>
-    </div>
-    <div class="read-more">
-      <a href="/post/llm-agent-benchmarks-guide/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>

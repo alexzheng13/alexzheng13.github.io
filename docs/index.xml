@@ -6,10 +6,48 @@
     <description>Recent content on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 12 Oct 2026 22:25:07 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 14 Oct 2026 21:42:43 +0200</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CS 329Z：Agent Memory Architectures——记忆类型、架构设计与评测</title>
+      <link>https://alexzheng13.github.io/post/cs329z-agent-memory-architectures/</link>
+      <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/cs329z-agent-memory-architectures/</guid>
+      <description>&lt;p&gt;一个助手可以在当前对话里给出很好的答案，但到了下一次会话，又需要你重新交代偏好、解释项目、重复上一轮已经完成的工作。它也许很会推理，却没有把这些能力接到一段持续的经历上。&lt;/p&gt;
+
+&lt;p&gt;Agent Memory 要解决的，就是这种跨时间的不连续：&lt;strong&gt;把过去的交互转成以后能够取回、更新，并正确用于行动的信息。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;上一篇 &lt;a href=&#34;https://alexzheng13.github.io/post/cs329z-context-management-patterns/&#34;&gt;Context Management Patterns&lt;/a&gt;讨论了每次模型调用应该看到什么。这篇进一步讨论：信息离开当前窗口之后，应该保存成什么、什么时候写入与召回，以及怎样证明记忆真的改善了后续任务。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;经历：对话、工具调用、环境反馈
+                ↓
+提炼：事实、偏好、经验、技能与任务状态
+                ↓
+存储与维护：分层、关联、更新、遗忘
+                ↓
+按需召回 → 进入工作上下文 → 影响下一次行动
+                ↑                         ↓
+                └──────── 新反馈 ────────┘&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;本文根据 &lt;strong&gt;Stanford CS 329Z Lecture 7: Agent Memory Architectures&lt;/strong&gt; 整理，沿着讲义的“动机 → 类型 → 架构 → 评测 → 开放问题”展开。文中的工程示例与设计建议是我的补充；实验结果会注明其具体设置。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>CS 329Z：Context Management Patterns——让 Agent 在长任务中保持专注与连续性</title>

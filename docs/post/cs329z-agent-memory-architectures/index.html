@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CS 329Z：Agent Memory Architectures——记忆类型、架构设计与评测 - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="基于 Stanford CS329Z Lecture 7，梳理 Agent 的工作、情景、语义和程序性记忆，以及 Voyager、AWM、MemGPT、MemoryOS、Generative Agents、A-Mem、Mem0 等架构，并比较四类记忆评测。" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/post/cs329z-agent-memory-architectures/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/cs329z-agent-memory-architectures/">
+<meta name="site-language-route" data-language="en" content="/en/post/cs329z-agent-memory-architectures/">
+<meta name="site-current-language" content="zh-cn"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="CS 329Z：Agent Memory Architectures——记忆类型、架构设计与评测" />
+<meta property="og:description" content="基于 Stanford CS329Z Lecture 7，梳理 Agent 的工作、情景、语义和程序性记忆，以及 Voyager、AWM、MemGPT、MemoryOS、Generative Agents、A-Mem、Mem0 等架构，并比较四类记忆评测。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/post/cs329z-agent-memory-architectures/" />
+<meta property="article:published_time" content="2026-10-14T21:42:43+02:00" />
+<meta property="article:modified_time" content="2026-10-14T21:42:43+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="CS 329Z：Agent Memory Architectures——记忆类型、架构设计与评测">
+<meta itemprop="description" content="基于 Stanford CS329Z Lecture 7，梳理 Agent 的工作、情景、语义和程序性记忆，以及 Voyager、AWM、MemGPT、MemoryOS、Generative Agents、A-Mem、Mem0 等架构，并比较四类记忆评测。">
+
+
+<meta itemprop="datePublished" content="2026-10-14T21:42:43&#43;02:00" />
+<meta itemprop="dateModified" content="2026-10-14T21:42:43&#43;02:00" />
+<meta itemprop="wordCount" content="6549">
+
+
+
+<meta itemprop="keywords" content="AI Agents,Agent Memory,Memory,Context Engineering,MemGPT,Mem0,Evaluation," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CS 329Z：Agent Memory Architectures——记忆类型、架构设计与评测"/>
+<meta name="twitter:description" content="基于 Stanford CS329Z Lecture 7，梳理 Agent 的工作、情景、语义和程序性记忆，以及 Voyager、AWM、MemGPT、MemoryOS、Generative Agents、A-Mem、Mem0 等架构，并比较四类记忆评测。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/cs329z-agent-memory-architectures/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/cs329z-agent-memory-architectures/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/cs329z-agent-memory-architectures/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/cs329z-agent-memory-architectures/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">CS 329Z：Agent Memory Architectures——记忆类型、架构设计与评测</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-10-14 </span>
+        <div class="post-category">
+            <a href="/categories/ai-agents/"> AI Agents </a>
+            </div>
+          <span class="more-meta"> 约 6549 字 </span>
+          <span class="more-meta"> 预计阅读 14 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-没有记忆-agent-会失去什么">1. 没有记忆，Agent 会失去什么？</a></li>
+<li><a href="#2-四种记忆-当前状态-过去经历-事实与技能">2. 四种记忆：当前状态、过去经历、事实与技能</a>
+<ul>
+<li><a href="#参数记忆与上下文记忆是另一条轴">参数记忆与上下文记忆是另一条轴</a></li>
+</ul></li>
+<li><a href="#3-架构先回答-what-when-how">3. 架构先回答 What、When、How</a>
+<ul>
+<li><a href="#what-保存与召回什么">What：保存与召回什么？</a></li>
+<li><a href="#when-什么时候读写">When：什么时候读写？</a></li>
+<li><a href="#how-使用什么存储与检索机制">How：使用什么存储与检索机制？</a></li>
+</ul></li>
+<li><a href="#4-模式一-从经历中学习程序与技能">4. 模式一：从经历中学习程序与技能</a>
+<ul>
+<li><a href="#voyager-把成功行为保存成可执行代码">Voyager：把成功行为保存成可执行代码</a></li>
+<li><a href="#awm-从轨迹中归纳可重复工作流">AWM：从轨迹中归纳可重复工作流</a></li>
+<li><a href="#skill-files-把方法变成可按需加载的资产">Skill Files：把方法变成可按需加载的资产</a></li>
+</ul></li>
+<li><a href="#5-模式二-分层记忆-让有限上下文连接长期存储">5. 模式二：分层记忆，让有限上下文连接长期存储</a>
+<ul>
+<li><a href="#memgpt-让模型参与管理自己的记忆">MemGPT：让模型参与管理自己的记忆</a></li>
+<li><a href="#memoryos-增加中期层与用户长期画像">MemoryOS：增加中期层与用户长期画像</a></li>
+</ul></li>
+<li><a href="#6-模式三-通过反思-把经历转成可复用结论">6. 模式三：通过反思，把经历转成可复用结论</a>
+<ul>
+<li><a href="#reflexion-从反馈中保留改进经验">Reflexion：从反馈中保留改进经验</a></li>
+<li><a href="#generative-agents-记忆流-检索-计划与反思">Generative Agents：记忆流、检索、计划与反思</a></li>
+</ul></li>
+<li><a href="#7-模式四-维护记忆-持续更新与遗忘">7. 模式四：维护记忆，持续更新与遗忘</a>
+<ul>
+<li><a href="#sleep-time-compute-利用请求之间的时间整理上下文">Sleep-time Compute：利用请求之间的时间整理上下文</a></li>
+<li><a href="#a-mem-让记忆的组织也具有主动性">A-Mem：让记忆的组织也具有主动性</a></li>
+<li><a href="#mem0-让新信息触发明确的更新动作">Mem0：让新信息触发明确的更新动作</a></li>
+</ul></li>
+<li><a href="#8-四类架构可以怎样组合">8. 四类架构可以怎样组合？</a></li>
+<li><a href="#9-记忆评测-从-答得出-走向-做得到">9. 记忆评测：从“答得出”走向“做得到”</a>
+<ul>
+<li><a href="#locomo-长对话里找得到-也要用得对">LoCoMo：长对话里找得到，也要用得对</a></li>
+<li><a href="#personamem-偏好会变-当前回答也要随之变化">PersonaMem：偏好会变，当前回答也要随之变化</a></li>
+<li><a href="#longmemeval-v2-把环境经验变成同事式知识">LongMemEval-V2：把环境经验变成同事式知识</a></li>
+<li><a href="#memoryarena-跨会话经验必须帮助后续行动">MemoryArena：跨会话经验必须帮助后续行动</a></li>
+</ul></li>
+<li><a href="#10-三个仍未解决的问题">10. 三个仍未解决的问题</a>
+<ul>
+<li><a href="#记什么-忘什么">记什么，忘什么？</a></li>
+<li><a href="#记忆可信度-隐私与用户控制">记忆可信度、隐私与用户控制</a></li>
+<li><a href="#检索到了-也可能用错">检索到了，也可能用错</a></li>
+</ul></li>
+<li><a href="#11-一份可落地的记忆记录">11. 一份可落地的记忆记录</a></li>
+<li><a href="#来源与延伸阅读">来源与延伸阅读</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>一个助手可以在当前对话里给出很好的答案，但到了下一次会话，又需要你重新交代偏好、解释项目、重复上一轮已经完成的工作。它也许很会推理，却没有把这些能力接到一段持续的经历上。</p>
+
+<p>Agent Memory 要解决的，就是这种跨时间的不连续：<strong>把过去的交互转成以后能够取回、更新，并正确用于行动的信息。</strong></p>
+
+<p>上一篇 <a href="/post/cs329z-context-management-patterns/">Context Management Patterns</a>讨论了每次模型调用应该看到什么。这篇进一步讨论：信息离开当前窗口之后，应该保存成什么、什么时候写入与召回，以及怎样证明记忆真的改善了后续任务。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">经历：对话、工具调用、环境反馈
+                ↓
+提炼：事实、偏好、经验、技能与任务状态
+                ↓
+存储与维护：分层、关联、更新、遗忘
+                ↓
+按需召回 → 进入工作上下文 → 影响下一次行动
+                ↑                         ↓
+                └──────── 新反馈 ────────┘</code></pre></td></tr></table>
+</div>
+</div>
+<p>本文根据 <strong>Stanford CS 329Z Lecture 7: Agent Memory Architectures</strong> 整理，沿着讲义的“动机 → 类型 → 架构 → 评测 → 开放问题”展开。文中的工程示例与设计建议是我的补充；实验结果会注明其具体设置。</p>
+
+<blockquote>
+<p><strong>同课程文章</strong>：<a href="/post/cs329z-context-management-patterns/">Context Management Patterns</a> · <a href="/post/cs329z-frameworks-orchestration/">Frameworks &amp; Orchestration</a> · <a href="/post/cs329z-rag-agentic-retrieval/">从 RAG 到 Agentic RAG</a></p>
+</blockquote>
+
+<h2 id="1-没有记忆-agent-会失去什么">1. 没有记忆，Agent 会失去什么？</h2>
+
+<p>讲义把问题分成三类：</p>
+
+<ul>
+<li><strong>Loss of Procedure</strong>：每次都要重新教它任务应该怎样做；</li>
+<li><strong>Loss of Knowledge</strong>：重要事实、规则和偏好没有跨会话保留；</li>
+<li><strong>Loss of Progress</strong>：任务变长后，忘记已经做过什么、早期目标与用户要求。</li>
+</ul>
+
+<p>对应地，记忆能够带来个性化、从经验中学习，以及有状态的持续工作。</p>
+
+<p>例如，用户说“接着改上次的研究计划”。一个有用的助手需要找回计划文件、尚未解决的问题、已经接受的修改意见，以及当前有效的限制。仅仅记住“用户正在写研究计划”，还不足以接着工作。</p>
+
+<p>因此，记忆质量最终要体现在下一次任务上：是否减少重复解释，是否避免重复错误，是否保留了尚未完成的承诺。</p>
+
+<h2 id="2-四种记忆-当前状态-过去经历-事实与技能">2. 四种记忆：当前状态、过去经历、事实与技能</h2>
+
+<p>讲义借用 CoALA（Cognitive Architectures for Language Agents）的框架，把记忆按内容和用途区分。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/coala.webp" alt="CoALA：工作记忆与程序性、语义、情景记忆之间的关系" /></p>
+
+<p><em>讲义第 16 页，原图来自 CoALA 论文。</em></p>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>主要保存什么</th>
+<th>示例</th>
+<th>使用方式</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Working Memory</td>
+<td>当前可见的任务状态与信息</td>
+<td>当前目标、最新工具结果、相关代码</td>
+<td>直接参与本轮推理，通常体现在上下文中</td>
+</tr>
+
+<tr>
+<td>Episodic Memory</td>
+<td>过去发生的具体经历</td>
+<td>一段对话、一次失败的测试、一个任务轨迹</td>
+<td>回查事件、恢复证据与历史</td>
+</tr>
+
+<tr>
+<td>Semantic Memory</td>
+<td>提炼出的事实和知识</td>
+<td>用户偏好、项目规则、环境特征</td>
+<td>回答问题或约束当前决策</td>
+</tr>
+
+<tr>
+<td>Procedural Memory</td>
+<td>如何完成任务</td>
+<td>技能代码、操作流程、排错方法</td>
+<td>指导或执行后续行动</td>
+</tr>
+</tbody>
+</table>
+
+<p>同一次经历可能产生多种记忆。例如，一次部署失败可以保存为原始日志；从中提炼出“发布前要检查配置版本”；再形成一份发布检查流程。它们分别偏向情景、语义与程序性记忆。</p>
+
+<h3 id="参数记忆与上下文记忆是另一条轴">参数记忆与上下文记忆是另一条轴</h3>
+
+<p>模型权重中已经包含大量知识和行为模式，也可以通过微调改变。外部事实、技能文件和历史对话，则要被读入上下文后才能用于当前生成。</p>
+
+<p>这与前面的内容分类并不冲突：同一种知识可以存在于参数中，也可以保存在外部存储中。</p>
+
+<p>讲义把参数侧的 Episodic Memory 标为不适用，可以理解为：<strong>模型权重不能代替一套能够精确查回某次交互的个人事件档案。</strong> 这并不意味着模型绝不会记住训练样本，而是强调可追踪历史与参数知识的用途不同。</p>
+
+<h2 id="3-架构先回答-what-when-how">3. 架构先回答 What、When、How</h2>
+
+<p>选文件系统、数据库或知识图谱之前，需要先回答三个问题。</p>
+
+<h3 id="what-保存与召回什么">What：保存与召回什么？</h3>
+
+<p>是用户事实、偏好、成功轨迹、失败经验，还是会话进度？原始日志与提炼结论是否同时保留？一个临时假设是否有足够证据成为长期记忆？</p>
+
+<h3 id="when-什么时候读写">When：什么时候读写？</h3>
+
+<p>记忆操作可以由 Agent 按需调用，也可以由后台任务、会话结束、工具事件或其他条件触发。</p>
+
+<p>实时写入让信息更快可用，但会增加当前任务延迟；后台整理能够做更充分的合并与校验，但要处理新旧状态并存的问题。</p>
+
+<h3 id="how-使用什么存储与检索机制">How：使用什么存储与检索机制？</h3>
+
+<table>
+<thead>
+<tr>
+<th>存储方式</th>
+<th>优势</th>
+<th>需要解决的问题</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>文件系统</td>
+<td>可读、可编辑，自带目录层次；可用 <code>ls</code>、搜索与读取工具操作</td>
+<td>命名、索引、并发修改和信息重复</td>
+</tr>
+
+<tr>
+<td>数据库</td>
+<td>易于按用户、时间、来源等字段筛选；可组合向量与词法检索</td>
+<td>Schema、查询质量、更新一致性</td>
+</tr>
+
+<tr>
+<td>知识图谱</td>
+<td>显式表达实体与关系，适合关系查询</td>
+<td>抽取错误、实体消歧、关系更新与维护成本</td>
+</tr>
+</tbody>
+</table>
+
+<p>向量检索适合语义近邻，BM25 适合精确词项，SQLite 等结构化存储适合元数据筛选。它们可以组合，和之前 RAG 章节中的检索取舍相通。</p>
+
+<p><strong>存储介质只解决一部分问题。</strong> 一个文件目录如果没有有效的读取策略，可能成为杂乱档案；一个向量库如果没有更新机制，也可能持续召回过时偏好。</p>
+
+<h2 id="4-模式一-从经历中学习程序与技能">4. 模式一：从经历中学习程序与技能</h2>
+
+<p>这类架构把过去有用的行动提炼成可以复用的程序性记忆。下一次遇到类似任务时，Agent 不必从头探索。</p>
+
+<h3 id="voyager-把成功行为保存成可执行代码">Voyager：把成功行为保存成可执行代码</h3>
+
+<p><a href="https://arxiv.org/abs/2305.16291">Voyager</a>在 Minecraft 中组合自动课程、反馈驱动的代码改进与 Skill Library。技能库保存代码及其描述，后续任务根据需要检索、调用或组合已有技能。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/voyager-skills.webp" alt="Voyager：用技能描述建立索引，检索对应的可执行程序" /></p>
+
+<p><em>讲义第 32 页。</em></p>
+
+<p>例如，“采矿”“熔炼”“制作工具”可以成为较小的能力单元，复杂任务再复用这些程序。讲义中的消融案例显示，技能库帮助系统在所展示实验中完成钻石工具制作；没有技能库的配置未达成同一目标。</p>
+
+<p>这里的学习发生在外部代码与检索层面，并不要求同步更新基础模型权重。</p>
+
+<h3 id="awm-从轨迹中归纳可重复工作流">AWM：从轨迹中归纳可重复工作流</h3>
+
+<p><a href="https://arxiv.org/abs/2409.07429">Agent Workflow Memory（AWM）</a>提取常见的操作套路。它从任务轨迹中归纳工作流，再把有关的流程提供给 Agent，指导后续行动。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/awm.webp" alt="AWM：收集轨迹、评价结果，再归纳可以复用的工作流" /></p>
+
+<p><em>讲义第 35 页。</em></p>
+
+<p>比如，“进入商品分类 → 选择子分类 → 浏览结果”，或“定位字段 → 修改值 → 保存”。提炼时应把具体商品名、用户 ID 等换成参数，保留可迁移的操作结构。</p>
+
+<h3 id="skill-files-把方法变成可按需加载的资产">Skill Files：把方法变成可按需加载的资产</h3>
+
+<p>技能也可以保存为说明文件、示例与脚本。它们适合通过 Progressive Disclosure 加载：先暴露简短能力描述，任务需要时再读详细步骤。</p>
+
+<p>这类记忆的共同风险是<strong>环境变化</strong>。网站结构、API、权限和业务规则发生变化后，过去成功的流程可能不再有效。因此，技能需要适用条件、版本与验证，而不是只记录“曾经成功”。</p>
+
+<h2 id="5-模式二-分层记忆-让有限上下文连接长期存储">5. 模式二：分层记忆，让有限上下文连接长期存储</h2>
+
+<p>分层架构让当前上下文承载少量活跃信息，把更多历史和知识保存在外部，并通过工具按需调入。</p>
+
+<h3 id="memgpt-让模型参与管理自己的记忆">MemGPT：让模型参与管理自己的记忆</h3>
+
+<p>MemGPT 的核心思路是给模型提供读写记忆的工具。讲义图中，System Instructions、可修改的 Working Context 和 FIFO 消息队列处于有限窗口内；外部则包含 Recall Storage 和 Archival Storage。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/memgpt.webp" alt="MemGPT：有限上下文、消息队列、Recall Storage 与 Archival Storage" /></p>
+
+<p><em>讲义第 44 页，原图来自 MemGPT 论文。</em></p>
+
+<p>三个部分的用途不同：</p>
+
+<ul>
+<li><strong>Working Context</strong>：当前重要的事实、偏好和状态，可以写入或替换；</li>
+<li><strong>Recall Storage</strong>：保存以前的交互记录，按内容或时间查找；</li>
+<li><strong>Archival Storage</strong>：保存更大规模的信息，通过检索恢复相关内容。</li>
+</ul>
+
+<p>不必检索已经在当前窗口里的 Working Memory；真正需要解决的是何时把外部信息调进来，以及调入后应该替换什么。</p>
+
+<h3 id="memoryos-增加中期层与用户长期画像">MemoryOS：增加中期层与用户长期画像</h3>
+
+<p><a href="https://arxiv.org/abs/2506.06326">MemoryOS</a>区分 Short-term、Mid-term 和 Long-term Personal Memory，并围绕存储、更新、检索和生成构建流程。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/memoryos.webp" alt="MemoryOS：短期、中期与长期个人记忆之间的更新和检索" /></p>
+
+<p><em>讲义第 49 页。</em></p>
+
+<p>中期层承接近期多轮对话，长期层保存更稳定的信息。这样，不必让一次临时表达立刻成为长期画像，也不必在近期记录离开窗口时丢掉全部结构。</p>
+
+<p>分层带来的代价是管理复杂度：哪些信息应该晋升、降级、合并或过期？如果调度错误，长期记忆可能丰富，但当前任务依然拿不到正确证据。</p>
+
+<h2 id="6-模式三-通过反思-把经历转成可复用结论">6. 模式三：通过反思，把经历转成可复用结论</h2>
+
+<p>原始轨迹记录“发生过什么”，反思尝试提炼“从中学到了什么”。</p>
+
+<h3 id="reflexion-从反馈中保留改进经验">Reflexion：从反馈中保留改进经验</h3>
+
+<p>讲义回顾了 Reflexion：Actor 执行任务，Evaluator 提供反馈，Self-reflection 将失败或不足转成语言经验，并在后续尝试中使用。</p>
+
+<p>例如，第一次测试失败后留下的有用经验，应指出漏检的条件和下一次应采取的检查，而不是只写“以后更仔细”。这延续了 <a href="/post/agentic-llm-1-reasoning/">Reasoning 文章中的反思机制</a>，但关注点转向经验如何被保存与复用。</p>
+
+<h3 id="generative-agents-记忆流-检索-计划与反思">Generative Agents：记忆流、检索、计划与反思</h3>
+
+<p>Generative Agents 把观察写入 Memory Stream，检索与当前情境相关的记忆，再用于行动、计划和更高层的反思。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/generative-agents.webp" alt="Generative Agents：从感知写入记忆流，检索后参与行动、计划与反思" /></p>
+
+<p><em>讲义第 54 页。</em></p>
+
+<p>讲义的检索示例同时考虑 <strong>Recency、Importance、Relevance</strong>：一条记忆有多新、是否重要、与当前问题是否相关。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/memory-retrieval-score.webp" alt="Generative Agents 的检索评分示例：综合新近性、重要性与相关性" /></p>
+
+<p><em>讲义第 55 页。</em></p>
+
+<p>可以用下面的示意式理解这种加权选择；具体归一化和权重取决于实现：</p>
+
+<div class="math-display">
+\[
+S(m,q)=\alpha R_{\mathrm{recency}}(m)
++\beta I(m)+\gamma R_{\mathrm{relevance}}(m,q)
+\]
+</div>
+
+<p>只看语义相似度，可能错过最近变化的事实；只看时间，又可能丢掉长期重要承诺。多个信号共同决定哪些记忆值得进入当前上下文。</p>
+
+<p>反思增加了抽象，也增加了推断出错的可能。例如，从“用户连续两天点素食”直接推出“用户永远不吃肉”，就把有限观察扩张成了未经确认的偏好。反思结论应保留证据和不确定性。</p>
+
+<h2 id="7-模式四-维护记忆-持续更新与遗忘">7. 模式四：维护记忆，持续更新与遗忘</h2>
+
+<p>长期系统的难点会从“怎么写进去”逐渐转向“怎样保持可用”：去重、解决冲突、更新索引、关联已有知识，并删除或失效过时信息。</p>
+
+<h3 id="sleep-time-compute-利用请求之间的时间整理上下文">Sleep-time Compute：利用请求之间的时间整理上下文</h3>
+
+<p><a href="https://arxiv.org/abs/2504.13171">Sleep-time Compute</a>在用户查询到来之前，对已知上下文进行离线处理，预先构建可能有用的信息，以减少后续任务的即时计算。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/sleep-time-compute.webp" alt="Sleep-time Compute：将部分上下文处理提前到用户查询之前" /></p>
+
+<p><em>讲义第 58 页。</em></p>
+
+<p>讲义把它放在记忆维护部分。它不必真的发生在夜间：关键是把可提前完成的整理移出用户等待的关键路径。收益取决于未来查询是否可预测，以及整理成本能否被多次复用摊销。</p>
+
+<h3 id="a-mem-让记忆的组织也具有主动性">A-Mem：让记忆的组织也具有主动性</h3>
+
+<p><a href="https://arxiv.org/abs/2502.12110">A-Mem</a>把新交互整理为带描述、关键词和标签的笔记，并寻找与旧记忆的关联。新信息加入后，还可以触发既有记忆表示的更新。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/a-mem.webp" alt="A-Mem：笔记构建、关联生成、记忆演化与检索" /></p>
+
+<p><em>讲义第 62 页。</em></p>
+
+<p>这让“写一条记录”成为组织知识网络的过程，而不只是向数据库追加一行。对应的挑战是：自动生成的关联和描述也可能有错，需要回到原始证据检查。</p>
+
+<h3 id="mem0-让新信息触发明确的更新动作">Mem0：让新信息触发明确的更新动作</h3>
+
+<p>讲义中的 Mem0 流程先抽取候选记忆，再检索相关记录，检测冲突并选择更新方式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">ADD      新事实，加入记录
+UPDATE   已有事实变化，更新当前表示
+DELETE   移除不再应保留的记录
+NOOP     没有必要改变当前记忆</code></pre></td></tr></table>
+</div>
+</div>
+<p><img src="/img/posts/cs329z-agent-memory/mem0.webp" alt="Mem0：抽取事实、检测冲突，再执行记忆更新" /></p>
+
+<p><em>讲义第 64 页。</em></p>
+
+<p>例如，“以前周二有空，现在改成周四”不应简单保存为两条没有时间关系的偏好。系统需要区分历史状态与当前有效状态，避免召回时把两者同时当成现状。</p>
+
+<p>这里的 <code>DELETE</code> 是记忆算法的更新动作，不能直接等同于底层备份、缓存和日志中的彻底删除。产品层的数据删除还需要独立处理。</p>
+
+<h2 id="8-四类架构可以怎样组合">8. 四类架构可以怎样组合？</h2>
+
+<p>讲义的四种模式处理不同问题，可以共存：</p>
+
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>保存内容</th>
+<th>常见写入时机</th>
+<th>主要收益</th>
+<th>主要代价</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>从经历学习程序</td>
+<td>代码、工作流、技能</td>
+<td>成功轨迹之后或离线归纳</td>
+<td>减少重复探索</td>
+<td>流程可能过期</td>
+</tr>
+
+<tr>
+<td>分层记忆</td>
+<td>活跃信息与外部细节</td>
+<td>新信息到达、窗口压力增大时</td>
+<td>有限上下文连接更大存储</td>
+<td>依赖可靠调度与召回</td>
+</tr>
+
+<tr>
+<td>反思式整合</td>
+<td>经验、规律、高层结论</td>
+<td>获得反馈或积累观察后</td>
+<td>提高复用与迁移能力</td>
+<td>可能产生无依据推断</td>
+</tr>
+
+<tr>
+<td>记忆维护</td>
+<td>更新后的事实、关联与索引</td>
+<td>新证据、写入或后台运行时</td>
+<td>保持记忆新鲜且有组织</td>
+<td>消耗计算，也可能误删信息</td>
+</tr>
+</tbody>
+</table>
+
+<p>例如，一个研究助手可以保存完整任务轨迹，用工作记忆维持当前进度，从成功的检索任务中形成流程，并在后台更新项目事实。它们共享同一条闭环：经历进入系统，记忆影响下一次行动，新的结果再反过来修正记忆。</p>
+
+<h2 id="9-记忆评测-从-答得出-走向-做得到">9. 记忆评测：从“答得出”走向“做得到”</h2>
+
+<p>讲义提出四个标准：<strong>Realistic、Long-context、Challenging、Verifiable</strong>。来源和问题要接近实际任务，历史足够长，难度足以区分系统，而且成功与失败应有明确依据。</p>
+
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>记忆来源</th>
+<th>主要能力</th>
+<th>评测时应注意</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>LoCoMo</td>
+<td>长期模拟人物对话</td>
+<td>跨会话事实、时间关系、多跳问答等</td>
+<td>对话回忆不等于完成 Agent 任务</td>
+</tr>
+
+<tr>
+<td>PersonaMem</td>
+<td>模拟用户与助手交互</td>
+<td>动态用户画像与偏好变化</td>
+<td>选择合适回答与实际行动仍有距离</td>
+</tr>
+
+<tr>
+<td>LongMemEval-V2</td>
+<td>Web Agent 历史轨迹</td>
+<td>环境状态、工作流、易错点与前提判断</td>
+<td>检索结果、读取模型和计算预算都影响成绩</td>
+</tr>
+
+<tr>
+<td>MemoryArena</td>
+<td>相互依赖的多会话任务</td>
+<td>用先前经历指导后续实际操作</td>
+<td>失败也可能来自规划、工具与执行能力</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="locomo-长对话里找得到-也要用得对">LoCoMo：长对话里找得到，也要用得对</h3>
+
+<p>LoCoMo 包含长对话上的问答、事件总结等任务。讲义展示了用不同记忆单元做 RAG 的结果，并强调：即使模型找到了相关记忆，也未必能正确回答。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/locomo.webp" alt="LoCoMo：长对话历史上的问答、事件总结与多模态任务" /></p>
+
+<p><em>讲义第 71 页。</em></p>
+
+<p>这提醒我们把两种错误分开：一是没有召回正确证据，二是拿到证据后仍然理解或推理错误。仅提高 Recall 不能自动解决后者。</p>
+
+<h3 id="personamem-偏好会变-当前回答也要随之变化">PersonaMem：偏好会变，当前回答也要随之变化</h3>
+
+<p>PersonaMem 更关注用户画像的演进。用户过去喜欢某类食物，后来改变了偏好；助手要根据当前状态选择适合的回应，而不是重复旧推荐。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/personamem.webp" alt="PersonaMem：跨会话追踪偏好更新，并在新情境中使用" /></p>
+
+<p><em>讲义第 76 页。</em></p>
+
+<p>它适合暴露“记住了过去，却没有更新现在”的问题。但从候选答案中选对回应，与在开放任务中正确使用偏好，仍不是同一个测试。</p>
+
+<h3 id="longmemeval-v2-把环境经验变成同事式知识">LongMemEval-V2：把环境经验变成同事式知识</h3>
+
+<p>该基准考察 Agent 能否从大量 Web 操作轨迹中积累环境经验，包括静态状态、动态变化、工作流、环境陷阱与前提意识。</p>
+
+<p>讲义的图表展示了 451 个问题，题型包括选择题、简答与自由回答；因此不宜把它整体描述为选择题基准。历史可扩展到数百条轨迹，论文报告最长约 115M Tokens。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/longmemeval-types.webp" alt="LongMemEval-V2：来源环境、问题类别与多种答案格式" /></p>
+
+<p><em>讲义第 83 页。</em></p>
+
+<p>讲义同时比较了 RAG 式召回与文件系统加编码 Agent 的证据搜集。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/longmemeval-results.webp" alt="LongMemEval-V2 的准确率—延迟对比，不同方案也使用了不同模型" /></p>
+
+<p><em>讲义第 85 页。</em></p>
+
+<p>文件系统方案在展示的设置中表现更好，但两侧使用的模型也不同；更强的模型与更主动的工具探索都可能贡献收益。<strong>这张图不能单独证明“文件系统天然优于向量检索”。</strong> 对生产选型，更有价值的是在相同任务、模型和预算下比较完整系统。</p>
+
+<h3 id="memoryarena-跨会话经验必须帮助后续行动">MemoryArena：跨会话经验必须帮助后续行动</h3>
+
+<p>MemoryArena 把记忆、Agent 与环境连接起来。任务包含相互依赖的子任务，前一轮的观察、反馈与偏好会成为后一轮的条件。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/memoryarena.webp" alt="MemoryArena：多会话 Memory–Agent–Environment 循环" /></p>
+
+<p><em>讲义第 88 页。</em></p>
+
+<p>例如，群体旅行规划先获得成员需求，下一轮再追加预算或行程变更。系统需要用已有记忆修订结果，并通过可验证约束判断是否完成。</p>
+
+<p>讲义中某些 Memory Controller 在这个设置下表现较弱，说明仍有很大提升空间。不过，任务完成率也依赖工具、规划和推理；不能把每一次失败都归因于记忆。</p>
+
+<h2 id="10-三个仍未解决的问题">10. 三个仍未解决的问题</h2>
+
+<h3 id="记什么-忘什么">记什么，忘什么？</h3>
+
+<p>记忆写入时，我们并不知道哪些内容未来会重要。保存一切会增加召回、上下文和维护成本；删除过多，又可能丢失关键证据和未完成承诺。</p>
+
+<p>一句话究竟是稳定偏好、临时情绪、引用他人的话，还是玩笑？仅靠“看起来像事实”不足以决定长期保存。</p>
+
+<h3 id="记忆可信度-隐私与用户控制">记忆可信度、隐私与用户控制</h3>
+
+<p>程序性记忆会影响未来行动，因此也是攻击入口。如果恶意内容被保存成“以后应该遵循的流程”，攻击影响就可能跨越当前会话。</p>
+
+<p><img src="/img/posts/cs329z-agent-memory/memory-poisoning.webp" alt="记忆投毒：被污染的程序性记忆可能影响后续任务中的行动" /></p>
+
+<p><em>讲义第 98 页。</em></p>
+
+<p>记忆被召回，也不意味着获得了更高的指令权限。对用户来说，还需要看得见系统保存了什么、信息来自哪里，并能够纠正或删除。</p>
+
+<h3 id="检索到了-也可能用错">检索到了，也可能用错</h3>
+
+<p>过度个性化就是典型例子：用户问一个普通问题，助手却因为读到了某项个人偏好，强行把答案往那个方向改。</p>
+
+<p>更好的召回与训练可以缓解这种情况，但还需要判断当前任务是否真的需要个人信息。<strong>会使用记忆，也包括知道什么时候不使用。</strong></p>
+
+<h2 id="11-一份可落地的记忆记录">11. 一份可落地的记忆记录</h2>
+
+<p>下面是我的工程补充，用来把前面的概念落实到一个明确的数据对象：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">id<span class="p">:</span><span class="w"> </span>pref<span class="m">-0042</span><span class="w">
+</span><span class="w"></span>type<span class="p">:</span><span class="w"> </span>semantic<span class="w">
+</span><span class="w"></span>scope<span class="p">:</span><span class="w"> </span>user<span class="w">
+</span><span class="w"></span>content<span class="p">:</span><span class="w"> </span>用户本学期更倾向周四开会<span class="w">
+</span><span class="w"></span>source<span class="p">:</span><span class="w"> </span>conversation<span class="m">-2026-10-14</span>-message<span class="m">-18</span><span class="w">
+</span><span class="w"></span>observed_at<span class="p">:</span><span class="w"> </span><span class="ld">2026-10-14</span><span class="w">
+</span><span class="w"></span>valid_during<span class="p">:</span><span class="w"> </span>当前学期<span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>active<span class="w">
+</span><span class="w"></span>supersedes<span class="p">:</span><span class="w"> </span>pref<span class="m">-0017</span><span class="w">
+</span><span class="w"></span>evidence<span class="p">:</span><span class="w"> </span>用户明确表示周二不再方便</code></pre></td></tr></table>
+</div>
+</div>
+<p>它除了保存内容，还记录来源、适用时间、有效状态和替代关系。实际系统再根据权限、任务相关性与时间过滤候选，取回必要证据，然后提供给回答或行动模块。</p>
+
+<p>一条完整的运行链路可以是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">保存原始交互
+    → 提取候选事实与经验
+    → 对照已有记忆，判断新增、更新或不处理
+    → 保留来源与时间关系
+    → 当前任务按需召回
+    → 检查适用性，再参与推理与行动
+    → 根据新反馈更新或失效</code></pre></td></tr></table>
+</div>
+</div>
+<p>评测也应覆盖整个链路：事实是否抽对、旧状态是否更新、召回是否准确、使用是否恰当，以及最终任务是否因此变好。</p>
+
+<p>这也是我对这一讲的核心理解：一个持续工作的助手，既要保留经历，也要能够修正自己对经历的理解。可靠记忆来自存储、召回、更新与行动之间的配合。</p>
+
+<h2 id="来源与延伸阅读">来源与延伸阅读</h2>
+
+<p>本文主要依据 <strong>CS329Z Lecture 7: Agent Memory Architectures</strong>，讲义署名 Diyi Yang、Michael Ryan、John Yang。插图渲染自用户提供的 PDF，保留原始来源标注；文章日期沿用 PDF 创建时间。架构与实验解释以讲义所述设置为准，不代表这些项目之后的所有版本。</p>
+
+<ul>
+<li><a href="https://arxiv.org/abs/2309.02427">CoALA</a> · <a href="https://arxiv.org/abs/2305.16291">Voyager</a> · <a href="https://arxiv.org/abs/2409.07429">Agent Workflow Memory</a></li>
+<li><a href="https://arxiv.org/abs/2310.08560">MemGPT</a> · <a href="https://arxiv.org/abs/2506.06326">MemoryOS</a></li>
+<li><a href="https://arxiv.org/abs/2303.11366">Reflexion</a> · <a href="https://arxiv.org/abs/2304.03442">Generative Agents</a></li>
+<li><a href="https://arxiv.org/abs/2504.13171">Sleep-time Compute</a> · <a href="https://arxiv.org/abs/2502.12110">A-Mem</a> · <a href="https://arxiv.org/abs/2504.19413">Mem0</a></li>
+<li><a href="https://aclanthology.org/2024.acl-long.747/">LoCoMo</a> · <a href="https://arxiv.org/abs/2504.14225">PersonaMem</a> · <a href="https://arxiv.org/abs/2605.12493">LongMemEval-V2</a> · <a href="https://arxiv.org/abs/2602.16313">MemoryArena</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2026-10-14
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/ai-agents/">AI Agents</a>
+          <a href="/tags/agent-memory/">Agent Memory</a>
+          <a href="/tags/memory/">Memory</a>
+          <a href="/tags/context-engineering/">Context Engineering</a>
+          <a href="/tags/memgpt/">MemGPT</a>
+          <a href="/tags/mem0/">Mem0</a>
+          <a href="/tags/evaluation/">Evaluation</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/cs329z-context-management-patterns/">
+            <span class="next-text nav-default">CS 329Z：Context Management Patterns——让 Agent 在长任务中保持专注与连续性</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

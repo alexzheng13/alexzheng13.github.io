@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MemGPT on Blowing in the wind</title>
+    <link>https://alexzheng13.github.io/en/tags/memgpt/</link>
+    <description>Recent content in MemGPT on Blowing in the wind</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 14 Oct 2026 21:42:43 +0200</lastBuildDate>
+    
+	<atom:link href="https://alexzheng13.github.io/en/tags/memgpt/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation</title>
+      <link>https://alexzheng13.github.io/en/post/cs329z-agent-memory-architectures/</link>
+      <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/post/cs329z-agent-memory-architectures/</guid>
+      <description>&lt;p&gt;An assistant can give an excellent answer in one conversation, then ask you to explain your preferences, project, and completed work all over again in the next. It may reason well without connecting that ability to an ongoing history.&lt;/p&gt;
+
+&lt;p&gt;Agent memory addresses this discontinuity: &lt;strong&gt;turning past interactions into information that can be retrieved, updated, and used correctly in later actions.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The previous article, &lt;a href=&#34;https://alexzheng13.github.io/en/post/cs329z-context-management-patterns/&#34;&gt;Context Management Patterns&lt;/a&gt;, examined what should enter each model call. This article asks what happens after information leaves the window: what gets stored, when it is written and retrieved, and how to establish whether memory improves later tasks.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;Experience: conversations, tool calls, environment feedback
+                         ↓
+Distillation: facts, preferences, lessons, skills, task state
+                         ↓
+Storage and maintenance: tiers, links, updates, forgetting
+                         ↓
+Retrieve → Working context → Next action
+    ↑                            ↓
+    └──────── New feedback ──────┘&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;This article follows &lt;strong&gt;Stanford CS 329Z Lecture 7: Agent Memory Architectures&lt;/strong&gt;, moving from motivation and memory types through architectures, evaluation, and open problems. Engineering examples and implementation suggestions are my additions; experimental claims refer to their stated setups.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

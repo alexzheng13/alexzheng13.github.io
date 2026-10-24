@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-12T22:25:07+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-14T21:42:43+02:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 33 posts by year</p>
+      <p>Browse all 34 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/cs329z-agent-memory-architectures/">
+          <time datetime="2026-10-14">10-14</time>
+          <span>CS 329Z: Agent Memory Architectures — Types, System Design, and Evaluation</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/cs329z-context-management-patterns/">
           <time datetime="2026-10-12">10-12</time>
           <span>CS 329Z: Context Management Patterns — Keeping Agents Focused Across Long Tasks</span>
@@ -393,6 +397,40 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/reinforcement-learning-3-exploration-and-data/">Reinforcement Learning III: Exploration, Policy Sampling, and Data Sources</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-08-27">August 27, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>5 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>Reinforcement learning must decide more than how to update parameters. It must also decide <strong>where the next training example should come from</strong>.</p>
+
+<p>Always choosing the current best action can preserve an early mistake forever. Exploring at random forever wastes opportunities. Training data may also come from the current policy, old policies, humans, experts, or a fixed dataset. Whether an algorithm can use that data safely depends on distribution mismatch.</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/reinforcement-learning/">Reinforcement Learning</a></li>
+                  <li><a href="/en/tags/exploration/">Exploration</a></li>
+                  <li><a href="/en/tags/exploitation/">Exploitation</a></li>
+                  <li><a href="/en/tags/ucb/">UCB</a></li>
+                  <li><a href="/en/tags/thompson-sampling/">Thompson Sampling</a></li>
+                  <li><a href="/en/tags/offline-rl/">Offline RL</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/reinforcement-learning-3-exploration-and-data/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/reinforcement-learning-2-classic-algorithms/">Reinforcement Learning II: From Q-Learning and DQN to Actor-Critic and PPO</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-08-26">August 26, 2026</time>
@@ -520,29 +558,6 @@
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/en/post/stanford-cs230-career-advice-in-ai/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/linux-io-multiplexing-select-poll-epoll/">Translation: Linux I/O Multiplexing - select vs. poll vs. epoll</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2021-02-11">February 11, 2021</time>
-            <span aria-hidden="true">·</span>
-            <span>9 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">Introduction  Before reading this article, you can first understand the five I/O models of Liunx
- References: I/O Models &ndash;Section 6.2 of &ldquo;UNIX® Network Programming Volume 1, Third Edition: The Sockets Networking&rdquo; by Richard Stevens
-The following is the text of the article    One of the basic concepts of Linux (actually Unix) is that everything in Unix/Linux is a file. Each process has a file descriptor table that points to files, sockets, devices, and other operating system objects related to the process.</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/linux-io-multiplexing-select-poll-epoll/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>
