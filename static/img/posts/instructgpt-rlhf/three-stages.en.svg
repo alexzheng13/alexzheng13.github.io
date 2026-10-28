@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="410" viewBox="0 0 1320 410" role="img" aria-labelledby="title desc">
+  <title id="title">The three-stage RLHF pipeline</title>
+  <desc id="desc">A pretrained model is supervised fine-tuned. Ranked responses train a reward model. PPO uses the SFT policy, frozen reference, and reward model. Evaluation checks all stages.</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#526477"/></marker></defs>
+  <rect width="1320" height="410" rx="18" fill="#f7f9fc"/>
+  <g font-family="system-ui, sans-serif" fill="#24394b" text-anchor="middle">
+    <g stroke-width="2">
+      <rect x="32" y="60" width="370" height="155" rx="12" fill="#e9f2fc" stroke="#4e81af"/>
+      <rect x="475" y="60" width="370" height="155" rx="12" fill="#f1eafa" stroke="#9567b3"/>
+      <rect x="918" y="60" width="370" height="155" rx="12" fill="#e7f3eb" stroke="#5a9371"/>
+      <rect x="300" y="315" width="720" height="65" rx="12" fill="#fff5df" stroke="#b58b38"/>
+    </g>
+    <g font-size="27" font-weight="650"><text x="217" y="108">1. Supervised fine-tuning</text><text x="660" y="108">2. Reward model</text><text x="1103" y="108">3. PPO-RLHF</text></g>
+    <g font-size="22"><text x="217" y="150">Pretrained model + demonstrations</text><text x="217" y="185">Output: SFT policy</text><text x="660" y="150">Prompt + chosen / rejected</text><text x="660" y="185">Output: preference scorer</text><text x="1103" y="150">Policy + reference + reward model</text><text x="1103" y="185">Output: optimized policy</text><text x="660" y="355">Evaluation: benchmarks + preference tests + human review</text></g>
+    <g stroke="#526477" stroke-width="2.5" fill="none" marker-end="url(#arrow)"><path d="M 402 137 H 463"/><path d="M 845 137 H 906"/><path d="M 217 215 V 259 H 1103 V 223"/><path d="M 1103 215 V 347 H 1032"/></g>
+    <rect x="402" y="240" width="516" height="36" fill="#f7f9fc"/><text x="660" y="265" font-size="21">SFT initializes Actor and frozen Reference</text>
+  </g>
+</svg>

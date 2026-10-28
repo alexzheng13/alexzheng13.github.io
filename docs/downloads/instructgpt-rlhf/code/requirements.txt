@@ -1,0 +1,6 @@
+# 第8章：RLHF 完整流水线实验依赖
+transformers==4.57.3
+trl==0.24.0
+torch>=2.0.0
+datasets==4.4.1
+accelerate==1.10.1

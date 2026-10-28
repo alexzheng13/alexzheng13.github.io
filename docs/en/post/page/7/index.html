@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-24T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-28T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 37 posts by year</p>
+      <p>Browse all 38 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/reinforcement-learning-4-instructgpt-rlhf/">
+          <time datetime="2026-10-28">10-28</time>
+          <span>Reinforcement Learning (4): InstructGPT-Style RLHF</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/anthropic-agent-skills/">
           <time datetime="2026-10-24">10-24</time>
           <span>Anthropic Agent Skills</span>
@@ -409,6 +413,32 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/use-a-mutex-or-a-channel/">Use a Mutex or a Channel?</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2020-01-16">January 16, 2020</time>
+            <span aria-hidden="true">·</span>
+            <span>1 min read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">Use a sync.Mutex or a channel?
+ Gives us 3 channel usage scenarios respectively:
+ 1. Transfer ownership of data 2. Assign work units 3. Convey asynchronous results  Usage scenarios of 2 mutex:
+ 1. Cache 2. Status  Chapter 2 &ldquo;Go&rsquo;s Philosophy on Concurrency&rdquo; in the book &ldquo;Concurrency In Go&rdquo; also has a decision tree and detailed discussion
+Summary
+﻿Go implements the CSP communication model through channels, which are mainly used for message passing and event notification between goroutines.</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/en/post/use-a-mutex-or-a-channel/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/http-1-1-vs-http-2/">HTTP/1.1 vs. HTTP/2</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2020-01-16">January 16, 2020</time>
@@ -495,27 +525,6 @@ Why?  The current stack splitting mechanism has a &ldquo;hot split&rdquo; proble
 
         <footer class="blog-summary-footer">
           <a class="blog-summary-read-more" href="/en/post/contiguous-stacks/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/go-main-goroutine-scheduler-2/">Inside Go&#39;s Main Goroutine Scheduler (2)</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2019-11-13">November 13, 2019</time>
-            <span aria-hidden="true">·</span>
-            <span>27 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">9. Enter runtime/proc.go and scheduler initialization 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65  func schedinit() { // raceinit must be the first call to race detector.</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/go-main-goroutine-scheduler-2/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

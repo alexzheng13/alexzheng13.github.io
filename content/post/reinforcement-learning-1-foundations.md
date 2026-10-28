@@ -16,7 +16,7 @@ mathjaxEnableSingleDollar: true
 
 <!--more-->
 
-> **系列导航**：**（一）基础、MDP 与贝尔曼方程** · [（二）从 Q-Learning 到 PPO](/post/reinforcement-learning-2-classic-algorithms/) · [（三）探索、采样与数据](/post/reinforcement-learning-3-exploration-and-data/) · （四）RLHF（待续） · （五）DPO 与 GRPO（待续） · （六）Agentic RL（待续）
+> **系列导航**：**（一）基础、MDP 与贝尔曼方程** · [（二）从 Q-Learning 到 PPO](/post/reinforcement-learning-2-classic-algorithms/) · [（三）探索、采样与数据](/post/reinforcement-learning-3-exploration-and-data/) · [（四）InstructGPT 风格的 RLHF](/post/reinforcement-learning-4-instructgpt-rlhf/) · （五）DPO 与 GRPO（待续） · （六）Agentic RL（待续）
 
 ## 1. 强化学习到底在学什么？
 

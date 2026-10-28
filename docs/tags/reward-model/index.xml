@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reward Model on Blowing in the wind</title>
+    <link>https://alexzheng13.github.io/tags/reward-model/</link>
+    <description>Recent content in Reward Model on Blowing in the wind</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 28 Oct 2026 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://alexzheng13.github.io/tags/reward-model/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>强化学习（四）：InstructGPT 风格的 RLHF</title>
+      <link>https://alexzheng13.github.io/post/reinforcement-learning-4-instructgpt-rlhf/</link>
+      <pubDate>Wed, 28 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/reinforcement-learning-4-instructgpt-rlhf/</guid>
+      <description>&lt;p&gt;预训练语言模型通过预测下一个 token 学习文本中的规律。要把它训练成能回答问题、遵循指令的助手，还需要示范回答和偏好数据。&lt;/p&gt;
+
+&lt;p&gt;InstructGPT 的训练分为三个阶段：先用 SFT 学习示范回答，再训练 Reward Model 评价回答，最后用 PPO 根据奖励更新策略。&lt;/p&gt;
+
+&lt;p&gt;三个阶段的实现可以对照 &lt;a href=&#34;https://github.com/walkinglabs/hands-on-modern-rl/tree/main/code/chapter08_rlhf&#34;&gt;&lt;code&gt;chapter08_rlhf&lt;/code&gt;&lt;/a&gt; 中的 Python 文件阅读，完整代码见文末。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

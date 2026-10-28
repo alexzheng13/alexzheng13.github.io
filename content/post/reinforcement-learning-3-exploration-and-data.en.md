@@ -16,7 +16,7 @@ Always choosing the current best action can preserve an early mistake forever. E
 
 <!--more-->
 
-> **Series**: [I. Foundations](/en/post/reinforcement-learning-1-foundations/) · [II. From Q-Learning to PPO](/en/post/reinforcement-learning-2-classic-algorithms/) · **III. Exploration, sampling, and data** · IV. RLHF (planned) · V. DPO and GRPO (planned) · VI. Agentic RL (planned)
+> **Series**: [I. Foundations](/en/post/reinforcement-learning-1-foundations/) · [II. From Q-Learning to PPO](/en/post/reinforcement-learning-2-classic-algorithms/) · **III. Exploration, sampling, and data** · [IV. InstructGPT-Style RLHF](/en/post/reinforcement-learning-4-instructgpt-rlhf/) · V. DPO and GRPO (planned) · VI. Agentic RL (planned)
 
 ## 1. Exploration versus exploitation
 

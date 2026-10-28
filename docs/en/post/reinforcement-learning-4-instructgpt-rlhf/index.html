@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Reinforcement Learning (4): InstructGPT-Style RLHF - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="Understand SFT, reward modeling and PPO through a version-pinned reading of Hands-On Modern RL v0.2.1, with loss masking, preference losses, KL, advantages, implementation limitations and complete source downloads." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/en/post/reinforcement-learning-4-instructgpt-rlhf/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/reinforcement-learning-4-instructgpt-rlhf/">
+<meta name="site-language-route" data-language="en" content="/en/post/reinforcement-learning-4-instructgpt-rlhf/">
+<meta name="site-current-language" content="en"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="Reinforcement Learning (4): InstructGPT-Style RLHF" />
+<meta property="og:description" content="Understand SFT, reward modeling and PPO through a version-pinned reading of Hands-On Modern RL v0.2.1, with loss masking, preference losses, KL, advantages, implementation limitations and complete source downloads." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/en/post/reinforcement-learning-4-instructgpt-rlhf/" />
+<meta property="article:published_time" content="2026-10-28T00:00:00+00:00" />
+<meta property="article:modified_time" content="2026-10-28T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="Reinforcement Learning (4): InstructGPT-Style RLHF">
+<meta itemprop="description" content="Understand SFT, reward modeling and PPO through a version-pinned reading of Hands-On Modern RL v0.2.1, with loss masking, preference losses, KL, advantages, implementation limitations and complete source downloads.">
+
+
+<meta itemprop="datePublished" content="2026-10-28T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2026-10-28T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3393">
+
+
+
+<meta itemprop="keywords" content="Reinforcement Learning,RLHF,InstructGPT,SFT,Reward Model,PPO,PyTorch," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Reinforcement Learning (4): InstructGPT-Style RLHF"/>
+<meta name="twitter:description" content="Understand SFT, reward modeling and PPO through a version-pinned reading of Hands-On Modern RL v0.2.1, with loss masking, preference losses, KL, advantages, implementation limitations and complete source downloads."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/en/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/en/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/en/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/en/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/reinforcement-learning-4-instructgpt-rlhf/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/reinforcement-learning-4-instructgpt-rlhf/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/en/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/reinforcement-learning-4-instructgpt-rlhf/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/reinforcement-learning-4-instructgpt-rlhf/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/en/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/about/">About</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Reinforcement Learning (4): InstructGPT-Style RLHF</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-10-28 </span>
+        <div class="post-category">
+            <a href="/en/categories/reinforcement-learning/"> Reinforcement Learning </a>
+            </div>
+          <span class="more-meta"> 3393 words </span>
+          <span class="more-meta"> 16 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-data-and-outputs-of-the-three-stages">1. Data and outputs of the three stages</a></li>
+<li><a href="#2-step-1-sft-learns-from-demonstrations">2. Step 1: SFT learns from demonstrations</a>
+<ul>
+<li><a href="#from-plausible-continuation-to-useful-task-completion">From plausible continuation to useful task completion</a></li>
+<li><a href="#what-the-sft-loss-optimizes">What the SFT loss optimizes</a></li>
+<li><a href="#source-examples-and-the-chat-template">Source: examples and the chat template</a></li>
+<li><a href="#source-training-settings-and-loss-masking">Source: training settings and loss masking</a></li>
+</ul></li>
+<li><a href="#3-step-2-a-reward-model-learns-comparisons">3. Step 2: a Reward Model learns comparisons</a>
+<ul>
+<li><a href="#preference-data-need-not-define-one-perfect-answer">Preference data need not define one perfect answer</a></li>
+<li><a href="#from-a-score-difference-to-a-preference-probability">From a score difference to a preference probability</a></li>
+<li><a href="#source-a-scalar-head-on-the-last-valid-token">Source: a scalar head on the last valid token</a></li>
+<li><a href="#accuracy-margins-and-the-limits-of-score-interpretation">Accuracy, margins and the limits of score interpretation</a></li>
+<li><a href="#why-saving-only-the-head-breaks-the-handoff">Why saving only the head breaks the handoff</a></li>
+</ul></li>
+<li><a href="#4-step-3-ppo-learns-from-reward">4. Step 3: PPO learns from reward</a>
+<ul>
+<li><a href="#language-generation-as-sequential-decision-making">Language generation as sequential decision-making</a></li>
+<li><a href="#four-logical-roles-two-trainable-roles">Four logical roles, two trainable roles</a></li>
+<li><a href="#why-subtract-a-kl-penalty">Why subtract a KL penalty?</a></li>
+<li><a href="#critic-and-advantage-better-than-expected-by-how-much">Critic and advantage: better than expected by how much?</a></li>
+<li><a href="#ppo-clipping-and-reference-kl-serve-different-purposes">PPO clipping and reference KL serve different purposes</a></li>
+</ul></li>
+<li><a href="#5-reading-the-ppo-implementation">5. Reading the PPO implementation</a>
+<ul>
+<li><a href="#initializing-actor-and-reference">Initializing Actor and Reference</a></li>
+<li><a href="#the-reward-can-be-heuristic-or-mixed">The reward can be heuristic or mixed</a></li>
+<li><a href="#advantage-without-a-critic-or-gae">Advantage without a Critic or GAE</a></li>
+<li><a href="#averaging-log-probabilities-changes-what-the-ratio-means">Averaging log probabilities changes what the ratio means</a></li>
+<li><a href="#clipping-is-written-down-but-rollouts-are-not-reused">Clipping is written down, but rollouts are not reused</a></li>
+<li><a href="#kl-does-not-contribute-to-the-gradient">KL does not contribute to the gradient</a></li>
+</ul></li>
+<li><a href="#6-how-to-tell-whether-rlhf-actually-helped">6. How to tell whether RLHF actually helped</a></li>
+<li><a href="#7-source-downloads-execution-order-and-provenance">7. Source downloads, execution order and provenance</a>
+<ul>
+<li><a href="#sources-and-license">Sources and license</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>A pretrained language model learns patterns in text by predicting the next token. Training it to answer questions and follow instructions also requires demonstrations and preference data.</p>
+
+<p>InstructGPT uses three training stages: SFT learns from demonstrated answers, a Reward Model learns to evaluate answers, and PPO updates the policy using those rewards.</p>
+
+<p>The three stages can be followed in the Python files in <a href="https://github.com/walkinglabs/hands-on-modern-rl/tree/main/code/chapter08_rlhf"><code>chapter08_rlhf</code></a>. Complete source files are available at the end.</p>
+
+<blockquote>
+<p><strong>Earlier in this series</strong>: <a href="/en/post/reinforcement-learning-1-foundations/">(1) Foundations, MDPs and Bellman Equations</a> · <a href="/en/post/reinforcement-learning-2-classic-algorithms/">(2) From Q-Learning to PPO</a> · <a href="/en/post/reinforcement-learning-3-exploration-and-data/">(3) Exploration, Sampling and Data</a>. This is Part 4; DPO, GRPO and Agentic RL remain separate follow-ups.</p>
+</blockquote>
+
+<p><strong>Source version</strong>: <a href="https://github.com/walkinglabs/hands-on-modern-rl/releases/tag/v0.2.1">Hands-On Modern RL v0.2.1</a>, commit <code>051b2ff0210c718091692d37ee26d08613ad0be8</code>. The examples use Qwen2.5-0.5B-Instruct and a simplified PPO implementation.</p>
+
+<p><img src="/img/posts/instructgpt-rlhf/three-stages.en.svg" alt="Demonstrations train an SFT policy, preferences train a reward model, and PPO uses both with a frozen reference before evaluation" /></p>
+
+<p><em>The SFT model initializes Actor and frozen Reference; the trained RM supplies rewards for PPO. Method: <a href="https://openai.com/index/instruction-following/">InstructGPT</a>.</em></p>
+
+<h2 id="1-data-and-outputs-of-the-three-stages">1. Data and outputs of the three stages</h2>
+
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Data</th>
+<th>Learning signal</th>
+<th>Main artifact</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>SFT</td>
+<td>Input and demonstration answer</td>
+<td>Increase the likelihood of demonstrated answers</td>
+<td>An instruction-following policy initialization</td>
+</tr>
+
+<tr>
+<td>Reward Model</td>
+<td>A prompt with chosen and rejected answers</td>
+<td>Score preferred answers higher</td>
+<td>A scalar reward model</td>
+</tr>
+
+<tr>
+<td>PPO</td>
+<td>Prompts and answers generated by the current policy</td>
+<td>Increase rewarded behavior while controlling drift</td>
+<td>An updated policy</td>
+</tr>
+</tbody>
+</table>
+
+<p>The same training prompt can serve different stages, but its supervision changes. SFT needs an example of what to say. RM training needs a comparison. PPO rollouts usually need only the prompt: the Actor generates the answer.</p>
+
+<p>For a question about PPO, SFT might provide a clear demonstration; RM training might compare an accurate explanation against a vague one; PPO scores a newly generated explanation and updates the model. <strong>PPO does not need a correct answer token at every position, but it does need a trustworthy reward signal.</strong></p>
+
+<p>The source files save their outputs here:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">sft_pipeline.py
+  → output/sft_results/sft_model
+
+reward_model_training.py
+  → output/rm_results/value_head.pt
+
+rlhf_ppo_train.py
+  → output/ppo_results/aligned_model</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="2-step-1-sft-learns-from-demonstrations">2. Step 1: SFT learns from demonstrations</h2>
+
+<h3 id="from-plausible-continuation-to-useful-task-completion">From plausible continuation to useful task completion</h3>
+
+<p>A pretrained language model predicts the next token. Given “Explain reinforcement learning,” it might explain the concept, or continue with “Explain supervised learning” and “Explain unsupervised learning.” A list of questions can be a plausible continuation of a document.</p>
+
+<p>Supervised Fine-Tuning selects demonstrations that show the behavior we want from an assistant:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;messages&#34;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="nt">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;system&#34;</span><span class="p">,</span> <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;You are a clear, honest and concise reinforcement learning tutor.&#34;</span><span class="p">},</span>
+    <span class="p">{</span><span class="nt">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;What is a value function?&#34;</span><span class="p">},</span>
+    <span class="p">{</span><span class="nt">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;A value function estimates the expected cumulative return from a state under a policy.&#34;</span><span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nt">&#34;source&#34;</span><span class="p">:</span> <span class="s2">&#34;human_written&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;quality&#34;</span><span class="p">:</span> <span class="s2">&#34;verified&#34;</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><code>source</code> and <code>quality</code> are dataset metadata, not text the assistant must generate.</p>
+
+<h3 id="what-the-sft-loss-optimizes">What the SFT loss optimizes</h3>
+
+<p>For prompt <code>x</code> and demonstration answer <code>y</code>, an answer-only negative log-likelihood is:</p>
+
+<div class="math-display">
+\[
+L_{\mathrm{SFT}}(\theta)
+=-\sum_{t=1}^{T}\log\pi_\theta(y_t\mid x,y_{\lt t}).
+\]
+</div>
+
+<p><code>θ</code> denotes model parameters, <code>y_t</code> the demonstrated token at position <code>t</code>, <code>y_&lt;t</code> its <strong>correct demonstration prefix</strong>, and <code>T</code> the answer length. The logarithm is natural; the minus sign turns probability maximization into loss minimization. Implementations generally also average over valid tokens or a batch.</p>
+
+<p>If the next token should be “Paris” and the model assigns probability 0.1, its loss contribution is about 2.303. At probability 0.8, that becomes about 0.223. Backpropagation pushes up the probability of the demonstrated token in similar contexts.</p>
+
+<p>This is teacher forcing: training conditions on the demonstration prefix rather than repeatedly feeding back the model&rsquo;s own errors. The objective remains next-token prediction; the selected data and supervised positions change.</p>
+
+<h3 id="source-examples-and-the-chat-template">Source: examples and the chat template</h3>
+
+<p>In <a href="https://github.com/walkinglabs/hands-on-modern-rl/blob/051b2ff0210c718091692d37ee26d08613ad0be8/code/chapter08_rlhf/sft_pipeline.py"><code>sft_pipeline.py</code></a>, <code>generate_sft_data()</code> returns handwritten instruction-response pairs covering mathematics, writing, programming and general knowledge. Although the comments call them Self-Instruct-style data, the script <strong>does not call another model to generate them</strong>.</p>
+
+<p>The list contains <strong>14 examples</strong>; the printed category counts overcount by one. This small dataset demonstrates the training process.</p>
+
+<p><code>format_sft_dataset()</code> performs this transformation:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="n">pair</span><span class="p">[</span><span class="s2">&#34;instruction&#34;</span><span class="p">]},</span>
+    <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="n">pair</span><span class="p">[</span><span class="s2">&#34;response&#34;</span><span class="p">]},</span>
+<span class="p">]</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
+    <span class="n">messages</span><span class="p">,</span>
+    <span class="n">tokenize</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">formatted_texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>The template inserts the model&rsquo;s expected role boundaries. A training example already includes the assistant answer, so it does not need an additional generation prefix. Inference, with only a user question, uses <code>add_generation_prompt=True</code>.</p>
+
+<p>The resulting dataset is <code>Dataset.from_dict({&quot;text&quot;: formatted_texts})</code>: a column of complete conversation strings.</p>
+
+<h3 id="source-training-settings-and-loss-masking">Source: training settings and loss masking</h3>
+
+<p><code>SFTTrainer</code> runs the training:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">sft_config</span> <span class="o">=</span> <span class="n">SFTConfig</span><span class="p">(</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&#34;./output/sft_results&#34;</span><span class="p">,</span>
+    <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">2e-5</span><span class="p">,</span>
+    <span class="n">num_train_epochs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+    <span class="n">logging_steps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">save_strategy</span><span class="o">=</span><span class="s2">&#34;epoch&#34;</span><span class="p">,</span>
+    <span class="n">report_to</span><span class="o">=</span><span class="s2">&#34;none&#34;</span><span class="p">,</span>
+    <span class="n">fp16</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">SFTTrainer</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">args</span><span class="o">=</span><span class="n">sft_config</span><span class="p">,</span>
+    <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span>
+    <span class="n">processing_class</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">train_result</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>The checkpoint, <strong>Qwen/Qwen2.5-0.5B-Instruct</strong>, is already instruction-tuned. This stage continues fine-tuning it.</p>
+
+<p>The script puts the whole conversation in <code>text</code> without an answer mask. Under TRL 0.24.0 defaults, system, user and assistant text all contribute to the language-modeling loss; the equation above supervises only the answer. The chat template determines formatting, not which tokens contribute to loss.</p>
+
+<p>To supervise only answers, separate prompt and completion or construct labels that ignore non-answer positions. Conceptually:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># Illustration: prompt and full-sequence token boundaries must align correctly.</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">input_ids</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+<span class="n">labels</span><span class="p">[:</span><span class="n">prompt_length</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span>
+<span class="n">labels</span><span class="p">[</span><span class="n">attention_mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><code>-100</code> is an ignored loss label, not a token ID. The model still attends to the prompt; it is simply not trained to reproduce it.</p>
+
+<p>TRL 0.24.0 supports <code>assistant_only_loss=True</code> for conversational data with a template that returns an assistant mask. This approach also requires converting the existing plain <code>text</code> data to the corresponding conversation structure. See the <a href="https://huggingface.co/docs/trl/v0.24.0/en/sft_trainer">SFT documentation</a>.</p>
+
+<p>SFT saves the model and tokenizer. The next stage uses preference pairs to train RM to rank answers.</p>
+
+<h2 id="3-step-2-a-reward-model-learns-comparisons">3. Step 2: a Reward Model learns comparisons</h2>
+
+<h3 id="preference-data-need-not-define-one-perfect-answer">Preference data need not define one perfect answer</h3>
+
+<p>“Accurate, helpful and clear” is difficult to encode as exhaustive rules. Comparing two answers can be easier:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;prompt&#34;</span><span class="p">:</span> <span class="s2">&#34;Explain the KL penalty in PPO-RLHF.&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;chosen&#34;</span><span class="p">:</span> <span class="s2">&#34;It discourages the policy from drifting too far from a reference model while pursuing reward.&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;rejected&#34;</span><span class="p">:</span> <span class="s2">&#34;The KL penalty is a mathematical formula. PPO uses it, so it is important.&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;labeler&#34;</span><span class="p">:</span> <span class="s2">&#34;human_or_judge&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;rubric&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;accuracy&#34;</span><span class="p">,</span> <span class="s2">&#34;helpfulness&#34;</span><span class="p">,</span> <span class="s2">&#34;clarity&#34;</span><span class="p">]</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>An RM consumes the complete prompt and answer, and produces a real-valued score <code>r_φ(x,y)</code>, with parameters <code>φ</code>. Rather than generating an explanation, it learns to score chosen answers higher.</p>
+
+<h3 id="from-a-score-difference-to-a-preference-probability">From a score difference to a preference probability</h3>
+
+<p>Let <code>y_w</code> be the preferred answer and <code>y_l</code> the other answer. Their margin is:</p>
+
+<div class="math-display">
+\[
+m=r_\phi(x,y_w)-r_\phi(x,y_l).
+\]
+</div>
+
+<p>The Bradley–Terry formulation maps it to a probability:</p>
+
+<div class="math-display">
+\[
+P_\phi(y_w\succ y_l\mid x)=\sigma(m),
+\qquad \sigma(m)=\frac{1}{1+e^{-m}}.
+\]
+</div>
+
+<p>The label tells us that the annotator selected <code>y_w</code>. Maximizing its probability gives this negative log-likelihood:</p>
+
+<div class="math-display">
+\[
+L_{\mathrm{RM}}(\phi)
+=-\log\sigma\!\left(r_\phi(x,y_w)-r_\phi(x,y_l)\right).
+\]
+</div>
+
+<p>A margin of <code>2</code> gives preference probability about 0.881 and loss about 0.127. At <code>0</code>, these are 0.5 and 0.693. At <code>-2</code>, the ordering is reversed and loss rises to about 2.127.</p>
+
+<p><strong>Wrong ordering is penalized; a stronger lead for the chosen answer reduces loss.</strong> This does not prove the chosen answer is correct in every respect. It identifies the preferred member of this comparison.</p>
+
+<h3 id="source-a-scalar-head-on-the-last-valid-token">Source: a scalar head on the last valid token</h3>
+
+<p><a href="https://github.com/walkinglabs/hands-on-modern-rl/blob/051b2ff0210c718091692d37ee26d08613ad0be8/code/chapter08_rlhf/reward_model_training.py"><code>reward_model_training.py</code></a> formats chosen and rejected responses separately with the same prompt, then tokenizes each sequence up to 256 tokens.</p>
+
+<p><code>RewardModel</code> adds <code>nn.Linear(hidden_size, 1)</code> to a language-model backbone. Its core forward pass, with comments omitted, is:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="p">(</span>
+    <span class="n">input_ids</span><span class="o">=</span><span class="n">input_ids</span><span class="p">,</span>
+    <span class="n">attention_mask</span><span class="o">=</span><span class="n">attention_mask</span><span class="p">,</span>
+    <span class="n">output_hidden_states</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">last_hidden</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">hidden_states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">sequence_lengths</span> <span class="o">=</span> <span class="n">attention_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="n">input_ids</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">last_token_hidden</span> <span class="o">=</span> <span class="n">last_hidden</span><span class="p">[</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">batch_size</span><span class="p">),</span> <span class="n">sequence_lengths</span>
+<span class="p">]</span>
+<span class="n">reward</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_head</span><span class="p">(</span><span class="n">last_token_hidden</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Shapes progress as <code>input_ids: [B,L] → last_hidden: [B,L,H] → last_token_hidden: [B,H] → reward: [B]</code>. The final valid position can attend to the preceding sequence and provide a representation for scoring.</p>
+
+<p>The indexing rule <code>attention_mask.sum()-1</code> assumes <strong>right padding</strong>. It is not a general last-valid-position rule for left padding. The 256-token limit can also truncate the end of an answer, so check what the scorer actually sees.</p>
+
+<p>This <code>value_head</code> outputs an answer&rsquo;s reward score. A PPO Critic estimates future return; the training targets differ.</p>
+
+<p>The essential training code is:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">r_chosen</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">chosen_ids</span><span class="p">,</span> <span class="n">chosen_mask</span><span class="p">)</span>
+<span class="n">r_rejected</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">rejected_ids</span><span class="p">,</span> <span class="n">rejected_mask</span><span class="p">)</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">r_chosen</span> <span class="o">-</span> <span class="n">r_rejected</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+<span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><code>-F.logsigmoid(r_chosen - r_rejected).mean()</code> is a mathematically equivalent, more numerically stable formulation.</p>
+
+<h3 id="accuracy-margins-and-the-limits-of-score-interpretation">Accuracy, margins and the limits of score interpretation</h3>
+
+<p>The script counts <code>r_chosen &gt; r_rejected</code> as correct. It actually defines <strong>19 pairs</strong>, split into 16 training pairs and 3 test pairs—not 20 and 4 as some comments suggest. With three test examples, accuracy moves in increments of roughly 33.3 percentage points. It is not a robust generalization estimate.</p>
+
+<p>Margins can reveal collapsed scoring, but bigger is not inherently better. Pairwise loss supplies no natural absolute reward scale. A shared score offset leaves comparisons unchanged, while rescaling scores changes downstream RL incentives. Check held-out rankings, score distributions, length correlations and actual examples together.</p>
+
+<p>In particular, politeness, length and numbered lists are not equivalent to correctness and helpfulness. If longer answers systematically win in the dataset, RM may learn that shortcut and PPO may amplify it.</p>
+
+<h3 id="why-saving-only-the-head-breaks-the-handoff">Why saving only the head breaks the handoff</h3>
+
+<p>The optimizer receives <code>reward_model.parameters()</code>. The backbone is not frozen, so <strong>both backbone and head are updated</strong>. Saving, however, only writes:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+    <span class="n">reward_model</span><span class="o">.</span><span class="n">value_head</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="s2">&#34;value_head.pt&#34;</span><span class="p">),</span>
+<span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>The PPO script subsequently reloads the original Qwen backbone and attaches this head. It <strong>does not restore the trained RM</strong>: the representation entering the head has changed.</p>
+
+<p>Restoring the full RM requires the trained backbone, head, tokenizer and configuration. Fixed examples can check that scores stay the same after reloading. Saving only the head is sufficient if the backbone was frozen from the start and only the head was trained.</p>
+
+<h2 id="4-step-3-ppo-learns-from-reward">4. Step 3: PPO learns from reward</h2>
+
+<h3 id="language-generation-as-sequential-decision-making">Language generation as sequential decision-making</h3>
+
+<p>For a prompt <code>x</code>, the model generates an answer one token at a time:</p>
+
+<table>
+<thead>
+<tr>
+<th>RL element</th>
+<th>Language-generation counterpart</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>State</td>
+<td>Prompt and generated answer prefix</td>
+</tr>
+
+<tr>
+<td>Action</td>
+<td>Next token</td>
+</tr>
+
+<tr>
+<td>Policy</td>
+<td>The model&rsquo;s next-token probability distribution</td>
+</tr>
+
+<tr>
+<td>Transition</td>
+<td>Append the token to the prefix</td>
+</tr>
+
+<tr>
+<td>Episode</td>
+<td>Generation until EOS or the length limit</td>
+</tr>
+
+<tr>
+<td>Task reward</td>
+<td>RM score for the complete prompt-answer pair</td>
+</tr>
+</tbody>
+</table>
+
+<p>RM often supplies a score only at the end. This creates a credit-assignment problem: did the answer fail near the beginning, or go off track much later? Critic-based advantage estimation helps turn returns into more stable token-level update signals.</p>
+
+<h3 id="four-logical-roles-two-trainable-roles">Four logical roles, two trainable roles</h3>
+
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Function</th>
+<th>Updated?</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Actor</td>
+<td>Generate answers and learn rewarded behavior</td>
+<td>Yes</td>
+</tr>
+
+<tr>
+<td>Reference</td>
+<td>Frozen SFT anchor for controlling drift</td>
+<td>No</td>
+</tr>
+
+<tr>
+<td>Reward Model</td>
+<td>Score complete answers</td>
+<td>Usually frozen during the PPO phase</td>
+</tr>
+
+<tr>
+<td>Critic</td>
+<td>Predict future return from the current prefix</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+
+<p>These roles can share parts of a model. RM scores an answer; Critic predicts future return from the current prefix and supplies a baseline for advantage estimation.</p>
+
+<h3 id="why-subtract-a-kl-penalty">Why subtract a KL penalty?</h3>
+
+<p>Maximizing RM alone may teach the Actor to exploit its judge, for example by producing long, apparently thorough answers that do not solve the task.</p>
+
+<p>A sequence-level objective is:</p>
+
+<div class="math-display">
+\[
+\begin{aligned}
+J(\theta)&=\mathbb E_{x}\Bigl[
+\mathbb E_{y\sim\pi_\theta(\cdot\mid x)}r_\phi(x,y)\\
+&\qquad-\beta D_{\mathrm{KL}}\!\left(
+\pi_\theta(\cdot\mid x)\,\|\,\pi_{\mathrm{ref}}(\cdot\mid x)
+\right)\Bigr].
+\end{aligned}
+\]
+</div>
+
+<p><code>π_θ</code> is Actor, <code>π_ref</code> is the frozen reference, <code>·</code> ranges over possible answers, and <code>β</code> sets the strength of the penalty. The RM parameters <code>φ</code> and Actor parameters <code>θ</code> are different.</p>
+
+<p>KL compares <strong>conditional distributions over answers</strong>, not the surface difference between two texts. For an answer sampled from the current policy, a sampled score is:</p>
+
+<div class="math-display">
+\[
+\widetilde R(x,y)=r_\phi(x,y)
+-\beta\log\frac{\pi_\theta(y\mid x)}{\pi_{\mathrm{ref}}(y\mid x)}.
+\]
+</div>
+
+<p>Its log-ratio has the sequence KL as its expectation under the current policy. Individual log-ratios can be negative: <strong>one sampled log-ratio is not itself a guaranteed nonnegative KL divergence</strong>.</p>
+
+<p>During rollouts, a temporarily fixed <code>π_old</code> typically generates data. A token-level shaped reward can be written:</p>
+
+<div class="math-display">
+\[
+\begin{aligned}
+k_t&=\log\frac{\pi_{\mathrm{old}}(y_t\mid s_t)}
+{\pi_{\mathrm{ref}}(y_t\mid s_t)},\\
+\widetilde r_t&=-\beta k_t
++\mathbf 1_{t=T}\,r_\phi(x,y).
+\end{aligned}
+\]
+</div>
+
+<p>Each step receives its reference penalty, and the final valid answer token receives the task reward. Alternative implementations exist, but the KL must actually affect updates through reward shaping or a differentiable objective—not merely appear in logs.</p>
+
+<h3 id="critic-and-advantage-better-than-expected-by-how-much">Critic and advantage: better than expected by how much?</h3>
+
+<p><code>V_ψ(s_t)</code> predicts the expected return from the current prefix. Advantage is positive when outcomes exceed that expectation, and negative when they disappoint. A common GAE form is:</p>
+
+<div class="math-display">
+\[
+\begin{aligned}
+\delta_t&=\widetilde r_t+\gamma V_\psi(s_{t+1})-V_\psi(s_t),\\
+\widehat A_t&=\sum_{l=0}^{T-t}(\gamma\lambda)^l\delta_{t+l}.
+\end{aligned}
+\]
+</div>
+
+<p>Terminal value is usually zero; length truncation may require different bootstrapping treatment. <code>γ</code> discounts future reward, and <code>λ</code> controls the bias-variance tradeoff. The Critic also needs a value-regression loss; calculating advantages does not train it automatically.</p>
+
+<h3 id="ppo-clipping-and-reference-kl-serve-different-purposes">PPO clipping and reference KL serve different purposes</h3>
+
+<p>PPO compares the new policy with the <strong>old rollout policy</strong>:</p>
+
+<div class="math-display">
+\[
+\rho_t(\theta)=
+\frac{\pi_\theta(y_t\mid s_t)}{\pi_{\mathrm{old}}(y_t\mid s_t)}.
+\]
+</div>
+
+<p>It then maximizes the clipped surrogate:</p>
+
+<div class="math-display">
+\[
+\begin{aligned}
+L_{\mathrm{clip}}(\theta)=\mathbb E_t\Bigl[\min\bigl(&
+\rho_t(\theta)\widehat A_t,\\
+&\operatorname{clip}(\rho_t(\theta),1-\epsilon,1+\epsilon)
+\widehat A_t\bigr)\Bigr].
+\end{aligned}
+\]
+</div>
+
+<p>Positive advantage encourages a probability increase, without continuing to reward excessive increases. Negative advantage encourages a decrease, with an analogous limit on the incentive. Clipping changes the objective; it is not a hard guarantee that every probability ratio stays inside the interval.</p>
+
+<p><strong>Old policy is refreshed for rollout batches; Reference remains a longer-lived SFT anchor.</strong> Clipping controls local updates, whereas reference KL controls drift from that anchor. Their denominators are not interchangeable. See the <a href="https://arxiv.org/abs/1707.06347">PPO paper</a> for its repeated minibatch-update formulation.</p>
+
+<h2 id="5-reading-the-ppo-implementation">5. Reading the PPO implementation</h2>
+
+<h3 id="initializing-actor-and-reference">Initializing Actor and Reference</h3>
+
+<p><a href="https://github.com/walkinglabs/hands-on-modern-rl/blob/051b2ff0210c718091692d37ee26d08613ad0be8/code/chapter08_rlhf/rlhf_ppo_train.py"><code>rlhf_ppo_train.py</code></a> tries to load the saved SFT model, falling back to the original Qwen Instruct checkpoint when unavailable.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">reference_model</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">policy_model</span><span class="p">)</span>
+<span class="n">reference_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">reference_model</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="bp">False</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Reference is a frozen copy of Actor. The script defines its own <code>PPOTrainer</code> class, separate from TRL&rsquo;s class of the same name.</p>
+
+<h3 id="the-reward-can-be-heuristic-or-mixed">The reward can be heuristic or mixed</h3>
+
+<p>Without <code>value_head.pt</code>, <code>SimpleRewardModel</code> scores length, lists, code fences and polite language. With a head, it reloads a Qwen backbone and returns:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">reward</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">rule_score</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>This is not necessarily a pure human-preference RM. Equal coefficients also do not imply equal influence when the score scales differ.</p>
+
+<p>Rules can be exploited too: an irrelevant answer containing polite phrasing, numbered steps and code fences may score well. Format checks are not semantic verification, and higher reward is not automatically greater usefulness.</p>
+
+<h3 id="advantage-without-a-critic-or-gae">Advantage without a Critic or GAE</h3>
+
+<p>The script computes:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">rewards_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">batch_rewards</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">advantages</span> <span class="o">=</span> <span class="n">rewards_tensor</span> <span class="o">-</span> <span class="n">rewards_tensor</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">advantages</span> <span class="o">=</span> <span class="n">advantages</span> <span class="o">/</span> <span class="p">(</span><span class="n">advantages</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">+</span> <span class="mf">1e-8</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Each answer receives one standardized scalar. The batch contains different prompts, mixing question difficulty and reward scales. This is neither a learned prefix-conditioned baseline nor GRPO&rsquo;s within-prompt comparison of multiple candidates.</p>
+
+<p>The generated positions in an answer therefore share one scalar, whereas standard Actor-Critic PPO estimates token-level advantages from the states at each position.</p>
+
+<h3 id="averaging-log-probabilities-changes-what-the-ratio-means">Averaging log probabilities changes what the ratio means</h3>
+
+<p><code>compute_log_probs()</code> aligns logits and next-token targets:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">shift_logits</span> <span class="o">=</span> <span class="n">logits</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">shift_labels</span> <span class="o">=</span> <span class="n">input_ids</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span>
+<span class="n">log_probs</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">shift_logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">token_log_probs</span> <span class="o">=</span> <span class="n">log_probs</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+    <span class="mi">2</span><span class="p">,</span> <span class="n">shift_labels</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">shift_mask</span> <span class="o">=</span> <span class="n">attention_mask</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span>
+<span class="n">token_log_probs</span> <span class="o">=</span> <span class="n">token_log_probs</span> <span class="o">*</span> <span class="n">shift_mask</span>
+<span class="k">return</span> <span class="n">token_log_probs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">shift_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Shift and gather are familiar causal-LM operations. But the final result is the <strong>mean log probability across valid tokens</strong>, and the sequence includes both prompt and response. The mask excludes padding, not prompt tokens.</p>
+
+<p>The joint log probability of an answer sums over <strong>answer tokens</strong>. Token-level PPO instead retains individual answer-token log probabilities and a response mask. Mixing prompt positions, averaging and then exponentiating does not yield either standard ratio.</p>
+
+<p><code>input_len</code> is available but unused for response masking. If prompt length is <code>P</code>, shifted position <code>P-1</code> predicts the first response token; correcting the mask requires care with that offset.</p>
+
+<h3 id="clipping-is-written-down-but-rollouts-are-not-reused">Clipping is written down, but rollouts are not reused</h3>
+
+<p>The script stores pre-update Actor log probabilities and computes:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">ratio</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">new_log_prob</span> <span class="o">-</span> <span class="n">old_log_p</span><span class="p">)</span>
+<span class="n">surr1</span> <span class="o">=</span> <span class="n">ratio</span> <span class="o">*</span> <span class="n">advantage</span>
+<span class="n">surr2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span>
+    <span class="n">ratio</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_range</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_range</span>
+<span class="p">)</span> <span class="o">*</span> <span class="n">advantage</span>
+<span class="n">policy_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">surr1</span><span class="p">,</span> <span class="n">surr2</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><code>old_log_p</code> comes from the pre-update Actor. The class docstring incorrectly names Reference as the denominator, contrary to the implementation.</p>
+
+<p>There is only one <code>optimizer.step()</code> per rollout batch. With deterministic forward passes and unchanged parameters, the ratio starts at 1. The gradient can still be nonzero, but clipping does not constrain subsequent updates on the same batch because there are none. Dropout-induced differences would not be evidence of a meaningful policy update either.</p>
+
+<p>Generation also uses temperature and top-p, whereas likelihoods use unmodified logits. The behavior distribution and ratio probabilities are not strictly consistent. This illustrates a loop, not an experiment validating PPO&rsquo;s clipping mechanism.</p>
+
+<h3 id="kl-does-not-contribute-to-the-gradient">KL does not contribute to the gradient</h3>
+
+<p><code>compute_kl_divergence()</code> computes vocabulary KL at visited prefixes under <code>torch.no_grad()</code>, then returns <code>kl_div.item()</code>, a Python float. Training adds those floats to the loss:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">avg_kl</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">batch_kl</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_kl</span><span class="p">)</span>
+<span class="n">kl_penalty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kl_coef</span> <span class="o">*</span> <span class="n">avg_kl</span>
+<span class="n">total_loss</span> <span class="o">=</span> <span class="n">avg_policy_loss</span> <span class="o">+</span> <span class="n">kl_penalty</span>
+<span class="n">total_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>The logged total loss includes KL, but its gradient does not.</strong> Adding a detached constant cannot change the policy-loss derivative. Advantages do not include KL either, so there is no alternative shaping path enforcing it.</p>
+
+<p>Two common designs can make KL matter:</p>
+
+<ul>
+<li>Put the sampled reference log-ratio into token rewards, then compute returns and advantages from those rewards. These rewards may be detached because they subsequently weight the policy gradient.</li>
+<li>Add a differentiable KL objective during optimization. Preserve the Actor graph, freeze Reference, and reduce only over the intended answer positions.</li>
+</ul>
+
+<p>For the second approach, the KL term can be calculated as follows:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">policy_logp</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">policy_logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">ref_logp</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">ref_logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">kl_per_token</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">policy_logp</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="n">policy_logp</span> <span class="o">-</span> <span class="n">ref_logp</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">kl_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">kl_per_token</span> <span class="o">*</span> <span class="n">response_mask</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">response_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">policy_loss</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">kl_loss</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>The logits must be shifted and aligned with next-answer-token targets, and the nonempty response mask must exclude prompt and padding. This fragment calculates differentiable KL; the training loop still handles old-policy state, value loss, advantages and minibatch updates.</p>
+
+<h2 id="6-how-to-tell-whether-rlhf-actually-helped">6. How to tell whether RLHF actually helped</h2>
+
+<p>RM is a proxy. An Actor can become better at exploiting it while becoming less useful to users. Keep at least three evaluation layers: fixed tasks for capabilities and instruction following; blinded SFT-versus-RLHF preference comparisons; and human inspection of high-scoring outputs.</p>
+
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>What it establishes</th>
+<th>Warning sign</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>SFT loss and held-out performance</td>
+<td>Learning versus overfitting</td>
+<td>Training improves while held-out results worsen</td>
+</tr>
+
+<tr>
+<td>RM accuracy and margins</td>
+<td>Generalization of rankings</td>
+<td>Preference for length, politeness or templates</td>
+</tr>
+
+<tr>
+<td>Reference KL</td>
+<td>Rate of drift from initialization</td>
+<td>Rapid growth, or a penalty that is only logged</td>
+</tr>
+
+<tr>
+<td>Length and repetition</td>
+<td>Whether superficial features inflate reward</td>
+<td>Increasing verbosity and repetitive filler</td>
+</tr>
+
+<tr>
+<td>Preference wins and capabilities</td>
+<td>Better preferences without major regressions</td>
+<td>Reward rises while blind tests or code tests worsen</td>
+</tr>
+</tbody>
+</table>
+
+<p>The scripts record before/after examples, RM test results and reward/KL/length plots. Capability regression tests and blinded preference comparisons require additional evaluation data.</p>
+
+<p>Feedback provenance also matters:</p>
+
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Useful for</th>
+<th>Risk</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Human annotation</td>
+<td>High-quality demonstrations, calibration and final evaluation</td>
+<td>Cost and inter-annotator consistency</td>
+</tr>
+
+<tr>
+<td>AI Judge / RLAIF</td>
+<td>Scaling comparisons and iteration</td>
+<td>Amplifying judge biases</td>
+</tr>
+
+<tr>
+<td>Rule-based verification</td>
+<td>Math answers, code tests and format constraints</td>
+<td>Incomplete checkers can be exploited</td>
+</tr>
+
+<tr>
+<td>Online feedback</td>
+<td>Finding real needs and failures</td>
+<td>Likes and copying behavior are noisy, not ground truth</td>
+</tr>
+</tbody>
+</table>
+
+<p>Human preferences, AI judgments and rules provide different training signals. This example uses predefined preference pairs and adds rule-based scores during PPO.</p>
+
+<h2 id="7-source-downloads-execution-order-and-provenance">7. Source downloads, execution order and provenance</h2>
+
+<p><strong><a href="/downloads/instructgpt-rlhf/chapter08-rlhf-v0.2.1.zip">Download the complete code bundle</a></strong></p>
+
+<p>The attachments contain the original v0.2.1 code, with its Chinese examples and comments. The article adds examples of loss masking, stable loss and differentiable KL.</p>
+
+<p>Dependencies pin <code>transformers==4.57.3</code>, <code>trl==0.24.0</code>, <code>datasets==4.4.1</code> and <code>accelerate==1.10.1</code>; PyTorch is only constrained to <code>&gt;=2.0.0</code>. The last two scripts also import <code>matplotlib</code>, missing from upstream requirements. From the extracted code directory:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">python3 -m venv .venv
+<span class="nb">source</span> .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m pip install matplotlib
+
+python sft_pipeline.py
+python reward_model_training.py
+python rlhf_ppo_train.py</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="sources-and-license">Sources and license</h3>
+
+<ul>
+<li><a href="https://github.com/walkinglabs/hands-on-modern-rl/tree/051b2ff0210c718091692d37ee26d08613ad0be8/code/chapter08_rlhf">Hands-On Modern RL v0.2.1 source</a>, WalkingLabs / Sanbu. Source and adapted explanation are provided under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>. The explanation adds implementation analysis and suggested changes; code attachments remain unmodified.</li>
+<li><a href="https://arxiv.org/abs/2203.02155">Training language models to follow instructions with human feedback</a>, the InstructGPT method.</li>
+<li><a href="https://arxiv.org/abs/1707.06347">Proximal Policy Optimization Algorithms</a>, the PPO method.</li>
+<li><a href="https://huggingface.co/docs/trl/v0.24.0/en/sft_trainer">TRL 0.24.0 SFTTrainer documentation</a>, for dataset and masking behavior.</li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-10-28
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/en/tags/reinforcement-learning/">Reinforcement Learning</a>
+          <a href="/en/tags/rlhf/">RLHF</a>
+          <a href="/en/tags/instructgpt/">InstructGPT</a>
+          <a href="/en/tags/sft/">SFT</a>
+          <a href="/en/tags/reward-model/">Reward Model</a>
+          <a href="/en/tags/ppo/">PPO</a>
+          <a href="/en/tags/pytorch/">PyTorch</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/en/post/anthropic-agent-skills/">
+            <span class="next-text nav-default">Anthropic Agent Skills</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.6388abde34e31667698edd963050a5a5d32866b5dbe6b270a37d5bee36bc8beb.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

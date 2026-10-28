@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>强化学习（四）：InstructGPT 风格的 RLHF - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="沿着 SFT、Reward Model、PPO 三阶段理解 RLHF，并逐段阅读 Hands-On Modern RL v0.2.1 的三个 Python 脚本，解释 loss mask、偏好损失、KL、优势与教学实现的边界，附完整代码下载。" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/post/reinforcement-learning-4-instructgpt-rlhf/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/reinforcement-learning-4-instructgpt-rlhf/">
+<meta name="site-language-route" data-language="en" content="/en/post/reinforcement-learning-4-instructgpt-rlhf/">
+<meta name="site-current-language" content="zh-cn"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="强化学习（四）：InstructGPT 风格的 RLHF" />
+<meta property="og:description" content="沿着 SFT、Reward Model、PPO 三阶段理解 RLHF，并逐段阅读 Hands-On Modern RL v0.2.1 的三个 Python 脚本，解释 loss mask、偏好损失、KL、优势与教学实现的边界，附完整代码下载。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/post/reinforcement-learning-4-instructgpt-rlhf/" />
+<meta property="article:published_time" content="2026-10-28T00:00:00+00:00" />
+<meta property="article:modified_time" content="2026-10-28T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="强化学习（四）：InstructGPT 风格的 RLHF">
+<meta itemprop="description" content="沿着 SFT、Reward Model、PPO 三阶段理解 RLHF，并逐段阅读 Hands-On Modern RL v0.2.1 的三个 Python 脚本，解释 loss mask、偏好损失、KL、优势与教学实现的边界，附完整代码下载。">
+
+
+<meta itemprop="datePublished" content="2026-10-28T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2026-10-28T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="7301">
+
+
+
+<meta itemprop="keywords" content="Reinforcement Learning,RLHF,InstructGPT,SFT,Reward Model,PPO,PyTorch," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="强化学习（四）：InstructGPT 风格的 RLHF"/>
+<meta name="twitter:description" content="沿着 SFT、Reward Model、PPO 三阶段理解 RLHF，并逐段阅读 Hands-On Modern RL v0.2.1 的三个 Python 脚本，解释 loss mask、偏好损失、KL、优势与教学实现的边界，附完整代码下载。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/reinforcement-learning-4-instructgpt-rlhf/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/reinforcement-learning-4-instructgpt-rlhf/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/reinforcement-learning-4-instructgpt-rlhf/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/reinforcement-learning-4-instructgpt-rlhf/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">强化学习（四）：InstructGPT 风格的 RLHF</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-10-28 </span>
+        <div class="post-category">
+            <a href="/categories/reinforcement-learning/"> Reinforcement Learning </a>
+            </div>
+          <span class="more-meta"> 约 7301 字 </span>
+          <span class="more-meta"> 预计阅读 15 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-三阶段的数据与产物">1. 三阶段的数据与产物</a></li>
+<li><a href="#2-step-1-sft-用示范教模型怎样回答">2. Step 1：SFT，用示范教模型怎样回答</a>
+<ul>
+<li><a href="#从-合理续写-到-完成用户任务">从“合理续写”到“完成用户任务”</a></li>
+<li><a href="#sft-loss-到底在优化什么">SFT loss 到底在优化什么？</a></li>
+<li><a href="#源码-先构造数据-再应用-chat-template">源码：先构造数据，再应用 Chat Template</a></li>
+<li><a href="#源码-训练配置与一个容易忽略的-mask">源码：训练配置与一个容易忽略的 mask</a></li>
+</ul></li>
+<li><a href="#3-step-2-reward-model-用比较教裁判怎样打分">3. Step 2：Reward Model，用比较教裁判怎样打分</a>
+<ul>
+<li><a href="#偏好数据不要求一个唯一正确答案">偏好数据不要求一个唯一正确答案</a></li>
+<li><a href="#从分差到偏好概率-再到-loss">从分差到偏好概率，再到 loss</a></li>
+<li><a href="#源码-最后一个有效-token-接一个标量-head">源码：最后一个有效 token 接一个标量 head</a></li>
+<li><a href="#accuracy-和-margin-要一起看-但分差不是绝对质量">accuracy 和 margin 要一起看，但分差不是绝对质量</a></li>
+<li><a href="#代码衔接-为什么只保存-head-还不够">代码衔接：为什么只保存 head 还不够？</a></li>
+</ul></li>
+<li><a href="#4-step-3-ppo-让模型根据奖励练习">4. Step 3：PPO，让模型根据奖励练习</a>
+<ul>
+<li><a href="#把语言生成看成序列决策">把语言生成看成序列决策</a></li>
+<li><a href="#四个角色-只有两个需要更新">四个角色，只有两个需要更新</a></li>
+<li><a href="#为什么奖励里还要扣掉-kl">为什么奖励里还要扣掉 KL？</a></li>
+<li><a href="#critic-和-advantage-比预期好多少">Critic 和 Advantage：比预期好多少？</a></li>
+<li><a href="#ppo-clip-与-reference-kl-约束的不是同一件事">PPO clip 与 Reference KL 约束的不是同一件事</a></li>
+</ul></li>
+<li><a href="#5-阅读-ppo-源码-生成-评分-更新之间发生了什么">5. 阅读 PPO 源码：生成、评分、更新之间发生了什么</a>
+<ul>
+<li><a href="#actor-与-reference-的初始化">Actor 与 Reference 的初始化</a></li>
+<li><a href="#奖励可能来自规则-也可能是混合分数">奖励可能来自规则，也可能是混合分数</a></li>
+<li><a href="#优势-这里没有-critic-也没有-gae">优势：这里没有 Critic，也没有 GAE</a></li>
+<li><a href="#log-probability-取平均之后-比例的含义变了">log probability：取平均之后，比例的含义变了</a></li>
+<li><a href="#clip-写出来了-但没有多轮复用-rollout">clip 写出来了，但没有多轮复用 rollout</a></li>
+<li><a href="#kl-没有参与梯度计算">KL 没有参与梯度计算</a></li>
+</ul></li>
+<li><a href="#6-怎样知道三阶段真的带来了改进">6. 怎样知道三阶段真的带来了改进？</a></li>
+<li><a href="#7-代码文件-运行顺序与版本记录">7. 代码文件、运行顺序与版本记录</a>
+<ul>
+<li><a href="#来源与许可">来源与许可</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>预训练语言模型通过预测下一个 token 学习文本中的规律。要把它训练成能回答问题、遵循指令的助手，还需要示范回答和偏好数据。</p>
+
+<p>InstructGPT 的训练分为三个阶段：先用 SFT 学习示范回答，再训练 Reward Model 评价回答，最后用 PPO 根据奖励更新策略。</p>
+
+<p>三个阶段的实现可以对照 <a href="https://github.com/walkinglabs/hands-on-modern-rl/tree/main/code/chapter08_rlhf"><code>chapter08_rlhf</code></a> 中的 Python 文件阅读，完整代码见文末。</p>
+
+<blockquote>
+<p><strong>系列前文</strong>：<a href="/post/reinforcement-learning-1-foundations/">（一）基础、MDP 与贝尔曼方程</a> · <a href="/post/reinforcement-learning-2-classic-algorithms/">（二）从 Q-Learning 到 PPO</a> · <a href="/post/reinforcement-learning-3-exploration-and-data/">（三）探索、采样与数据</a>。本文是第四篇，DPO、GRPO 和 Agentic RL 留待后续展开。</p>
+</blockquote>
+
+<p><strong>代码版本</strong>：<a href="https://github.com/walkinglabs/hands-on-modern-rl/releases/tag/v0.2.1">Hands-On Modern RL v0.2.1</a>，commit <code>051b2ff0210c718091692d37ee26d08613ad0be8</code>。示例基于 Qwen2.5-0.5B-Instruct，PPO 部分采用了简化实现。</p>
+
+<p><img src="/img/posts/instructgpt-rlhf/three-stages.en.svg" alt="SFT、Reward Model 与 PPO 三阶段流程，以及冻结参考模型和评估的关系" /></p>
+
+<p><em>SFT 模型用于初始化 Actor 和冻结的 Reference；训练好的 RM 为 PPO 提供奖励。方法来源：<a href="https://openai.com/index/instruction-following/">InstructGPT</a>。</em></p>
+
+<h2 id="1-三阶段的数据与产物">1. 三阶段的数据与产物</h2>
+
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>数据长什么样</th>
+<th>学习什么</th>
+<th>主要产物</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>SFT</td>
+<td>用户输入 + 示范回答</td>
+<td>提高示范回答的生成概率</td>
+<td>能按指令回答的策略起点</td>
+</tr>
+
+<tr>
+<td>Reward Model</td>
+<td>同一个问题 + chosen / rejected</td>
+<td>给更受偏好的回答更高分</td>
+<td>标量奖励模型</td>
+</tr>
+
+<tr>
+<td>PPO</td>
+<td>问题 + 当前策略自己生成的回答</td>
+<td>提高高奖励行为的概率，并控制偏离</td>
+<td>更新后的策略模型</td>
+</tr>
+</tbody>
+</table>
+
+<p>同一个问题可以出现在不同训练阶段，但监督信息不同。SFT 要知道“理想回答是什么”；RM 要知道“这两个回答哪个更好”；PPO rollout 时通常只需要问题，回答由当前 Actor 生成。</p>
+
+<p>例如，让模型解释 PPO：SFT 给出一段人工示范；RM 比较一段准确解释与一段空泛解释；PPO 则对模型新生成的解释打分，再更新模型。<strong>PPO 不需要逐 token 的标准答案，但需要可信的奖励信号。</strong></p>
+
+<p>实现这三阶段的入口是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">sft_pipeline.py
+  → output/sft_results/sft_model
+
+reward_model_training.py
+  → output/rm_results/value_head.pt
+
+rlhf_ppo_train.py
+  → output/ppo_results/aligned_model</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="2-step-1-sft-用示范教模型怎样回答">2. Step 1：SFT，用示范教模型怎样回答</h2>
+
+<h3 id="从-合理续写-到-完成用户任务">从“合理续写”到“完成用户任务”</h3>
+
+<p>预训练模型的基本任务是：给定前面的文本，预测下一个 token。输入“请解释什么是强化学习”，模型可能开始解释，也可能继续列出“请解释什么是监督学习”“请解释什么是无监督学习”。后一种续写在某些文本分布里也很合理。</p>
+
+<p>SFT（Supervised Fine-Tuning）用经过选择的指令与示范回答，让训练集中呈现的行为更接近我们需要的助手行为。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;messages&#34;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="nt">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;system&#34;</span><span class="p">,</span> <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;你是一个清晰、诚实、简洁的强化学习助教。&#34;</span><span class="p">},</span>
+    <span class="p">{</span><span class="nt">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;请解释什么是价值函数。&#34;</span><span class="p">},</span>
+    <span class="p">{</span><span class="nt">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="nt">&#34;content&#34;</span><span class="p">:</span> <span class="s2">&#34;价值函数估计从某个状态开始，按某个策略行动能够获得的期望累积回报。&#34;</span><span class="p">}</span>
+  <span class="p">],</span>
+  <span class="nt">&#34;source&#34;</span><span class="p">:</span> <span class="s2">&#34;human_written&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;quality&#34;</span><span class="p">:</span> <span class="s2">&#34;verified&#34;</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>这里的 <code>source</code>、<code>quality</code> 是数据管理字段，不是语言模型必须生成的回答内容。</p>
+
+<h3 id="sft-loss-到底在优化什么">SFT loss 到底在优化什么？</h3>
+
+<p>给定问题 <code>x</code> 和示范回答 <code>y</code>，回答部分的负对数似然是：</p>
+
+<div class="math-display">
+\[
+L_{\mathrm{SFT}}(\theta)
+=-\sum_{t=1}^{T}\log\pi_\theta(y_t\mid x,y_{\lt t}).
+\]
+</div>
+
+<p>其中，<code>θ</code> 是模型参数；<code>y_t</code> 是示范回答的第 <code>t</code> 个 token；<code>y_&lt;t</code> 是它前面的<strong>正确示范 token</strong>；<code>T</code> 是回答长度。<code>log</code> 为自然对数，前面的负号把“提高正确 token 的概率”变为“最小化损失”。实际训练通常还会在有效 token 或 batch 上取平均。</p>
+
+<p>如果下一 token 应当是“巴黎”，模型却只给它 0.1 的概率，这一项损失约为 2.303；概率提高到 0.8，损失就降到约 0.223。反向传播会推动模型在类似上下文中提高正确 token 的概率。</p>
+
+<p>这也是 Teacher Forcing：训练时给模型看示范的前缀，而不是让它每步都接着自己的错误回答往下写。目标依然是 next-token prediction，只是数据与需要监督的位置发生了变化。</p>
+
+<h3 id="源码-先构造数据-再应用-chat-template">源码：先构造数据，再应用 Chat Template</h3>
+
+<p><a href="https://github.com/walkinglabs/hands-on-modern-rl/blob/051b2ff0210c718091692d37ee26d08613ad0be8/code/chapter08_rlhf/sft_pipeline.py"><code>sft_pipeline.py</code></a> 的 <code>generate_sft_data()</code> 返回手写的 instruction-response 列表，覆盖数学、写作、编程和知识问答。名字和打印信息提到 Self-Instruct 风格，但代码<strong>没有调用另一个模型自动生成数据</strong>。</p>
+
+<p>列表包含 <strong>14 条</strong>样本，打印的分类计数多算了一条。这组小数据用于演示训练流程。</p>
+
+<p><code>format_sft_dataset()</code> 的关键部分是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="n">pair</span><span class="p">[</span><span class="s2">&#34;instruction&#34;</span><span class="p">]},</span>
+    <span class="p">{</span><span class="s2">&#34;role&#34;</span><span class="p">:</span> <span class="s2">&#34;assistant&#34;</span><span class="p">,</span> <span class="s2">&#34;content&#34;</span><span class="p">:</span> <span class="n">pair</span><span class="p">[</span><span class="s2">&#34;response&#34;</span><span class="p">]},</span>
+<span class="p">]</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
+    <span class="n">messages</span><span class="p">,</span>
+    <span class="n">tokenize</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">add_generation_prompt</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">formatted_texts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Chat Template 负责把角色和内容转换成模型认识的分隔格式。训练样本已经包含 assistant 回答，因此这里不需要额外追加一个等待生成的 assistant 开头。推理时只有用户问题，才使用 <code>add_generation_prompt=True</code>。</p>
+
+<p>随后传入的是 <code>Dataset.from_dict({&quot;text&quot;: formatted_texts})</code>：一列完整的对话字符串。</p>
+
+<h3 id="源码-训练配置与一个容易忽略的-mask">源码：训练配置与一个容易忽略的 mask</h3>
+
+<p>训练由 <code>SFTTrainer</code> 执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">sft_config</span> <span class="o">=</span> <span class="n">SFTConfig</span><span class="p">(</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&#34;./output/sft_results&#34;</span><span class="p">,</span>
+    <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">2e-5</span><span class="p">,</span>
+    <span class="n">num_train_epochs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">max_length</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span>
+    <span class="n">logging_steps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">save_strategy</span><span class="o">=</span><span class="s2">&#34;epoch&#34;</span><span class="p">,</span>
+    <span class="n">report_to</span><span class="o">=</span><span class="s2">&#34;none&#34;</span><span class="p">,</span>
+    <span class="n">fp16</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">SFTTrainer</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">args</span><span class="o">=</span><span class="n">sft_config</span><span class="p">,</span>
+    <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span>
+    <span class="n">processing_class</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">train_result</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>加载的 <strong>Qwen/Qwen2.5-0.5B-Instruct</strong> 已经经过指令训练，这里是在它的基础上继续微调。</p>
+
+<p>源码把整个对话放进 <code>text</code>，没有构造回答 mask。按 TRL 0.24.0 的默认行为，system、user 和 assistant 文本都会参与语言建模损失；上面的公式则只计算回答部分。Chat Template 负责格式，不负责划定哪些 token 参与 loss。</p>
+
+<p>要实现回答部分监督，常见办法是把输入与回答分开，或显式构造 labels，将非回答位置设为 <code>-100</code>。概念上可以写成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 解释性示意：假设 prompt 与完整序列的 token 边界已正确对齐。</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">input_ids</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+<span class="n">labels</span><span class="p">[:</span><span class="n">prompt_length</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span>
+<span class="n">labels</span><span class="p">[</span><span class="n">attention_mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><code>-100</code> 是这里用于忽略损失的位置，不是 token id，也不是让模型看不到输入。模型仍能关注 prompt，只是不需要学习生成它。</p>
+
+<p>TRL 0.24.0 支持 conversational 数据的 <code>assistant_only_loss=True</code>，需要配合能返回 assistant mask 的模板使用。采用这种方式时，也要把现有 <code>text</code> 数据改为对应的对话结构。详见 <a href="https://huggingface.co/docs/trl/v0.24.0/en/sft_trainer">SFT 文档</a>。</p>
+
+<p>SFT 完成后保存模型和 tokenizer。接下来用偏好对训练 RM，让它学习回答之间的优劣。</p>
+
+<h2 id="3-step-2-reward-model-用比较教裁判怎样打分">3. Step 2：Reward Model，用比较教裁判怎样打分</h2>
+
+<h3 id="偏好数据不要求一个唯一正确答案">偏好数据不要求一个唯一正确答案</h3>
+
+<p>“准确、有帮助、清楚”很难写成完整规则，但比较两个回答通常更容易。偏好样本可以写成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;prompt&#34;</span><span class="p">:</span> <span class="s2">&#34;请解释 PPO 中的 KL 惩罚。&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;chosen&#34;</span><span class="p">:</span> <span class="s2">&#34;KL 惩罚限制策略偏离参考模型太远，减少为了追求奖励而产生的失控变化。&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;rejected&#34;</span><span class="p">:</span> <span class="s2">&#34;KL 惩罚就是一个数学公式，PPO 会用它，所以很重要。&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;labeler&#34;</span><span class="p">:</span> <span class="s2">&#34;human_or_judge&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;rubric&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;accuracy&#34;</span><span class="p">,</span> <span class="s2">&#34;helpfulness&#34;</span><span class="p">,</span> <span class="s2">&#34;clarity&#34;</span><span class="p">]</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Reward Model 输入完整的“问题 + 回答”，输出一个实数 <code>r_φ(x,y)</code>，其中 <code>φ</code> 是奖励模型参数。它不必生成一段解释，而是学习让 chosen 的分数高于 rejected。</p>
+
+<h3 id="从分差到偏好概率-再到-loss">从分差到偏好概率，再到 loss</h3>
+
+<p>把更受偏好的回答记为 <code>y_w</code>，另一个记为 <code>y_l</code>，定义分差：</p>
+
+<div class="math-display">
+\[
+m=r_\phi(x,y_w)-r_\phi(x,y_l).
+\]
+</div>
+
+<p>用 Bradley–Terry 形式把它转成偏好概率：</p>
+
+<div class="math-display">
+\[
+P_\phi(y_w\succ y_l\mid x)=\sigma(m),
+\qquad \sigma(m)=\frac{1}{1+e^{-m}}.
+\]
+</div>
+
+<p>标签已经告诉我们人类选择了 <code>y_w</code>，所以希望这个选择的概率越大越好。取负对数得到：</p>
+
+<div class="math-display">
+\[
+L_{\mathrm{RM}}(\phi)
+=-\log\sigma\!\left(r_\phi(x,y_w)-r_\phi(x,y_l)\right).
+\]
+</div>
+
+<p>当分差为 <code>2</code>，预测偏好概率约为 0.881，loss 约为 0.127；分差为 <code>0</code>，概率为 0.5，loss 约为 0.693；分差为 <code>-2</code>，排序反了，loss 约为 2.127。</p>
+
+<p><strong>排序反了，惩罚大；chosen 领先，损失小。</strong> 这不意味着 chosen 在所有方面都绝对正确，只表示它是这条比较数据里的优选项。</p>
+
+<h3 id="源码-最后一个有效-token-接一个标量-head">源码：最后一个有效 token 接一个标量 head</h3>
+
+<p><a href="https://github.com/walkinglabs/hands-on-modern-rl/blob/051b2ff0210c718091692d37ee26d08613ad0be8/code/chapter08_rlhf/reward_model_training.py"><code>reward_model_training.py</code></a> 为 chosen 和 rejected 分别拼接同一个 prompt，再编码为最长 256 token 的序列。</p>
+
+<p><code>RewardModel</code> 在语言模型上增加 <code>nn.Linear(hidden_size, 1)</code>。关键前向计算如下，省略了注释：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="p">(</span>
+    <span class="n">input_ids</span><span class="o">=</span><span class="n">input_ids</span><span class="p">,</span>
+    <span class="n">attention_mask</span><span class="o">=</span><span class="n">attention_mask</span><span class="p">,</span>
+    <span class="n">output_hidden_states</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">last_hidden</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">hidden_states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">sequence_lengths</span> <span class="o">=</span> <span class="n">attention_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="n">input_ids</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">last_token_hidden</span> <span class="o">=</span> <span class="n">last_hidden</span><span class="p">[</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">batch_size</span><span class="p">),</span> <span class="n">sequence_lengths</span>
+<span class="p">]</span>
+<span class="n">reward</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_head</span><span class="p">(</span><span class="n">last_token_hidden</span><span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>形状沿着 <code>input_ids: [B,L] → last_hidden: [B,L,H] → last_token_hidden: [B,H] → reward: [B]</code> 变化。最后一个有效位置已经能关注前面的完整序列，因此可以作为评分的输入表示。</p>
+
+<p><code>attention_mask.sum()-1</code> 这种索引写法依赖<strong>右侧 padding</strong>。改成左侧 padding 后，它不再表示最后一个有效位置；长回答也可能被 256 token 的截断切掉尾部。评分到底看到了哪些内容，需要一起检查。</p>
+
+<p>这里的 <code>value_head</code> 输出回答的奖励分数；PPO 中的 Critic 则估计未来回报，两者的训练目标不同。</p>
+
+<p>训练循环的核心只有几行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">r_chosen</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">chosen_ids</span><span class="p">,</span> <span class="n">chosen_mask</span><span class="p">)</span>
+<span class="n">r_rejected</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">rejected_ids</span><span class="p">,</span> <span class="n">rejected_mask</span><span class="p">)</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">r_chosen</span> <span class="o">-</span> <span class="n">r_rejected</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+<span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>这项损失也可以写成数值上更稳定的 <code>-F.logsigmoid(r_chosen - r_rejected).mean()</code>。</p>
+
+<h3 id="accuracy-和-margin-要一起看-但分差不是绝对质量">accuracy 和 margin 要一起看，但分差不是绝对质量</h3>
+
+<p>源码通过 <code>r_chosen &gt; r_rejected</code> 计算排序准确率。实际生成的是 <strong>19 对数据</strong>，划分后为 16 对训练、3 对测试，而不是注释写的 20 对、4 对测试。测试集只有三对时，准确率每次变化就是约 33.3 个百分点，不能据此推断稳健泛化。</p>
+
+<p>margin 能帮助发现信号是否塌缩，但也不是越大越好。成对损失只约束相对分差，不提供天然的绝对分数标尺；整体平移分数不改变排序，缩放分数却会影响后续 RL 的奖励尺度。需要一起看 held-out 排序、分差分布、回答长度偏差和人工样本。</p>
+
+<p>尤其不要把“礼貌、长、带编号”直接当成“正确、有帮助”。如果偏好数据总让长回答获胜，RM 很可能把长度当捷径，PPO 又会进一步放大这个偏差。</p>
+
+<h3 id="代码衔接-为什么只保存-head-还不够">代码衔接：为什么只保存 head 还不够？</h3>
+
+<p>RM 的优化器接收 <code>reward_model.parameters()</code>，骨干没有被冻结，因此骨干和评分头都会更新。但保存时只写了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+    <span class="n">reward_model</span><span class="o">.</span><span class="n">value_head</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">save_dir</span><span class="p">,</span> <span class="s2">&#34;value_head.pt&#34;</span><span class="p">),</span>
+<span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>PPO 脚本随后加载原始 Qwen 骨干，再接这个已训练 head，<strong>并没有恢复训练后的完整 RM</strong>。head 所接收的表示已经变了，分数不能被当成原 RM 的连续输出。</p>
+
+<p>加载完整 RM 需要同时恢复训练后的骨干、评分头、tokenizer 和配置，并检查固定样本在保存前后的分数是否一致。如果选择只保存 head，就应在训练开始时冻结骨干，只更新评分头。</p>
+
+<h2 id="4-step-3-ppo-让模型根据奖励练习">4. Step 3：PPO，让模型根据奖励练习</h2>
+
+<h3 id="把语言生成看成序列决策">把语言生成看成序列决策</h3>
+
+<p>对一个问题 <code>x</code>，模型逐 token 生成回答。此时：</p>
+
+<table>
+<thead>
+<tr>
+<th>RL 要素</th>
+<th>语言生成中的对应物</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>状态</td>
+<td>问题 + 已生成回答前缀</td>
+</tr>
+
+<tr>
+<td>动作</td>
+<td>下一个 token</td>
+</tr>
+
+<tr>
+<td>策略</td>
+<td>语言模型的 next-token 概率分布</td>
+</tr>
+
+<tr>
+<td>状态转移</td>
+<td>把新 token 追加到前缀</td>
+</tr>
+
+<tr>
+<td>episode</td>
+<td>从开始生成到 EOS 或长度上限</td>
+</tr>
+
+<tr>
+<td>任务奖励</td>
+<td>RM 对完整问题与回答的评分</td>
+</tr>
+</tbody>
+</table>
+
+<p>RM 通常在完整回答结束后才给一个分数。Credit Assignment 的难点也就出现了：低分到底是因为开头答错，还是后半段跑偏？Critic 与优势估计帮助把回报变成更稳定的 token 级更新信号，而不是直接把一个分数不加区别地乘到整段文本上。</p>
+
+<h3 id="四个角色-只有两个需要更新">四个角色，只有两个需要更新</h3>
+
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>做什么</th>
+<th>是否更新</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Actor</td>
+<td>生成回答，学习提高奖励</td>
+<td>是</td>
+</tr>
+
+<tr>
+<td>Reference</td>
+<td>冻结的 SFT 策略，限制长期偏离</td>
+<td>否</td>
+</tr>
+
+<tr>
+<td>Reward Model</td>
+<td>评价完整回答</td>
+<td>通常在这轮 PPO 中冻结</td>
+</tr>
+
+<tr>
+<td>Critic</td>
+<td>预测当前前缀的未来回报，辅助优势估计</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+
+<p>这四个角色可以共享部分模型结构。RM 负责给回答打分，Critic 负责预测当前前缀的未来回报，提供优势估计所需的基线。</p>
+
+<h3 id="为什么奖励里还要扣掉-kl">为什么奖励里还要扣掉 KL？</h3>
+
+<p>如果只最大化 RM 分数，Actor 可能学会讨好裁判，例如重复堆砌长段落，让回答看起来完整，却没有解决问题。</p>
+
+<p>更准确的序列级目标是：</p>
+
+<div class="math-display">
+\[
+\begin{aligned}
+J(\theta)&=\mathbb E_{x}\Bigl[
+\mathbb E_{y\sim\pi_\theta(\cdot\mid x)}r_\phi(x,y)\\
+&\qquad-\beta D_{\mathrm{KL}}\!\left(
+\pi_\theta(\cdot\mid x)\,\|\,\pi_{\mathrm{ref}}(\cdot\mid x)
+\right)\Bigr].
+\end{aligned}
+\]
+</div>
+
+<p><code>π_θ</code> 是当前 Actor；<code>π_ref</code> 是冻结 Reference；点号 <code>·</code> 表示所有可能回答；<code>β</code> 控制惩罚强度。<code>φ</code> 是 RM 的参数，<code>θ</code> 是 Actor 的参数。</p>
+
+<p>KL 衡量给定同一个问题时，Actor 与 Reference 对各种可能回答分配的概率有多大差异。</p>
+
+<p>从当前策略采样一个回答后，可以用下面的 sampled score 估计这个目标中的奖励：</p>
+
+<div class="math-display">
+\[
+\widetilde R(x,y)=r_\phi(x,y)
+-\beta\log\frac{\pi_\theta(y\mid x)}{\pi_{\mathrm{ref}}(y\mid x)}.
+\]
+</div>
+
+<p>在当前策略下取期望，log-ratio 对应序列 KL。单个样本的 log-ratio 可以为负，<strong>不能把每个样本的值都当成非负的完整 KL</strong>。</p>
+
+<p>实际 rollout 往往由暂时固定的 <code>π_old</code> 生成，此时可按 token 构造奖励：</p>
+
+<div class="math-display">
+\[
+\begin{aligned}
+k_t&=\log\frac{\pi_{\mathrm{old}}(y_t\mid s_t)}
+{\pi_{\mathrm{ref}}(y_t\mid s_t)},\\
+\widetilde r_t&=-\beta k_t
++\mathbf 1_{t=T}\,r_\phi(x,y).
+\end{aligned}
+\]
+</div>
+
+<p>也就是每一步承担偏离 Reference 的代价，最后一个有效回答 token 再接上整段 RM 奖励。还有其他等价或近似实现，但必须确认 KL 真正通过奖励塑形或可微损失影响更新，而不是只出现在日志里。</p>
+
+<h3 id="critic-和-advantage-比预期好多少">Critic 和 Advantage：比预期好多少？</h3>
+
+<p>Critic 的 <code>V_ψ(s_t)</code> 估计从当前前缀继续生成的预期回报。如果实际回报超过预期，优势为正；低于预期，优势为负。一个常见的 GAE 写法是：</p>
+
+<div class="math-display">
+\[
+\begin{aligned}
+\delta_t&=\widetilde r_t+\gamma V_\psi(s_{t+1})-V_\psi(s_t),\\
+\widehat A_t&=\sum_{l=0}^{T-t}(\gamma\lambda)^l\delta_{t+l}.
+\end{aligned}
+\]
+</div>
+
+<p>终止状态的 value 通常设为零；若是长度截断，是否 bootstrap 则要按任务定义处理。<code>γ</code> 是折扣，<code>λ</code> 控制偏差与方差的取舍。优势告诉 Actor“这一步比当前预期更好还是更差”，Critic 则另有 value 回归损失，不能只计算优势却不训练 value。</p>
+
+<h3 id="ppo-clip-与-reference-kl-约束的不是同一件事">PPO clip 与 Reference KL 约束的不是同一件事</h3>
+
+<p>PPO 用新策略与<strong>采样时的旧策略</strong>计算比例：</p>
+
+<div class="math-display">
+\[
+\rho_t(\theta)=
+\frac{\pi_\theta(y_t\mid s_t)}{\pi_{\mathrm{old}}(y_t\mid s_t)}.
+\]
+</div>
+
+<p>然后最大化裁剪目标：</p>
+
+<div class="math-display">
+\[
+\begin{aligned}
+L_{\mathrm{clip}}(\theta)=\mathbb E_t\Bigl[\min\bigl(&
+\rho_t(\theta)\widehat A_t,\\
+&\operatorname{clip}(\rho_t(\theta),1-\epsilon,1+\epsilon)
+\widehat A_t\bigr)\Bigr].
+\end{aligned}
+\]
+</div>
+
+<p>优势为正时，希望提高对应动作的概率，但过大的提升不再带来额外收益；优势为负时，希望降低概率，也限制单次压低的幅度。这不是硬性保证所有概率比都留在区间内，而是改变优化目标，让过激更新不再占便宜。</p>
+
+<p><strong>Old policy 是每轮 rollout 的采样快照，Reference 是较长期固定的 SFT 锚点。</strong> clip 控制这一轮改多少，Reference KL 控制相对起点偏离多少，不能把两者写成同一个分母。PPO 的多轮 minibatch 更新机制可对照 <a href="https://arxiv.org/abs/1707.06347">PPO 论文</a>。</p>
+
+<h2 id="5-阅读-ppo-源码-生成-评分-更新之间发生了什么">5. 阅读 PPO 源码：生成、评分、更新之间发生了什么</h2>
+
+<h3 id="actor-与-reference-的初始化">Actor 与 Reference 的初始化</h3>
+
+<p><a href="https://github.com/walkinglabs/hands-on-modern-rl/blob/051b2ff0210c718091692d37ee26d08613ad0be8/code/chapter08_rlhf/rlhf_ppo_train.py"><code>rlhf_ppo_train.py</code></a> 先尝试读取 SFT 保存路径；找不到时，直接回退到原始 Qwen Instruct checkpoint。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">reference_model</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">policy_model</span><span class="p">)</span>
+<span class="n">reference_model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">reference_model</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+    <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="bp">False</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Reference 是 Actor 的冻结副本。这里的 <code>PPOTrainer</code> 是脚本自己定义的类，与 TRL 的同名类无关。</p>
+
+<h3 id="奖励可能来自规则-也可能是混合分数">奖励可能来自规则，也可能是混合分数</h3>
+
+<p>找不到 <code>value_head.pt</code> 时，<code>SimpleRewardModel</code> 使用长度、列表、代码块、礼貌用语等规则打分。有 head 时，则重新加载 Qwen 骨干，并使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">reward</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">rule_score</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>这意味着这里的 reward 不一定是纯人类偏好 RM。两种分数的尺度也未必可比，系数各为 0.5 不代表影响就各占一半。</p>
+
+<p>规则分数同样可能被钻空子：无关回答加上“好的”“以下”和代码围栏，也可能得分更高。检查输出格式不等于检查语义正确，reward 上升也不自动意味着更有帮助。</p>
+
+<h3 id="优势-这里没有-critic-也没有-gae">优势：这里没有 Critic，也没有 GAE</h3>
+
+<p>源码的做法是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">rewards_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">batch_rewards</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">advantages</span> <span class="o">=</span> <span class="n">rewards_tensor</span> <span class="o">-</span> <span class="n">rewards_tensor</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">advantages</span> <span class="o">=</span> <span class="n">advantages</span> <span class="o">/</span> <span class="p">(</span><span class="n">advantages</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">+</span> <span class="mf">1e-8</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>这是把一批回答的奖励中心化、标准化，每个回答得到一个标量优势。batch 内是不同问题，因此问题难度与奖励尺度可能被混在一起；它不是按前缀训练的 value baseline，也不是同一问题多个候选的 GRPO 组内比较。</p>
+
+<p>因此，同一段回答的所有生成位置共用这个标量，而标准 Actor-Critic PPO 会根据各位置的状态估计 token 级优势。</p>
+
+<h3 id="log-probability-取平均之后-比例的含义变了">log probability：取平均之后，比例的含义变了</h3>
+
+<p><code>compute_log_probs()</code> 先把 logits 与下一个真实 token 对齐：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">shift_logits</span> <span class="o">=</span> <span class="n">logits</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">shift_labels</span> <span class="o">=</span> <span class="n">input_ids</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span>
+<span class="n">log_probs</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">shift_logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">token_log_probs</span> <span class="o">=</span> <span class="n">log_probs</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+    <span class="mi">2</span><span class="p">,</span> <span class="n">shift_labels</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">shift_mask</span> <span class="o">=</span> <span class="n">attention_mask</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span>
+<span class="n">token_log_probs</span> <span class="o">=</span> <span class="n">token_log_probs</span> <span class="o">*</span> <span class="n">shift_mask</span>
+<span class="k">return</span> <span class="n">token_log_probs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">shift_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>前半段做了 causal LM 常见的 shift 和 gather；最后返回的是<strong>有效 token 的平均 log probability</strong>。而传入的序列包含 prompt 与 response，mask 只去掉 padding，没有去掉 prompt。</p>
+
+<p>完整回答的 log probability 应当对<strong>回答 token</strong>求和；标准 token-level PPO 则保留每个回答 token 的 log probability 和 response mask。这份代码先混合 prompt、取均值，再指数化做 ratio，得到的不是标准 token 概率比，也不是回答联合概率比。</p>
+
+<p>代码已经拿到了 <code>input_len</code>，但没有用它构造 response mask。若 prompt 长度为 <code>P</code>，shift 后第 <code>P-1</code> 个位置才预测第一个 response token；修正时还要避免差一位错误。</p>
+
+<h3 id="clip-写出来了-但没有多轮复用-rollout">clip 写出来了，但没有多轮复用 rollout</h3>
+
+<p>源码保存更新前策略的 log probability，再计算：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">ratio</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">new_log_prob</span> <span class="o">-</span> <span class="n">old_log_p</span><span class="p">)</span>
+<span class="n">surr1</span> <span class="o">=</span> <span class="n">ratio</span> <span class="o">*</span> <span class="n">advantage</span>
+<span class="n">surr2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span>
+    <span class="n">ratio</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_range</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_range</span>
+<span class="p">)</span> <span class="o">*</span> <span class="n">advantage</span>
+<span class="n">policy_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">surr1</span><span class="p">,</span> <span class="n">surr2</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><code>old_log_p</code> 来自更新前的 Actor。文件类注释把分母写成了 <code>π_ref</code>，与这里的实现不符。</p>
+
+<p>每批 rollout 只做一次 <code>optimizer.step()</code>。在前向确定且更新前参数相同的情况下，新旧概率比起始为 1，这次梯度可以非零，但 clip 并没有机会限制同批数据上的后续大步更新。若 dropout 等使前向有噪声，ratio 的差异也不等于策略已经发生了有效更新。</p>
+
+<p>此外，生成使用 temperature 和 top-p，后续算概率却直接使用未经同样变换的 logits，采样分布与用于 ratio 的分布并不严格一致。它适合展示循环结构，不适合用于验证 PPO clipping 的实际效果。</p>
+
+<h3 id="kl-没有参与梯度计算">KL 没有参与梯度计算</h3>
+
+<p><code>compute_kl_divergence()</code> 在 <code>torch.no_grad()</code> 内计算各前缀上的词表 KL，最后 <code>return kl_div.item()</code>，转成 Python 浮点数。</p>
+
+<p>训练时又把这些浮点数相加：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">avg_kl</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">batch_kl</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch_kl</span><span class="p">)</span>
+<span class="n">kl_penalty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kl_coef</span> <span class="o">*</span> <span class="n">avg_kl</span>
+<span class="n">total_loss</span> <span class="o">=</span> <span class="n">avg_policy_loss</span> <span class="o">+</span> <span class="n">kl_penalty</span>
+<span class="n">total_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>日志里的 total loss 含有 KL，但梯度里没有 KL。</strong> 加一个与参数计算图脱离的常数，不会改变 <code>avg_policy_loss</code> 对参数的导数；而源码的 advantages 里也没有扣 KL，所以这里并不存在另一条奖励塑形路径来补上约束。</p>
+
+<p>有两种常见的正确思路：</p>
+
+<ul>
+<li>在 rollout 时，把采样的 Reference log-ratio 放进 token reward，再据此计算 return 与 advantage。奖励本身可以 detach，因为它随后作为策略梯度的权重。</li>
+<li>在训练损失里加入可微 KL 项，保留 Actor 计算图，只冻结 Reference。应只在定义好的回答位置上归约，并明确优化的是哪个 KL 估计。</li>
+</ul>
+
+<p>第二种方式的 KL 项可以这样计算：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">policy_logp</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">policy_logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+    <span class="n">ref_logp</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">ref_logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">kl_per_token</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">policy_logp</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="n">policy_logp</span> <span class="o">-</span> <span class="n">ref_logp</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">kl_loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">kl_per_token</span> <span class="o">*</span> <span class="n">response_mask</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">response_mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">policy_loss</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">kl_loss</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>两个 logits 需要按“预测下一个回答 token”的位置对齐，<code>response_mask</code> 排除 prompt 与 padding，且至少包含一个有效回答 token。这段代码只计算可微 KL；旧策略快照、value loss、优势估计和 minibatch 更新仍由训练循环处理。</p>
+
+<h2 id="6-怎样知道三阶段真的带来了改进">6. 怎样知道三阶段真的带来了改进？</h2>
+
+<p>不能只看 reward 曲线。RM 是偏好的代理，Actor 可能越来越会利用代理漏洞，却越来越偏离用户需要。</p>
+
+<p>至少保留三层评估：固定任务集检查指令遵循、代码、简单推理与事实问答；盲测比较 SFT 与 RLHF 回答的偏好胜率；人工抽检高分样本是否真的解决问题。</p>
+
+<table>
+<thead>
+<tr>
+<th>检查项</th>
+<th>希望确认什么</th>
+<th>值得警惕的现象</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>SFT loss 与留出集</td>
+<td>示范是否学到了、是否过拟合</td>
+<td>train loss 下降，留出表现变差</td>
+</tr>
+
+<tr>
+<td>RM accuracy 与 margin</td>
+<td>能否给没见过的回答正确排序</td>
+<td>只偏爱长文、礼貌措辞或固定模板</td>
+</tr>
+
+<tr>
+<td>Reference KL</td>
+<td>偏离初始策略的速度是否合理</td>
+<td>KL 很快升高；或记录了却没实际约束</td>
+</tr>
+
+<tr>
+<td>回答长度与重复率</td>
+<td>reward 是否被表面特征带高</td>
+<td>越答越长、重复、泛泛而谈</td>
+</tr>
+
+<tr>
+<td>偏好胜率与原有能力</td>
+<td>是否更符合偏好且没有明显退化</td>
+<td>reward 上升，盲测或代码测试反而下降</td>
+</tr>
+</tbody>
+</table>
+
+<p>原脚本记录了训练前后样例、RM 测试结果和 reward / KL / length 曲线；能力回归与偏好盲测需要另行准备数据。</p>
+
+<p>反馈来源也会影响目标本身：</p>
+
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>适合做什么</th>
+<th>需要注意什么</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>人类标注</td>
+<td>高质量示范、偏好校准与最终评估</td>
+<td>成本与标注一致性</td>
+</tr>
+
+<tr>
+<td>AI Judge / RLAIF</td>
+<td>扩充比较数据、加快迭代</td>
+<td>Judge 的系统性偏差会被放大</td>
+</tr>
+
+<tr>
+<td>规则验证</td>
+<td>数学答案、代码测试、格式约束</td>
+<td>检查器覆盖不全也可能被利用</td>
+</tr>
+
+<tr>
+<td>线上反馈</td>
+<td>发现真实需求与失败案例</td>
+<td>点赞、复制等行为有噪声，不能直接当真值</td>
+</tr>
+</tbody>
+</table>
+
+<p>人类偏好、AI 评分和规则奖励对应不同的训练信号。这个例子中，偏好数据是预先写好的比较对，PPO 阶段还混入了规则分数。</p>
+
+<h2 id="7-代码文件-运行顺序与版本记录">7. 代码文件、运行顺序与版本记录</h2>
+
+<p><strong><a href="/downloads/instructgpt-rlhf/chapter08-rlhf-v0.2.1.zip">下载完整代码包</a></strong></p>
+
+<p>附件保留 v0.2.1 原始代码。正文补充了 loss mask、稳定损失和可微 KL 的写法。</p>
+
+<p>原依赖锁定 <code>transformers==4.57.3</code>、<code>trl==0.24.0</code>、<code>datasets==4.4.1</code>、<code>accelerate==1.10.1</code>，PyTorch 只要求 <code>&gt;=2.0.0</code>；最后两个脚本还导入了未列入 requirements 的 <code>matplotlib</code>。在代码目录创建隔离环境后，运行顺序如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">python3 -m venv .venv
+<span class="nb">source</span> .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m pip install matplotlib
+
+python sft_pipeline.py
+python reward_model_training.py
+python rlhf_ppo_train.py</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="来源与许可">来源与许可</h3>
+
+<ul>
+<li><a href="https://github.com/walkinglabs/hands-on-modern-rl/tree/051b2ff0210c718091692d37ee26d08613ad0be8/code/chapter08_rlhf">Hands-On Modern RL v0.2.1 源码</a>，WalkingLabs / Sanbu。源码与改编讲解按 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 提供；讲解补充了实现分析和改进示例，代码附件保持原样。</li>
+<li><a href="https://arxiv.org/abs/2203.02155">Training language models to follow instructions with human feedback</a>，InstructGPT 方法来源。</li>
+<li><a href="https://arxiv.org/abs/1707.06347">Proximal Policy Optimization Algorithms</a>，PPO 方法来源。</li>
+<li><a href="https://huggingface.co/docs/trl/v0.24.0/en/sft_trainer">TRL 0.24.0 SFTTrainer 文档</a>，用于核对数据格式与 loss mask 行为。</li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2026-10-28
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/reinforcement-learning/">Reinforcement Learning</a>
+          <a href="/tags/rlhf/">RLHF</a>
+          <a href="/tags/instructgpt/">InstructGPT</a>
+          <a href="/tags/sft/">SFT</a>
+          <a href="/tags/reward-model/">Reward Model</a>
+          <a href="/tags/ppo/">PPO</a>
+          <a href="/tags/pytorch/">PyTorch</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/anthropic-agent-skills/">
+            <span class="next-text nav-default">Anthropic Agent Skills</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.6388abde34e31667698edd963050a5a5d32866b5dbe6b270a37d5bee36bc8beb.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

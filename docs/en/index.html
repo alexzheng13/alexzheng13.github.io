@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/" />
 
-<meta property="og:updated_time" content="2026-10-24T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-28T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,33 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/reinforcement-learning-4-instructgpt-rlhf/">Reinforcement Learning (4): InstructGPT-Style RLHF</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-10-28 </span>
+      <div class="post-category">
+          <a href="/en/categories/reinforcement-learning/"> Reinforcement Learning </a>
+          </div>
+        <span class="more-meta"> 3393 words </span>
+        <span class="more-meta"> 16 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>A pretrained language model learns patterns in text by predicting the next token. Training it to answer questions and follow instructions also requires demonstrations and preference data.</p>
+
+<p>InstructGPT uses three training stages: SFT learns from demonstrated answers, a Reward Model learns to evaluate answers, and PPO updates the policy using those rewards.</p>
+
+<p>The three stages can be followed in the Python files in <a href="https://github.com/walkinglabs/hands-on-modern-rl/tree/main/code/chapter08_rlhf"><code>chapter08_rlhf</code></a>. Complete source files are available at the end.</p>
+    </div>
+    <div class="read-more">
+      <a href="/en/post/reinforcement-learning-4-instructgpt-rlhf/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/en/post/anthropic-agent-skills/">Anthropic Agent Skills</a></h1>
@@ -488,41 +515,6 @@ Plan, compare, and revise before execution</code></pre></td></tr></table>
     </div>
     <div class="read-more">
       <a href="/en/post/agentic-llm-2-action/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/en/post/agentic-llm-1-reasoning/">Agentic LLM Reasoning (I): From Chain of Thought to Search, Reflection, and RLVR</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-09-29 </span>
-      <div class="post-category">
-          <a href="/en/categories/ai-agents/"> AI Agents </a>
-          </div>
-        <span class="more-meta"> 2935 words </span>
-        <span class="more-meta"> 14 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>A model that can answer a question is not necessarily able to complete a task.</p>
-
-<p>A conventional chatbot receives a prompt and returns a response. An agent must decide what to do next in a changing environment, act, inspect the result, and choose whether to continue, backtrack, or try another path. That transition begins with <strong>reasoning</strong>.</p>
-
-<p>A complete agent system needs at least three capabilities:</p>
-
-<ol>
-<li><strong>Reasoning</strong>: analyze state, decompose problems, compare paths, and form decisions.</li>
-<li><strong>Action</strong>: call tools and translate decisions into external operations.</li>
-<li><strong>Interaction</strong>: observe outcomes, exchange information with the environment or other agents, and revise the strategy.</li>
-</ol>
-
-<p>This is the <strong>first article in the Agentic Large Language Models series</strong>. Rather than listing reasoning terms in isolation, it follows one question: <strong>when one generation or one reasoning path is unreliable, what can the system add?</strong> Part II covers Action, followed by Interaction in Part III.</p>
-    </div>
-    <div class="read-more">
-      <a href="/en/post/agentic-llm-1-reasoning/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>

@@ -6,10 +6,73 @@
     <description>Recent content in Tags on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 24 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 28 Oct 2026 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/en/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>InstructGPT</title>
+      <link>https://alexzheng13.github.io/en/tags/instructgpt/</link>
+      <pubDate>Wed, 28 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/instructgpt/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PPO</title>
+      <link>https://alexzheng13.github.io/en/tags/ppo/</link>
+      <pubDate>Wed, 28 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/ppo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PyTorch</title>
+      <link>https://alexzheng13.github.io/en/tags/pytorch/</link>
+      <pubDate>Wed, 28 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/pytorch/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reinforcement Learning</title>
+      <link>https://alexzheng13.github.io/en/tags/reinforcement-learning/</link>
+      <pubDate>Wed, 28 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/reinforcement-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reward Model</title>
+      <link>https://alexzheng13.github.io/en/tags/reward-model/</link>
+      <pubDate>Wed, 28 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/reward-model/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>RLHF</title>
+      <link>https://alexzheng13.github.io/en/tags/rlhf/</link>
+      <pubDate>Wed, 28 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/rlhf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>SFT</title>
+      <link>https://alexzheng13.github.io/en/tags/sft/</link>
+      <pubDate>Wed, 28 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/sft/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Agent Skills</title>
@@ -570,15 +633,6 @@
     </item>
     
     <item>
-      <title>PyTorch</title>
-      <link>https://alexzheng13.github.io/en/tags/pytorch/</link>
-      <pubDate>Sat, 26 Sep 2026 21:00:00 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/en/tags/pytorch/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Transformer</title>
       <link>https://alexzheng13.github.io/en/tags/transformer/</link>
       <pubDate>Sat, 26 Sep 2026 21:00:00 +0200</pubDate>
@@ -759,15 +813,6 @@
     </item>
     
     <item>
-      <title>Reinforcement Learning</title>
-      <link>https://alexzheng13.github.io/en/tags/reinforcement-learning/</link>
-      <pubDate>Thu, 27 Aug 2026 09:00:00 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/en/tags/reinforcement-learning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Thompson Sampling</title>
       <link>https://alexzheng13.github.io/en/tags/thompson-sampling/</link>
       <pubDate>Thu, 27 Aug 2026 09:00:00 +0200</pubDate>
@@ -800,15 +845,6 @@
       <pubDate>Wed, 26 Aug 2026 09:00:00 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/en/tags/dqn/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>PPO</title>
-      <link>https://alexzheng13.github.io/en/tags/ppo/</link>
-      <pubDate>Wed, 26 Aug 2026 09:00:00 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/en/tags/ppo/</guid>
       <description></description>
     </item>
     

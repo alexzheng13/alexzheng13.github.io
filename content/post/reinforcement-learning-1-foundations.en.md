@@ -16,7 +16,7 @@ This series starts with the common language behind those algorithms, then moves 
 
 <!--more-->
 
-> **Series**: **I. Foundations, MDPs, and Bellman equations** · [II. From Q-Learning to PPO](/en/post/reinforcement-learning-2-classic-algorithms/) · [III. Exploration, sampling, and data](/en/post/reinforcement-learning-3-exploration-and-data/) · IV. RLHF (planned) · V. DPO and GRPO (planned) · VI. Agentic RL (planned)
+> **Series**: **I. Foundations, MDPs, and Bellman equations** · [II. From Q-Learning to PPO](/en/post/reinforcement-learning-2-classic-algorithms/) · [III. Exploration, sampling, and data](/en/post/reinforcement-learning-3-exploration-and-data/) · [IV. InstructGPT-Style RLHF](/en/post/reinforcement-learning-4-instructgpt-rlhf/) · V. DPO and GRPO (planned) · VI. Agentic RL (planned)
 
 ## 1. What does reinforcement learning learn?
 

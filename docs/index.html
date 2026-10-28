@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/" />
 
-<meta property="og:updated_time" content="2026-10-24T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-28T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,33 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/reinforcement-learning-4-instructgpt-rlhf/">强化学习（四）：InstructGPT 风格的 RLHF</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-10-28 </span>
+      <div class="post-category">
+          <a href="/categories/reinforcement-learning/"> Reinforcement Learning </a>
+          </div>
+        <span class="more-meta"> 约 7301 字 </span>
+        <span class="more-meta"> 预计阅读 15 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>预训练语言模型通过预测下一个 token 学习文本中的规律。要把它训练成能回答问题、遵循指令的助手，还需要示范回答和偏好数据。</p>
+
+<p>InstructGPT 的训练分为三个阶段：先用 SFT 学习示范回答，再训练 Reward Model 评价回答，最后用 PPO 根据奖励更新策略。</p>
+
+<p>三个阶段的实现可以对照 <a href="https://github.com/walkinglabs/hands-on-modern-rl/tree/main/code/chapter08_rlhf"><code>chapter08_rlhf</code></a> 中的 Python 文件阅读，完整代码见文末。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/reinforcement-learning-4-instructgpt-rlhf/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/anthropic-agent-skills/">Anthropic Agent Skills</a></h1>
@@ -488,41 +515,6 @@ Telemetry + Evals             让系统可观察、可比较、可改进</code><
     </div>
     <div class="read-more">
       <a href="/post/agentic-llm-2-action/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/agentic-llm-1-reasoning/">Agentic LLM Reasoning（一）：从 Chain of Thought 到搜索、反思与 RLVR</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-09-29 </span>
-      <div class="post-category">
-          <a href="/categories/ai-agents/"> AI Agents </a>
-          </div>
-        <span class="more-meta"> 约 6170 字 </span>
-        <span class="more-meta"> 预计阅读 13 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>模型能回答一个问题，不等于它能完成一项任务。</p>
-
-<p>普通 Chatbot 接收 Prompt，然后返回 Response；Agent 则要在不断变化的环境中决定下一步做什么，执行动作，读取结果，再判断应该继续、回退还是换一条路。这种能力首先依赖 <strong>Reasoning（推理）</strong>。</p>
-
-<p>一个完整的 Agent 系统至少需要三类能力：</p>
-
-<ol>
-<li><strong>Reasoning</strong>：分析状态、拆解问题、比较候选路径并形成决策；</li>
-<li><strong>Action</strong>：调用工具，把决策转化为对外部世界的操作；</li>
-<li><strong>Interaction</strong>：读取行动结果，与环境或其他 Agent 持续交换信息并修正策略。</li>
-</ol>
-
-<p>本文是 <strong>Agentic Large Language Models 系列的第一篇</strong>。我不会把 Reasoning 当成一串孤立术语来罗列，而会沿着同一个问题展开：<strong>当一次生成或一条推理链不够可靠时，系统还能增加什么？</strong> 第二篇将继续讨论 Action，第三篇讨论 Interaction。</p>
-    </div>
-    <div class="read-more">
-      <a href="/post/agentic-llm-1-reasoning/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>

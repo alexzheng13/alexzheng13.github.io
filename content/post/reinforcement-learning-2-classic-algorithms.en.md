@@ -16,7 +16,7 @@ The progression is continuous. Dynamic programming assumes a model. Monte Carlo 
 
 <!--more-->
 
-> **Series**: [I. Foundations](/en/post/reinforcement-learning-1-foundations/) · **II. From Q-Learning to PPO** · [III. Exploration, sampling, and data](/en/post/reinforcement-learning-3-exploration-and-data/) · IV. RLHF (planned) · V. DPO and GRPO (planned) · VI. Agentic RL (planned)
+> **Series**: [I. Foundations](/en/post/reinforcement-learning-1-foundations/) · **II. From Q-Learning to PPO** · [III. Exploration, sampling, and data](/en/post/reinforcement-learning-3-exploration-and-data/) · [IV. InstructGPT-Style RLHF](/en/post/reinforcement-learning-4-instructgpt-rlhf/) · V. DPO and GRPO (planned) · VI. Agentic RL (planned)
 
 ## 1. Model-based and model-free learning
 
