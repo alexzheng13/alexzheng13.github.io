@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Memvid：单文件 AI 记忆系统 - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="介绍 Memvid v2 的用途与架构：mv2 文件、Frame、嵌入式 WAL、TOC、全文与向量检索，以及它在 Agent 长期记忆中的位置。结合 Rust 源码解释追加写入、崩溃恢复、混合检索与设计取舍。" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/post/memvid-memory-architecture/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/memvid-memory-architecture/">
+<meta name="site-language-route" data-language="en" content="/en/post/memvid-memory-architecture/">
+<meta name="site-current-language" content="zh-cn"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="Memvid：单文件 AI 记忆系统" />
+<meta property="og:description" content="介绍 Memvid v2 的用途与架构：mv2 文件、Frame、嵌入式 WAL、TOC、全文与向量检索，以及它在 Agent 长期记忆中的位置。结合 Rust 源码解释追加写入、崩溃恢复、混合检索与设计取舍。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/post/memvid-memory-architecture/" />
+<meta property="article:published_time" content="2026-10-29T00:00:00+00:00" />
+<meta property="article:modified_time" content="2026-10-29T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="Memvid：单文件 AI 记忆系统">
+<meta itemprop="description" content="介绍 Memvid v2 的用途与架构：mv2 文件、Frame、嵌入式 WAL、TOC、全文与向量检索，以及它在 Agent 长期记忆中的位置。结合 Rust 源码解释追加写入、崩溃恢复、混合检索与设计取舍。">
+
+
+<meta itemprop="datePublished" content="2026-10-29T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2026-10-29T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="7283">
+
+
+
+<meta itemprop="keywords" content="Memvid,Agent Memory,RAG,Storage,Rust,Vector Search," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Memvid：单文件 AI 记忆系统"/>
+<meta name="twitter:description" content="介绍 Memvid v2 的用途与架构：mv2 文件、Frame、嵌入式 WAL、TOC、全文与向量检索，以及它在 Agent 长期记忆中的位置。结合 Rust 源码解释追加写入、崩溃恢复、混合检索与设计取舍。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/memvid-memory-architecture/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/memvid-memory-architecture/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/post/memvid-memory-architecture/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/en/post/memvid-memory-architecture/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Memvid：单文件 AI 记忆系统</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-10-29 </span>
+        <div class="post-category">
+            <a href="/categories/ai-agents/"> AI Agents </a>
+            </div>
+          <span class="more-meta"> 约 7283 字 </span>
+          <span class="more-meta"> 预计阅读 15 分钟 </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-memvid-是什么-解决什么问题">1. Memvid 是什么，解决什么问题？</a></li>
+<li><a href="#2-项目目录结构">2. 项目目录结构</a></li>
+<li><a href="#3-architecture-overview-整体架构">3. Architecture Overview：整体架构</a></li>
+<li><a href="#4-memory-architecture-记忆怎样组织和流转">4. Memory Architecture：记忆怎样组织和流转？</a>
+<ul>
+<li><a href="#mv2-内部的几层结构">.mv2 内部的几层结构</a></li>
+<li><a href="#写入与读取的生命周期">写入与读取的生命周期</a></li>
+<li><a href="#文件锁与并发">文件锁与并发</a></li>
+</ul></li>
+<li><a href="#5-frame-architecture-一条记忆的结构">5. Frame Architecture：一条记忆的结构</a>
+<ul>
+<li><a href="#frame-与-payload-描述信息和内容字节分开">Frame 与 Payload：描述信息和内容字节分开</a></li>
+<li><a href="#为什么用-frame-而不是只保存-embedding">为什么用 Frame，而不是只保存 Embedding？</a></li>
+</ul></li>
+<li><a href="#6-indices-and-tracks-不同的检索入口">6. Indices and Tracks：不同的检索入口</a>
+<ul>
+<li><a href="#lexical-index-按词找到记录">Lexical Index：按词找到记录</a></li>
+<li><a href="#vector-index-按语义找相关记录">Vector Index：按语义找相关记录</a></li>
+<li><a href="#时间索引与可选-tracks">时间索引与可选 Tracks</a></li>
+</ul></li>
+<li><a href="#7-file-layout-字节怎样落到文件里">7. File Layout：字节怎样落到文件里？</a>
+<ul>
+<li><a href="#header-先找到文件里的目录">Header：先找到文件里的目录</a></li>
+<li><a href="#toc-与-footer-保存定位关系和提交信息">TOC 与 Footer：保存定位关系和提交信息</a></li>
+</ul></li>
+<li><a href="#8-time-index-track-按时间访问记忆">8. Time Index Track：按时间访问记忆</a></li>
+<li><a href="#9-embedded-wal-写入-提交与恢复">9. Embedded WAL：写入、提交与恢复</a>
+<ul>
+<li><a href="#wal-的容量与已使用空间不同">WAL 的容量与已使用空间不同</a></li>
+<li><a href="#提交时不只是追加正文">提交时不只是追加正文</a></li>
+<li><a href="#单文件和崩溃安全-各自保证什么">单文件和崩溃安全，各自保证什么？</a></li>
+</ul></li>
+<li><a href="#10-search-retrieval-从候选到原文证据">10. Search &amp; Retrieval：从候选到原文证据</a>
+<ul>
+<li><a href="#hybrid-合并候选-不是固定各取一半">Hybrid：合并候选，不是固定各取一半</a></li>
+</ul></li>
+<li><a href="#11-接入-agent-谁决定怎样使用记忆">11. 接入 Agent：谁决定怎样使用记忆？</a></li>
+<li><a href="#12-一个离线检索例子">12. 一个离线检索例子</a></li>
+<li><a href="#13-设计上的取舍">13. 设计上的取舍</a>
+<ul>
+<li><a href="#参考资料">参考资料</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>Memvid 是面向 AI Agent 的单文件记忆系统。它把资料和检索索引保存在本地，让 Agent 在新的会话中查回之前存下的信息。</p>
+
+<p>项目地址：<a href="https://github.com/memvid/memvid">memvid/memvid</a> · Commit：<a href="https://github.com/memvid/memvid/tree/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813"><code>e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813</code></a></p>
+
+<h2 id="1-memvid-是什么-解决什么问题">1. Memvid 是什么，解决什么问题？</h2>
+
+<p>Memvid 是一个面向 AI 应用的持久化记忆与检索组件。它的核心对象是 memory 文件，例如 <code>knowledge.mv2</code>。把文档写进去之后，可以按关键词、语义或时间找到相关内容，结果带有来源标识与元数据。</p>
+
+<p>例如，一个编程 Agent 已经处理过项目的部署问题。下次再问“这个服务用什么部署，发布后要检查哪个接口”，应用可以先检索相关记录，将部署方式和健康检查地址放进上下文，不必重新上传所有文件。</p>
+
+<p>常见用途包括：</p>
+
+<ul>
+<li><strong>项目知识库</strong>：保存架构说明、接口约定、排障记录和技术决策。</li>
+<li><strong>个人助手记忆</strong>：保存用户确认的偏好和计划，并在相关任务中检索。</li>
+<li><strong>离线资料检索</strong>：在不运行独立检索服务的环境中查询本地文档。</li>
+<li><strong>Agent 调试</strong>：查看写入顺序、检索来源，以及某个历史范围内可见的记录。</li>
+</ul>
+
+<p>Memvid 不改变基础模型的参数。它返回的是外部证据，模型仍通过上下文使用这些信息。LoRA 属于参数适配，Memvid 属于外部存储与检索，两者可以配合。</p>
+
+<p>在 RAG 系统中，它可以承担内容存储和检索这一层；文档选择、权限、提示词、生成和评估仍由应用组织。Agentic RAG 进一步让 Agent 决定何时查询、怎样改写问题、是否继续搜索，Memvid 可以成为它调用的检索工具。</p>
+
+<h2 id="2-项目目录结构">2. 项目目录结构</h2>
+
+<p>先看源码的组织方式。下面保留与存储和检索主线相关的目录与文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">memvid/
+├── Cargo.toml
+├── src/
+│   ├── lib.rs
+│   ├── memvid/           # 写入、查询、提交与恢复
+│   ├── types/            # Frame、TOC、查询参数等数据结构
+│   ├── io/               # Header、WAL、时间索引的读写
+│   ├── lex.rs            # 全文索引
+│   ├── vec.rs            # 向量存储与检索
+│   ├── vec_pq.rs
+│   ├── text_embed.rs
+│   ├── toc.rs
+│   └── footer.rs
+├── tests/
+├── benches/
+└── examples/</code></pre></td></tr></table>
+</div>
+</div>
+<p>这个仓库的 Rust crate 是 <code>memvid-core</code>。其中，<code>src/</code> 是实现代码；用户导入的文档和生成的记忆文件不属于源码目录。</p>
+
+<p>阅读时可以从 <a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/lib.rs"><code>src/lib.rs</code></a> 看对外导出的接口，再进入 <a href="https://github.com/memvid/memvid/tree/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/memvid"><code>src/memvid/</code></a>：</p>
+
+<ul>
+<li><code>lifecycle.rs</code>：文件创建、打开和生命周期。</li>
+<li><code>mutation.rs</code>：写入变更、提交和目录更新。</li>
+<li><code>search/</code> 与 <code>ask.rs</code>：候选检索、排序和回答流程。</li>
+<li><code>frame.rs</code> 与 <code>chunks.rs</code>：读取记录及处理文档片段。</li>
+</ul>
+
+<p>例如，Frame 的字段定义在 <code>types/frame.rs</code>，WAL 的读写实现在 <code>io/wal.rs</code>，提交时怎样使用它们则要看 <code>memvid/mutation.rs</code>。数据结构、底层读写和业务操作分开，便于沿一次写入或查询追踪代码。</p>
+
+<h2 id="3-architecture-overview-整体架构">3. Architecture Overview：整体架构</h2>
+
+<p>从应用看，一次使用可以分成两条路径：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">写入：文档 / 文本 → 提取与切分 → Frame → 内容和索引 → 提交到 .mv2
+查询：问题 → 关键词 / 向量 / 时间检索 → Frame → 原文证据 → 应用或 LLM</code></pre></td></tr></table>
+</div>
+</div>
+<p><code>.mv2</code> 是 Memvid 的二进制记忆文件，不是 Markdown 文本，也不是模型权重。它同时承载内容、索引和用于定位及恢复的元数据。CLI 和 SDK 是访问入口，Rust Core 负责底层存储与查询；LLM 在需要生成回答时使用检索结果。</p>
+
+<p><a href="https://docs.memvid.com/architecture/overview">官方架构概览</a>围绕单文件、崩溃恢复、确定性与检索性能展开。单文件让内容和索引可以一起迁移；WAL 与校验信息处理写入中断；固定输入条件下的确定性便于复现存储结果。这些机制各有职责，不能只靠“所有东西放在一起”就同时解决。</p>
+
+<p>还要区分：记忆数据保存在一个文件中，不等于程序、Embedding 模型和 LLM 也打包进了这个文件。</p>
+
+<h2 id="4-memory-architecture-记忆怎样组织和流转">4. Memory Architecture：记忆怎样组织和流转？</h2>
+
+<p><a href="https://docs.memvid.com/concepts/memory-architecture">Memory Architecture</a>关注整个 memory 的生命周期：文件怎样被打开，新增记录怎样提交，查询怎样找到内容。</p>
+
+<h3 id="mv2-内部的几层结构">.mv2 内部的几层结构</h3>
+
+<p><img src="/img/posts/memvid-architecture/mv2-layout.svg" alt="Memvid 单文件内部包含 Header、Embedded WAL、Frame 内容、索引、TOC 与提交 Footer" /></p>
+
+<p>图中是逻辑分层，不按实际字节大小绘制：</p>
+
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>保存什么</th>
+<th>负责什么</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Header</td>
+<td>格式标识、版本与关键偏移</td>
+<td>打开文件时定位其他结构</td>
+</tr>
+
+<tr>
+<td>Embedded WAL</td>
+<td>待处理变更与检查点进度</td>
+<td>支持中断后的恢复</td>
+</tr>
+
+<tr>
+<td>内容区域</td>
+<td>文本、二进制内容等 payload</td>
+<td>保存可回读的资料</td>
+</tr>
+
+<tr>
+<td>索引与 Tracks</td>
+<td>关键词、向量、时间等访问结构</td>
+<td>根据不同条件找到记录</td>
+</tr>
+
+<tr>
+<td>TOC + Footer</td>
+<td>描述符、位置、校验与提交信息</td>
+<td>将这些区域关联成一致的状态</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="写入与读取的生命周期">写入与读取的生命周期</h3>
+
+<p>写入时，应用先提供内容和元数据。导入流程可能提取文本、切分文档并生成 Embedding，然后建立 Frame 及相应索引。变更由 WAL 和提交过程协调，最终形成可恢复的文件状态。</p>
+
+<p>查询时，Core 根据 Header、TOC 等信息定位索引，查询得到 Frame 标识后再读取文本或 payload。遇到非正常退出，还需要检查有效提交信息及 WAL，处理可恢复的变更。</p>
+
+<p>这意味着一条检索结果不只是相似度分数：它应当能够回到某条记录、某份来源及对应内容。Frame 定义这个记录单位，索引提供访问路径，文件布局提供它们在磁盘上的定位方式。</p>
+
+<h3 id="文件锁与并发">文件锁与并发</h3>
+
+<p>并发方面，源码使用操作系统文件锁，支持共享读锁与排他写锁。它不是任意数量的写入者都能同时修改的分布式数据库。多个 Agent 共同写记忆时，应用应串行化写入或统一交给一个写入服务。</p>
+
+<h2 id="5-frame-architecture-一条记忆的结构">5. Frame Architecture：一条记忆的结构</h2>
+
+<p>Frame 是文件中的记录单位。可以先把它理解为“内容的位置 + 来源与时间 + 状态”，再看它怎样支持更新和检索。</p>
+
+<h3 id="frame-与-payload-描述信息和内容字节分开">Frame 与 Payload：描述信息和内容字节分开</h3>
+
+<p>Frame 是记忆记录的基本单位，但在代码里，Frame 结构本身并不直接塞进全部正文。<a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/types/frame.rs"><code>Frame</code></a> 的字段包括：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="c1">// 摘录 Frame 的部分字段
+</span><span class="c1"></span><span class="k">pub</span><span class="w"> </span><span class="n">id</span>: <span class="nc">FrameId</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">timestamp</span>: <span class="kt">i64</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">payload_offset</span>: <span class="kt">u64</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">payload_length</span>: <span class="kt">u64</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">checksum</span>: <span class="p">[</span><span class="kt">u8</span><span class="p">;</span><span class="w"> </span><span class="mi">32</span><span class="p">],</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">uri</span>: <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">title</span>: <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">search_text</span>: <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Payload 保存内容字节，可以采用 Plain 或 Zstd 编码；Frame 描述符记录它的位置、长度和校验值，还可以包含提取出的 <code>search_text</code>。因此，查看文本记录时，有些内容出现在 <code>frame.search_text</code>，不一定出现在一个统一的 <code>content</code> 字段里。</p>
+
+<p><code>frame_id</code> 标识文件内的具体记录；URI 则可以作为应用侧较稳定的文档标识。同一个主题更新后，应用可以继续使用相同 URI，让新记录替代旧记录。一次导入也不一定只产生一个 Frame：长文档可能包含父文档与多个 chunk，具体取决于导入接口和切分策略。</p>
+
+<h3 id="为什么用-frame-而不是只保存-embedding">为什么用 Frame，而不是只保存 Embedding？</h3>
+
+<p>向量检索返回的首先是相似记录的位置。真正回答问题时，还需要原文、来源、时间和更新状态。只保存向量，无法还原“当时具体说了什么”。</p>
+
+<p>Frame 把这些信息绑定到同一条记录，使检索命中可以回到实际证据。Embedding 只是这条记录的一种检索表示，与正文一起保存在同一个文件，但不必物理嵌在每个 Frame 描述符中。</p>
+
+<p>这种设计有几个直接影响。</p>
+
+<p><strong>内容与索引可以使用不同的组织方式。</strong> 原文适合压缩保存；全文检索需要倒排索引；语义检索需要向量和搜索结构；时间检索需要按时间排序。把它们装进同一个容器，不代表要把它们强行编码成同一种数据。</p>
+
+<p><strong>更新可以保留来源关系。</strong> Frame 中有 <code>status</code>、<code>supersedes</code>、<code>superseded_by</code> 等字段，用来表达生效、替代和删除。内容的追加式写入，与元数据状态的更新是两个层面。</p>
+
+<p><strong>切分仍然需要设计。</strong> 过大的 chunk 容易把多个主题混在一起；过小则会丢掉上下文。对会议记录可以按议题，对代码可以按函数或模块，对个人偏好可以按确认的独立事实组织。Frame 没有消除 chunking 问题，而是提供了保存 chunk 及其关联信息的位置。</p>
+
+<h2 id="6-indices-and-tracks-不同的检索入口">6. Indices and Tracks：不同的检索入口</h2>
+
+<p>索引回答“怎样更快找到记录”，Track 则可以保存按用途组织的数据。它们与 Frame 关联，但不需要把每种访问结构都塞进 Frame 本身。</p>
+
+<h3 id="lexical-index-按词找到记录">Lexical Index：按词找到记录</h3>
+
+<p>全文索引主要解决精确术语问题，例如错误码 <code>E_LOCKED</code>、函数名 <code>rewrite_toc_footer</code>、项目名和日期。Tantivy 提供倒排索引和 BM25 排序，候选最终映射回 Frame。</p>
+
+<p>假设两条记录分别写着“Atlas uses FastAPI”和“Atlas uses Docker Compose”，查询 <code>FastAPI</code> 时，倒排索引可以直接定位包含这个词的记录，不用逐条读取所有正文。</p>
+
+<p>分词方式会影响结果。英文缩写、代码标识符与中文短语的表现并不相同；没有关键词命中，也不能立即判断资料不存在。</p>
+
+<h3 id="vector-index-按语义找相关记录">Vector Index：按语义找相关记录</h3>
+
+<p>语义检索先把问题变成向量，再找相近的文档或 chunk 向量。例如资料写着“exposes its HTTP API with FastAPI”，问题问“用什么处理 Web 请求”，即使没有完全相同的词，也可能找到这条记录。</p>
+
+<p>源码的 <a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/vec.rs"><code>VecDocument</code></a> 直接体现了向量与 Frame 的关联：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">VecDocument</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">frame_id</span>: <span class="nc">FrameId</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">embedding</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>向量及其索引结构序列化进文件的向量区域。实现同时有未压缩向量、PQ 和 HNSW 等路径；小规模数据可以直接扫描向量，达到阈值且启用相应功能后，构建器才选择 HNSW。</p>
+
+<p>BGE-small 的一个向量有 384 维。只计算 FP32 数值，需要 <code>384 × 4 = 1536 bytes</code>，还不包括图结构、元数据和文件开销。PQ 压缩的是向量表示，不能把它的压缩倍数直接套到整个 memory 文件上。</p>
+
+<p>更换 Embedding 模型时，还需要重建对应的文档向量。即使两个模型都输出 384 维，它们也可能处在不同的向量空间，不能混用。</p>
+
+<h3 id="时间索引与可选-tracks">时间索引与可选 Tracks</h3>
+
+<p>Time Index 按时间定位 Frame，具体结构在第 8 节展开。关键词、向量和时间三个入口可以配合使用，例如先限制到上周，再搜索与部署有关的记录。</p>
+
+<p>除了这三类索引，TOC 还可以引用结构化 MemoryCards、Logic Mesh 关系图和 replay track。它们分别用于保存抽取出的事实、实体关系和回放信息，需要相应的处理或功能支持，不会因为创建了 <code>.mv2</code> 文件就自动拥有全部内容。</p>
+
+<h2 id="7-file-layout-字节怎样落到文件里">7. File Layout：字节怎样落到文件里？</h2>
+
+<p>前面介绍的是逻辑对象。落实到磁盘，程序需要知道每个区域从哪个字节开始、占多少字节，以及怎样验证它。Header、TOC 与 Footer 负责这些定位和校验信息。</p>
+
+<h3 id="header-先找到文件里的目录">Header：先找到文件里的目录</h3>
+
+<p>Header 固定占用 4096 bytes，主要回答“这是什么格式”和“其他结构在哪里”。<a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/io/header.rs">HeaderCodec</a> 会按固定偏移读写这些字段：</p>
+
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>作用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>magic</code></td>
+<td>文件标识，源码为 <code>MV2\0</code></td>
+</tr>
+
+<tr>
+<td><code>version</code> / spec 字段</td>
+<td>识别文件格式版本，不是记忆内容的历史版本</td>
+</tr>
+
+<tr>
+<td><code>footer_offset</code></td>
+<td>定位当前 TOC 的起始位置</td>
+</tr>
+
+<tr>
+<td><code>wal_offset</code> / <code>wal_size</code></td>
+<td>定位嵌入式 WAL 的区域</td>
+</tr>
+
+<tr>
+<td><code>wal_checkpoint_pos</code> / <code>wal_sequence</code></td>
+<td>记录 WAL 的检查点位置和序列进度</td>
+</tr>
+
+<tr>
+<td><code>toc_checksum</code></td>
+<td>检查目录元数据的完整性</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>Offset</code> 是相对文件开头的字节位置。它让读取器能够直接跳到目标区域，而不是从头扫描所有正文。</p>
+
+<h3 id="toc-与-footer-保存定位关系和提交信息">TOC 与 Footer：保存定位关系和提交信息</h3>
+
+<p>TOC 是 Table of Contents，即文件内部的目录元数据。它不是被导入的 Markdown 文件，也不是文档目录标题的集合。</p>
+
+<p><a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/types/manifest.rs"><code>Toc</code></a> 保存 Frame 描述符、索引 manifest、segment catalog，以及其他可选 track 的引用。索引 manifest 会记录相关字节区域的 offset、length、checksum 等信息。</p>
+
+<p>例如，要读取 Frame 42，程序先找到该记录的描述符，再根据 <code>payload_offset</code> 和 <code>payload_length</code> 读取对应字节；需要解压时，再按记录的编码还原内容。</p>
+
+<p>TOC 后面还有一个提交 Footer。<a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/footer.rs"><code>CommitFooter</code></a> 包含标识 <code>MV2FOOT!</code>、TOC 长度、BLAKE3 哈希和 generation。恢复时可以从文件尾部反向寻找有效 Footer，并验证前面的 TOC。</p>
+
+<p>这里的校验解决的是损坏检测。BLAKE3 校验值不等于加密，也不能单独提供访问控制。</p>
+
+<h2 id="8-time-index-track-按时间访问记忆">8. Time Index Track：按时间访问记忆</h2>
+
+<p>问题如果是“上周新增了哪些部署决策”，时间就是筛选条件。<a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/io/time_index.rs">时间索引源码</a> 的记录是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">TimeIndexEntry</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">timestamp</span>: <span class="kt">i64</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">frame_id</span>: <span class="kt">u64</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>写入前会按 <code>(timestamp, frame_id)</code> 排序。时间索引帮助定位范围内的 Frame，之后仍可以结合全文或语义相关性排序。记录写入时间与正文中提到的事件时间也要区分，不能把所有日期都当成同一种时间含义。</p>
+
+<h2 id="9-embedded-wal-写入-提交与恢复">9. Embedded WAL：写入、提交与恢复</h2>
+
+<p>写入一条记忆会同时影响内容、索引和目录。如果更新到一半程序退出，文件不能把半套新索引与旧内容混成一个已完成状态。嵌入式 WAL 用于记录待提交的变更和恢复进度。</p>
+
+<h3 id="wal-的容量与已使用空间不同">WAL 的容量与已使用空间不同</h3>
+
+<p>WAL 的预留容量是一个字节区域；pending bytes 才表示当前未处理记录占了多少空间。提交并推进检查点后，这个区域可以继续使用，不是每次操作都永久向其中增加一段历史。</p>
+
+<p>概览文档列出了 1、4、16、64 MB 等容量档位；当前源码还定义了小型文件起步用的 <strong>64 KiB</strong> WAL，并包含按需扩容逻辑。因此，不能把文档中的档位理解成所有新文件必然预留至少 1 MB。</p>
+
+<p><a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/io/wal.rs"><code>EmbeddedWal</code></a> 维护写指针、检查点、pending bytes 和序列号。记录超过空间时不能覆盖未提交数据；<a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/memvid/mutation.rs"><code>append_wal_entry()</code></a> 会处理扩容后重试。</p>
+
+<p>源码的检查点条件包括 WAL 占用达到 75%，或检查点后追加次数达到 1000。批量模式可以调整同步与自动检查点行为，用较少的同步操作换取吞吐；也需要在结束批次时完成 flush。</p>
+
+<h3 id="提交时不只是追加正文">提交时不只是追加正文</h3>
+
+<p>逻辑上的过程是：记录变更，提交内容与索引，生成一致的 TOC/Footer，更新相关元数据并推进 WAL 检查点。<code>commit()</code> 与恢复路径负责协调这些状态。</p>
+
+<p>一个容易误解的地方是：<strong>Frame 内容采用追加式组织，不意味着文件里所有字节都永远只能追加。</strong></p>
+
+<p><code>rewrite_toc_footer()</code> 中有下面这些实际写入操作，中间省略了 Footer 的构造和边界计算：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="bp">self</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">seek</span><span class="p">(</span><span class="n">SeekFrom</span>::<span class="n">Start</span><span class="p">(</span><span class="n">footer_offset</span><span class="p">))</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="bp">self</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">write_all</span><span class="p">(</span><span class="o">&amp;</span><span class="n">toc_bytes</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="c1">// 构造并编码新的 CommitFooter
+</span><span class="c1"></span><span class="bp">self</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">write_all</span><span class="p">(</span><span class="o">&amp;</span><span class="n">encoded_footer</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="c1">// 计算新文件长度，至少保留 Header + WAL 区域
+</span><span class="c1"></span><span class="bp">self</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">set_len</span><span class="p">(</span><span class="n">final_len</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="bp">self</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">sync_all</span><span class="p">()</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>它在指定位置写入新目录和 Footer，并调整文件长度。所以不能假设每次提交都会永久累积一份旧 TOC，也不能把 <code>.mv2</code> 当成自动保留每一版物理文件快照的 Git 仓库。</p>
+
+<p>删除或替代过的内容可能留下不再需要的空间，vacuum 则用于整理有效数据、更新位置并回收空间。它与正常提交时重写尾部目录不是同一操作。</p>
+
+<h3 id="单文件和崩溃安全-各自保证什么">单文件和崩溃安全，各自保证什么？</h3>
+
+<p>单文件减少了“正文复制了，但索引或日志漏拷了”的风险。崩溃恢复则依靠有效提交信息、WAL 记录与校验判断可恢复状态。复制或备份仍应选择稳定提交点，避免直接把正在写入的文件当成一致快照。</p>
+
+<h2 id="10-search-retrieval-从候选到原文证据">10. Search &amp; Retrieval：从候选到原文证据</h2>
+
+<p><img src="/img/posts/memvid-architecture/retrieval-flow.svg" alt="关键词与向量候选经过融合和过滤，定位 Frame 后返回原文，再由应用交给 LLM" /></p>
+
+<p><em>这是检索的逻辑流程。具体启用哪些索引、过滤和排序步骤，由查询入口、参数及编译功能决定。</em></p>
+
+<h3 id="hybrid-合并候选-不是固定各取一半">Hybrid：合并候选，不是固定各取一半</h3>
+
+<p>关键词排名与向量分数的尺度不同，直接相加往往不合适。公开 Core 的 <code>ask.rs</code> 中有 <a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/memvid/ask.rs"><code>fuse_hits_rrf()</code></a>，按各候选列表中的名次累积分数：</p>
+
+<div class="math-display">
+\[
+\operatorname{RRF}(d)=\sum_{j:\,d\in L_j}\frac{1}{c+\operatorname{rank}_j(d)}.
+\]
+</div>
+
+<p>同一 Frame 在多个列表靠前，就能获得更多贡献。<code>c</code> 用于平滑名次差异，按 <code>frame_id</code> 合并还可以避免同一个结果重复占位。</p>
+
+<p>但不能据此假设所有 CLI 和 SDK 查询都只执行这一段函数。代码还有语义重排、过滤和回退路径，CLI 参数也不等于 Core 中某个内部候选数量。</p>
+
+<p>尤其是 <code>--top-k 10</code>，表示最终返回数量的配置，<strong>不意味着 BM25 和向量各搜 5 条</strong>。候选召回预算、融合后的数量与最终输出数量是不同层次。</p>
+
+<p>Adaptive Retrieval 还可能根据分数分布缩短结果列表。检查固定候选数或排查遗漏时，可以用 <code>--no-adaptive</code>；它关闭的是自适应截断，不会把一个低相关结果变成事实证据。</p>
+
+<h2 id="11-接入-agent-谁决定怎样使用记忆">11. 接入 Agent：谁决定怎样使用记忆？</h2>
+
+<p>Memvid 提供存储与检索能力，Agent 还需要一套使用规则：哪些事实值得写入，什么时候检索，旧记录怎样被修正，哪些结果允许放进当前任务。</p>
+
+<p>一个简单的工程安排是把规则、源资料和检索产物分开：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">AGENTS.md       何时查记忆、何时写入、怎样处理冲突
+notes/*.md      可阅读、可编辑的事实或项目记录
+knowledge.mv2   从这些资料建立的持久化记忆与索引</code></pre></td></tr></table>
+</div>
+</div>
+<p>例如，用户纠正了某项长期偏好，先修改对应源笔记，再以稳定 URI 更新记录，并使用相同 Embedding 模型重建其向量。随后同时测试关键词查询和换一种说法的语义查询，确认旧信息没有继续作为有效结果出现。</p>
+
+<p>这也便于处理失败：源笔记仍在，索引可以重新构建；检索结果包含来源，Agent 可以回读全文，而不是只依赖截断的 snippet。</p>
+
+<p>相似度高只表示“相关”，不表示“正确”或“得到用户确认”。外部记忆中的指令同样可能包含提示注入，不能因为被检索出来就自动拥有执行权限。涉及个人或企业数据，还需要按来源控制采集、授权、保留与删除。</p>
+
+<p>“本地 memory 文件”也不等于整个工作流天然离线：Embedding 模型、运行时和模型缓存通常在文件之外；如果最后调用云端 LLM，选中的上下文仍会发送给云服务。</p>
+
+<h2 id="12-一个离线检索例子">12. 一个离线检索例子</h2>
+
+<p>准备两份示例文档，内容不涉及真实个人数据：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">api.md
+Project Atlas exposes its HTTP API with FastAPI.
+The service is written in Python. Its health-check endpoint is /health.
+
+deployment.md
+Project Atlas runs in Docker Compose on a single Linux server.
+It does not use Kubernetes.</code></pre></td></tr></table>
+</div>
+</div>
+<p>在一个新目录创建 memory，再导入两份文件。下面假设 <code>memvid</code> 已安装，BGE-small 已下载到本地缓存：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">MEMVID_OFFLINE</span><span class="o">=</span><span class="m">1</span> memvid create atlas.mv2
+
+<span class="nv">MEMVID_OFFLINE</span><span class="o">=</span><span class="m">1</span> memvid put atlas.mv2 <span class="se">\
+</span><span class="se"></span>  --input api.md --uri memvid://demo/atlas/api <span class="se">\
+</span><span class="se"></span>  --title <span class="s2">&#34;Atlas API&#34;</span> <span class="se">\
+</span><span class="se"></span>  --embedding --embedding-model bge-small --no-enrich --json
+
+<span class="nv">MEMVID_OFFLINE</span><span class="o">=</span><span class="m">1</span> memvid put atlas.mv2 <span class="se">\
+</span><span class="se"></span>  --input deployment.md --uri memvid://demo/atlas/deployment <span class="se">\
+</span><span class="se"></span>  --title <span class="s2">&#34;Atlas Deployment&#34;</span> <span class="se">\
+</span><span class="se"></span>  --embedding --embedding-model bge-small --no-enrich --json</code></pre></td></tr></table>
+</div>
+</div>
+<p><code>--embedding</code> 明确要求生成向量，<code>--no-enrich</code> 关闭自动规则 enrichment。导入结果中的 <code>embedding.enabled</code> 和 <code>runtime_dimension</code> 可以确认是否真正生成了 384 维向量，不能只根据命令成功就认定语义索引已建立。</p>
+
+<p>精确找框架名：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">MEMVID_OFFLINE</span><span class="o">=</span><span class="m">1</span> memvid find atlas.mv2 <span class="se">\
+</span><span class="se"></span>  --query <span class="s2">&#34;FastAPI&#34;</span> --mode lex <span class="se">\
+</span><span class="se"></span>  --no-adaptive --top-k <span class="m">2</span> --json</code></pre></td></tr></table>
+</div>
+</div>
+<p>换一种说法查询：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">MEMVID_OFFLINE</span><span class="o">=</span><span class="m">1</span> memvid find atlas.mv2 <span class="se">\
+</span><span class="se"></span>  --query <span class="s2">&#34;What does Atlas use to serve web requests?&#34;</span> <span class="se">\
+</span><span class="se"></span>  --mode sem --embedding-model bge-small <span class="se">\
+</span><span class="se"></span>  --no-adaptive --top-k <span class="m">2</span> --snippet-chars <span class="m">300</span> --json</code></pre></td></tr></table>
+</div>
+</div>
+<p>在 CLI 2.0.140 的本地测试中，后一条查询把 <strong>Atlas API</strong> 排在第一位，返回文本包含 FastAPI。结果中同时提供 <code>frame_id</code>、URI、分数和 snippet，应用可以继续读取来源，再组织回答。这个两文档实验用于确认流程，不是检索准确率 benchmark。</p>
+
+<p><code>find</code> 到这里仍然是在检索证据。<code>ask</code> 则在检索之后接上回答生成，是否访问外部服务取决于选择的模型和配置。需要严格离线时，应检查整条调用链，而不只检查 <code>.mv2</code> 放在哪里。</p>
+
+<h2 id="13-设计上的取舍">13. 设计上的取舍</h2>
+
+<p><strong>单文件降低部署和迁移复杂度，也集中了承载内容的责任。</strong> 不需要运行单独的向量检索服务，但仍要做好文件权限、备份、校验和恢复。多个机器同时写入时，单机文件锁也无法替代分布式协调。</p>
+
+<p><strong>内容和索引放在一起，减少了外部同步点，也让维护操作涉及整个容器。</strong> 扩容、重建索引和 vacuum 可能移动大量字节，因此批量导入、提交频率和备份窗口需要按实际数据量选择。</p>
+
+<p><strong>索引提供不同的访问方式，却不负责判断信息的长期价值。</strong> 去重、遗忘、冲突处理和任务相关性仍要在应用层定义；有了时间索引，也不意味着系统自动理解事件因果。</p>
+
+<p><strong>确定性的编码与校验有利于测试和排障。</strong> 固定输入顺序、时间戳与构建配置后，可以比较序列化结果，判断是否发生了意外变化。这个目标针对存储和构建过程，不表示上层 LLM 每次都会给出相同回答；自动生成的时间、不同模型或不同导入顺序也会改变输入条件。</p>
+
+<p>适合它的场景，是本地或嵌入式应用需要一份可携带、可检索、可追溯的知识资产。若需求是大量租户、高并发写入、跨地域复制和严格的分布式事务，就应进一步评估服务化检索或数据库方案，而不是仅凭“一个文件”决定架构。</p>
+
+<h3 id="参考资料">参考资料</h3>
+
+<ul>
+<li><a href="https://docs.memvid.com/architecture/overview">Memvid Architecture Overview</a></li>
+<li><a href="https://docs.memvid.com/introduction/frames">Frame Architecture</a> 与 <a href="https://docs.memvid.com/concepts/memory-architecture">Memory Architecture</a></li>
+<li><a href="https://docs.memvid.com/concepts/indexes-and-tracks">Indices and Tracks</a> · <a href="https://docs.memvid.com/file-format/time-index-track">Time Index Track</a></li>
+<li><a href="https://docs.memvid.com/file-format/wal">Embedded WAL</a> · <a href="https://docs.memvid.com/cli/search-and-ask">Search &amp; Ask</a></li>
+<li><a href="https://github.com/memvid/memvid/tree/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813">Memvid Rust 源码，固定 commit</a>，Apache-2.0。文中的源码片段作了节选，图示为逻辑结构重绘。</li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2026-10-29
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/memvid/">Memvid</a>
+          <a href="/tags/agent-memory/">Agent Memory</a>
+          <a href="/tags/rag/">RAG</a>
+          <a href="/tags/storage/">Storage</a>
+          <a href="/tags/rust/">Rust</a>
+          <a href="/tags/vector-search/">Vector Search</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/reinforcement-learning-4-instructgpt-rlhf/">
+            <span class="next-text nav-default">强化学习（四）：InstructGPT 风格的 RLHF</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.6388abde34e31667698edd963050a5a5d32866b5dbe6b270a37d5bee36bc8beb.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

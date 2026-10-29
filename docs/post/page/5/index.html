@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/post/" />
 
-<meta property="og:updated_time" content="2026-10-28T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-29T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">文章归档</h1>
-      <p>按年份浏览全部 38 篇文章</p>
+      <p>按年份浏览全部 39 篇文章</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         订阅 RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="按年份排列的文章">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/post/memvid-memory-architecture/">
+          <time datetime="2026-10-29">10-29</time>
+          <span>Memvid：单文件 AI 记忆系统</span>
+        </a>
         <a class="blog-archive-index-item" href="/post/reinforcement-learning-4-instructgpt-rlhf/">
           <time datetime="2026-10-28">10-28</time>
           <span>强化学习（四）：InstructGPT 风格的 RLHF</span>
@@ -413,6 +417,40 @@
   <div class="blog-recent-posts" aria-label="最近文章">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/post/reinforcement-learning-2-classic-algorithms/">强化学习（二）：从 Q-Learning、DQN 到 Actor-Critic 与 PPO</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-08-26">2026年08月26日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 7 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p><a href="/post/reinforcement-learning-1-foundations/">上一篇</a>建立了 MDP、价值函数与贝尔曼方程。接下来要回答的是：<strong>当环境模型未知、状态无法枚举、策略又由神经网络表示时，怎样真的把价值或策略学出来？</strong></p>
+
+<p>本文沿着一条连续的演进路径展开：动态规划需要完整模型；蒙特卡洛只依赖完整轨迹；时序差分可以边走边学；Q-Learning 学最优动作价值；DQN 用神经网络处理高维状态；Actor-Critic 与 PPO 则直接优化策略，并控制每次更新不要走得太远。</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="标签">
+              <span class="blog-summary-tags-label">标签</span>
+              <ul>
+                  <li><a href="/tags/reinforcement-learning/">Reinforcement Learning</a></li>
+                  <li><a href="/tags/q-learning/">Q-Learning</a></li>
+                  <li><a href="/tags/dqn/">DQN</a></li>
+                  <li><a href="/tags/actor-critic/">Actor-Critic</a></li>
+                  <li><a href="/tags/ppo/">PPO</a></li>
+                  <li><a href="/tags/temporal-difference/">Temporal Difference</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/post/reinforcement-learning-2-classic-algorithms/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/post/reinforcement-learning-1-foundations/">强化学习（一）：从 CartPole 到 MDP 与贝尔曼方程</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-08-25">2026年08月25日</time>
@@ -541,27 +579,6 @@
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/post/langchain-agent-builder-memory-system/">阅读全文<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/post/%E8%AF%91liunx-io-multiplexing-select-vs-poll-vs-epoll/">（译）Liunx – IO Multiplexing – Select VS Poll VS Epoll</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2021-02-11">2021年02月11日</time>
-            <span aria-hidden="true">·</span>
-            <span>预计阅读 8 分钟</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">导读 &emsp;&emsp;读这篇文章前可以先了解下Liunx5种I/O模型 &emsp;&emsp;参考文献: I/O Models &ndash;Richard Stevens的《UNI</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/post/%E8%AF%91liunx-io-multiplexing-select-vs-poll-vs-epoll/">阅读全文<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

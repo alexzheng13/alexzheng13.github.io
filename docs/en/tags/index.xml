@@ -6,10 +6,64 @@
     <description>Recent content in Tags on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 28 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 29 Oct 2026 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/en/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Agent Memory</title>
+      <link>https://alexzheng13.github.io/en/tags/agent-memory/</link>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/agent-memory/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Memvid</title>
+      <link>https://alexzheng13.github.io/en/tags/memvid/</link>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/memvid/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>RAG</title>
+      <link>https://alexzheng13.github.io/en/tags/rag/</link>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/rag/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rust</title>
+      <link>https://alexzheng13.github.io/en/tags/rust/</link>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/rust/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Storage</title>
+      <link>https://alexzheng13.github.io/en/tags/storage/</link>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/storage/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Vector Search</title>
+      <link>https://alexzheng13.github.io/en/tags/vector-search/</link>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/vector-search/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>InstructGPT</title>
@@ -170,15 +224,6 @@
       <pubDate>Mon, 19 Oct 2026 09:00:16 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/en/tags/relationships/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Agent Memory</title>
-      <link>https://alexzheng13.github.io/en/tags/agent-memory/</link>
-      <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/en/tags/agent-memory/</guid>
       <description></description>
     </item>
     
@@ -359,15 +404,6 @@
       <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/en/tags/graphrag/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>RAG</title>
-      <link>https://alexzheng13.github.io/en/tags/rag/</link>
-      <pubDate>Tue, 06 Oct 2026 09:00:00 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/en/tags/rag/</guid>
       <description></description>
     </item>
     

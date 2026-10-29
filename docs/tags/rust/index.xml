@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rust on Blowing in the wind</title>
+    <link>https://alexzheng13.github.io/tags/rust/</link>
+    <description>Recent content in Rust on Blowing in the wind</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 29 Oct 2026 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://alexzheng13.github.io/tags/rust/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Memvid：单文件 AI 记忆系统</title>
+      <link>https://alexzheng13.github.io/post/memvid-memory-architecture/</link>
+      <pubDate>Thu, 29 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/post/memvid-memory-architecture/</guid>
+      <description>&lt;p&gt;Memvid 是面向 AI Agent 的单文件记忆系统。它把资料和检索索引保存在本地，让 Agent 在新的会话中查回之前存下的信息。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

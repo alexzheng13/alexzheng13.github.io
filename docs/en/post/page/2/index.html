@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-28T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-29T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 38 posts by year</p>
+      <p>Browse all 39 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/memvid-memory-architecture/">
+          <time datetime="2026-10-29">10-29</time>
+          <span>Memvid: A Single-File Memory System for AI</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/reinforcement-learning-4-instructgpt-rlhf/">
           <time datetime="2026-10-28">10-28</time>
           <span>Reinforcement Learning (4): InstructGPT-Style RLHF</span>
@@ -411,6 +415,60 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="Recent posts">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/en/post/cs329z-context-management-patterns/">CS 329Z: Context Management Patterns</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-10-12">October 12, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>11 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>A coding agent usually begins a bug fix with a clear objective: find the cause, change the code, and run tests. Dozens of turns later, its context may be full of search results, file fragments, terminal logs, and abandoned approaches. The user&rsquo;s original constraints still exist somewhere in history, but the next decision may no longer use them correctly.</p>
+
+<p>Long tasks require information to accumulate and to be reorganized. <strong>Context management decides what enters each model call, what stays in external storage, and what can temporarily be hidden.</strong></p>
+
+<p>Stanford CS 329Z Lecture 6 identifies five patterns:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Persistent event log   Store events and reconstruct model inputs
+Memory offloading     Move knowledge into memory or files
+Compaction            Replace longer histories with summaries
+Observation masking   Hide old tool outputs, retain action structure
+Context isolation     Give subtasks their own context</code></pre></td></tr></table>
+</div>
+</div>
+<p>This article explains each pattern through the same bug-fixing example. The lecture&rsquo;s context management section supplies the main framework; the handoff template, combined pipeline, and evaluation suggestions are my engineering synthesis.</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/ai-agents/">AI Agents</a></li>
+                  <li><a href="/en/tags/context-engineering/">Context Engineering</a></li>
+                  <li><a href="/en/tags/context-management/">Context Management</a></li>
+                  <li><a href="/en/tags/agent-harness/">Agent Harness</a></li>
+                  <li><a href="/en/tags/memory/">Memory</a></li>
+                  <li><a href="/en/tags/compaction/">Compaction</a></li>
+                  <li><a href="/en/tags/observation-masking/">Observation Masking</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/cs329z-context-management-patterns/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/en/post/cs329z-frameworks-orchestration/">CS 329Z: Frameworks &amp; Orchestration</a></h2>
@@ -622,41 +680,6 @@ Plan, compare, and revise before execution</code></pre></td></tr></table>
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/en/post/agentic-llm-1-reasoning/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/anthropic-recursive-self-improvement/">When AI Starts Building Itself: Anthropic&#39;s Internal Practice and the Future of Recursive Self-Improvement</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-09-28">September 28, 2026</time>
-            <span aria-hidden="true">·</span>
-            <span>14 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>Something important is happening inside Anthropic: AI is no longer only the product being researched and built. It is increasingly participating in the process of building AI itself. Claude has progressed from completing code to editing repositories, running experiments, reviewing changes, and coordinating parallel agents.</p>
-
-<p>If this path continues, its endpoint could be <strong>recursive self-improvement (RSI)</strong>: an AI system capable of designing, training, and evaluating its own successors, turning model progress into an accelerator of further model progress.</p>
-
-<p>This article organizes my notes around the Anthropic Institute essay <a href="https://www.anthropic.com/institute/recursive-self-improvement">When AI builds itself</a>. It does not assume that RSI is inevitable. Instead, it asks what Anthropic has already delegated to Claude, what is still missing from a closed loop, and where this trajectory could move the human role.</p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="Tags">
-              <span class="blog-summary-tags-label">Tags</span>
-              <ul>
-                  <li><a href="/en/tags/anthropic/">Anthropic</a></li>
-                  <li><a href="/en/tags/claude/">Claude</a></li>
-                  <li><a href="/en/tags/recursive-self-improvement/">Recursive Self-Improvement</a></li>
-                  <li><a href="/en/tags/autonomous-agents/">Autonomous Agents</a></li>
-                  <li><a href="/en/tags/ai-rd/">AI R&amp;D</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/en/post/anthropic-recursive-self-improvement/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

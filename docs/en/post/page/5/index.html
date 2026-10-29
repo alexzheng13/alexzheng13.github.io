@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-28T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-29T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 38 posts by year</p>
+      <p>Browse all 39 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/memvid-memory-architecture/">
+          <time datetime="2026-10-29">10-29</time>
+          <span>Memvid: A Single-File Memory System for AI</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/reinforcement-learning-4-instructgpt-rlhf/">
           <time datetime="2026-10-28">10-28</time>
           <span>Reinforcement Learning (4): InstructGPT-Style RLHF</span>
@@ -413,6 +417,40 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/reinforcement-learning-2-classic-algorithms/">Reinforcement Learning II: From Q-Learning and DQN to Actor-Critic and PPO</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-08-26">August 26, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>5 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p><a href="/en/post/reinforcement-learning-1-foundations/">Part I</a> established MDPs, value functions, and Bellman equations. Now the practical question is: <strong>when the environment is unknown, states cannot be enumerated, and policies are neural networks, how do we actually learn values or policies?</strong></p>
+
+<p>The progression is continuous. Dynamic programming assumes a model. Monte Carlo uses complete trajectories. Temporal difference learning updates before an episode ends. Q-Learning targets optimal action values. DQN scales Q-functions to high-dimensional inputs. Actor-Critic and PPO optimize policies while controlling unstable updates.</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/reinforcement-learning/">Reinforcement Learning</a></li>
+                  <li><a href="/en/tags/q-learning/">Q-Learning</a></li>
+                  <li><a href="/en/tags/dqn/">DQN</a></li>
+                  <li><a href="/en/tags/actor-critic/">Actor-Critic</a></li>
+                  <li><a href="/en/tags/ppo/">PPO</a></li>
+                  <li><a href="/en/tags/temporal-difference/">Temporal Difference</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/reinforcement-learning-2-classic-algorithms/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/reinforcement-learning-1-foundations/">Reinforcement Learning I: From CartPole to MDPs and Bellman Equations</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-08-25">August 25, 2026</time>
@@ -541,29 +579,6 @@
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/en/post/langchain-agent-builder-memory-system/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/linux-io-multiplexing-select-poll-epoll/">Translation: Linux I/O Multiplexing - select vs. poll vs. epoll</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2021-02-11">February 11, 2021</time>
-            <span aria-hidden="true">·</span>
-            <span>9 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary">Introduction  Before reading this article, you can first understand the five I/O models of Liunx
- References: I/O Models &ndash;Section 6.2 of &ldquo;UNIX® Network Programming Volume 1, Third Edition: The Sockets Networking&rdquo; by Richard Stevens
-The following is the text of the article    One of the basic concepts of Linux (actually Unix) is that everything in Unix/Linux is a file. Each process has a file descriptor table that points to files, sockets, devices, and other operating system objects related to the process.</div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-          <a class="blog-summary-read-more" href="/en/post/linux-io-multiplexing-select-poll-epoll/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

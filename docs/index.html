@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/" />
 
-<meta property="og:updated_time" content="2026-10-28T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-29T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,29 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/memvid-memory-architecture/">Memvid：单文件 AI 记忆系统</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-10-29 </span>
+      <div class="post-category">
+          <a href="/categories/ai-agents/"> AI Agents </a>
+          </div>
+        <span class="more-meta"> 约 7283 字 </span>
+        <span class="more-meta"> 预计阅读 15 分钟 </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>Memvid 是面向 AI Agent 的单文件记忆系统。它把资料和检索索引保存在本地，让 Agent 在新的会话中查回之前存下的信息。</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/memvid-memory-architecture/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/reinforcement-learning-4-instructgpt-rlhf/">强化学习（四）：InstructGPT 风格的 RLHF</a></h1>
@@ -468,53 +491,6 @@ Telemetry + Evals             让系统可观察、可比较、可改进</code><
     </div>
     <div class="read-more">
       <a href="/post/cs329z-rag-agentic-retrieval/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/agentic-llm-2-action/">Agentic LLM（二）：Action</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-10-05 </span>
-      <div class="post-category">
-          <a href="/categories/ai-agents/"> AI Agents </a>
-          </div>
-        <span class="more-meta"> 约 5361 字 </span>
-        <span class="more-meta"> 预计阅读 11 分钟 </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>推理给出了“下一步应该做什么”，但只有当这个决定被翻译成一次 API 调用、一次鼠标点击，或者机器人的一段运动时，Agent 才真正开始影响环境。</p>
-
-<p>这也是 <strong>Action</strong> 与普通文本生成的根本区别：文本答错了可以重新生成，动作却可能改变状态、消耗资源，甚至产生不可逆的结果。Agent 因此不能只会“想”，还要理解环境允许哪些动作、预测动作的后果，并根据新的观察继续决策。</p>
-
-<p>本文是 <strong>Agentic Large Language Models 系列的第二篇</strong>。上一篇讨论了 <a href="/post/agentic-llm-1-reasoning/">Reasoning：从 Chain of Thought 到搜索、反思与 RLVR</a>；这一篇沿着下面这条主线展开：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">看见环境（VLM）
-      ↓
-把意图映射为动作（VLA）
-      ↓
-预测动作之后会发生什么（World Model）
-      ↓
-在真实执行前规划、比较与修正</code></pre></td></tr></table>
-</div>
-</div>
-    </div>
-    <div class="read-more">
-      <a href="/post/agentic-llm-2-action/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>

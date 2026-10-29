@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="900" viewBox="0 0 1080 900" role="img" aria-labelledby="title desc">
+<title id="title">Inside a Memvid memory file</title><desc id="desc">Header, embedded WAL, frame payloads, lexical vector and time index segments, TOC and commit footer are contained in one mv2 file. Frame descriptors and index manifests locate content by offsets.</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10" fill="#597087"/></marker></defs>
+<rect width="1080" height="900" rx="20" fill="#f8fafc"/>
+<g font-family="system-ui, sans-serif" fill="#24394b">
+<text x="48" y="50" font-size="28" font-weight="700">knowledge.mv2</text><text x="48" y="80" font-size="19" fill="#60758a">A single persistent container · logical layout, not to scale</text>
+<g stroke-width="1.5">
+<rect x="48" y="105" width="760" height="100" rx="12" fill="#dceaff" stroke="#9bb8dd"/>
+<rect x="48" y="220" width="760" height="95" rx="12" fill="#e4ddf8" stroke="#b7a7d7"/>
+<rect x="48" y="330" width="760" height="155" rx="12" fill="#ddf3e6" stroke="#9bc7ae"/>
+<rect x="48" y="500" width="760" height="145" rx="12" fill="#edf2fc" stroke="#acbdd5"/>
+<rect x="48" y="660" width="760" height="105" rx="12" fill="#fff0d4" stroke="#d6bb87"/>
+<rect x="48" y="780" width="760" height="75" rx="12" fill="#e8ebf0" stroke="#adb9c7"/>
+</g>
+<g font-size="25" font-weight="650"><text x="72" y="140">Header · 4 KiB</text><text x="72" y="255">Embedded WAL</text><text x="72" y="367">Frame payloads</text><text x="72" y="537">Index segments</text><text x="72" y="697">TOC · Table of Contents</text><text x="72" y="815">Commit footer</text></g>
+<g font-size="20"><text x="72" y="174">Magic, format version, WAL offsets, checkpoint, TOC checksum</text><text x="72" y="290">Pending writes, sequence numbers, recovery records</text><text x="72" y="403">Text / source bytes / media · optional compression</text><rect x="72" y="425" width="330" height="40" rx="7" fill="#ffffff"/><rect x="420" y="425" width="365" height="40" rx="7" fill="#ffffff"/><text x="88" y="452">Frame 0: Atlas uses FastAPI</text><text x="436" y="452">Frame 1: Docker Compose</text>
+<rect x="72" y="557" width="218" height="64" rx="7" fill="#ffffff"/><rect x="306" y="557" width="250" height="64" rx="7" fill="#ffffff"/><rect x="572" y="557" width="212" height="64" rx="7" fill="#ffffff"/>
+<text x="92" y="584">Lexical · BM25</text><text x="92" y="608" font-size="17">Terms → frame IDs</text><text x="326" y="584">Vector · embeddings</text><text x="326" y="608" font-size="17">Vectors ↔ frame IDs</text><text x="592" y="584">Time index</text><text x="592" y="608" font-size="17">Time → frame IDs</text>
+<text x="72" y="730">Frame descriptors + index manifests: offsets, lengths, hashes</text><text x="72" y="842" font-size="18">TOC length + BLAKE3 hash + generation · MV2FOOT!</text></g>
+<g stroke="#597087" stroke-width="2" fill="none" marker-end="url(#a)"><path d="M808 150 H858 V703 H815"/><path d="M48 709 H25 V410 H42"/><path d="M48 728 H12 V575 H42"/></g>
+<g font-size="18" fill="#526b82"><text x="883" y="375">Header</text><text x="883" y="402">locates</text><text x="883" y="429">the TOC</text></g>
+</g></svg>

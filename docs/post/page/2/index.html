@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/post/" />
 
-<meta property="og:updated_time" content="2026-10-28T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-29T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">文章归档</h1>
-      <p>按年份浏览全部 38 篇文章</p>
+      <p>按年份浏览全部 39 篇文章</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         订阅 RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="按年份排列的文章">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/post/memvid-memory-architecture/">
+          <time datetime="2026-10-29">10-29</time>
+          <span>Memvid：单文件 AI 记忆系统</span>
+        </a>
         <a class="blog-archive-index-item" href="/post/reinforcement-learning-4-instructgpt-rlhf/">
           <time datetime="2026-10-28">10-28</time>
           <span>强化学习（四）：InstructGPT 风格的 RLHF</span>
@@ -411,6 +415,60 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="最近文章">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/post/cs329z-context-management-patterns/">CS 329Z：Context Management Patterns</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-10-12">2026年10月12日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 11 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>一个编码 Agent 刚开始修 Bug 时，往往很清楚目标：找到原因、修改代码、运行测试。几十轮之后，上下文里却堆满了搜索结果、文件片段、终端日志和已经放弃的方案。用户最初提出的约束仍在历史里，但下一次决策未必还能正确利用它们。</p>
+
+<p>长任务需要持续积累信息，也需要主动整理信息。<strong>Context Management 决定每次调用模型时，哪些内容进入上下文、哪些保存到外部，以及哪些细节暂时隐藏。</strong></p>
+
+<p>Stanford CS 329Z Lecture 6 把这件事归纳为五种模式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Persistent Event Log   保存完整事件，按需重建输入
+Memory Offloading     将知识移到记忆或文件
+Compaction            用摘要替换较长的历史
+Observation Masking   隐藏旧工具输出，保留行动线索
+Context Isolation     为子任务建立独立上下文</code></pre></td></tr></table>
+</div>
+</div>
+<p>本文围绕这五种模式展开，并用同一个修 Bug 场景说明它们怎样组合。内容以讲义的 Context Management 章节为主；文中的任务摘要模板、组合流程与评测建议是我的工程化整理。</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="标签">
+              <span class="blog-summary-tags-label">标签</span>
+              <ul>
+                  <li><a href="/tags/ai-agents/">AI Agents</a></li>
+                  <li><a href="/tags/context-engineering/">Context Engineering</a></li>
+                  <li><a href="/tags/context-management/">Context Management</a></li>
+                  <li><a href="/tags/agent-harness/">Agent Harness</a></li>
+                  <li><a href="/tags/memory/">Memory</a></li>
+                  <li><a href="/tags/compaction/">Compaction</a></li>
+                  <li><a href="/tags/observation-masking/">Observation Masking</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/post/cs329z-context-management-patterns/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/post/cs329z-frameworks-orchestration/">CS 329Z：Frameworks &amp; Orchestration</a></h2>
@@ -622,41 +680,6 @@ Telemetry + Evals             让系统可观察、可比较、可改进</code><
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/post/agentic-llm-1-reasoning/">阅读全文<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/post/anthropic-recursive-self-improvement/">当 AI 开始构建自己：Anthropic 内部实践与递归自我改进的未来</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-09-28">2026年09月28日</time>
-            <span aria-hidden="true">·</span>
-            <span>预计阅读 12 分钟</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>Anthropic 内部正在发生一个值得关注的变化：AI 不再只是被研究和开发的产品，也开始参与开发 AI 的过程。从补全代码，到自主修改代码库、运行实验、组织并行 Agent，Claude 正逐渐进入模型研发循环本身。</p>
-
-<p>如果这条路径继续延伸，终点可能是 <strong>Recursive Self-Improvement（递归自我改进，RSI）</strong>：一个 AI 系统能够自主设计、训练和评估自己的继任者，让“模型进步”本身成为下一轮模型进步的加速器。</p>
-
-<p>本文根据我的笔记与 Anthropic Institute 的文章 <a href="https://www.anthropic.com/institute/recursive-self-improvement">When AI builds itself</a> 整理。重点不是断言 RSI 一定发生，而是理解：Anthropic 内部已经把哪些工作交给 Claude，距离真正闭环还缺什么，以及这条趋势可能把人类角色推向哪里。</p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="标签">
-              <span class="blog-summary-tags-label">标签</span>
-              <ul>
-                  <li><a href="/tags/anthropic/">Anthropic</a></li>
-                  <li><a href="/tags/claude/">Claude</a></li>
-                  <li><a href="/tags/recursive-self-improvement/">Recursive Self-Improvement</a></li>
-                  <li><a href="/tags/autonomous-agents/">Autonomous Agents</a></li>
-                  <li><a href="/tags/ai-rd/">AI R&amp;D</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/post/anthropic-recursive-self-improvement/">阅读全文<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

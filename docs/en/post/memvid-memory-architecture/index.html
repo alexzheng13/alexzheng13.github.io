@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Memvid: A Single-File Memory System for AI - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="How Memvid v2 stores and retrieves agent memory: MV2 files, frames, embedded WAL, TOC, lexical and vector indexes, with a Rust source walkthrough and the tradeoffs of a portable memory container." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/en/post/memvid-memory-architecture/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/memvid-memory-architecture/">
+<meta name="site-language-route" data-language="en" content="/en/post/memvid-memory-architecture/">
+<meta name="site-current-language" content="en"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="Memvid: A Single-File Memory System for AI" />
+<meta property="og:description" content="How Memvid v2 stores and retrieves agent memory: MV2 files, frames, embedded WAL, TOC, lexical and vector indexes, with a Rust source walkthrough and the tradeoffs of a portable memory container." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/en/post/memvid-memory-architecture/" />
+<meta property="article:published_time" content="2026-10-29T00:00:00+00:00" />
+<meta property="article:modified_time" content="2026-10-29T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="Memvid: A Single-File Memory System for AI">
+<meta itemprop="description" content="How Memvid v2 stores and retrieves agent memory: MV2 files, frames, embedded WAL, TOC, lexical and vector indexes, with a Rust source walkthrough and the tradeoffs of a portable memory container.">
+
+
+<meta itemprop="datePublished" content="2026-10-29T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2026-10-29T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3298">
+
+
+
+<meta itemprop="keywords" content="Memvid,Agent Memory,RAG,Storage,Rust,Vector Search," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Memvid: A Single-File Memory System for AI"/>
+<meta name="twitter:description" content="How Memvid v2 stores and retrieves agent memory: MV2 files, frames, embedded WAL, TOC, lexical and vector indexes, with a Rust source walkthrough and the tradeoffs of a portable memory container."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/en/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/en/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/en/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/en/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/memvid-memory-architecture/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/memvid-memory-architecture/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/en/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/memvid-memory-architecture/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/memvid-memory-architecture/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/en/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/about/">About</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Memvid: A Single-File Memory System for AI</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-10-29 </span>
+        <div class="post-category">
+            <a href="/en/categories/ai-agents/"> AI Agents </a>
+            </div>
+          <span class="more-meta"> 3298 words </span>
+          <span class="more-meta"> 16 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-what-memvid-does">1. What Memvid does</a></li>
+<li><a href="#2-project-directory-structure">2. Project directory structure</a></li>
+<li><a href="#3-architecture-overview">3. Architecture Overview</a></li>
+<li><a href="#4-memory-architecture">4. Memory Architecture</a>
+<ul>
+<li><a href="#layers-inside-an-mv2-file">Layers inside an MV2 file</a></li>
+<li><a href="#write-and-read-lifecycle">Write and read lifecycle</a></li>
+<li><a href="#file-locks-and-concurrency">File locks and concurrency</a></li>
+</ul></li>
+<li><a href="#5-frame-architecture">5. Frame Architecture</a>
+<ul>
+<li><a href="#frames-and-payloads-descriptions-and-content-bytes">Frames and payloads: descriptions and content bytes</a></li>
+<li><a href="#why-frames-rather-than-embeddings-alone">Why frames rather than embeddings alone?</a></li>
+</ul></li>
+<li><a href="#6-indices-and-tracks">6. Indices and Tracks</a>
+<ul>
+<li><a href="#lexical-index-locating-words">Lexical index: locating words</a></li>
+<li><a href="#vector-index-locating-related-meaning">Vector index: locating related meaning</a></li>
+<li><a href="#time-index-and-optional-tracks">Time index and optional tracks</a></li>
+</ul></li>
+<li><a href="#7-file-layout">7. File Layout</a>
+<ul>
+<li><a href="#header-locating-the-directory">Header: locating the directory</a></li>
+<li><a href="#toc-and-footer-addresses-and-commit-information">TOC and footer: addresses and commit information</a></li>
+</ul></li>
+<li><a href="#8-time-index-track">8. Time Index Track</a></li>
+<li><a href="#9-embedded-wal">9. Embedded WAL</a>
+<ul>
+<li><a href="#reserved-capacity-is-not-used-space">Reserved capacity is not used space</a></li>
+<li><a href="#a-commit-does-more-than-append-text">A commit does more than append text</a></li>
+<li><a href="#single-file-portability-and-crash-safety">Single-file portability and crash safety</a></li>
+</ul></li>
+<li><a href="#10-search-retrieval-from-candidates-to-evidence">10. Search &amp; Retrieval: from candidates to evidence</a>
+<ul>
+<li><a href="#hybrid-combining-candidates-not-a-fixed-half-and-half-split">Hybrid: combining candidates, not a fixed half-and-half split</a></li>
+</ul></li>
+<li><a href="#11-agent-integration-who-decides-how-memory-is-used">11. Agent integration: who decides how memory is used?</a></li>
+<li><a href="#12-an-offline-retrieval-example">12. An offline retrieval example</a></li>
+<li><a href="#13-design-tradeoffs">13. Design tradeoffs</a>
+<ul>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>Memvid is a single-file memory system for AI agents. It keeps content and retrieval indexes locally, so an agent can look up information saved in earlier sessions.</p>
+
+<p>Project: <a href="https://github.com/memvid/memvid">memvid/memvid</a> · Commit: <a href="https://github.com/memvid/memvid/tree/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813"><code>e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813</code></a></p>
+
+<h2 id="1-what-memvid-does">1. What Memvid does</h2>
+
+<p>Memvid is a persistent memory and retrieval component for AI applications. Its central object is a memory file, such as <code>knowledge.mv2</code>. Once documents are ingested, an application can locate relevant material by keywords, meaning or time, with source identifiers and metadata attached to results.</p>
+
+<p>Suppose a coding agent previously helped deploy a service. When asked later how that service is deployed and which endpoint to check afterward, it can retrieve the deployment record and health-check address instead of requesting all the files again.</p>
+
+<p>Typical uses include:</p>
+
+<ul>
+<li><strong>Project knowledge:</strong> architecture notes, API conventions, troubleshooting records and technical decisions.</li>
+<li><strong>Personal assistants:</strong> confirmed preferences and plans retrieved when relevant to a task.</li>
+<li><strong>Offline document retrieval:</strong> local search without running a separate search service.</li>
+<li><strong>Agent debugging:</strong> inspecting ingestion order, retrieved sources and records visible within a historical range.</li>
+</ul>
+
+<p>Memvid does not modify the base model&rsquo;s parameters. It returns external evidence that the model uses through context. LoRA adapts parameters; Memvid stores and retrieves information. They can be used together.</p>
+
+<p>In a RAG system, Memvid can handle content storage and retrieval. Document selection, authorization, prompting, generation and evaluation remain application concerns. An Agentic RAG system additionally lets an agent decide when to search, how to reformulate a question and whether another search is needed. Memvid can be one of its retrieval tools.</p>
+
+<h2 id="2-project-directory-structure">2. Project directory structure</h2>
+
+<p>Start with the source tree. The following files cover the main storage and retrieval paths:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">memvid/
+├── Cargo.toml
+├── src/
+│   ├── lib.rs
+│   ├── memvid/           # Writes, queries, commits and recovery
+│   ├── types/            # Frame, TOC and query data structures
+│   ├── io/               # Header, WAL and time-index I/O
+│   ├── lex.rs            # Full-text indexing
+│   ├── vec.rs            # Vector storage and search
+│   ├── vec_pq.rs
+│   ├── text_embed.rs
+│   ├── toc.rs
+│   └── footer.rs
+├── tests/
+├── benches/
+└── examples/</code></pre></td></tr></table>
+</div>
+</div>
+<p>The Rust crate is <code>memvid-core</code>. Its implementation lives under <code>src/</code>; ingested documents and generated memory files are not part of this source tree.</p>
+
+<p>Begin with the exports in <a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/lib.rs"><code>src/lib.rs</code></a>, then follow the operations in <a href="https://github.com/memvid/memvid/tree/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/memvid"><code>src/memvid/</code></a>:</p>
+
+<ul>
+<li><code>lifecycle.rs</code>: file creation, opening and lifecycle.</li>
+<li><code>mutation.rs</code>: mutations, commits and directory updates.</li>
+<li><code>search/</code> and <code>ask.rs</code>: candidate retrieval, ranking and answer generation.</li>
+<li><code>frame.rs</code> and <code>chunks.rs</code>: record access and document chunks.</li>
+</ul>
+
+<p>For example, <code>types/frame.rs</code> defines a frame, <code>io/wal.rs</code> implements WAL I/O, and <code>memvid/mutation.rs</code> coordinates their use during a commit. Separating data structures, low-level I/O and operations makes a write or query easier to trace.</p>
+
+<h2 id="3-architecture-overview">3. Architecture Overview</h2>
+
+<p>There are two main paths through the system:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Write: document / text → extraction and chunking → frames → content and indexes → MV2 commit
+Read: question → lexical / vector / time lookup → frames → source evidence → application or LLM</code></pre></td></tr></table>
+</div>
+</div>
+<p>An <code>.mv2</code> file is Memvid&rsquo;s binary memory container, not Markdown text or model weights. It stores content, indexes and metadata for addressing and recovery. CLI and SDK interfaces expose the system; Rust Core implements storage and queries. An LLM uses retrieved evidence when an answer needs to be generated.</p>
+
+<p>The <a href="https://docs.memvid.com/architecture/overview">official overview</a> centers on single-file portability, crash recovery, determinism and retrieval performance. Keeping content and indexes together simplifies migration. WAL records and checksums handle interrupted writes. Deterministic construction under fixed input conditions helps reproduce storage results. These are separate mechanisms, not automatic consequences of using one file.</p>
+
+<p>A single memory file does not also package the application runtime, embedding weights or an LLM.</p>
+
+<h2 id="4-memory-architecture">4. Memory Architecture</h2>
+
+<p><a href="https://docs.memvid.com/concepts/memory-architecture">Memory Architecture</a> describes the lifecycle of a memory: opening its file, committing records and finding content during a query.</p>
+
+<h3 id="layers-inside-an-mv2-file">Layers inside an MV2 file</h3>
+
+<p><img src="/img/posts/memvid-architecture/mv2-layout.svg" alt="A single MV2 file containing the header, embedded WAL, frame payloads, indexes, TOC and commit footer" /></p>
+
+<p>The diagram shows logical layers, not byte proportions:</p>
+
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Contents</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Header</td>
+<td>Format identity, version and key offsets</td>
+<td>Locate structures when opening a file</td>
+</tr>
+
+<tr>
+<td>Embedded WAL</td>
+<td>Pending mutations and checkpoint progress</td>
+<td>Recover from interrupted operations</td>
+</tr>
+
+<tr>
+<td>Content regions</td>
+<td>Text, binary data and other payloads</td>
+<td>Retain material that can be read back</td>
+</tr>
+
+<tr>
+<td>Indexes and tracks</td>
+<td>Lexical, vector, temporal and other access structures</td>
+<td>Locate records by different criteria</td>
+</tr>
+
+<tr>
+<td>TOC + footer</td>
+<td>Descriptors, addresses, checksums and commit information</td>
+<td>Tie the regions into a consistent state</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="write-and-read-lifecycle">Write and read lifecycle</h3>
+
+<p>For ingestion, the application supplies content and metadata. Processing may extract text, split documents and generate embeddings, then create frames and index entries. WAL and commit handling coordinate these mutations into a recoverable file state.</p>
+
+<p>For retrieval, Core uses the header and TOC to locate indexes, obtains frame identifiers, and reads the corresponding text or payloads. After an abnormal exit, valid commit information and WAL records must also be checked to recover pending changes.</p>
+
+<p>A useful result therefore contains more than a similarity score: it leads back to a record, a source and its content. Frames define those records, indexes provide access paths, and file layout determines where they are stored.</p>
+
+<h3 id="file-locks-and-concurrency">File locks and concurrency</h3>
+
+<p>The source uses operating-system file locks, with shared readers and an exclusive writer. It is not a distributed database allowing arbitrary simultaneous writers. Applications with several memory-writing agents should serialize writes or route them through one writer service.</p>
+
+<h2 id="5-frame-architecture">5. Frame Architecture</h2>
+
+<p>A frame is a record in the container. It combines content addressing, provenance, time and status, which retrieval and updates can then use.</p>
+
+<h3 id="frames-and-payloads-descriptions-and-content-bytes">Frames and payloads: descriptions and content bytes</h3>
+
+<p>A frame is the basic memory record. In the implementation, however, the <code>Frame</code> structure does not simply contain the entire document body. Selected fields from <a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/types/frame.rs"><code>Frame</code></a> are:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="c1">// Selected fields from Frame
+</span><span class="c1"></span><span class="k">pub</span><span class="w"> </span><span class="n">id</span>: <span class="nc">FrameId</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">timestamp</span>: <span class="kt">i64</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">payload_offset</span>: <span class="kt">u64</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">payload_length</span>: <span class="kt">u64</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">checksum</span>: <span class="p">[</span><span class="kt">u8</span><span class="p">;</span><span class="w"> </span><span class="mi">32</span><span class="p">],</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">uri</span>: <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">title</span>: <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="n">search_text</span>: <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>The payload holds content bytes, optionally encoded as Plain or Zstd. Its frame descriptor records location, length and checksum, and may also contain extracted <code>search_text</code>. When inspecting text records, useful content may therefore appear in <code>frame.search_text</code> rather than a universal <code>content</code> field.</p>
+
+<p><code>frame_id</code> identifies a particular record inside the file. A URI can provide a more stable application-level document identifier. Updating a topic can reuse its URI while creating a replacement record. One ingestion operation need not create exactly one frame: long documents can have parent and chunk records, depending on the ingestion interface and chunking strategy.</p>
+
+<h3 id="why-frames-rather-than-embeddings-alone">Why frames rather than embeddings alone?</h3>
+
+<p>Vector search first identifies related records. Answering a question still requires the original text, its source, its time and its update status. An embedding alone cannot reconstruct exactly what a document said.</p>
+
+<p>Frames associate that information with a record, so a search hit can lead back to evidence. An embedding is one retrieval representation of the record. It belongs in the same container without necessarily being embedded physically in each frame descriptor.</p>
+
+<p>This separation has several consequences.</p>
+
+<p><strong>Content and indexes can use different organizations.</strong> Source text benefits from compression; lexical search needs an inverted index; semantic retrieval needs vectors and search structures; temporal access needs ordering by time. Sharing a container does not require sharing one encoding.</p>
+
+<p><strong>Updates can retain provenance.</strong> Fields such as <code>status</code>, <code>supersedes</code> and <code>superseded_by</code> express active, replaced and deleted records. Appending content and changing metadata status are separate operations.</p>
+
+<p><strong>Chunking still matters.</strong> Large chunks can mix unrelated topics; tiny chunks lose context. Meeting notes might be split by agenda item, code by function or module, and preferences by independently confirmed facts. Frames provide a place to store chunks and their relationships; they do not remove the need to design those chunks.</p>
+
+<h2 id="6-indices-and-tracks">6. Indices and Tracks</h2>
+
+<p>Indexes provide ways to find records; tracks hold data organized for particular purposes. Both can reference frames without putting every access structure inside each frame.</p>
+
+<h3 id="lexical-index-locating-words">Lexical index: locating words</h3>
+
+<p>Full-text search is useful for exact terms: <code>E_LOCKED</code>, <code>rewrite_toc_footer</code>, project names and dates. Tantivy supplies inverted indexing and BM25 ranking, ultimately mapping candidates to frames.</p>
+
+<p>If one record says “Atlas uses FastAPI” and another says “Atlas uses Docker Compose,” a query for <code>FastAPI</code> can use postings to locate the matching record instead of reading all document bodies.</p>
+
+<p>Tokenization affects results. English abbreviations, code identifiers and Chinese phrases do not necessarily behave alike. No keyword match does not immediately establish that a fact is absent.</p>
+
+<h3 id="vector-index-locating-related-meaning">Vector index: locating related meaning</h3>
+
+<p>Semantic retrieval embeds a question and searches nearby document or chunk vectors. A record saying “exposes its HTTP API with FastAPI” may match “What serves web requests?” without identical phrasing.</p>
+
+<p><a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/vec.rs"><code>VecDocument</code></a> makes the frame-vector relationship explicit:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">VecDocument</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">frame_id</span>: <span class="nc">FrameId</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">embedding</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Vectors and index structures are serialized into vector regions of the file. The implementation includes uncompressed, PQ and HNSW paths. Small collections can scan vectors directly; the builder selects HNSW when its threshold and required features permit it.</p>
+
+<p>A BGE-small vector has 384 dimensions. Its FP32 values alone occupy <code>384 × 4 = 1536 bytes</code>, excluding graph structures, metadata and file overhead. PQ compresses a vector representation; its compression factor is not a compression factor for the entire memory file.</p>
+
+<p>Changing the embedding model requires rebuilding compatible document vectors. Two models that both output 384 dimensions can still define different vector spaces and cannot be mixed safely.</p>
+
+<h3 id="time-index-and-optional-tracks">Time index and optional tracks</h3>
+
+<p>The time index locates frames chronologically; Section 8 covers its structure. The three access paths can work together—for example, restricting results to last week before searching for deployment decisions.</p>
+
+<p>Beyond these three indexes, the TOC can reference structured MemoryCards, a Logic Mesh relationship graph and replay tracks. These store extracted facts, entity relationships and replay information when the corresponding processing or features are enabled. Creating an MV2 file does not populate all of them automatically.</p>
+
+<h2 id="7-file-layout">7. File Layout</h2>
+
+<p>The preceding sections describe logical objects. On disk, the engine needs byte positions, lengths and integrity information. The header, TOC and footer supply that addressing and verification metadata.</p>
+
+<h3 id="header-locating-the-directory">Header: locating the directory</h3>
+
+<p>The header occupies 4096 bytes. It identifies the format and locates other structures. <a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/io/header.rs"><code>HeaderCodec</code></a> reads and writes fields at fixed offsets:</p>
+
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>magic</code></td>
+<td>File identifier, <code>MV2\0</code> in the source</td>
+</tr>
+
+<tr>
+<td><code>version</code> and spec fields</td>
+<td>File-format compatibility, not a version of remembered facts</td>
+</tr>
+
+<tr>
+<td><code>footer_offset</code></td>
+<td>Start of the current TOC</td>
+</tr>
+
+<tr>
+<td><code>wal_offset</code> / <code>wal_size</code></td>
+<td>Location and capacity of the embedded WAL</td>
+</tr>
+
+<tr>
+<td><code>wal_checkpoint_pos</code> / <code>wal_sequence</code></td>
+<td>WAL checkpoint position and sequence progress</td>
+</tr>
+
+<tr>
+<td><code>toc_checksum</code></td>
+<td>Integrity verification for directory metadata</td>
+</tr>
+</tbody>
+</table>
+
+<p>An offset is a byte position relative to the beginning of the file. It lets a reader seek directly to a region rather than scan every document.</p>
+
+<h3 id="toc-and-footer-addresses-and-commit-information">TOC and footer: addresses and commit information</h3>
+
+<p>TOC means Table of Contents. It is the container&rsquo;s directory metadata, not an imported Markdown file or a list of document headings.</p>
+
+<p><a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/types/manifest.rs"><code>Toc</code></a> contains frame descriptors, index manifests, a segment catalog and references to optional tracks. Index manifests record byte offsets, lengths and checksums.</p>
+
+<p>To read Frame 42, the engine obtains its descriptor, reads <code>payload_length</code> bytes at <code>payload_offset</code>, and decodes them according to the recorded encoding.</p>
+
+<p>A commit footer follows the TOC. <a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/footer.rs"><code>CommitFooter</code></a> includes the <code>MV2FOOT!</code> marker, TOC length, a BLAKE3 hash and a generation number. Recovery can scan backward for a valid footer and verify the preceding TOC.</p>
+
+<p>Checksums detect corruption. A BLAKE3 checksum is not encryption and does not provide access control by itself.</p>
+
+<h2 id="8-time-index-track">8. Time Index Track</h2>
+
+<p>For “Which deployment decisions were added last week?”, time is a filter. The <a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/io/time_index.rs">time-index implementation</a> stores:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">TimeIndexEntry</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">timestamp</span>: <span class="kt">i64</span><span class="p">,</span><span class="w">
+</span><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">frame_id</span>: <span class="kt">u64</span><span class="p">,</span><span class="w">
+</span><span class="w"></span><span class="p">}</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Entries are sorted by <code>(timestamp, frame_id)</code> before writing. This helps identify frames within a range, after which lexical or semantic relevance can still be applied. Ingestion time and dates mentioned in the content are different temporal meanings and should not be conflated.</p>
+
+<h2 id="9-embedded-wal">9. Embedded WAL</h2>
+
+<p>A write can affect content, indexes and directory metadata. If the process exits midway, a partially updated index should not be mistaken for a complete new state. The embedded write-ahead log records pending mutations and recovery progress.</p>
+
+<h3 id="reserved-capacity-is-not-used-space">Reserved capacity is not used space</h3>
+
+<p>WAL capacity is the size of a reserved byte region. Pending bytes measure the records currently awaiting processing. After a commit advances the checkpoint, that region can be reused; it is not a permanent archive of every operation.</p>
+
+<p>The architecture overview lists capacity tiers of 1, 4, 16 and 64 MB. The current source additionally defines a <strong>64 KiB</strong> initial WAL for small files and supports growth. The published tiers should not be read as a guarantee that every new file immediately reserves at least 1 MB.</p>
+
+<p><a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/io/wal.rs"><code>EmbeddedWal</code></a> tracks write position, checkpoint, pending bytes and sequence numbers. A full region must not overwrite uncommitted records. <a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/memvid/mutation.rs"><code>append_wal_entry()</code></a> can grow the region and retry.</p>
+
+<p>Checkpoint conditions include 75% occupancy or 1000 appends since the last checkpoint. Batch mode can change synchronization and automatic checkpoint behavior, exchanging fewer synchronization operations for throughput. Ending the batch must complete the flush.</p>
+
+<h3 id="a-commit-does-more-than-append-text">A commit does more than append text</h3>
+
+<p>The logical sequence is to record mutations, commit content and indexes, produce consistent TOC/footer information, update metadata and advance the WAL checkpoint. <code>commit()</code> and recovery coordinate these states.</p>
+
+<p><strong>Append-oriented frame content does not mean that every byte in the container is append-only forever.</strong></p>
+
+<p><code>rewrite_toc_footer()</code> includes these actual operations, with footer construction and boundary calculations omitted:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-rust" data-lang="rust"><span class="bp">self</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">seek</span><span class="p">(</span><span class="n">SeekFrom</span>::<span class="n">Start</span><span class="p">(</span><span class="n">footer_offset</span><span class="p">))</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="bp">self</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">write_all</span><span class="p">(</span><span class="o">&amp;</span><span class="n">toc_bytes</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="c1">// Construct and encode the new CommitFooter
+</span><span class="c1"></span><span class="bp">self</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">write_all</span><span class="p">(</span><span class="o">&amp;</span><span class="n">encoded_footer</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="c1">// Compute length while retaining at least the Header + WAL region
+</span><span class="c1"></span><span class="bp">self</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">set_len</span><span class="p">(</span><span class="n">final_len</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="bp">self</span><span class="p">.</span><span class="n">file</span><span class="p">.</span><span class="n">sync_all</span><span class="p">()</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>It writes the new TOC and footer at a specified position and adjusts file length. Each commit therefore need not retain another permanent copy of the old TOC. An MV2 file is not automatically a Git repository of every previous physical file image.</p>
+
+<p>Deleted or superseded content can leave unused space. Vacuum reorganizes live data, updates locations and reclaims space. That is distinct from rewriting the tail directory during an ordinary commit.</p>
+
+<h3 id="single-file-portability-and-crash-safety">Single-file portability and crash safety</h3>
+
+<p>A single container reduces the risk of copying content while forgetting a separate index or journal. Crash recovery uses valid commits, WAL records and checksums to determine recoverable state. Backups should still be taken at a stable commit point rather than treating a file being actively written as a consistent snapshot.</p>
+
+<h2 id="10-search-retrieval-from-candidates-to-evidence">10. Search &amp; Retrieval: from candidates to evidence</h2>
+
+<p><img src="/img/posts/memvid-architecture/retrieval-flow.svg" alt="Lexical and semantic candidates are combined and filtered, then frame evidence is read and passed to the LLM by the application" /></p>
+
+<p><em>A logical retrieval flow. Enabled indexes, filtering and ranking depend on the entry point, options and compiled features.</em></p>
+
+<h3 id="hybrid-combining-candidates-not-a-fixed-half-and-half-split">Hybrid: combining candidates, not a fixed half-and-half split</h3>
+
+<p>Lexical and vector scores have different scales. One way to combine their outputs is by rank. The public Core&rsquo;s <code>ask.rs</code> contains <a href="https://github.com/memvid/memvid/blob/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813/src/memvid/ask.rs"><code>fuse_hits_rrf()</code></a>, which accumulates contributions from each candidate list:</p>
+
+<div class="math-display">
+\[
+\operatorname{RRF}(d)=\sum_{j:\,d\in L_j}\frac{1}{c+\operatorname{rank}_j(d)}.
+\]
+</div>
+
+<p>A frame ranking highly in multiple lists gains more contributions. <code>c</code> smooths rank differences. Combining by <code>frame_id</code> also prevents the same record occupying several result slots.</p>
+
+<p>This does not establish that every CLI and SDK query executes only that function. Other paths perform semantic reordering, filtering and fallbacks; a CLI option does not necessarily map directly to one Core candidate budget.</p>
+
+<p>In particular, <code>--top-k 10</code> configures the final result count. <strong>It does not imply five BM25 hits plus five vector hits.</strong> Candidate budgets, fused candidate counts and output counts are separate stages.</p>
+
+<p>Adaptive Retrieval may shorten a list based on its score distribution. <code>--no-adaptive</code> is useful when inspecting a fixed result count or diagnosing omissions. It disables adaptive cutoff; it does not turn an irrelevant neighbor into factual evidence.</p>
+
+<h2 id="11-agent-integration-who-decides-how-memory-is-used">11. Agent integration: who decides how memory is used?</h2>
+
+<p>Agents still need a policy for selecting durable facts, deciding when to retrieve, handling corrections and determining which results belong in the current task.</p>
+
+<p>A practical arrangement separates instructions, editable sources and search artifacts:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">AGENTS.md       When to recall, when to write, how to resolve conflicts
+notes/*.md      Human-readable facts and project records
+knowledge.mv2   Persistent memory and indexes built from those sources</code></pre></td></tr></table>
+</div>
+</div>
+<p>When a user corrects a durable preference, update the corresponding source note, replace the memory record through a stable URI and regenerate its vector with the same embedding model. Test both exact terms and paraphrased questions to check that the outdated record no longer appears as active evidence.</p>
+
+<p>Keeping sources also makes failures manageable. Indexes can be rebuilt, and the agent can read an entire source rather than rely solely on a truncated snippet.</p>
+
+<p>High similarity means relevance, not correctness or user confirmation. Retrieved text can contain prompt injection and should not acquire execution authority merely because it was retrieved. Personal and company information also requires explicit decisions about collection, authorization, retention and deletion.</p>
+
+<p>A local memory file does not make an entire workflow offline. Embedding weights, runtimes and model caches usually live outside the container. Passing retrieved context to a cloud LLM still sends that selected information to the cloud service.</p>
+
+<h2 id="12-an-offline-retrieval-example">12. An offline retrieval example</h2>
+
+<p>Prepare two synthetic documents, without real personal data:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">api.md
+Project Atlas exposes its HTTP API with FastAPI.
+The service is written in Python. Its health-check endpoint is /health.
+
+deployment.md
+Project Atlas runs in Docker Compose on a single Linux server.
+It does not use Kubernetes.</code></pre></td></tr></table>
+</div>
+</div>
+<p>Create a memory in a new directory and ingest both files. These commands assume the CLI is installed and BGE-small is already cached locally:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">MEMVID_OFFLINE</span><span class="o">=</span><span class="m">1</span> memvid create atlas.mv2
+
+<span class="nv">MEMVID_OFFLINE</span><span class="o">=</span><span class="m">1</span> memvid put atlas.mv2 <span class="se">\
+</span><span class="se"></span>  --input api.md --uri memvid://demo/atlas/api <span class="se">\
+</span><span class="se"></span>  --title <span class="s2">&#34;Atlas API&#34;</span> <span class="se">\
+</span><span class="se"></span>  --embedding --embedding-model bge-small --no-enrich --json
+
+<span class="nv">MEMVID_OFFLINE</span><span class="o">=</span><span class="m">1</span> memvid put atlas.mv2 <span class="se">\
+</span><span class="se"></span>  --input deployment.md --uri memvid://demo/atlas/deployment <span class="se">\
+</span><span class="se"></span>  --title <span class="s2">&#34;Atlas Deployment&#34;</span> <span class="se">\
+</span><span class="se"></span>  --embedding --embedding-model bge-small --no-enrich --json</code></pre></td></tr></table>
+</div>
+</div>
+<p><code>--embedding</code> explicitly requests vectors. <code>--no-enrich</code> disables automatic rules-based enrichment. Check <code>embedding.enabled</code> and <code>runtime_dimension</code> in the ingestion result to confirm that 384-dimensional embeddings were actually generated.</p>
+
+<p>For an exact framework name:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">MEMVID_OFFLINE</span><span class="o">=</span><span class="m">1</span> memvid find atlas.mv2 <span class="se">\
+</span><span class="se"></span>  --query <span class="s2">&#34;FastAPI&#34;</span> --mode lex <span class="se">\
+</span><span class="se"></span>  --no-adaptive --top-k <span class="m">2</span> --json</code></pre></td></tr></table>
+</div>
+</div>
+<p>For a paraphrase:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">MEMVID_OFFLINE</span><span class="o">=</span><span class="m">1</span> memvid find atlas.mv2 <span class="se">\
+</span><span class="se"></span>  --query <span class="s2">&#34;What does Atlas use to serve web requests?&#34;</span> <span class="se">\
+</span><span class="se"></span>  --mode sem --embedding-model bge-small <span class="se">\
+</span><span class="se"></span>  --no-adaptive --top-k <span class="m">2</span> --snippet-chars <span class="m">300</span> --json</code></pre></td></tr></table>
+</div>
+</div>
+<p>In a local CLI 2.0.140 test, the latter query ranked <strong>Atlas API</strong> first and returned text containing FastAPI. Results also include <code>frame_id</code>, URI, score and a snippet, allowing the application to inspect evidence before constructing an answer. This two-document test checks the workflow; it is not an accuracy benchmark.</p>
+
+<p><code>find</code> retrieves evidence. <code>ask</code> adds answer generation after retrieval; external service use depends on the selected model and configuration. A strictly offline deployment needs the whole call chain checked, not only the location of its MV2 file.</p>
+
+<h2 id="13-design-tradeoffs">13. Design tradeoffs</h2>
+
+<p><strong>One file simplifies deployment and migration while concentrating responsibility for the data.</strong> There is no separate vector service to run, but permissions, backup, verification and recovery still matter. Local file locks cannot coordinate writers across machines.</p>
+
+<p><strong>Co-locating content and indexes reduces external synchronization points but makes maintenance a container-level operation.</strong> WAL growth, index rebuilding and vacuum can move many bytes. Batch sizes, commit frequency and backup windows should reflect the actual collection.</p>
+
+<p><strong>Indexes provide access paths, not a policy for long-term relevance.</strong> Deduplication, forgetting, conflicts and task relevance still need application decisions. A time index does not automatically establish event causality.</p>
+
+<p><strong>Deterministic encoding and verification help testing and debugging.</strong> With input order, timestamps and build configuration fixed, serialized outputs can be compared for unexpected changes. This concerns storage and construction, not a guarantee of identical LLM answers. Generated timestamps, different models or a different ingestion order also change the input conditions.</p>
+
+<p>Memvid is a useful fit when a local or embedded application needs a portable, searchable and attributable knowledge asset. Large tenant populations, heavy concurrent writes, cross-region replication and distributed transactions require evaluating service-based search or database designs as well.</p>
+
+<h3 id="references">References</h3>
+
+<ul>
+<li><a href="https://docs.memvid.com/architecture/overview">Memvid Architecture Overview</a></li>
+<li><a href="https://docs.memvid.com/introduction/frames">Frame Architecture</a> and <a href="https://docs.memvid.com/concepts/memory-architecture">Memory Architecture</a></li>
+<li><a href="https://docs.memvid.com/concepts/indexes-and-tracks">Indices and Tracks</a> · <a href="https://docs.memvid.com/file-format/time-index-track">Time Index Track</a></li>
+<li><a href="https://docs.memvid.com/file-format/wal">Embedded WAL</a> · <a href="https://docs.memvid.com/cli/search-and-ask">Search &amp; Ask</a></li>
+<li><a href="https://github.com/memvid/memvid/tree/e6bd9f7b9c38cd8d5370fa0fc936ac1dcd751813">Pinned Memvid Rust source</a>, Apache-2.0. Source excerpts are abridged; diagrams are logical reconstructions.</li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-10-29
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/en/tags/memvid/">Memvid</a>
+          <a href="/en/tags/agent-memory/">Agent Memory</a>
+          <a href="/en/tags/rag/">RAG</a>
+          <a href="/en/tags/storage/">Storage</a>
+          <a href="/en/tags/rust/">Rust</a>
+          <a href="/en/tags/vector-search/">Vector Search</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/en/post/reinforcement-learning-4-instructgpt-rlhf/">
+            <span class="next-text nav-default">Reinforcement Learning (4): InstructGPT-Style RLHF</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.6388abde34e31667698edd963050a5a5d32866b5dbe6b270a37d5bee36bc8beb.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.0.5/es5/tex-mml-chtml.js" integrity="sha256-HGLuEfFcsUJGhvB8cQ8nr0gai9EucOOaIxFw7qxmd+w=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

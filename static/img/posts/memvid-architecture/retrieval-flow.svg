@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="720" viewBox="0 0 1100 720" role="img" aria-labelledby="title desc">
+<title id="title">Retrieving evidence from Memvid</title><desc id="desc">An application applies scope and time constraints, retrieves lexical and vector candidates, combines and filters results, reads frame evidence and sends selected context to an LLM. The LLM is outside the memory file.</desc>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10" fill="#60758a"/></marker></defs>
+<rect width="1100" height="720" rx="20" fill="#f8fafc"/>
+<g font-family="system-ui, sans-serif" fill="#24394b" text-anchor="middle">
+<text x="550" y="46" font-size="27" font-weight="700">From a question to source evidence</text>
+<g stroke-width="1.5"><rect x="275" y="75" width="550" height="70" rx="12" fill="#dceaff" stroke="#9bb8dd"/><rect x="275" y="185" width="550" height="70" rx="12" fill="#e8ebf0" stroke="#adb9c7"/>
+<rect x="55" y="300" width="440" height="90" rx="12" fill="#ddf3e6" stroke="#9bc7ae"/><rect x="605" y="300" width="440" height="90" rx="12" fill="#e4ddf8" stroke="#b7a7d7"/>
+<rect x="275" y="440" width="550" height="65" rx="12" fill="#fff0d4" stroke="#d6bb87"/><rect x="275" y="545" width="550" height="65" rx="12" fill="#ddf3e6" stroke="#9bc7ae"/><rect x="275" y="650" width="550" height="50" rx="12" fill="#dceaff" stroke="#9bb8dd"/></g>
+<g font-size="23" font-weight="600"><text x="550" y="118">Question</text><text x="550" y="227">Scope / permissions / time constraints</text><text x="275" y="336">Lexical candidates</text><text x="825" y="336">Semantic candidates</text><text x="550" y="480">Fusion + filtering + result cutoff</text><text x="550" y="585">Frame IDs → source text + metadata</text><text x="550" y="683">Application selects context → LLM</text></g>
+<g font-size="19" fill="#526b82"><text x="275" y="367">Query terms → BM25 ranking</text><text x="825" y="367">Query embedding → vector search</text></g>
+<g stroke="#60758a" stroke-width="2" fill="none" marker-end="url(#a)"><path d="M550 145 V178"/><path d="M420 255 V277 H275 V292"/><path d="M680 255 V277 H825 V292"/><path d="M275 390 V414 H430 V432"/><path d="M825 390 V414 H670 V432"/><path d="M550 505 V537"/><path d="M550 610 V642"/></g>
+</g></svg>

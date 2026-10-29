@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-28T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-29T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 38 posts by year</p>
+      <p>Browse all 39 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/memvid-memory-architecture/">
+          <time datetime="2026-10-29">10-29</time>
+          <span>Memvid: A Single-File Memory System for AI</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/reinforcement-learning-4-instructgpt-rlhf/">
           <time datetime="2026-10-28">10-28</time>
           <span>Reinforcement Learning (4): InstructGPT-Style RLHF</span>
@@ -411,6 +415,29 @@
   </aside>
 
   <div class="blog-recent-posts" aria-label="Recent posts">
+      <article class="blog-summary-card">
+        <header>
+          <h2><a href="/en/post/contiguous-stacks/">Translation: Contiguous Stacks</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2019-11-30">November 30, 2019</time>
+            <span aria-hidden="true">·</span>
+            <span>8 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary">Contiguous stacks original address
+ Allocate a continuous stack memory space for each go coroutine. When the memory is used up, it will be reallocated/copied and grown.
+Why?  The current stack splitting mechanism has a &ldquo;hot split&rdquo; problem - if the stack space is almost full, calling the function will trigger the forced allocation of a new stack block. When the calling function returns, the new stack block will be released.</div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+          <a class="blog-summary-read-more" href="/en/post/contiguous-stacks/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
       <article class="blog-summary-card">
         <header>
           <h2><a href="/en/post/go-main-goroutine-scheduler-2/">Inside Go&#39;s Main Goroutine Scheduler (2)</a></h2>
