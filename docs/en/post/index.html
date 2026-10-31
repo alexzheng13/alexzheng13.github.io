@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-29T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-31T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 39 posts by year</p>
+      <p>Browse all 40 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/loop-engineering/">
+          <time datetime="2026-10-31">10-31</time>
+          <span>Harness, Loop and Graph Engineering</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/memvid-memory-architecture/">
           <time datetime="2026-10-29">10-29</time>
           <span>Memvid: A Single-File Memory System for AI</span>
@@ -417,6 +421,41 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/loop-engineering/">Harness, Loop and Graph Engineering</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-10-31">October 31, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>30 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>Repairing a login failure raises three sets of engineering questions: which files can the agent access and where can it run tests; how should it continue after a failure and when should it stop; and, if investigation, implementation and review are separate, who receives the work next?</p>
+
+<p>Harness engineering concerns the execution system around a model. Loop engineering concerns progress through feedback. Graph engineering concerns the connections and handoffs between working units. They overlap and often coexist; they are more useful as design perspectives than as successive replacements for one another.</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/agent-harness/">Agent Harness</a></li>
+                  <li><a href="/en/tags/loop-engineering/">Loop Engineering</a></li>
+                  <li><a href="/en/tags/graph-engineering/">Graph Engineering</a></li>
+                  <li><a href="/en/tags/long-running-agents/">Long-Running Agents</a></li>
+                  <li><a href="/en/tags/multi-agent/">Multi-Agent</a></li>
+                  <li><a href="/en/tags/verification/">Verification</a></li>
+                  <li><a href="/en/tags/autoresearch/">autoresearch</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/loop-engineering/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/memvid-memory-architecture/">Memvid: A Single-File Memory System for AI</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-10-29">October 29, 2026</time>
@@ -548,68 +587,6 @@
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/en/post/christopher-kerr-end-of-life-dreams-and-meaning/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/cs329z-agent-memory-architectures/">CS 329Z: Agent Memory Architectures</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-10-14">October 14, 2026</time>
-            <span aria-hidden="true">·</span>
-            <span>13 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>An assistant can give an excellent answer in one conversation, then ask you to explain your preferences, project, and completed work all over again in the next. It may reason well without connecting that ability to an ongoing history.</p>
-
-<p>Agent memory addresses this discontinuity: <strong>turning past interactions into information that can be retrieved, updated, and used correctly in later actions.</strong></p>
-
-<p>The previous article, <a href="/en/post/cs329z-context-management-patterns/">Context Management Patterns</a>, examined what should enter each model call. This article asks what happens after information leaves the window: what gets stored, when it is written and retrieved, and how to establish whether memory improves later tasks.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">Experience: conversations, tool calls, environment feedback
-                         ↓
-Distillation: facts, preferences, lessons, skills, task state
-                         ↓
-Storage and maintenance: tiers, links, updates, forgetting
-                         ↓
-Retrieve → Working context → Next action
-    ↑                            ↓
-    └──────── New feedback ──────┘</code></pre></td></tr></table>
-</div>
-</div>
-<p>This article follows <strong>Stanford CS 329Z Lecture 7: Agent Memory Architectures</strong>, moving from motivation and memory types through architectures, evaluation, and open problems. Engineering examples and implementation suggestions are my additions; experimental claims refer to their stated setups.</p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="Tags">
-              <span class="blog-summary-tags-label">Tags</span>
-              <ul>
-                  <li><a href="/en/tags/ai-agents/">AI Agents</a></li>
-                  <li><a href="/en/tags/agent-memory/">Agent Memory</a></li>
-                  <li><a href="/en/tags/memory/">Memory</a></li>
-                  <li><a href="/en/tags/context-engineering/">Context Engineering</a></li>
-                  <li><a href="/en/tags/memgpt/">MemGPT</a></li>
-                  <li><a href="/en/tags/mem0/">Mem0</a></li>
-                  <li><a href="/en/tags/evaluation/">Evaluation</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/en/post/cs329z-agent-memory-architectures/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

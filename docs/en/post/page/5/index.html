@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/post/" />
 
-<meta property="og:updated_time" content="2026-10-29T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-31T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">Archive</h1>
-      <p>Browse all 39 posts by year</p>
+      <p>Browse all 40 posts by year</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         Subscribe via RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="Posts grouped by year">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/en/post/loop-engineering/">
+          <time datetime="2026-10-31">10-31</time>
+          <span>Harness, Loop and Graph Engineering</span>
+        </a>
         <a class="blog-archive-index-item" href="/en/post/memvid-memory-architecture/">
           <time datetime="2026-10-29">10-29</time>
           <span>Memvid: A Single-File Memory System for AI</span>
@@ -417,6 +421,40 @@
   <div class="blog-recent-posts" aria-label="Recent posts">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/en/post/reinforcement-learning-3-exploration-and-data/">Reinforcement Learning III: Exploration, Policy Sampling, and Data Sources</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-08-27">August 27, 2026</time>
+            <span aria-hidden="true">·</span>
+            <span>5 mins read</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>Reinforcement learning must decide more than how to update parameters. It must also decide <strong>where the next training example should come from</strong>.</p>
+
+<p>Always choosing the current best action can preserve an early mistake forever. Exploring at random forever wastes opportunities. Training data may also come from the current policy, old policies, humans, experts, or a fixed dataset. Whether an algorithm can use that data safely depends on distribution mismatch.</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="Tags">
+              <span class="blog-summary-tags-label">Tags</span>
+              <ul>
+                  <li><a href="/en/tags/reinforcement-learning/">Reinforcement Learning</a></li>
+                  <li><a href="/en/tags/exploration/">Exploration</a></li>
+                  <li><a href="/en/tags/exploitation/">Exploitation</a></li>
+                  <li><a href="/en/tags/ucb/">UCB</a></li>
+                  <li><a href="/en/tags/thompson-sampling/">Thompson Sampling</a></li>
+                  <li><a href="/en/tags/offline-rl/">Offline RL</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/en/post/reinforcement-learning-3-exploration-and-data/">Read more<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/en/post/reinforcement-learning-2-classic-algorithms/">Reinforcement Learning II: From Q-Learning and DQN to Actor-Critic and PPO</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-08-26">August 26, 2026</time>
@@ -544,41 +582,6 @@
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/en/post/stanford-cs230-career-advice-in-ai/">Read more<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/en/post/langchain-agent-builder-memory-system/">LangChain Agent Builder’s Memory System</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-02-21">February 21, 2026</time>
-            <span aria-hidden="true">·</span>
-            <span>8 mins read</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>A meeting assistant writes paragraphs. You ask for lists instead. At the next meeting, it follows that preference without another reminder.</p>
-
-<p>This kind of memory changes how an agent works, not merely what it can recall. Agent Builder represents instructions, capabilities, and knowledge as files so feedback can become rules available to future runs.</p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="Tags">
-              <span class="blog-summary-tags-label">Tags</span>
-              <ul>
-                  <li><a href="/en/tags/ai-agents/">AI Agents</a></li>
-                  <li><a href="/en/tags/agent-memory/">Agent Memory</a></li>
-                  <li><a href="/en/tags/langchain/">LangChain</a></li>
-                  <li><a href="/en/tags/deep-agents/">Deep Agents</a></li>
-                  <li><a href="/en/tags/agents.md/">AGENTS.md</a></li>
-                  <li><a href="/en/tags/skills/">Skills</a></li>
-                  <li><a href="/en/tags/context-engineering/">Context Engineering</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/en/post/langchain-agent-builder-memory-system/">Read more<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

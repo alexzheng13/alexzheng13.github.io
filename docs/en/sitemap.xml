@@ -2,28 +2,98 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://alexzheng13.github.io/en/tags/agent-memory/</loc>
-    <lastmod>2026-10-29T00:00:00+00:00</lastmod>
+    <loc>https://alexzheng13.github.io/en/tags/agent-harness/</loc>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://alexzheng13.github.io/en/categories/ai-agents/</loc>
-    <lastmod>2026-10-29T00:00:00+00:00</lastmod>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/autoresearch/</loc>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://alexzheng13.github.io/en/</loc>
-    <lastmod>2026-10-29T00:00:00+00:00</lastmod>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://alexzheng13.github.io/en/categories/</loc>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/graph-engineering/</loc>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/post/loop-engineering/</loc>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/long-running-agents/</loc>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/loop-engineering/</loc>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/multi-agent/</loc>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/post/</loc>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/</loc>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/verification/</loc>
+    <lastmod>2026-10-31T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://alexzheng13.github.io/en/tags/agent-memory/</loc>
     <lastmod>2026-10-29T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -38,13 +108,6 @@
   
   <url>
     <loc>https://alexzheng13.github.io/en/post/memvid-memory-architecture/</loc>
-    <lastmod>2026-10-29T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/post/</loc>
     <lastmod>2026-10-29T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -66,13 +129,6 @@
   
   <url>
     <loc>https://alexzheng13.github.io/en/tags/storage/</loc>
-    <lastmod>2026-10-29T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/tags/</loc>
     <lastmod>2026-10-29T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -107,14 +163,14 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/tags/reinforcement-learning/</loc>
+    <loc>https://alexzheng13.github.io/en/categories/reinforcement-learning/</loc>
     <lastmod>2026-10-28T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/categories/reinforcement-learning/</loc>
+    <loc>https://alexzheng13.github.io/en/tags/reinforcement-learning/</loc>
     <lastmod>2026-10-28T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -277,13 +333,6 @@
   <url>
     <loc>https://alexzheng13.github.io/en/tags/memory/</loc>
     <lastmod>2026-10-14T21:42:43+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/tags/agent-harness/</loc>
-    <lastmod>2026-10-12T22:25:07+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -744,13 +793,6 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/tags/long-running-agents/</loc>
-    <lastmod>2026-09-12T21:07:45+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://alexzheng13.github.io/en/post/anthropic-agent-evolution-3-planner-generator-evaluator/</loc>
     <lastmod>2026-09-12T21:06:45+02:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -759,13 +801,6 @@
   
   <url>
     <loc>https://alexzheng13.github.io/en/tags/evaluator/</loc>
-    <lastmod>2026-09-12T21:06:45+02:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://alexzheng13.github.io/en/tags/multi-agent/</loc>
     <lastmod>2026-09-12T21:06:45+02:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -982,14 +1017,14 @@
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/categories/career-development/</loc>
+    <loc>https://alexzheng13.github.io/en/tags/career-development/</loc>
     <lastmod>2026-03-23T12:22:13+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://alexzheng13.github.io/en/tags/career-development/</loc>
+    <loc>https://alexzheng13.github.io/en/categories/career-development/</loc>
     <lastmod>2026-03-23T12:22:13+01:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/post/" />
 
-<meta property="og:updated_time" content="2026-10-29T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-31T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Posts">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -243,7 +243,7 @@
   <aside class="blog-archive-sidebar" aria-labelledby="blog-archive-title">
     <div class="blog-archive-sidebar-header">
       <h1 id="blog-archive-title">文章归档</h1>
-      <p>按年份浏览全部 39 篇文章</p>
+      <p>按年份浏览全部 40 篇文章</p>
       <a class="blog-rss-subscribe" href="https://alexzheng13.github.io/index.xml" type="application/rss+xml">
         <span class="iconfont icon-rss" aria-hidden="true"></span>
         订阅 RSS
@@ -252,6 +252,10 @@
 
     <nav class="blog-archive-years" aria-label="按年份排列的文章">
           <h2 class="blog-archive-year" id="year-2026">2026</h2>
+        <a class="blog-archive-index-item" href="/post/loop-engineering/">
+          <time datetime="2026-10-31">10-31</time>
+          <span>Harness、Loop 与 Graph Engineering</span>
+        </a>
         <a class="blog-archive-index-item" href="/post/memvid-memory-architecture/">
           <time datetime="2026-10-29">10-29</time>
           <span>Memvid：单文件 AI 记忆系统</span>
@@ -417,6 +421,70 @@
   <div class="blog-recent-posts" aria-label="最近文章">
       <article class="blog-summary-card">
         <header>
+          <h2><a href="/post/transformer-architecture/">Transformer Architecture：从 Token Embedding 到训练循环</a></h2>
+          <div class="blog-summary-meta">
+            <time datetime="2026-09-14">2026年09月14日</time>
+            <span aria-hidden="true">·</span>
+            <span>预计阅读 6 分钟</span>
+          </div>
+        </header>
+
+        <div class="blog-summary-excerpt post">
+          <div class="post-content">
+            <div class="post-summary"><p>Transformer 看起来由许多组件组成，但一条 GPT 风格的前向路径可以概括为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Token IDs
+   ↓
+Token Embedding + Position Embedding
+   ↓
+[LayerNorm → Self-Attention → Residual]
+   ↓
+[LayerNorm → FFN → Residual]
+   ↓
+重复多个 Transformer Blocks
+   ↓
+Final LayerNorm → LM Head
+   ↓
+Next-token logits → Cross-Entropy Loss</code></pre></td></tr></table>
+</div>
+</div>
+<p>本文从一个简单的 GPT 实现出发，沿着数据流解释每一步的作用和张量形状。完整源码放在文章最后，读完前面的原理后可以结合代码对照理解。</p></div>
+          </div>
+        </div>
+
+        <footer class="blog-summary-footer">
+            <div class="blog-summary-tags" aria-label="标签">
+              <span class="blog-summary-tags-label">标签</span>
+              <ul>
+                  <li><a href="/tags/transformer/">Transformer</a></li>
+                  <li><a href="/tags/gpt/">GPT</a></li>
+                  <li><a href="/tags/attention/">Attention</a></li>
+                  <li><a href="/tags/pytorch/">PyTorch</a></li>
+                  <li><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li>
+              </ul>
+            </div>
+          <a class="blog-summary-read-more" href="/post/transformer-architecture/">阅读全文<span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </article>
+      <article class="blog-summary-card">
+        <header>
           <h2><a href="/post/anthropic-agent-evolution-1-from-workflows-to-agents/">Anthropic Agent 演进（一）：从 Workflow 到 Agent</a></h2>
           <div class="blog-summary-meta">
             <time datetime="2026-09-12">2026年09月12日</time>
@@ -546,42 +614,6 @@
               </ul>
             </div>
           <a class="blog-summary-read-more" href="/post/anthropic-agent-evolution-4-managed-agent-runtime/">阅读全文<span aria-hidden="true">→</span>
-          </a>
-        </footer>
-      </article>
-      <article class="blog-summary-card">
-        <header>
-          <h2><a href="/post/reinforcement-learning-3-exploration-and-data/">强化学习（三）：探索与利用、策略采样和数据来源</a></h2>
-          <div class="blog-summary-meta">
-            <time datetime="2026-08-27">2026年08月27日</time>
-            <span aria-hidden="true">·</span>
-            <span>预计阅读 7 分钟</span>
-          </div>
-        </header>
-
-        <div class="blog-summary-excerpt post">
-          <div class="post-content">
-            <div class="post-summary"><p>强化学习不只是“拿到数据以后怎样更新参数”，它还必须决定：<strong>下一条训练数据应该从哪里来？</strong></p>
-
-<p>如果一直选择当前最好的动作，早期误判可能永远无法纠正；如果不断随机探索，又会浪费大量行动机会。进一步地，训练数据可能来自当前策略、历史策略、人类、专家或一个固定数据集。算法能否安全使用这些数据，取决于策略分布是否匹配。</p>
-
-<p>本文把这两组问题放在一起：先讨论探索与利用，再区分 on-policy、off-policy、online、offline，最后说明奖励设计为什么会把我们带到 RLHF、DPO、GRPO 与 Agentic RL。</p></div>
-          </div>
-        </div>
-
-        <footer class="blog-summary-footer">
-            <div class="blog-summary-tags" aria-label="标签">
-              <span class="blog-summary-tags-label">标签</span>
-              <ul>
-                  <li><a href="/tags/reinforcement-learning/">Reinforcement Learning</a></li>
-                  <li><a href="/tags/exploration/">Exploration</a></li>
-                  <li><a href="/tags/exploitation/">Exploitation</a></li>
-                  <li><a href="/tags/ucb/">UCB</a></li>
-                  <li><a href="/tags/thompson-sampling/">Thompson Sampling</a></li>
-                  <li><a href="/tags/offline-rl/">Offline RL</a></li>
-              </ul>
-            </div>
-          <a class="blog-summary-read-more" href="/post/reinforcement-learning-3-exploration-and-data/">阅读全文<span aria-hidden="true">→</span>
           </a>
         </footer>
       </article>

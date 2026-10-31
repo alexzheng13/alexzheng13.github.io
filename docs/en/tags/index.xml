@@ -6,10 +6,73 @@
     <description>Recent content in Tags on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 29 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/en/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Agent Harness</title>
+      <link>https://alexzheng13.github.io/en/tags/agent-harness/</link>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/agent-harness/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>autoresearch</title>
+      <link>https://alexzheng13.github.io/en/tags/autoresearch/</link>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/autoresearch/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Graph Engineering</title>
+      <link>https://alexzheng13.github.io/en/tags/graph-engineering/</link>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/graph-engineering/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Long-Running Agents</title>
+      <link>https://alexzheng13.github.io/en/tags/long-running-agents/</link>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/long-running-agents/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Loop Engineering</title>
+      <link>https://alexzheng13.github.io/en/tags/loop-engineering/</link>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/loop-engineering/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Multi-Agent</title>
+      <link>https://alexzheng13.github.io/en/tags/multi-agent/</link>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/multi-agent/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Verification</title>
+      <link>https://alexzheng13.github.io/en/tags/verification/</link>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/tags/verification/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Agent Memory</title>
@@ -260,15 +323,6 @@
       <pubDate>Wed, 14 Oct 2026 21:42:43 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/en/tags/memory/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Agent Harness</title>
-      <link>https://alexzheng13.github.io/en/tags/agent-harness/</link>
-      <pubDate>Mon, 12 Oct 2026 22:25:07 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/en/tags/agent-harness/</guid>
       <description></description>
     </item>
     
@@ -732,29 +786,11 @@
     </item>
     
     <item>
-      <title>Long-Running Agents</title>
-      <link>https://alexzheng13.github.io/en/tags/long-running-agents/</link>
-      <pubDate>Sat, 12 Sep 2026 21:07:45 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/en/tags/long-running-agents/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Evaluator</title>
       <link>https://alexzheng13.github.io/en/tags/evaluator/</link>
       <pubDate>Sat, 12 Sep 2026 21:06:45 +0200</pubDate>
       
       <guid>https://alexzheng13.github.io/en/tags/evaluator/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Multi-Agent</title>
-      <link>https://alexzheng13.github.io/en/tags/multi-agent/</link>
-      <pubDate>Sat, 12 Sep 2026 21:06:45 +0200</pubDate>
-      
-      <guid>https://alexzheng13.github.io/en/tags/multi-agent/</guid>
       <description></description>
     </item>
     

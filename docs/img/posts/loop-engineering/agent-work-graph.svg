@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1060" viewBox="0 0 1080 1060" role="img" aria-labelledby="title desc">
+  <title id="title">A work graph, supported by a harness</title>
+  <desc id="desc">Versioned state connects research, implementation, independent verification, human review and delivery. Failed implementation returns to implementation; missing information returns to research. Agent nodes may contain local loops. Global budgets can block the run. The harness provides tools, permissions, environment, state and observations.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L8 4 L0 8 Z" fill="#566a7c"/></marker>
+  </defs>
+  <rect width="1080" height="1060" rx="18" fill="#f8fafc"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif" fill="#263b4c">
+    <text x="40" y="48" font-size="29" font-weight="700">A work graph, supported by a harness</text>
+    <text x="40" y="78" font-size="18" fill="#556977">Graph = explicit handoffs; agent nodes can keep their own local loops.</text>
+
+    <rect x="40" y="104" width="1000" height="80" rx="10" fill="#e7eef5" stroke="#c7d3de"/>
+    <text x="62" y="135" font-size="22" font-weight="700">Versioned handoff state</text>
+    <text x="62" y="163" font-size="19">Requirements · source evidence · candidate revision · verdict · budget</text>
+
+    <g stroke="#566a7c" stroke-width="2.5" fill="none" marker-end="url(#arrow)">
+      <path d="M540 184 V216"/>
+      <path d="M540 310 V354"/>
+      <path d="M540 446 V490"/>
+      <path d="M540 582 V626"/>
+      <path d="M540 714 V758"/>
+      <path d="M280 538 H192 V400 H278"/>
+      <path d="M800 538 H950 V264 H802"/>
+    </g>
+
+    <g stroke="#c4d0da" stroke-width="1.5">
+      <rect x="280" y="218" width="520" height="92" rx="10" fill="#e4edf7"/>
+      <rect x="280" y="354" width="520" height="92" rx="10" fill="#e2eee7"/>
+      <rect x="280" y="490" width="520" height="92" rx="10" fill="#eae6f3"/>
+      <rect x="280" y="626" width="520" height="88" rx="10" fill="#f2e9d5"/>
+      <rect x="280" y="758" width="520" height="88" rx="10" fill="#e2eee7"/>
+    </g>
+
+    <text x="304" y="253" font-size="23" font-weight="700">RESEARCH</text>
+    <text x="304" y="284" font-size="20">Inspect sources; reproduce; clarify requirements</text>
+    <text x="304" y="389" font-size="23" font-weight="700">IMPLEMENT</text>
+    <text x="304" y="420" font-size="20">Local loop: edit → test → repair, within budget</text>
+    <text x="304" y="525" font-size="23" font-weight="700">VERIFY</text>
+    <text x="304" y="556" font-size="20">Fresh review; real checks on the same revision</text>
+    <text x="304" y="661" font-size="23" font-weight="700">HUMAN REVIEW</text>
+    <text x="304" y="692" font-size="20">Pause for the required decision or authorization</text>
+    <text x="304" y="793" font-size="23" font-weight="700">DELIVER</text>
+    <text x="304" y="824" font-size="20">Save accepted output; external writes stay scoped</text>
+
+    <text x="552" y="609" font-size="19" fill="#556977">Pass</text>
+    <text x="552" y="742" font-size="19" fill="#556977">Approved</text>
+    <text x="53" y="374" font-size="19" fill="#556977">Implementation</text>
+    <text x="53" y="400" font-size="19" fill="#556977">failure</text>
+    <text x="826" y="367" font-size="19" fill="#556977">Needs more</text>
+    <text x="826" y="393" font-size="19" fill="#556977">research</text>
+
+    <rect x="40" y="875" width="1000" height="52" rx="9" fill="#f1e5e4" stroke="#ddc8c5"/>
+    <text x="62" y="908" font-size="21" font-weight="600">All nodes: global time / execution / cost limits → BLOCKED</text>
+
+    <rect x="40" y="947" width="1000" height="82" rx="10" fill="#dfe7ef" stroke="#c4d0da"/>
+    <text x="62" y="979" font-size="22" font-weight="700">HARNESS: capabilities and enforcement beneath the graph</text>
+    <text x="62" y="1009" font-size="19">Context · tools · permissions · environment · durable state · logs and evidence</text>
+  </g>
+</svg>

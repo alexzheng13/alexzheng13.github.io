@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Harness, Loop and Graph Engineering - Blowing in the wind</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var theme = "light";
+    try {
+      var saved = localStorage.getItem("bobo-color-theme");
+      theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    } catch (error) {
+      theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+  }());
+</script>
+
+<meta id="theme-color-meta" name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="zhengxz" /><meta name="description" content="Distinguish agent harnesses, loop engineering and graph engineering through execution boundaries, feedback, shared state and conditional routing, with scheduling, Maker/Checker and autoresearch examples." /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.59.1 with theme even" />
+
+
+<link rel="canonical" href="https://alexzheng13.github.io/en/post/loop-engineering/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.4747d1be8010357c5daf4cd103b0bc1cff65936180045419874ea97f32138102.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/readability.css?v=cc5e81519306cb96e57d928f17a6896a">
+<link rel="stylesheet" href="/css/about.css?v=76d177e0491eafe3abfaf10894def06e">
+<script defer src="/js/theme-toggle.js?v=e6b67a9d5a41159eafd507738e4646c2"></script>
+<meta name="site-language-route" data-language="zh-cn" content="/post/loop-engineering/">
+<meta name="site-language-route" data-language="en" content="/en/post/loop-engineering/">
+<meta name="site-current-language" content="en"><script defer src="/js/language-routing.js?v=bb63d29aecb3487e72328a5acd216f63"></script>
+
+<meta property="og:title" content="Harness, Loop and Graph Engineering" />
+<meta property="og:description" content="Distinguish agent harnesses, loop engineering and graph engineering through execution boundaries, feedback, shared state and conditional routing, with scheduling, Maker/Checker and autoresearch examples." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alexzheng13.github.io/en/post/loop-engineering/" />
+<meta property="article:published_time" content="2026-10-31T00:00:00+00:00" />
+<meta property="article:modified_time" content="2026-10-31T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta itemprop="name" content="Harness, Loop and Graph Engineering">
+<meta itemprop="description" content="Distinguish agent harnesses, loop engineering and graph engineering through execution boundaries, feedback, shared state and conditional routing, with scheduling, Maker/Checker and autoresearch examples.">
+
+
+<meta itemprop="datePublished" content="2026-10-31T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2026-10-31T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="6262">
+
+
+
+<meta itemprop="keywords" content="Agent Harness,Loop Engineering,Graph Engineering,Long-Running Agents,Multi-Agent,Verification,autoresearch," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Harness, Loop and Graph Engineering"/>
+<meta name="twitter:description" content="Distinguish agent harnesses, loop engineering and graph engineering through execution boundaries, feedback, shared state and conditional routing, with scheduling, Maker/Checker and autoresearch examples."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/en/about/" class="logo">Bobo</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/en/post/">
+        <li class="mobile-menu-item">Blog</li>
+      </a><a href="/en/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/en/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+
+  
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/loop-engineering/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/loop-engineering/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+  <div class="mobile-theme-toggle">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+  </div>
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/en/about/" class="logo">Bobo</a>
+</div>
+
+
+
+  <nav class="language-selector" aria-label="Language selector">
+    <ul class="languages-list">
+      
+        
+        
+        <li class="language-item ">
+          
+            <a href="/post/loop-engineering/" lang="zh-cn" hreflang="zh-cn" data-language-choice="zh-cn">中文</a>
+          
+        </li>
+      
+        
+        
+        <li class="language-item active">
+          
+            <a href="/en/post/loop-engineering/" lang="en" hreflang="en" data-language-choice="en">EN</a>
+          
+        </li>
+      
+    </ul>
+  </nav>
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/en/post/">Blog</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/categories/">Categories</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/en/about/">About</a>
+      </li>
+    <li class="menu-item theme-toggle-item">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="切换夜间模式" title="切换夜间模式">
+  <svg class="theme-toggle-icon theme-toggle-moon" aria-hidden="true" viewBox="0 0 24 24">
+    <path d="M20.3 15.2A8.5 8.5 0 0 1 8.8 3.7 8.5 8.5 0 1 0 20.3 15.2Z" />
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-sun" aria-hidden="true" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41" />
+  </svg>
+  <span class="theme-toggle-label" data-theme-toggle-label></span>
+</button>
+
+    </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Harness, Loop and Graph Engineering</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2026-10-31 </span>
+        <div class="post-category">
+            <a href="/en/categories/ai-agents/"> AI Agents </a>
+            </div>
+          <span class="more-meta"> 6262 words </span>
+          <span class="more-meta"> 30 mins read </span>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-what-does-each-perspective-design">1. What does each perspective design?</a></li>
+<li><a href="#2-harness-engineering-enable-work-inside-a-project">2. Harness engineering: enable work inside a project</a></li>
+<li><a href="#3-loop-engineering-progress-through-feedback">3. Loop engineering: progress through feedback</a>
+<ul>
+<li><a href="#goals-timers-and-events-why-does-the-loop-run-again">Goals, timers and events: why does the loop run again?</a></li>
+</ul></li>
+<li><a href="#4-putting-loops-to-work">4. Putting loops to work</a>
+<ul>
+<li><a href="#automations-opportunities-to-run">Automations: opportunities to run</a>
+<ul>
+<li><a href="#in-session-follow-up-return-to-the-same-piece-of-work">In-session follow-up: return to the same piece of work</a></li>
+<li><a href="#local-and-cloud-where-the-work-runs">Local and cloud: where the work runs</a></li>
+<li><a href="#events-and-self-managed-scheduling-let-changes-arrive">Events and self-managed scheduling: let changes arrive</a></li>
+</ul></li>
+<li><a href="#worktrees-isolated-file-changes">Worktrees: isolated file changes</a></li>
+<li><a href="#skills-reusable-working-methods">Skills: reusable working methods</a></li>
+<li><a href="#connectors-access-to-real-systems">Connectors: access to real systems</a></li>
+<li><a href="#sub-agents-separate-production-from-judgment">Sub-agents: separate production from judgment</a></li>
+<li><a href="#external-state-recoverable-progress">External state: recoverable progress</a></li>
+<li><a href="#a-complete-example-morning-issue-triage">A complete example: morning issue triage</a></li>
+<li><a href="#maker-checker-separation-needs-a-real-acceptance-boundary">Maker/Checker separation needs a real acceptance boundary</a>
+<ul>
+<li><a href="#who-can-mark-a-feature-passing">Who can mark a feature passing?</a></li>
+</ul></li>
+<li><a href="#autoresearch-a-repeatable-experiment-ratchet">autoresearch: a repeatable experiment ratchet</a>
+<ul>
+<li><a href="#what-stays-fixed-and-what-improves">What stays fixed, and what improves?</a></li>
+<li><a href="#the-nine-step-cycle">The nine-step cycle</a></li>
+<li><a href="#more-than-a-lower-score">More than a lower score</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#5-graph-engineering-make-collaboration-executable">5. Graph engineering: make collaboration executable</a>
+<ul>
+<li><a href="#four-components">Four components</a></li>
+<li><a href="#define-the-handoff-state-first">Define the handoff state first</a></li>
+<li><a href="#nodes-and-back-edges">Nodes and back edges</a></li>
+<li><a href="#checkpoints-and-recovery-state-is-only-part-of-the-problem">Checkpoints and recovery: state is only part of the problem</a></li>
+<li><a href="#graphs-and-workflows-do-not-reinvent-the-history">Graphs and workflows: do not reinvent the history</a></li>
+</ul></li>
+<li><a href="#6-who-can-change-a-goal-or-veto-a-result">6. Who can change a goal or veto a result?</a></li>
+<li><a href="#7-costs-shared-by-loops-and-graphs">7. Costs shared by loops and graphs</a>
+<ul>
+<li><a href="#verification-debt-production-outpaces-checking">Verification debt: production outpaces checking</a></li>
+<li><a href="#comprehension-rot-the-code-outgrows-the-team-s-mental-model">Comprehension rot: the code outgrows the team&rsquo;s mental model</a></li>
+<li><a href="#cognitive-surrender-outsourcing-the-judgment-too">Cognitive surrender: outsourcing the judgment too</a></li>
+<li><a href="#token-and-runtime-costs-paying-for-history-again">Token and runtime costs: paying for history again</a></li>
+<li><a href="#orchestration-tax-growing-the-review-queue">Orchestration tax: growing the review queue</a></li>
+</ul></li>
+<li><a href="#8-when-do-you-need-a-harness-loop-or-graph">8. When do you need a harness, loop or graph?</a>
+<ul>
+<li><a href="#references-and-templates">References and templates</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>Repairing a login failure raises three sets of engineering questions: which files can the agent access and where can it run tests; how should it continue after a failure and when should it stop; and, if investigation, implementation and review are separate, who receives the work next?</p>
+
+<p>Harness engineering concerns the execution system around a model. Loop engineering concerns progress through feedback. Graph engineering concerns the connections and handoffs between working units. They overlap and often coexist; they are more useful as design perspectives than as successive replacements for one another.</p>
+
+<p>The main sources are WalkingLabs <a href="https://walkinglabs.github.io/learn-harness-engineering/en/lectures/lecture-13-loop-engineering/">Lecture 13: Loop Engineering</a> and <a href="https://walkinglabs.github.io/learn-harness-engineering/en/lectures/lecture-14-graph-engineering/">Lecture 14: Graph Engineering</a>, revision <code>a9342ff</code>, together with selected further reading. Product behavior is checked against official documentation; source revisions for autoresearch and the graph example are identified separately.</p>
+
+<h2 id="1-what-does-each-perspective-design">1. What does each perspective design?</h2>
+
+<p>Use one task throughout: repair a login timeout, preserve the interface and provide reproducible verification.</p>
+
+<table>
+<thead>
+<tr>
+<th>Perspective</th>
+<th>Main design object</th>
+<th>Question for this task</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Harness engineering</td>
+<td>The execution system around a model</td>
+<td>How can it edit, test, record progress and stay within permissions?</td>
+</tr>
+
+<tr>
+<td>Loop engineering</td>
+<td>Repeated work guided by feedback</td>
+<td>How does failure change the next attempt, and what ends the work?</td>
+</tr>
+
+<tr>
+<td>Graph engineering</td>
+<td>Connections and control flow between units</td>
+<td>Who investigates, implements and reviews; where does failure go?</td>
+</tr>
+</tbody>
+</table>
+
+<p>There is no universally accepted hierarchy. In a broad definition, a harness includes tools, context, permissions, state and feedback, and may include loop control and multi-agent orchestration. The lectures use a foundation metaphor, with loops and graphs built on a harness. That is a useful design view, not a requirement for three disjoint software layers. <a href="https://addyosmani.com/blog/agent-harness-engineering/">Agent Harness Engineering</a></p>
+
+<p>Three questions make the distinction easier to retain:</p>
+
+<ul>
+<li><strong>Harness: under what conditions can the agent work?</strong></li>
+<li><strong>Loop: how does this task progress from its results?</strong></li>
+<li><strong>Graph: how do the working units connect and hand off?</strong></li>
+</ul>
+
+<p>Prompts and context remain necessary. A prompt expresses the current request; context supplies available information. A harness connects them to tools and the environment. A loop determines whether feedback leads to another attempt. A graph determines which unit runs next and what it receives.</p>
+
+<p>The same “retry after a failed test” logic can be harness control code, a loop&rsquo;s feedback rule and a graph&rsquo;s back edge. These are different scales of description, not a reason to build three services.</p>
+
+<h2 id="2-harness-engineering-enable-work-inside-a-project">2. Harness engineering: enable work inside a project</h2>
+
+<p>A model can produce a test command. An external program must start the process, constrain its working directory, capture its exit status, preserve logs and return errors to the model. Connecting decisions to execution and observations is central to the harness.</p>
+
+<p>For a coding task, five groups of capabilities are useful:</p>
+
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Concrete artifacts</th>
+<th>Typical failure when missing</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Instructions and context</td>
+<td>Project rules, document index, retrieval policy</td>
+<td>Missing conventions or excessive irrelevant history</td>
+</tr>
+
+<tr>
+<td>Tools and permissions</td>
+<td>File tools, shell, scoped APIs, approval entry points</td>
+<td>Inability to act, or unauthorized action</td>
+</tr>
+
+<tr>
+<td>Environment</td>
+<td>Dependencies, runtime, isolated checkout, test services</td>
+<td>Correct commands in an unreproducible environment</td>
+</tr>
+
+<tr>
+<td>State and recovery</td>
+<td>Candidate revision, progress, logs, handoff records</td>
+<td>Lost progress or duplicated operations</td>
+</tr>
+
+<tr>
+<td>Feedback and acceptance</td>
+<td>Tests, lint, behavior checks, evidence</td>
+<td>Confusing generated code with a resolved problem</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>AGENTS.md</code> or <code>CLAUDE.md</code> is an instruction entry point, not the entire system. “Test before publishing” influences behavior. Enforcing it requires a tool boundary, validation endpoint or CI gate. A written rule does not enforce itself.</p>
+
+<p>Nor is a harness restricted to a single run. State storage, recovery, context reconstruction and independent checking can all support work across sessions. Assigning every long-running concern exclusively to loop engineering would miss that overlap.</p>
+
+<p>Improve the harness from observed failures: was the requirement unclear, an error invisible, a dependency missing, or an acceptance result attached to the wrong revision? Add the relevant feedback or constraint and compare equivalent tasks. More components are not automatically better; reassess their value when models change.</p>
+
+<h2 id="3-loop-engineering-progress-through-feedback">3. Loop engineering: progress through feedback</h2>
+
+<p>In an ordinary interaction, a person asks for work, the agent changes something and reports back, then waits. Inside that interaction, the agent may already perform many model–tool–observation cycles. But deciding what happens after the turn, checking completion and restarting work can still fall to the person.</p>
+
+<p>There are two layers here: <strong>a ReAct loop advances immediate execution; a workflow-level loop also decides when to start, what to work on next, how to accept the result and when to stop.</strong> The outer process can use one agent or several roles.</p>
+
+<p>A goal-driven workflow is a useful starting point. In a Codex build that supports Goals, an objective might look like this:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">/goal Fix the failing login tests while preserving the existing API.
+Verify with the project&#39;s typecheck, lint, login unit tests and end-to-end login flow.
+Do not change database migrations, merge or deploy. Stop and report missing credentials.</code></pre></td></tr></table>
+</div>
+</div>
+<p>Compared with “change this function,” this establishes a completion contract. The objective remains active, and the next action depends on new evidence. Failures lead to repairs; missing evidence leads to further checks. Success, a budget limit or a blocker requiring human input ends the work. Command availability depends on the host and version: <code>/goal</code> is not a universal implementation contract. <a href="https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex">Official Codex Goals guide</a></p>
+
+<p>The lecture describes four steps toward this working style:</p>
+
+<ol>
+<li><strong>Direct every step.</strong> The person specifies actions, checks results and supplies the next instruction.</li>
+<li><strong>Put several steps in one prompt.</strong> Analysis, implementation and tests run together, but drift still needs intervention.</li>
+<li><strong>Continue from feedback.</strong> The agent selects further actions, but may declare success prematurely.</li>
+<li><strong>Ground completion in evidence.</strong> Tests, evaluation programs or an independent checker participate in acceptance; the implementer&rsquo;s assurance is insufficient.</li>
+</ol>
+
+<p>This is a useful progression of responsibilities, not a precise release history for every product. Addy Osmani&rsquo;s discussion of loop engineering likewise moves attention from individual prompts to the system that schedules and checks the work. <a href="https://addyosmani.com/blog/loop-engineering/">Original article</a></p>
+
+<p>A minimal working loop must answer three questions: <strong>what state should be reached, what evidence establishes it, and when should execution continue or stop?</strong> “Keep going” addresses very little of that contract.</p>
+
+<h3 id="goals-timers-and-events-why-does-the-loop-run-again">Goals, timers and events: why does the loop run again?</h3>
+
+<p>Loops have different triggers. A trigger determines when execution becomes possible; a completion rule determines how far it should go. These can be combined.</p>
+
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Trigger</th>
+<th>End of the current run</th>
+<th>Example</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Interactive</td>
+<td>The next human instruction</td>
+<td>Request handled or interrupted</td>
+<td>Investigating an unclear problem</td>
+</tr>
+
+<tr>
+<td>Goal-driven</td>
+<td>A persistent objective needs further work</td>
+<td>Success, budget, cancellation or a genuine blocker</td>
+<td>Repairing failing tests</td>
+</tr>
+
+<tr>
+<td>Time-driven</td>
+<td>A scheduled check becomes due</td>
+<td>The current check or work segment finishes</td>
+<td>Checking deployment status periodically</td>
+</tr>
+
+<tr>
+<td>Event-driven</td>
+<td>An external event arrives</td>
+<td>Event handled, deferred or handed off</td>
+<td>Investigating a CI failure</td>
+</tr>
+</tbody>
+</table>
+
+<p><code>/goal</code> primarily expresses a continuing objective; <code>/loop</code> primarily expresses repeated triggering. For example, Claude Code&rsquo;s session-scoped scheduler can accept:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">/loop 15m Check whether this deployment has finished. Report success or failure once; stay quiet when nothing changes.</code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>A timer does not imply amnesia.</strong> It might return to the same session or launch a fresh run. A fresh run can still recover progress from external state. Conversely, repeatedly waking the same session does not guarantee useful progress.</p>
+
+<p>The choice also depends on execution location and continuity: return to this chat, start an independent local task, or run remotely? The Automations section below separates these layers.</p>
+
+<p>A task can both check every fifteen minutes and stop once a deployment succeeds. The dangerous case is repeated triggering without state, deduplication or stopping rules: a new attempt starts while the old one is running, or a successful deployment keeps generating notifications.</p>
+
+<h2 id="4-putting-loops-to-work">4. Putting loops to work</h2>
+
+<p>In a manual workflow, a person discovers work, chooses an action and checks its result. An automated loop assigns those activities to an explicit process. The person remains responsible for objectives, authorization, exceptions and final review.</p>
+
+<p><img src="/img/posts/loop-engineering/work-loop.svg" alt="An automated work loop: trigger, recover state, select work, implement, verify, persist and deliver; bounded retries and human decisions form explicit exits" /></p>
+
+<p><em>Adapted from the lecture&rsquo;s work-loop and morning-triage diagrams. External state supports every iteration; it is not merely a final log entry.</em></p>
+
+<p>The lecture identifies six composable building blocks. They are a toolbox, not six mandatory services for every task.</p>
+
+<h3 id="automations-opportunities-to-run">Automations: opportunities to run</h3>
+
+<p>Work needs a rule for advancing without someone repeatedly typing “continue.” A current run can proceed directly from its objective and verification results. Timers, webhooks and CI events become useful when work must wait for a later check or an external change. <strong>A loop does not necessarily need a timer; it needs a rule for continuing automatically.</strong></p>
+
+<p>Claude Code and Codex expose different entry points. The comparison below separates <strong>local Codex automation from ChatGPT&rsquo;s web capabilities</strong>, rather than treating them as one execution environment. Names and boundaries were checked against official documentation on 2026-10-31.</p>
+
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Claude Code</th>
+<th>Codex / ChatGPT</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>In-session</td>
+<td><code>/loop</code></td>
+<td>Thread automation</td>
+</tr>
+
+<tr>
+<td>Local schedule</td>
+<td>Desktop local tasks</td>
+<td>Standalone local automation</td>
+</tr>
+
+<tr>
+<td>Cloud schedule</td>
+<td>Cloud scheduled tasks, formerly Routines</td>
+<td>ChatGPT web scheduled tasks</td>
+</tr>
+
+<tr>
+<td>Events</td>
+<td>Cloud API / GitHub triggers</td>
+<td>ChatGPT web event tasks; or CI invoking the CLI</td>
+</tr>
+
+<tr>
+<td>Self-managed</td>
+<td>GitHub Actions / cron</td>
+<td><code>codex exec</code> + cron / CI</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="in-session-follow-up-return-to-the-same-piece-of-work">In-session follow-up: return to the same piece of work</h4>
+
+<p>Think of thread automation as setting an alarm for an existing chat. When it rings, the agent returns with that chat&rsquo;s context. If the work concerns PR #42, each check need not begin by explaining the PR, the previous observation and which results have already been reported.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Now: query PR #42; CI is running → wait
+Next wakeup: continue this chat; query again → unchanged → no repeated notification
+Later wakeup: CI has failed → inspect logs; act within authorization or notify</code></pre></td></tr></table>
+</div>
+</div>
+<p>This serves a similar purpose to Claude Code&rsquo;s <code>/loop</code>; it does not mean a model keeps thinking throughout the wait. <strong>Context records what was known previously. Current facts still need to be queried.</strong> Remembering a launched command does not establish that its process is still alive.</p>
+
+<p>“Close it and everything is lost” is too absolute. Claude Code can restore some unexpired tasks when a session resumes, but that does not execute them in the cloud while the session is inactive. Likewise, a local Codex thread&rsquo;s history alone cannot keep its execution environment available. <a href="https://code.claude.com/docs/en/scheduled-tasks">Claude Code session scheduling</a></p>
+
+<h4 id="local-and-cloud-where-the-work-runs">Local and cloud: where the work runs</h4>
+
+<p>An independent local task suits recurring project checks or daily reports without tying them to this chat. Its objective, method and progress should be recoverable from configuration, project files or another persistent store. Claude Code Desktop&rsquo;s local scheduled tasks start new sessions and require the machine and app to run. <a href="https://code.claude.com/docs/en/desktop-scheduled-tasks">Desktop scheduled tasks</a></p>
+
+<p>Cloud tasks remove the dependency on an always-on local machine. Claude Code&rsquo;s Cloud scheduled tasks, formerly Routines, support schedules, API calls and GitHub events. ChatGPT web also provides remote scheduled tasks, but cannot directly read a local directory. A local Codex scheduler&rsquo;s machine requirement therefore does not establish that OpenAI has no cloud scheduling. <a href="https://code.claude.com/docs/en/routines">Claude Code cloud tasks</a>, <a href="https://learn.chatgpt.com/docs/automations">official OpenAI scheduling documentation</a></p>
+
+<h4 id="events-and-self-managed-scheduling-let-changes-arrive">Events and self-managed scheduling: let changes arrive</h4>
+
+<p>Polling asks “has CI finished?” periodically. An event trigger wakes the workflow when CI changes. ChatGPT&rsquo;s Gmail, Slack and GitHub event tasks are currently web and mobile capabilities; installing a plugin does not give local Codex desktop automations the same triggers. <a href="https://learn.chatgpt.com/docs/automations#trigger-tasks-from-app-events">OpenAI event-trigger documentation</a></p>
+
+<p>For a custom runtime or trigger, cron or CI can invoke <code>codex exec</code>. The scheduler decides when to start; the CLI performs a run. Retries, concurrency control, deduplication, timeouts, result storage and authorization remain responsibilities of the surrounding workflow. <a href="https://learn.chatgpt.com/docs/non-interactive-mode">Codex non-interactive execution</a></p>
+
+<p>At every layer, a trigger only offers an opportunity to run. Check whether useful work exists, whether the event was already handled and whether a previous run is still active. An unchanged poll can do nothing. A blocker requiring a person should name the missing decision rather than repeat “still waiting” on every wakeup.</p>
+
+<h3 id="worktrees-isolated-file-changes">Worktrees: isolated file changes</h3>
+
+<p>Concurrent agents editing one checkout can overwrite each other. Git worktrees provide separate checkouts, usually on separate branches, where tasks can change and test files independently.</p>
+
+<p>This does not isolate every resource. Worktrees can still compete for a port, test database, cloud resource or pull request, and their changes can conflict during integration. Useful parallelism depends on environment isolation and review capacity, not just the number of available agents.</p>
+
+<h3 id="skills-reusable-working-methods">Skills: reusable working methods</h3>
+
+<p>A skill can contain instructions, scripts, references and output contracts for a class of work. An issue-triage skill might define categories, duplicate checks and the evidence required before attempting a fix.</p>
+
+<p>It reduces the need to explain the method in every run. Current task progress belongs in a state record; repeatedly adding transient results to <code>SKILL.md</code> mixes two different responsibilities.</p>
+
+<h3 id="connectors-access-to-real-systems">Connectors: access to real systems</h3>
+
+<p>Connectors let the loop inspect issues, query CI, use test services and write back results within authorization. MCP is one common interface, not a requirement for every connector.</p>
+
+<p>Reading information and changing external systems require separate authority. Permission to inspect a CI failure does not grant permission to change deployment configuration. Permission to prepare a fix does not automatically include merging, publishing or messaging other people.</p>
+
+<h3 id="sub-agents-separate-production-from-judgment">Sub-agents: separate production from judgment</h3>
+
+<p>A common arrangement uses an Explorer to investigate, a Maker to implement and a Checker to verify. Small tasks can skip a dedicated Explorer and use deterministic checks from one main agent; specialized review is added when its benefits justify the cost.</p>
+
+<p>The value lies in independent observations and reduced commitment to the implementer&rsquo;s explanation. Several agents reading the same summary and repeating the same reasoning may add little independent evidence.</p>
+
+<h3 id="external-state-recoverable-progress">External state: recoverable progress</h3>
+
+<p>The next iteration needs the objective, completed work, current baseline, verification results, blockers and next action. Files, task systems and databases can all hold that information; concurrency, queries and audit requirements determine the appropriate store.</p>
+
+<p>After compaction, session replacement or a restart, recovery should not depend solely on what the model happens to remember. Records should resolve to sources such as commits, command outputs, issues and artifacts. <strong>Skills hold the method; external state records where this instance of the work has reached.</strong></p>
+
+<h3 id="a-complete-example-morning-issue-triage">A complete example: morning issue triage</h3>
+
+<p>The building blocks can form a concrete workflow: inspect new repository issues each morning, attempt small fixes and place reviewable results in front of a person.</p>
+
+<p>First bound the work. Otherwise “look through issues” can expand indefinitely. This example adapts the lecture&rsquo;s goal template:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-markdown" data-lang="markdown"><span class="gh"># Goal
+</span><span class="gh"></span>Triage the latest 10 issues in the target repository.
+
+<span class="gh"># Allowed work
+</span><span class="gh"></span><span class="k">-</span> Inspect existing labels, ownership and records to avoid duplicate handling.
+<span class="k">-</span> Propose categories; apply labels only when authorized.
+<span class="k">-</span> Attempt one small fix in an isolated branch, expected to be verifiable within 10 minutes.
+<span class="k">-</span> After acceptance, create a draft PR if authorized, or leave local changes for review.
+
+<span class="gh"># Acceptance
+</span><span class="gh"></span><span class="k">-</span> Record a reproduction before the fix; the same case passes afterward.
+<span class="k">-</span> Pass typecheck, lint and applicable tests; verify end-to-end behavior when necessary.
+<span class="k">-</span> Deliver the tested revision, commands, results and remaining risks.
+
+<span class="gh"># Boundaries and stopping rules
+</span><span class="gh"></span><span class="k">-</span> Do not merge, deploy, change production data or credentials, or weaken CI security.
+<span class="k">-</span> Finish when all 10 issues have explicit dispositions.
+<span class="k">-</span> At most 20 iterations; escalate after 3 iterations without new useful evidence.
+- Stop blocked work when it requires broader authority, changed requirements or external input.</code></pre></td></tr></table>
+</div>
+</div>
+<p>When the timer fires, the system reads issues and saved state and excludes already handled events. It selects a bounded task and prepares an isolated environment. The Maker implements and performs basic checks, then hands an exact revision to the Checker. Failure feeds a bounded repair cycle. Accepted work moves to delivery and state writeback.</p>
+
+<p>A state record needs more than “fixed.” It should preserve facts that another run can check:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">goal<span class="p">:</span><span class="w"> </span><span class="s2">&#34;Triage the latest 10 issues&#34;</span><span class="w">
+</span><span class="w"></span>iteration<span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w"></span>status<span class="p">:</span><span class="w"> </span>needs_review<span class="w">
+</span><span class="w"></span>task<span class="p">:</span><span class="w">
+</span><span class="w">  </span>issue<span class="p">:</span><span class="w"> </span><span class="s2">&#34;#42&#34;</span><span class="w">
+</span><span class="w">  </span>branch<span class="p">:</span><span class="w"> </span><span class="s2">&#34;fix/login-timeout&#34;</span><span class="w">
+</span><span class="w">  </span>revision<span class="p">:</span><span class="w"> </span><span class="s2">&#34;&lt;tested-commit&gt;&#34;</span><span class="w">
+</span><span class="w"></span>verification<span class="p">:</span><span class="w">
+</span><span class="w">  </span>reproduction<span class="p">:</span><span class="w"> </span><span class="s2">&#34;&lt;fixture-and-command&gt;&#34;</span><span class="w">
+</span><span class="w">  </span>test_result<span class="p">:</span><span class="w"> </span>passed<span class="w">
+</span><span class="w">  </span>evidence<span class="p">:</span><span class="w"> </span><span class="s2">&#34;&lt;log-or-artifact-reference&gt;&#34;</span><span class="w">
+</span><span class="w"></span>decision<span class="p">:</span><span class="w">
+</span><span class="w">  </span>accepted<span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">  </span>reason<span class="p">:</span><span class="w"> </span><span class="s2">&#34;Waiting for independent review&#34;</span><span class="w">
+</span><span class="w"></span>next_action<span class="p">:</span><span class="w"> </span><span class="s2">&#34;Review the tested revision; do not repeat implementation&#34;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><code>test_result: passed</code> records a test outcome; <code>accepted: false</code> records incomplete independent acceptance. Those should not collapse into one “done” flag. A later run must also check that the recorded revision is still the relevant candidate.</p>
+
+<p>Crash recovery matters. If a PR was created but the process exited before recording its URL, the next run should discover that existing PR rather than create another. Persistent state and deduplication of external effects become essential when a demonstration turns into a long-running system.</p>
+
+<h3 id="maker-checker-separation-needs-a-real-acceptance-boundary">Maker/Checker separation needs a real acceptance boundary</h3>
+
+<p>The lecture emphasizes separating the Generator from the Evaluator because an implementer can interpret results through the lens of its own design. A checker should begin with requirements and observable behavior, not assume that the implementation summary is correct.</p>
+
+<p>The roles can use a compact protocol:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">Maker
+1. Read the objective, boundaries and state; identify this iteration&#39;s hypothesis.
+2. Implement within scope and run basic checks.
+3. Deliver an exact revision, changes, commands, outcomes and known risks.
+4. Request validation rather than claiming final acceptance.
+
+Checker
+1. Review that revision against original requirements, not the Maker&#39;s assurance.
+2. Reproduce critical paths, independently run applicable tests and inspect edge cases.
+3. Give a location, trigger, evidence and severity for each finding.
+4. Do not invent problems. Report missing verification as missing, not as a pass.</code></pre></td></tr></table>
+</div>
+</div>
+<p>Different models are an option; separate contexts using the same model are another. Independent tasks, observations and acceptance evidence matter more than a promise that different models cannot share mistakes. For checks with explicit expected results, scripts and real environment tests are usually stronger than another request for an opinion.</p>
+
+<p>Anthropic&rsquo;s long-running application experiment separates implementation and QA, with the Evaluator operating the actual application through a browser. The existing <a href="/en/post/anthropic-agent-evolution-3-planner-generator-evaluator/">Planner–Generator–Evaluator article</a> covers that structure. <a href="https://www.anthropic.com/research/harness-design-long-running-apps">Original experiment</a></p>
+
+<h4 id="who-can-mark-a-feature-passing">Who can mark a feature passing?</h4>
+
+<p>“Run tests before changing the status” in <code>CLAUDE.md</code> or <code>AGENTS.md</code> is a behavioral rule. If the agent can arbitrarily edit the status file, it can still bypass that rule.</p>
+
+<p>A stronger design exposes a harness-controlled validation entry point. This is process pseudocode, not a runnable controller:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">request_validation</span><span class="p">(</span><span class="n">feature_id</span><span class="p">,</span> <span class="n">candidate_revision</span><span class="p">):</span>
+    <span class="n">contract</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">load_contract</span><span class="p">(</span><span class="n">feature_id</span><span class="p">)</span>
+    <span class="n">candidate</span> <span class="o">=</span> <span class="n">workspace</span><span class="o">.</span><span class="n">pin_revision</span><span class="p">(</span><span class="n">candidate_revision</span><span class="p">)</span>
+
+    <span class="c1"># Run the registered checks against the pinned candidate</span>
+    <span class="n">report</span> <span class="o">=</span> <span class="n">verifier</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">contract</span><span class="p">,</span> <span class="n">candidate</span><span class="p">)</span>
+    <span class="n">evidence_store</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">satisfies</span><span class="p">(</span><span class="n">contract</span><span class="p">)</span> <span class="ow">and</span> <span class="n">workspace</span><span class="o">.</span><span class="n">still_matches</span><span class="p">(</span><span class="n">candidate</span><span class="p">):</span>
+        <span class="n">state_store</span><span class="o">.</span><span class="n">transition</span><span class="p">(</span><span class="n">feature_id</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="s2">&#34;passing&#34;</span><span class="p">,</span> <span class="n">evidence</span><span class="o">=</span><span class="n">report</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">state_store</span><span class="o">.</span><span class="n">record_failure</span><span class="p">(</span><span class="n">feature_id</span><span class="p">,</span> <span class="n">evidence</span><span class="o">=</span><span class="n">report</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">report</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Tool or storage boundaries must actually protect state writes, and the Maker must not be able to weaken the acceptance contract just to pass. Evidence must bind to the candidate: testing revision A cannot qualify revision B after further changes.</p>
+
+<p>Even then, passing means satisfying the registered checks, not proving the absence of all unknown defects. Acceptance criteria need maintenance, and subjective quality or high-risk actions may still require human judgment.</p>
+
+<h3 id="autoresearch-a-repeatable-experiment-ratchet">autoresearch: a repeatable experiment ratchet</h3>
+
+<p>Karpathy&rsquo;s autoresearch demonstrates a different loop. An agent changes a training program, runs an experiment under a fixed budget and uses validation results to keep or discard the candidate.</p>
+
+<p>This discussion follows <a href="https://github.com/karpathy/autoresearch/tree/228791fb499afffb54b46200aca536f79142f117">source revision <code>228791f</code></a>. Three files define the main boundaries:</p>
+
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Responsibility</th>
+<th>Change boundary during experiments</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>prepare.py</code></td>
+<td>Data, tokenizer, time budget and evaluation utilities</td>
+<td>Fixed infrastructure; not modified by the experiment agent</td>
+</tr>
+
+<tr>
+<td><code>train.py</code></td>
+<td>Model, optimizer, hyperparameters and training loop</td>
+<td>The agent&rsquo;s main search space</td>
+</tr>
+
+<tr>
+<td><code>program.md</code></td>
+<td>Objective, working rules, output format and selection policy</td>
+<td>Human-authored research method</td>
+</tr>
+</tbody>
+</table>
+
+<p>The design separates the search space from its evaluation rules. The agent can change a learning rate or architecture, but not improve its score by rewriting the evaluator. Natural-language instructions live in <code>program.md</code>; execution still requires the coding agent, tools and training environment. Markdown does not run itself.</p>
+
+<h4 id="what-stays-fixed-and-what-improves">What stays fixed, and what improves?</h4>
+
+<p><code>prepare.py</code> defines <code>TIME_BUDGET = 300</code>. The main metric is <code>val_bpb</code>, validation bits per byte, where lower is better. Wall-clock budgeting limits elapsed time counted toward training, not a fixed step count. On the same machine, a candidate taking 0.5 seconds per step can complete roughly 600 steps in 300 seconds; one taking a second can complete about 300. The comparison concerns quality within a time budget, not just quality per step.</p>
+
+<p>This revision skips the initial steps when accumulating training time to avoid initial compilation overhead, stops at a step boundary after reaching the budget, and evaluates afterward. Total experiment time therefore exceeds five minutes. A short-budget winner is not necessarily the winner after much longer training. <a href="https://github.com/karpathy/autoresearch/blob/228791fb499afffb54b46200aca536f79142f117/train.py#L538-L624">Training timer source</a></p>
+
+<p>Keeping hardware, data, evaluation and training budget fixed helps compare candidates without letting one win merely by training longer. It does not make results on different hardware directly comparable. Small improvements also deserve checks for noise and repeatability.</p>
+
+<p>The instructions consider simplicity too: a substantially simpler candidate with similar performance can be worth retaining. The ratchet selects a better working baseline under fixed evaluation rules; not every decision is a mechanical requirement for a strictly lower floating-point number.</p>
+
+<h4 id="the-nine-step-cycle">The nine-step cycle</h4>
+
+<p><img src="/img/posts/loop-engineering/research-ratchet.svg" alt="The autoresearch ratchet reads constraints and the baseline, proposes a hypothesis, edits and snapshots a candidate, trains, evaluates and records it, then keeps or discards before continuing" /></p>
+
+<p>The lecture&rsquo;s cycle can be expanded into nine steps:</p>
+
+<ol>
+<li>Read <code>program.md</code> for boundaries and evaluation rules.</li>
+<li>Inspect the code, Git baseline and previous experiments.</li>
+<li>Form a testable hypothesis.</li>
+<li>Modify <code>train.py</code>.</li>
+<li>Save an identifiable candidate revision.</li>
+<li>Train under the prescribed budget.</li>
+<li>Inspect metrics, resource use and failures; record the experiment.</li>
+<li>Keep a candidate that meets the selection rules, or discard it and restore a usable baseline.</li>
+<li>Continue from the updated baseline and accumulated history.</li>
+</ol>
+
+<p>The ratchet prevents arbitrary replacement of an accepted baseline by a worse candidate. It does not guarantee successful exploration every time or a global optimum. Discarding must affect only the isolated experiment&rsquo;s own changes, not unrelated work in a shared dirty checkout.</p>
+
+<h4 id="more-than-a-lower-score">More than a lower score</h4>
+
+<p>Outputs include retained code revisions, an experiment table and run logs. <code>program.md</code> specifies five columns for <code>results.tsv</code>. This is a format example, not data from a run performed for this article:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">commit   val_bpb   memory_gb   status    description
+a1b2c3d  0.997900  44.0        keep      baseline
+b2c3d4e  0.993200  44.2        keep      increase learning rate
+c3d4e5f  1.005000  44.0        discard   change activation
+d4e5f6g  0.000000  0.0         crash     double width; out of memory</code></pre></td></tr></table>
+</div>
+</div>
+<p>The real file is tab-separated. Zero in a <code>crash</code> row is a prescribed failure placeholder, not a score better than every successful experiment. Readers must inspect <code>status</code> as well as the number.</p>
+
+<p>Git history retains accepted candidates; the experiment table must preserve failures too, or later iterations can repeat disproven ideas. An agent&rsquo;s summary does not replace original run evidence. Reviewing or transferring a result can still require code and logs.</p>
+
+<p>One result cited by the lecture comes from nanochat. Its <a href="https://github.com/karpathy/nanochat/commit/f06860494848db080c9a80a0ffa83203b042056b">autoresearch round 1 leaderboard commit</a> reports reducing time to the GPT-2 comparison target from 2.02 hours to 1.80 hours, roughly 10.9%. This is a report for that project and configuration, not a universal improvement from adding a loop, and not a reproduction performed here.</p>
+
+<p>The original autoresearch protocol encourages continued experimentation after setup confirmation until a person interrupts it. Practical use should add total time, cost and compute limits. A bounded training run does not bound the overall research campaign.</p>
+
+<h2 id="5-graph-engineering-make-collaboration-executable">5. Graph engineering: make collaboration executable</h2>
+
+<p>Maker/Checker already has the outline of a graph: implementation goes to verification, failure returns to implementation and success reaches delivery. A simple controller is enough when this is the only path.</p>
+
+<p>A harder question is why a test failed. Is the implementation wrong, or was the requirement misunderstood? Should missing information send work back to research? Can two investigations run concurrently, and when should their results join? Which outcomes require approval? Repeated handoffs become difficult to diagnose when every boundary depends on one agent&rsquo;s improvised next step.</p>
+
+<p>Graph engineering makes those relationships explicit. This is an <strong>execution and collaboration graph</strong>, not a knowledge graph of entities. Node count is not agent count.</p>
+
+<h3 id="four-components">Four components</h3>
+
+<p><strong>Nodes</strong> perform work. A node can be ordinary code, one model call, a tool, a complete agent or a human decision step. A complete agent node may contain its own edit–test–repair loop.</p>
+
+<p><strong>Edges</strong> describe allowed handoffs: research to implementation, failed verification back to implementation, missing information back to research. Fan-out and fan-in describe parallel work and its join.</p>
+
+<p><strong>State</strong> holds the facts needed at boundaries: requirements, source evidence, candidate revisions, test reports, review decisions and budgets. Shared state does not require broadcasting every conversation to every node.</p>
+
+<p><strong>Routing</strong> selects the next step from that state. It may use deterministic code or a model&rsquo;s classification. Even when a model diagnoses a failure, code can constrain allowed destinations, permissions and budget checks. <a href="https://docs.langchain.com/oss/python/langgraph/graph-api">LangGraph Graph API</a></p>
+
+<p><img src="/img/posts/loop-engineering/agent-work-graph.svg" alt="A login-repair graph connecting research, implementation, independent verification, human review and delivery, with failure-specific back edges, versioned state and a supporting harness" /></p>
+
+<p><em>Adapted from Lecture 14&rsquo;s development graph, adding revision-bound evidence, budget exits and human review. Agent nodes may retain local loops; the harness supplies execution and state capabilities. This example requires approval before delivery.</em></p>
+
+<h3 id="define-the-handoff-state-first">Define the handoff state first</h3>
+
+<p>Before drawing arrows, specify what each node receives and produces. An example snapshot is:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">run_id<span class="p">:</span><span class="w"> </span>login-timeout<span class="m">-42</span><span class="w">
+</span><span class="w"></span>requirements<span class="p">:</span><span class="w"> </span><span class="s2">&#34;Fix the timeout without changing the public API&#34;</span><span class="w">
+</span><span class="w"></span>evidence_refs<span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;issue:42&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;logs:reproduction-1&#34;</span><span class="p">]</span><span class="w">
+</span><span class="w"></span>candidate_revision<span class="p">:</span><span class="w"> </span>candidate<span class="m">-3</span><span class="w">
+</span><span class="w"></span>verification_revision<span class="p">:</span><span class="w"> </span>candidate<span class="m">-3</span><span class="w">
+</span><span class="w"></span>review<span class="p">:</span><span class="w"> </span>fail<span class="w">
+</span><span class="w"></span>attempts<span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span><span class="w"></span>max_attempts<span class="p">:</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="w"></span>requires_approval<span class="p">:</span><span class="w"> </span><span class="kc">true</span></code></pre></td></tr></table>
+</div>
+</div>
+<p><code>candidate_revision</code> identifies the code; <code>verification_revision</code> identifies what the report checked. They must match before the report can qualify the candidate. A real system should use an exact commit or immutable artifact ID; <code>candidate-3</code> is a readable placeholder.</p>
+
+<p>Fields also need ownership and merge rules. A requirements owner maintains the contract, the implementation node produces candidates and the verifier produces reports. Parallel research findings can merge using stable IDs and deduplication. Two code revisions cannot be integrated by simply appending them. If a counter uses additive updates, return an increment rather than adding the accumulated total again. <strong>A shared schema is not an access-control system: write authority still needs enforcement.</strong></p>
+
+<p>The implementer needs current requirements, relevant files and previous failure evidence. The reviewer needs the original acceptance contract, candidate revision and tools, not the implementer&rsquo;s entire transcript. Fresh context can reduce commitment to a particular solution, but must not remove facts needed for verification.</p>
+
+<h3 id="nodes-and-back-edges">Nodes and back edges</h3>
+
+<table>
+<thead>
+<tr>
+<th>Node</th>
+<th>Inputs and work</th>
+<th>Output and handoff</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>research</code></td>
+<td>Inspect the issue, reproduction logs and documents</td>
+<td>Sourced requirements and hypotheses for implementation</td>
+</tr>
+
+<tr>
+<td><code>implement</code></td>
+<td>Edit in an isolated environment; test and retry locally</td>
+<td>Candidate revision and change record for verification</td>
+</tr>
+
+<tr>
+<td><code>verify</code></td>
+<td>Independently inspect the same revision against requirements</td>
+<td>Pass, implementation failure or a need for more research</td>
+</tr>
+
+<tr>
+<td><code>human_review</code></td>
+<td>Review risk or missing authorization</td>
+<td>Approve, reject or request changes</td>
+</tr>
+
+<tr>
+<td><code>deliver</code></td>
+<td>Check acceptance and authority</td>
+<td>Save deliverables; publication or merging requires explicit authority</td>
+</tr>
+</tbody>
+</table>
+
+<p>Local loops handle attempts inside a responsibility. The graph handles handoffs between responsibilities. An implementation node might repair syntax within its local budget; contradictory requirements should route back to research instead of causing endless code changes.</p>
+
+<p>This routing function demonstrates the distinction. It does not implement nodes, persistence or tool permissions and is not a complete graph engine:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">route_after_verify</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="s2">&#34;verification_revision&#34;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&#34;candidate_revision&#34;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="s2">&#34;verify&#34;</span>
+
+    <span class="n">verdict</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&#34;review&#34;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">verdict</span> <span class="o">==</span> <span class="s2">&#34;pass&#34;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&#34;human_review&#34;</span> <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="s2">&#34;requires_approval&#34;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&#34;deliver&#34;</span>
+
+    <span class="k">if</span> <span class="n">state</span><span class="p">[</span><span class="s2">&#34;attempts&#34;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&#34;max_attempts&#34;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="s2">&#34;blocked&#34;</span>
+    <span class="k">if</span> <span class="n">verdict</span> <span class="o">==</span> <span class="s2">&#34;needs_research&#34;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&#34;research&#34;</span>
+    <span class="k">if</span> <span class="n">verdict</span> <span class="o">==</span> <span class="s2">&#34;fail&#34;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&#34;implement&#34;</span>
+    <span class="k">return</span> <span class="s2">&#34;human_review&#34;</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Different failures now have different destinations, and an unknown verdict cannot silently pass. The runner also needs global time, node-execution and cost limits: re-verifying stale reports, for example, need not increment the implementation counter. Drawing a human node is not an approval system. The runner must actually pause, and tools must not bypass that boundary.</p>
+
+<h3 id="checkpoints-and-recovery-state-is-only-part-of-the-problem">Checkpoints and recovery: state is only part of the problem</h3>
+
+<p>Recovery requires the run&rsquo;s state, completed work, next step and artifact references, not just a model summary. A stable run ID distinguishes task instances. A conversation ID, graph thread ID and business task ID may be associated, but are not inherently identical.</p>
+
+<p>External side effects still need care. If a PR was created just before a checkpoint write failed, replaying the step can create another PR. Use idempotency keys, discovery of existing results or transactional handoffs. Checkpointing alone does not make an external operation execute exactly once.</p>
+
+<p>Lecture 14&rsquo;s <a href="https://github.com/walkinglabs/learn-harness-engineering/blob/a9342ff471f2c0e60be0c08b9f4a7c502df4e442/docs/zh/lectures/lecture-14-graph-engineering/code/maker_checker_graph.py">LangGraph skeleton</a> illustrates <code>StateGraph</code>, nodes, conditional edges and <code>thread_id</code>, but is not yet a reliable coding system:</p>
+
+<ul>
+<li><code>call_model()</code> is unimplemented. The placeholder test checks whether code contains <code>def test</code>; it does not execute tests.</li>
+<li><code>attempts</code> is not incremented. The router distinguishes <code>fail</code> from everything else, so an unknown result also reaches <code>merge</code>.</li>
+<li><code>merge</code> prints a message. <code>MemorySaver</code> stores checkpoints in RAM, not on disk for recovery after process restarts.</li>
+</ul>
+
+<p>Persistent recovery needs a durable checkpointer plus tested replay and side-effect handling. Official documentation distinguishes in-memory savers from SQLite and PostgreSQL backends. <a href="https://docs.langchain.com/oss/python/langgraph/persistence">Persistence documentation</a></p>
+
+<h3 id="graphs-and-workflows-do-not-reinvent-the-history">Graphs and workflows: do not reinvent the history</h3>
+
+<p>Workflow systems already support branches, parallelism, state, approvals and dynamic tasks. Describing all traditional workflows as fixed functions that always take an identical path would incorrectly assign their existing capabilities to graph engineering.</p>
+
+<p>The useful distinction is <strong>which decisions belong to code, which to a model and which to a person</strong>. Anthropic distinguishes prescribed workflows from model-directed control; either can be represented as a graph, and one graph can mix them. <a href="https://www.anthropic.com/research/building-effective-agents">Building Effective Agents</a></p>
+
+<p>A graph therefore does not require an agent in every box, and need not be a DAG. A verification back edge already creates a cycle. At a coarser level, an entire agent can be one node with a feedback self-loop. Its relationship to a loop depends on abstraction, not an either–or choice.</p>
+
+<p>LangChain&rsquo;s further reading also cautions against fixing every exploratory step in advance: tasks with known structure benefit from explicit paths, while open-ended research may suit a flexible core loop. Excessive predefined handoffs can obstruct exploration. <a href="https://www.langchain.com/blog/3-years-of-graph-engineering-with-langgraph">3 Years of Graph Engineering with LangGraph</a></p>
+
+<h2 id="6-who-can-change-a-goal-or-veto-a-result">6. Who can change a goal or veto a result?</h2>
+
+<p>Connected nodes show where work travels. Long-running systems also need relationships between objectives and their evaluation.</p>
+
+<p><strong>Metric gaming.</strong> Suppose a support agent optimizes closed-ticket count. It may close tickets faster while users repeatedly return. A coding agent might delete tests to produce a green check. Separate optimization metrics from acceptance and protective measures; the executor must not freely weaken the evaluator for a better score.</p>
+
+<p><strong>Unreviewed objectives.</strong> If a system pursues a benchmark without checking its relevance to real requirements, extra retries only make it more effective at the wrong objective. Assign ownership of goals, acceptance contracts and changes to them.</p>
+
+<p><strong>Conflicting loops.</strong> One unit optimizes response speed, another investigation depth. Two individually successful repairs can break a shared interface. Integration checks, resource ownership, priorities and veto paths complement local acceptance.</p>
+
+<p>Eigent&rsquo;s further reading adds measurement decay: logs and scoring drift until internal reports validate one another without touching real outcomes. Its anchors are independent checks on the optimized process, such as held-out tests, real-scenario regressions and human sampling. <a href="https://www.eigent.ai/blog/graph-engineering-ai-agents">Graph Engineering for AI Agents</a></p>
+
+<p>For the login repair, make authority explicit:</p>
+
+<ul>
+<li>A requirements owner can approve acceptance changes; the implementation node cannot relax them itself.</li>
+<li>A verifier can reject a candidate with revision-bound reproduction evidence.</li>
+<li>Integration checks can veto locally passing changes.</li>
+<li>Budget and permission controllers can suspend work without the model&rsquo;s consent.</li>
+</ul>
+
+<p>A graph can express these mechanisms; a well-designed loop can implement them too. <strong>Graph structure improves auditability, but does not automatically remove Goodhart effects, bias or mistaken objectives.</strong> Fresh reviewers can share incorrect assumptions. Evidence and acceptance must improve alongside separation.</p>
+
+<p>Prefect emphasizes comparable, reproducible run structure. iii.dev redirects attention to the runtime substrate and the durable state, observations and reusable capabilities that survive a session. These views are compatible: make handoffs explicit and give them an inspectable, recoverable implementation. <a href="https://www.prefect.io/blog/loops-vs-graphs">Loops vs. Graphs</a>, <a href="https://iii.dev/blog/loops-graphs-and-the-layer-that-matters/">Loops, Graphs, and the Layer That Matters</a></p>
+
+<h2 id="7-costs-shared-by-loops-and-graphs">7. Costs shared by loops and graphs</h2>
+
+<h3 id="verification-debt-production-outpaces-checking">Verification debt: production outpaces checking</h3>
+
+<p>A change looks reasonable, so the next iteration builds on it. A fault discovered much later can span several commits.</p>
+
+<p>Bind reproductions, regressions and acceptance results to revisions. Count effectively verified changes, untested paths and failures incorrectly recorded as success, not just generated code.</p>
+
+<h3 id="comprehension-rot-the-code-outgrows-the-team-s-mental-model">Comprehension rot: the code outgrows the team&rsquo;s mental model</h3>
+
+<p>Automated loops can produce changes faster than maintainers can understand the new dependencies, design choices and failure boundaries. Reading a generated summary alone does not maintain that understanding.</p>
+
+<p>Keep changes reviewable, record important decisions, use critical workflows directly and inspect risky diffs. Documentation supports understanding; it does not replace it.</p>
+
+<h3 id="cognitive-surrender-outsourcing-the-judgment-too">Cognitive surrender: outsourcing the judgment too</h3>
+
+<p>When a loop runs smoothly, its conclusion can begin to feel equivalent to a sound judgment. Whether a feature is worth building, whether a benchmark reflects user experience and whether a risk is acceptable may lie outside automated acceptance.</p>
+
+<p>Agreement between Maker and Checker does not establish that the original objective was sensible. Someone must remain able to question the goal, change the evaluator or stop an unproductive direction.</p>
+
+<h3 id="token-and-runtime-costs-paying-for-history-again">Token and runtime costs: paying for history again</h3>
+
+<p>Suppose each iteration adds about <code>k</code> tokens and every request resubmits the complete history. Input at iteration <code>i</code> is roughly <code>i × k</code>, making total input over <code>N</code> iterations approximately <code>k × N(N+1)/2</code>. The near-quadratic growth depends on both accumulation and repeated full-history processing; it is not inherent in every agent system.</p>
+
+<p>Compaction, external state, selective reads and reuse of stable material can reduce repetition. Actual billing also depends on caching, model choice, output length and tool use, so this expression is not an invoice estimator. Independent checking, worktree setup, environment startup and retries also consume time and money.</p>
+
+<p>The useful measure is total cost per accepted outcome, including tools, retries and human review—not only the price of one generation.</p>
+
+<h3 id="orchestration-tax-growing-the-review-queue">Orchestration tax: growing the review queue</h3>
+
+<p>Parallel nodes add more than model cost: decomposition, handoffs, integration conflicts and final review consume attention. If every change needs one person&rsquo;s understanding and approval, extra workers may just lengthen the queue. This is the orchestration tax described by Addy Osmani. <a href="https://addyosmani.com/blog/orchestration-tax/">Original article</a></p>
+
+<p>Limit work in progress, batch reviews by module, automate mechanical checks and set concurrency from measured review throughput rather than how many agents the interface permits.</p>
+
+<h2 id="8-when-do-you-need-a-harness-loop-or-graph">8. When do you need a harness, loop or graph?</h2>
+
+<p>Diagnose the difficulty before choosing a framework:</p>
+
+<table>
+<thead>
+<tr>
+<th>Current difficulty</th>
+<th>First intervention</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Missing project context, unusable tools or absent verification</td>
+<td>Improve harness context, environment and feedback</td>
+</tr>
+
+<tr>
+<td>Individual runs work, but a person must push each next step</td>
+<td>Define goals, feedback, state and stops to form a loop</td>
+</tr>
+
+<tr>
+<td>Recurring confusion between research, implementation and review</td>
+<td>Specify nodes, state contracts and conditional edges</td>
+</tr>
+
+<tr>
+<td>A fixed sequence needs no open-ended judgment</td>
+<td>A script or ordinary workflow may suffice</td>
+</tr>
+
+<tr>
+<td>Exploration follows paths that are hard to predict</td>
+<td>Retain a flexible loop; fix essential acceptance and permission boundaries</td>
+</tr>
+</tbody>
+</table>
+
+<p>The signal for explicit graph design is not simply many steps. It is meaningful branching, backtracking, parallel joins, independent review or recovery boundaries. A linear pipeline can also be represented as a graph, but that does not justify another engine. Coordination and review costs must be smaller than the collaboration benefit.</p>
+
+<p>The lecture&rsquo;s starting sequence is to pick repeated work, define a goal and stopping rules, separate making from checking, persist progress and add a trigger. Order matters: make one iteration verifiable before automating repetition. Otherwise automation repeats the same mistake faster.</p>
+
+<p>Capabilities can be added gradually:</p>
+
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Added capability</th>
+<th>First question to resolve</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Goal Runner</td>
+<td>Continue toward one objective</td>
+<td>What proves completion, and what stops the run?</td>
+</tr>
+
+<tr>
+<td>Scheduled Task</td>
+<td>Start work on a schedule</td>
+<td>Is the environment available, and can wakeups duplicate work?</td>
+</tr>
+
+<tr>
+<td>Maker / Checker</td>
+<td>Separate implementation and verification</td>
+<td>Is review independent and tied to the candidate revision?</td>
+</tr>
+
+<tr>
+<td>Self-Feeding Loop</td>
+<td>Select work from external state</td>
+<td>Where do priority, scope and authority come from?</td>
+</tr>
+
+<tr>
+<td>Multiple Loops</td>
+<td>Run several workflows concurrently</td>
+<td>How are ownership, shared resources, state writes and review capacity coordinated?</td>
+</tr>
+</tbody>
+</table>
+
+<p>This is a capability ladder, not a ranking every team must climb. A low-frequency, single-task loop that reliably saves human effort may be more useful than an elaborate fleet.</p>
+
+<p>Three small experiments are enough to begin:</p>
+
+<ol>
+<li>Complete the same bounded task manually and through a loop with stopping conditions; compare quality and interventions.</li>
+<li>Add a Checker and record valid findings alongside its extra cost.</li>
+<li>Run three iterations, replacing the session between some of them; check recovery from external state and duplicate effects.</li>
+</ol>
+
+<p>Track interventions, valid findings, false positives, acceptance results, retries and total cost. Running unattended for a long time is not itself evidence of usefulness. A better signal is <strong>less human pushing for the same accepted outcome, without weakening quality or boundaries.</strong></p>
+
+<p>Re-evaluate the structure as models change. Test which checks remain necessary and which handoffs have become overhead by removing components individually and comparing results. More agents and more instructions are not, by themselves, guarantees of reliability.</p>
+
+<p>Return to the login task: the harness enables bounded edits, tests and state recording; the loop turns feedback into another attempt; the graph specifies the protocol between investigation, implementation, verification and approval. Larger tasks often use all three. Smaller tasks need not add components merely to claim all three labels.</p>
+
+<h3 id="references-and-templates">References and templates</h3>
+
+<ul>
+<li>WalkingLabs: <a href="https://github.com/walkinglabs/learn-harness-engineering/tree/a9342ff471f2c0e60be0c08b9f4a7c502df4e442/docs/en/lectures/lecture-13-loop-engineering">Lecture 13 and templates</a>, <a href="https://github.com/walkinglabs/learn-harness-engineering/tree/a9342ff471f2c0e60be0c08b9f4a7c502df4e442/docs/en/lectures/lecture-14-graph-engineering">Lecture 14 and graph skeleton</a>. Explanations and diagrams are reorganized, examples adapted, and authority, revision binding and implementation limits added. Original lectures and templates: Copyright &copy; 2025 WalkingLab, used under the <a href="/downloads/loop-engineering/LICENSE-WalkingLab.txt">MIT License</a>.</li>
+<li><a href="https://addyosmani.com/blog/agent-harness-engineering/">Addy Osmani: Agent Harness Engineering</a> · <a href="https://addyosmani.com/blog/orchestration-tax/">The Orchestration Tax</a></li>
+<li><a href="https://addyosmani.com/blog/loop-engineering/">Addy Osmani: Loop Engineering</a></li>
+<li><a href="https://simonw.substack.com/p/designing-agentic-loops">Simon Willison: Designing Agentic Loops</a>, on designing around objectives, tools and observable results.</li>
+<li><a href="https://www.langchain.com/blog/3-years-of-graph-engineering-with-langgraph">LangChain: 3 Years of Graph Engineering with LangGraph</a> · <a href="https://docs.langchain.com/oss/python/langgraph/graph-api">Graph API</a> · <a href="https://docs.langchain.com/oss/python/langgraph/persistence">Persistence</a></li>
+<li><a href="https://www.prefect.io/blog/loops-vs-graphs">Prefect: Loops vs. Graphs</a> · <a href="https://www.eigent.ai/blog/graph-engineering-ai-agents">Eigent: Graph Engineering for AI Agents</a> · <a href="https://iii.dev/blog/loops-graphs-and-the-layer-that-matters/">iii.dev: Loops, Graphs, and the Layer That Matters</a></li>
+<li><a href="https://www.anthropic.com/research/building-effective-agents">Anthropic: Building Effective Agents</a></li>
+<li><a href="https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex">OpenAI: Using Goals in Codex</a> · <a href="https://learn.chatgpt.com/docs/automations">Automations</a></li>
+<li><a href="https://code.claude.com/docs/en/scheduled-tasks">Claude Code: Scheduled Tasks</a> · <a href="https://code.claude.com/docs/en/goal">Goals</a></li>
+<li><a href="https://www.anthropic.com/research/harness-design-long-running-apps">Anthropic: Harness design for long-running application development</a></li>
+<li><a href="https://github.com/karpathy/autoresearch/tree/228791fb499afffb54b46200aca536f79142f117">autoresearch: README and program.md at revision 228791f</a></li>
+<li>Related: <a href="/en/post/anthropic-agent-evolution-2-context-reset-and-handoff/">Context Reset and Structured Handoff</a> · <a href="/en/post/memvid-memory-architecture/">Memvid: A Single-File Memory System for AI</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">zhengxz</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2026-10-31
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/en/tags/agent-harness/">Agent Harness</a>
+          <a href="/en/tags/loop-engineering/">Loop Engineering</a>
+          <a href="/en/tags/graph-engineering/">Graph Engineering</a>
+          <a href="/en/tags/long-running-agents/">Long-Running Agents</a>
+          <a href="/en/tags/multi-agent/">Multi-Agent</a>
+          <a href="/en/tags/verification/">Verification</a>
+          <a href="/en/tags/autoresearch/">autoresearch</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/en/post/memvid-memory-architecture/">
+            <span class="next-text nav-default">Memvid: A Single-File Memory System for AI</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+  <a href="https://alexzheng13.github.io/en/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2026<span class="heart"><i class="iconfont icon-heart"></i></span><span>zhengxz</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.6388abde34e31667698edd963050a5a5d32866b5dbe6b270a37d5bee36bc8beb.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

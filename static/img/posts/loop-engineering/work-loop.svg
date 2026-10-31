@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="930" viewBox="0 0 1080 930" role="img" aria-labelledby="title desc">
+<title id="title">A bounded, stateful agent work loop</title>
+<desc id="desc">Triggers lead to recovery and selection, an isolated Maker, an independent Checker and accepted delivery. Failures retry within budget or escalate. Persistent state supports the entire process.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#687d8c"/></marker></defs>
+<rect width="1080" height="930" rx="20" fill="#f8fafc"/>
+<g font-family="Arial, Helvetica, sans-serif" fill="#243b4b">
+<text x="54" y="57" font-size="29" font-weight="700">From repeated prompts to a work loop</text><text x="54" y="88" font-size="17" fill="#647786">A stable goal, independent evidence, explicit continuation and stops</text>
+<g stroke="#c8d4dd" stroke-width="1.5"><rect x="70" y="120" width="670" height="88" rx="12" fill="#e8f0fa"/><rect x="70" y="246" width="670" height="100" rx="12" fill="#e8f0fa"/><rect x="70" y="384" width="670" height="100" rx="12" fill="#e3f2e9"/><rect x="70" y="522" width="670" height="100" rx="12" fill="#f0eafa"/><rect x="70" y="668" width="670" height="100" rx="12" fill="#fff1d8"/><rect x="790" y="522" width="230" height="100" rx="12" fill="#f9e9e5"/></g>
+<g font-size="23" font-weight="700"><text x="98" y="154">1. Trigger</text><text x="98" y="282">2. Recover and select</text><text x="98" y="420">3. Maker</text><text x="98" y="558">4. Checker</text><text x="98" y="704">5. Accept and deliver</text><text x="810" y="558" font-size="20">Human decision</text></g>
+<g font-size="18" fill="#526a79"><text x="98" y="184">Schedule / event / active goal</text><text x="98" y="313">Read state, scope, ownership and the next useful task</text><text x="98" y="451">Isolated worktree, scoped changes, basic tests</text><text x="98" y="589">Inspect the exact revision and run independent checks</text><text x="98" y="735">Record evidence and result; publish only if authorized</text><text x="810" y="587" font-size="16">Blocker / exhausted budget</text></g>
+<g fill="none" stroke="#687d8c" stroke-width="2" marker-end="url(#arrow)"><path d="M405 208V246"/><path d="M405 346V384"/><path d="M405 484V522"/><path d="M405 622V668"/><path d="M740 572H790"/><path d="M220 622V644H37V434H70"/><path d="M600 768V788H1052V296H740"/></g>
+<g font-size="16" fill="#647786"><text x="418" y="651">Pass</text><text x="54" y="639">Fail: retry within budget</text><text x="758" y="770">More admitted work</text></g>
+<rect x="70" y="814" width="950" height="77" rx="12" fill="#e8edf1" stroke="#c8d4dd"/>
+<text x="95" y="845" font-size="21" font-weight="700">External state supports every iteration</text><text x="95" y="874" font-size="17" fill="#526a79">Goal • task identity • tested revision • evidence • blocker • next action</text>
+</g></svg>

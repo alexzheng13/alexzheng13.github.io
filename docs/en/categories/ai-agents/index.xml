@@ -6,10 +6,21 @@
     <description>Recent content in AI Agents on Blowing in the wind</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 29 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 31 Oct 2026 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://alexzheng13.github.io/en/categories/ai-agents/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Harness, Loop and Graph Engineering</title>
+      <link>https://alexzheng13.github.io/en/post/loop-engineering/</link>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 +0000</pubDate>
+      
+      <guid>https://alexzheng13.github.io/en/post/loop-engineering/</guid>
+      <description>&lt;p&gt;Repairing a login failure raises three sets of engineering questions: which files can the agent access and where can it run tests; how should it continue after a failure and when should it stop; and, if investigation, implementation and review are separate, who receives the work next?&lt;/p&gt;
+
+&lt;p&gt;Harness engineering concerns the execution system around a model. Loop engineering concerns progress through feedback. Graph engineering concerns the connections and handoffs between working units. They overlap and often coexist; they are more useful as design perspectives than as successive replacements for one another.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Memvid: A Single-File Memory System for AI</title>

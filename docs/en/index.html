@@ -66,7 +66,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://alexzheng13.github.io/en/" />
 
-<meta property="og:updated_time" content="2026-10-29T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
+<meta property="og:updated_time" content="2026-10-31T00:00:00+00:00" /><meta property="og:site_name" content="Blowing in the wind" />
 <meta itemprop="name" content="Blowing in the wind">
 <meta itemprop="description" content="Hugo theme even example site.">
 
@@ -209,6 +209,31 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/en/post/loop-engineering/">Harness, Loop and Graph Engineering</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2026-10-31 </span>
+      <div class="post-category">
+          <a href="/en/categories/ai-agents/"> AI Agents </a>
+          </div>
+        <span class="more-meta"> 6262 words </span>
+        <span class="more-meta"> 30 mins read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>Repairing a login failure raises three sets of engineering questions: which files can the agent access and where can it run tests; how should it continue after a failure and when should it stop; and, if investigation, implementation and review are separate, who receives the work next?</p>
+
+<p>Harness engineering concerns the execution system around a model. Loop engineering concerns progress through feedback. Graph engineering concerns the connections and handoffs between working units. They overlap and often coexist; they are more useful as design perspectives than as successive replacements for one another.</p>
+    </div>
+    <div class="read-more">
+      <a href="/en/post/loop-engineering/" class="read-more-link">Read more...</a>
+    </div>
+  </div>
+</article>
+
       <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/en/post/memvid-memory-architecture/">Memvid: A Single-File Memory System for AI</a></h1>
@@ -453,44 +478,6 @@ Telemetry + evals              makes the system observable and improvable</code>
     </div>
     <div class="read-more">
       <a href="/en/post/cs329z-frameworks-orchestration/" class="read-more-link">Read more...</a>
-    </div>
-  </div>
-</article>
-
-      <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/en/post/cs329z-rag-agentic-retrieval/">CS 329Z: From RAG to Agentic RAG</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2026-10-06 </span>
-      <div class="post-category">
-          <a href="/en/categories/ai-agents/"> AI Agents </a>
-          </div>
-        <span class="more-meta"> 2717 words </span>
-        <span class="more-meta"> 13 mins read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>RAG is often summarized as “retrieve a few passages from a vector database and put them in the prompt.” That description is not wrong, but it hides the difficult questions: <strong>How should knowledge be chunked? How do we combine semantic and exact matching? How should candidates be reranked? How do we know whether the evidence is sufficient, and when should the system search again?</strong></p>
-
-<p>Seen this way, RAG is not merely an external knowledge store. It is an evidence-centered decision pipeline:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-text" data-lang="text">Documents → Chunk and index → Multi-path recall → Fuse and rerank → Read and generate
-                                      ↑                              ↓
-                                      └── Evaluate, rewrite, search again ──┘</code></pre></td></tr></table>
-</div>
-</div>
-<p>This article reorganizes the RAG chapter from my <strong>Stanford CS 329Z: Engineering AI Agents</strong> notes. The first half develops retrieval and evaluation. The second puts retrieval back inside the agent loop and explains why the architecture naturally evolves toward <strong>Agentic RAG</strong>.</p>
-    </div>
-    <div class="read-more">
-      <a href="/en/post/cs329z-rag-agentic-retrieval/" class="read-more-link">Read more...</a>
     </div>
   </div>
 </article>
